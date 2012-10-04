@@ -45,8 +45,11 @@
  - 条件分岐
    beq, bne, beqf, bnef
 
-その他
+移動命令
+   mv, mvf (move)
    mfhi, mflo (move from Hi, Lo)
+
+その他
    nop
    dbg  (シミュレータのデバッグ用命令)
    halt (停止)
