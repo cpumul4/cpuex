@@ -1,0 +1,72 @@
+**算術演算命令**
+add  rd rs rt   R[rd] = R[rs] + R[rt]
+sub  rd rs rt   R[rd] = R[rs] - R[rt]
+mul  rd rs rt   R[rd] = R[rs] * R[rt]
+div  rd rs rt   R[rd] = R[rs] / R[rt]
+
+addf fd fs ft   F[fd] = F[fs] +. F[ft]
+subf fd fs ft   F[fd] = F[fs] -. F[ft]
+mulf fd fs ft   F[fd] = F[fs] *. F[ft]
+divf fd fs ft   F[fd] = F[fs] /. F[ft]
+
+addi rt rs imm  R[rt] = R[rs] + imm
+subi rt rs imm  R[rt] = R[rs] - imm
+
+**算術演算命令その2**
+abs  rt rs      R[rt] = | R[rs] |    // 絶対値
+neg  rt rs      R[rt] = - (R[rs])    // 符号反転
+
+absf ft fs      F[ft] = | F[fs] |
+negf ft fs      F[ft] = - (F[fs])
+sqrt ft fs      F[ft] = sqrt(F[fs])  // 平方根
+
+**論理演算命令**
+and  rd rs rt   R[rd] = R[rs] and R[rt]
+or   rd rs rt   R[rd] = R[rs] or  R[rt]
+nor  rd rs rt   R[rd] = R[rs] nor R[rt]
+
+andi rt rs imm  R[rt] = R[rs] and imm
+ori  rt rs imm  R[rt] = R[rs] or  imm
+
+**シフト命令**
+sll  rt rs amt  R[rt] = R[rs] <<  amt    // shift left logical
+srl  rt rs amt  R[rt] = R[rs] >>  amt    // shift right logical
+sra  rt rs amt  R[rt] = R[rs] >>> amt    // shift right arith.
+
+**ロード/ストア命令**
+lw   rd rs rt   R[rd] = M[R[rs] + R[rt]]
+lwi  rt rs imm  R[rt] = M[R[rs] + imm]
+sw   rd rs rt   M[R[rs] + R[rt]] = R[rd]
+swi  rt rs imm  M[R[rs] + imm] = R[rt]
+
+lwf  fd rs rt   F[fd] = M[R[rs] + R[rt]]
+lwif ft rs imm  F[ft] = M[R[rs] + imm]
+swf  fd rs rt   M[R[rs] + R[rt]] = F[fd]
+swif ft rs imm  M[R[rs] + imm] = F[ft]
+
+**比較命令**
+clt  rd rs rt   R[rd] = (R[rs] < R[rt]) ? 1 : 0
+cltf fd fs ft   F[fd] = (F[fs] < F[ft]) ? 1 : 0
+
+**無条件分岐命令**
+j    addr       PC = PC[31:26] @ addr              // jump
+jl   addr       $ra = PC; PC = PC[31:26] @ addr    // jump and linked
+jr   rs         PC = R[rs]                         // jump register
+
+**条件分岐命令**
+beq  rs rt imm  if (R[rs] == R[rt]) PC = PC + imm
+bne  rs rt imm  if (R[rs] != R[rt]) PC = PC + imm
+beqf fs ft imm  if (F[fs] == F[ft]) PC = PC + imm
+bnef fs ft imm  if (F[fs] != F[ft]) PC = PC + imm
+
+**移動命令**
+mv   rt rs      R[rt] = R[rs]
+mvf  ft fs      F[ft] = F[fs]
+mfhi rs         R[rs] = Hi
+mflo rs         R[rs] = Lo
+
+**その他**
+nop
+dbg     // シミュレータ用デバッグ命令(コアではnopと同義)
+halt    // 停止
+rst     // レジスタをリセット

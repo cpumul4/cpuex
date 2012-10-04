@@ -38,7 +38,7 @@
    sw, swi, swf (Store Word)
 
 比較命令
-   slt, sltf (Set Less Than (Float))
+   clt, cltf (Compare Less Than (Float))
 
 分岐命令
  - 無条件分岐
