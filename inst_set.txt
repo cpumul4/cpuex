@@ -27,7 +27,7 @@ unsigned intは要らない？？？
    slt, sltf(Set Less Than Float)
 
 分岐命令
-	j, beq, bne, beqf, bnef
+   j, jr, jl, beq, bne, beqf, bnef
 
 その他
 	nop, シミュレータのデバッグ用命令, halt, reset
