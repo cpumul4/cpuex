@@ -1,9 +1,13 @@
+命令実行中に参照するプログラムカウンタPCは、次命令のアドレスを指している。
+
 命令形式
  - R   Rレジスタ*3
  - I   Rレジスタ*2, 即値(16bit)
  - J   即値(26bit)
  - FR  Fレジスタ*3
  - FI  Fレジスタ*2, 即値(16bit)
+ - MR  Rレジスタ*2, Fレジスタ*1
+ - MI  Rレジスタ*1, Fレジスタ*1, 即値(16bit)
 
 **算術演算命令**
 R  add  rd rs rt   R[rd] = R[rs] + R[rt]
@@ -46,10 +50,10 @@ I  lwi  rt rs imm  R[rt] = M[R[rs] + imm]
 R  sw   rd rs rt   M[R[rs] + R[rt]] = R[rd]
 I  swi  rt rs imm  M[R[rs] + imm] = R[rt]
 
-FR lwf  fd rs rt   F[fd] = M[R[rs] + R[rt]]
-FI lwif ft rs imm  F[ft] = M[R[rs] + imm]
-FR swf  fd rs rt   M[R[rs] + R[rt]] = F[fd]
-FI swif ft rs imm  M[R[rs] + imm] = F[ft]
+MR lwf  fd rs rt   F[fd] = M[R[rs] + R[rt]]
+MI lwif ft rs imm  F[ft] = M[R[rs] + imm]
+MR swf  fd rs rt   M[R[rs] + R[rt]] = F[fd]
+MI swif ft rs imm  M[R[rs] + imm] = F[ft]
 
 **比較命令**
 R  clt  rd rs rt   R[rd] = (R[rs] < R[rt]) ? 1 : 0
