@@ -9,6 +9,9 @@
  - 整数の乗算除算結果を格納するレジスタ 32bit * 2個
    Hi, Lo
 
+命令形式/アドレシングモード
+   please wait...
+
 算術演算命令
  - 整数
    add , sub , mul , div (整数レジスタ同士の演算)
@@ -31,8 +34,8 @@
    (slaは、オーバーフローになるから不要ってことになった@10/03昼)
 
 ロード/ストア命令
-   lw, lwf (Load Word (Float))
-   sw, swf (Store Word (Float))
+   lw, lwi, lwf (Load Word)
+   sw, swi, swf (Store Word)
 
 比較命令
    slt, sltf (Set Less Than (Float))
