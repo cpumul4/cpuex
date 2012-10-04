@@ -1,4 +1,5 @@
 レジスタはfloatもintも32bit
+汎用レジスタ 32個（割り当てがまだ決まってない）
 unsigned intは要らない？？？
 
 算術演算命令
@@ -21,10 +22,16 @@ unsigned intは要らない？？？
    lw, lwf  (Load Word (Float))
    sw, swf
 
-以下は未決定？？？？@10/03昼
+
+比較命令
+   slt, sltf(Set Less Than Float)
 
 分岐命令
-   j(jump), blt(<), ble(<=), bez(==0), bgz(!=0)
-比較命令はどうせ分岐に使うんだから分岐命令に組み込めばよしということになった。@10/03昼
+	j, beq, bne, beqf, bnef
 
-レジスタの本数も未決定？？
+その他
+	nop, シミュレータのデバッグ用命令, halt, reset
+
+
+平方根命令入れるかも。
+float <-> intの変換命令
