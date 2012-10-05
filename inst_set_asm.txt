@@ -40,9 +40,9 @@ I  andi rt rs imm  R[rt] = R[rs] and imm
 I  ori  rt rs imm  R[rt] = R[rs] or  imm
 
 **シフト命令**
-I  sll  rt rs amt  R[rt] = R[rs] <<  amt    // shift left logical
-I  srl  rt rs amt  R[rt] = R[rs] >>  amt    // shift right logical
-I  sra  rt rs amt  R[rt] = R[rs] >>> amt    // shift right arith.
+R  sll  rd rs amt  R[rd] = R[rs] <<  amt    // shift left logical
+R  srl  rd rs amt  R[rd] = R[rs] >>  amt    // shift right logical
+R  sra  rd rs amt  R[rd] = R[rs] >>> amt    // shift right arith.
 
 **ロード/ストア命令**
 R  lw   rd rs rt   R[rd] = M[R[rs] + R[rt]]
