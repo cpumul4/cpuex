@@ -24,12 +24,12 @@ I  addi rt rs imm  R[rt] = R[rs] + imm
 I  subi rt rs imm  R[rt] = R[rs] - imm
 
 **算術演算命令その2**
-R  abs  rt rs      R[rt] = | R[rs] |    // 絶対値
-R  neg  rt rs      R[rt] = - (R[rs])    // 符号反転
+R  abs  rd rs      R[rd] = | R[rs] |    // 絶対値
+R  neg  rd rs      R[rd] = - (R[rs])    // 符号反転
 
-FR absf ft fs      F[ft] = | F[fs] |
-FR negf ft fs      F[ft] = - (F[fs])
-FR sqrt ft fs      F[ft] = sqrt(F[fs])  // 平方根
+FR absf fd fs      F[fd] = | F[fs] |
+FR negf fd fs      F[fd] = - (F[fs])
+FR sqrt fd fs      F[fd] = sqrt(F[fs])  // 平方根
 
 **論理演算命令**
 R  and  rd rs rt   R[rd] = R[rs] and R[rt]
@@ -71,10 +71,10 @@ FI beqf fs ft imm  if (F[fs] == F[ft]) PC = PC + imm
 FI bnef fs ft imm  if (F[fs] != F[ft]) PC = PC + imm
 
 **移動命令**
-R  mv   rt rs      R[rt] = R[rs]
-FR mvf  ft fs      F[ft] = F[fs]
-R  mfhi rs         R[rs] = Hi
-R  mflo rs         R[rs] = Lo
+R  mv   rd rs      R[rd] = R[rs]
+FR mvf  fd fs      F[fd] = F[fs]
+R  mfhi rd         R[rd] = Hi
+R  mflo rd         R[rd] = Lo
 
 **その他**
 -  nop
