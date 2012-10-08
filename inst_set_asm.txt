@@ -2,12 +2,19 @@
 
 命令形式
  - R   Rレジスタ*3
+       opcode(31-26),rs(25-21),rt(20-16),rd(15-11),amt(10-6),func(5-0)
  - I   Rレジスタ*2, 即値(16bit)
+       opcode(31-26),rs(25-21),rt(20-16),imm(15-0)
  - J   即値(26bit)
+       opcode(31-26),addr(25-0)
  - FR  Fレジスタ*3
+       opcode(31-26),fs(25-21),ft(20-16),fd(15-11),amt(10-6),func(5-0)
  - FI  Fレジスタ*2, 即値(16bit)
+       opcode(31-26),fs(25-21),ft(20-16),imm(15-0)
  - MR  Rレジスタ*2, Fレジスタ*1
+       opcode(31-26),rs(25-21),rt(20-16),fd(15-11),amt(10-6),func(5-0)
  - MI  Rレジスタ*1, Fレジスタ*1, 即値(16bit)
+       opcode(31-26),rs(25-21),ft(20-16),imm(15-0)
 
 **算術演算命令**
 R  add  rd rs rt   R[rd] = R[rs] + R[rt]
@@ -45,9 +52,9 @@ R  srl  rd rs amt  R[rd] = R[rs] >>  amt    // shift right logical
 R  sra  rd rs amt  R[rd] = R[rs] >>> amt    // shift right arith.
 
 **ロード/ストア命令**
-R  lw   rd rs rt   R[rd] = M[R[rs] + R[rt]]
+R  lw   rd rs rt   R[rd] = M[R[rs] + R[rt]]    // load word
 I  lwi  rt rs imm  R[rt] = M[R[rs] + imm]
-R  sw   rd rs rt   M[R[rs] + R[rt]] = R[rd]
+R  sw   rd rs rt   M[R[rs] + R[rt]] = R[rd]    // store word
 I  swi  rt rs imm  M[R[rs] + imm] = R[rt]
 
 MR lwf  fd rs rt   F[fd] = M[R[rs] + R[rt]]
@@ -56,8 +63,8 @@ MR swf  fd rs rt   M[R[rs] + R[rt]] = F[fd]
 MI swif ft rs imm  M[R[rs] + imm] = F[ft]
 
 **比較命令**
-R  clt  rd rs rt   R[rd] = (R[rs] < R[rt]) ? 1 : 0
-FR cltf fd fs ft   F[fd] = (F[fs] < F[ft]) ? 1 : 0
+R  cmp  rd rs rt   R[rd] = (R[rs] <= R[rt]) ? 1 : 0    // compare less than or equal
+FR cmpf fd fs ft   F[fd] = (F[fs] <= F[ft]) ? 1 : 0
 
 **無条件分岐命令**
 J  j    addr       PC = PC{31:26} @ addr              // jump
@@ -65,16 +72,16 @@ J  jl   addr       $ra = PC; PC = PC{31:26} @ addr    // jump and linked
 R  jr   rs         PC = R[rs]                         // jump register
 
 **条件分岐命令**
-I  beq  rs rt imm  if (R[rs] == R[rt]) PC = PC + imm
-I  bne  rs rt imm  if (R[rs] != R[rt]) PC = PC + imm
+I  beq  rs rt imm  if (R[rs] == R[rt]) PC = PC + imm    // branch on equal
+I  bne  rs rt imm  if (R[rs] != R[rt]) PC = PC + imm    // branch on not equal
 FI beqf fs ft imm  if (F[fs] == F[ft]) PC = PC + imm
 FI bnef fs ft imm  if (F[fs] != F[ft]) PC = PC + imm
 
 **移動命令**
-R  mv   rd rs      R[rd] = R[rs]
+R  mv   rd rs      R[rd] = R[rs]    // move
 FR mvf  fd fs      F[fd] = F[fs]
-R  mfhi rd         R[rd] = Hi
-R  mflo rd         R[rd] = Lo
+R  mfhi rd         R[rd] = Hi    // move from Hi
+R  mflo rd         R[rd] = Lo    // move from Lo
 
 **その他**
 -  nop
