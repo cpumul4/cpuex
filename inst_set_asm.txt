@@ -19,8 +19,6 @@
 **算術演算命令**
 R  add  rd rs rt   R[rd] = R[rs] + R[rt]
 R  sub  rd rs rt   R[rd] = R[rs] - R[rt]
-R  mul  rs rt      Hi @ Lo = R[rs] * R[rt]
-R  div  rs rt      Lo = R[rs] / R[rt]; Hi = R[rs] % R[rt]
 
 FR addf fd fs ft   F[fd] = F[fs] +. F[ft]
 FR subf fd fs ft   F[fd] = F[fs] -. F[ft]
@@ -31,17 +29,13 @@ I  addi rt rs imm  R[rt] = R[rs] + imm
 I  subi rt rs imm  R[rt] = R[rs] - imm
 
 **算術演算命令その2**
-R  abs  rd rs      R[rd] = | R[rs] |    // 絶対値
-R  neg  rd rs      R[rd] = - (R[rs])    // 符号反転
-
-FR absf fd fs      F[fd] = | F[fs] |
-FR negf fd fs      F[fd] = - (F[fs])
 FR sqrt fd fs      F[fd] = sqrt(F[fs])  // 平方根
 
 **論理演算命令**
 R  and  rd rs rt   R[rd] = R[rs] and R[rt]
 R  or   rd rs rt   R[rd] = R[rs] or  R[rt]
 R  nor  rd rs rt   R[rd] = R[rs] nor R[rt]
+R  xor	rd rs rt   R[rd] = R[rs] xor R[rt]
 
 I  andi rt rs imm  R[rt] = R[rs] and imm
 I  ori  rt rs imm  R[rt] = R[rs] or  imm
@@ -80,11 +74,21 @@ FI bnef fs ft imm  if (F[fs] != F[ft]) PC = PC + imm
 **移動命令**
 R  mv   rd rs      R[rd] = R[rs]    // move
 FR mvf  fd fs      F[fd] = F[fs]
-R  mfhi rd         R[rd] = Hi    // move from Hi
-R  mflo rd         R[rd] = Lo    // move from Lo
 
 **その他**
 -  nop
 -  dbg     // シミュレータ用デバッグ命令(コアではnopと同義)
 -  halt    // 停止
 -  rst     // レジスタをリセット
+
+**10/09削除**
+R  mul  rs rt      Hi @ Lo = R[rs] * R[rt]
+R  div  rs rt      Lo = R[rs] / R[rt]; Hi = R[rs] % R[rt]
+
+R  abs  rd rs      R[rd] = | R[rs] |    // 絶対値
+R  neg  rd rs      R[rd] = - (R[rs])    // 符号反転
+FR absf fd fs      F[fd] = | F[fs] |
+FR negf fd fs      F[fd] = - (F[fs])
+
+R  mfhi rd         R[rd] = Hi    // move from Hi
+R  mflo rd         R[rd] = Lo    // move from Lo

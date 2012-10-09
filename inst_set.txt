@@ -6,26 +6,20 @@
  - Rレジスタ(int) 32bit * 32個
  - Fレジスタ(float) 32bit * 32個
    $f0 - $f31
- - 整数の乗算除算結果を格納するレジスタ 32bit * 2個
-   Hi, Lo
 
 命令形式/アドレシングモード
    -> inst_set_asm.txt
 
 算術演算命令
  - 整数
-   add , sub , mul , div (整数レジスタ同士の演算)
+   add, sub (整数レジスタ同士の演算)
    addi, subi (整数レジスタと即値の演算)
-   abs (絶対値)
-   neg (符号反転)
  - 浮動小数点数
    addf, subf, mulf, divf (float同士の演算)
    sqrt (平方根)
-   absf
-   negf
 
 論理演算命令
-   and, andi, or, ori, nor
+   and, andi, or, ori, nor, xor
 
 シフト命令
    sll (Shift Left  Logic)
@@ -38,7 +32,7 @@
    sw, swi, swf (Store Word)
 
 比較命令
-   clt, cltf (Compare Less Than (Float))
+   cmp, cmpf (Compare Less Than or Equal (Float))
 
 分岐命令
  - 無条件分岐
@@ -50,7 +44,6 @@
 
 移動命令
    mv, mvf (move)
-   mfhi, mflo (move from Hi, Lo)
 
 その他
    nop
