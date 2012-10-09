@@ -1,4 +1,4 @@
-#include "./mycommon.h"
+#include "./common.h"
 #include "./memory.h"
 #include "./instruction.h"
 

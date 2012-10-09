@@ -1,4 +1,4 @@
-#include "./mycommon.h"
+#include "./common.h"
 #include "./memory.h"
 
 uint32_t ram[RAM_SIZE];

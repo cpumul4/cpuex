@@ -1,7 +1,7 @@
 #ifndef _INSTRUCTION
 #define _INSTRUCTION
 
-#include "./mycommon.h"
+#include "./common.h"
 #include <iostream>
 using namespace std;
 #include <stdio.h>

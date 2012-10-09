@@ -1,5 +1,5 @@
 #include "./instruction.h"
-#include "./mycommon.h"
+#include "./common.h"
 #include <fstream>
 #include <cstring>
 

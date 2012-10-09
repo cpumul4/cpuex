@@ -1,5 +1,7 @@
 命令実行中に参照するプログラムカウンタPCは、次命令のアドレスを指している。
 
+word = 32bit
+
 命令形式
  - R   Rレジスタ*3
        opcode(31-26),rs(25-21),rt(20-16),rd(15-11),amt(10-6),func(5-0)
@@ -47,9 +49,9 @@ R  sra  rd rs amt  R[rd] = R[rs] >>> amt    // shift right arith.
 
 **ロード/ストア命令**
 R  lw   rd rs rt   R[rd] = M[R[rs] + R[rt]]    // load word
-I  lwi  rt rs imm  R[rt] = M[R[rs] + imm]
+I  lwi  rt rs imm  R[rt] = M[R[rs] + imm]      // 即値は符号付き
 R  sw   rd rs rt   M[R[rs] + R[rt]] = R[rd]    // store word
-I  swi  rt rs imm  M[R[rs] + imm] = R[rt]
+I  swi  rt rs imm  M[R[rs] + imm] = R[rt]      // 即値は符号付き
 
 MR lwf  fd rs rt   F[fd] = M[R[rs] + R[rt]]
 MI lwif ft rs imm  F[ft] = M[R[rs] + imm]
@@ -60,9 +62,12 @@ MI swif ft rs imm  M[R[rs] + imm] = F[ft]
 R  cmp  rd rs rt   R[rd] = (R[rs] <= R[rt]) ? 1 : 0    // compare less than or equal
 FR cmpf fd fs ft   F[fd] = (F[fs] <= F[ft]) ? 1 : 0
 
-**無条件分岐命令**
+**無条件分岐命令** (@はbit列の連結　ex. 001 @ 101 = 001101)
 J  j    addr       PC = PC{31:26} @ addr              // jump
+	      // 2**26 = 67,108,864なのでPC{31:26}はおそらく全部0.
+	      // よってこの命令は絶対アドレスを指定してjumpするのにほぼ等しいか？[y_som]
 J  jl   addr       $ra = PC; PC = PC{31:26} @ addr    // jump and linked
+   		       	     	  	      	      // $ra = link register
 R  jr   rs         PC = R[rs]                         // jump register
 
 **条件分岐命令**
