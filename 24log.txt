@@ -1,4 +1,9 @@
 24ばん 作業記録
+**10/09Tue
+命令セット変更(mul,div,mfhi,mflo,neg,negf,abs,absf削除 xor追加)
+データパス&制御ユニット設計
+制御信号の整理
+レジスタ内訳の決定
 **10/08Mon
 命令変更(clt,cltf -> cmp,cmpf)
 命令セットをスライドにまとめる
