@@ -6,7 +6,7 @@ fib:
 	addi r7, r0, 1	;r3 == 1
 	beq  r1, r7, One		;goto one
 
-	swi r29 , r29, -128 	
+	swi r29 , r29, -128 	# comment test
 	subi r29 , r29,  128	
 	swi r31, r29, 144	;link registerの退避
 	swi r1, r29, 152

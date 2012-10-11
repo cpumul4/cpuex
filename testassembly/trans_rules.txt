@@ -1,3 +1,28 @@
+[返り値のレジスタの変換]
+r3 -> r1
+[heap register]
+r1 -> r29
+[register jump]
+mflr -> linkreg = r31なので不要
+
+blr -> jr r31
+bl Label -> jl Label
+
+-----
+std(ld) rx, const(ry)
+		-> swi(lwi) rx, ry, const
+--
+stdu rx, const(ry)
+		->swi rx, ry, const
+		->subi(/addi) ry, ry, const
+---
+li rx, const 
+		-> addi rx, r0, const 
+
+---
+subi, addi, add, subは同じ
+
+
 [ 0 と比較して分岐する ]
 cmpwi r2, r3, 0
 beq r2, Label
@@ -6,5 +31,10 @@ beq r2, Label
 [ 定数と比較して飛ぶ ]
 cmpwi rx, ry, const
 beq   rx, Label
-		-> addi rx, r0, 1
+		-> addi rx, r0, const
 		-> beq  ry, rx, Label
+
+
+[carry]
+addc rx, ry,rz
+		->
