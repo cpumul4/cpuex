@@ -3,9 +3,6 @@
 #include <math.h>
 #include "./memory.h"
 
-
-
-
 instr::instr(uint8_t _op, uint8_t _rd, uint8_t _rs, int16_t _rt){
   opcode = _op;
   rd = _rd;
@@ -25,11 +22,72 @@ void instr::set_imm(uint8_t _op, int16_t _imm){
   rt = _imm;
 }
 
-void instr::show(){
-  cout << (int)opcode << ' ' << (int)rd << ' ' << (int)rs << ' ' << (int)rt << '\n';
+string encode(uint8_t opcode){
+#define op(str,code,form) \
+    else if (opcode == code){return #str;}
+
+  if(opcode == ADD){
+    return "add";
+  }
+  op(sub , SUB, r)
+    op(mul , MUL , r)
+    op(div , DIV , r)
+    op(addf, ADDF, r)
+    op(subf, SUBF, r)
+    op(mulf, MULF, r)
+    op(divf, DIVF, r)
+    op(addi, ADDI, i)
+    op(subi, SUBI, i)
+    op(abs , ABS , r)
+    op(neg , NEG , r)
+    op(absf, ABSF, r)
+    op(negf, NEGF, r)
+    op(sqrt, SQRT, r)
+    op(and ,  AND, r)
+    op(or  ,  OR , r)
+    op(nor , NOR , r)
+    op(andi, ANDI, i)
+    op(ori , ORI , i)
+    op(sll , SLL , r)
+    op(srl , SRL , r)
+    op(sra , SRA , r)
+    op(lw  , LW  , r)
+    op(lwi , LWI , r)
+    op(sw  , SW  , r)
+    op(swi , SWI , i)
+    op(lwf , LWF , r)
+    op(lwif, LWIF, i)
+    op(swf , SWF , r)
+    op(swif, SWIF, i)
+    op(clt , CLT , r)
+    op(cltf, CLTF, r)
+    op(j   , J   , j)
+    op(jl  , JL  , j)
+    op(jr  , JR  , r)
+    op(beq , BEQ , branch)
+    op(bne , BNE , branch)
+    op(beqf, BEQF, branch)
+    op(bnef, BNEF, branch)
+    op(mv  , MV  , r)
+    op(mvf , MVF , r)
+    op(mfhi, MFHI, r)
+    op(mflo, MFLO, r)
+    op(nop , NOP , none)
+    op(dgb , DBG , none)
+    op(rst , RST , none) 
+    op(halt, HALT, none)
+    else return "unknown";
 }
 
-void instr::exec_asm(){ 
+inline uint32_t get_pc(uint32_t pc, uint16_t imm){
+  return ((pc >> 26) << 26) | imm;
+}
+
+void instr::show(){
+  cout << encode(opcode) << ' ' << (int)rd << ' ' << (int)rs << ' ' << (int)rt << '\n';
+}
+
+void instr::exec_asm(void){ 
 
   union conv { uint32_t i; float f; };
 
@@ -75,24 +133,18 @@ void instr::exec_asm(){
 
     c(LWI , D = ram[S + IMM];);
     c(SWI , ram[S + IMM] = D;); // **********D,Sの順番に注意********
-    c(BEQ , if(D == S)pc += IMM;); // この後pcが変更される可能性もあるので注意
-    c(BNE , if(D != S)pc += IMM;);
+    c(BEQ , if(D == S)pc = pc + IMM;); // この後pcが変更される可能性もあるので注意
+    c(BNE , if(D != S)pc = pc + IMM;);
 #undef S
 #undef D
     // -------------- J形式 --------------
-    c(J , pc += IMM;);
-    c(JL, lreg = pc; pc += IMM;);
+    c(J , pc = get_pc(pc,IMM););
+    c(JL, LR = pc;pc = get_pc(pc,IMM););
 #undef IMM
     // -------------- FR形式 -------------
 #define FD freg[rd]
 #define FS freg[rs]
 #define FT freg[rt]
-#define cf(_op, oprtr)  c(_op, conv _fd, _fs, _ft; \
-    _fd.i = FD; \
-    _fs.i = FS; \
-    _ft.i = FT; \
-    _fd.f = _fs.f oprtr _ft.f;)
-      
     c(ADDF , FD = FS + FT;);
     c(SUBF , FD = FS - FT;);
     c(MULF , FD = FS * FT;);

@@ -10,7 +10,6 @@
 
 instr rom[ROM_SIZE];
 
-
 class ltable {
   uint index[LABEL_TABLE_NUM];
   char *label[LABEL_TABLE_NUM];
@@ -41,6 +40,13 @@ uint ltable::get_index(const char *_label){
 }
     
 
+
+inline int get_regnum(char *reg){
+  if(reg[0] == 'r' || reg[0] == 'f')
+    return (int)atoi(reg + 1);
+  else 
+    return (int)atoi(reg);
+}
 
 
 void put_rom(char assm[], ltable table, instr &inst, uint romindex){
@@ -111,6 +117,10 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(dgb , DBG , none)
     op(rst , RST , none) 
     op(halt, HALT, none)
+  else {
+    cerr << "unknown opcode: " << asmtok[0] << '\n';
+    exit(1);
+  }
     ;
 #undef op
 
@@ -119,27 +129,34 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   }
   else if(format == j){
     int16_t imm;
-    imm = table.get_index(asmtok[1]) - romindex - 1;
+    imm = table.get_index(asmtok[1]);
     inst.set_imm(opcode, imm);
   }
   else if(format == branch){
     uint8_t args[2] = {0, 0};
     for(int itr=0; itr < 2;itr++){
-      args[itr] = (uint8_t)atoi(asmtok[itr+1]);
+      args[itr] = get_regnum(asmtok[itr+1]);
     }
 
     int16_t imm;
     imm = table.get_index(asmtok[3]) - romindex - 1;
+    if(romindex == 0)imm--;
     inst.set(opcode, args[0], args[1], imm);
 
   }
   else {  
-    uint8_t args[3] = {0, 0, 0};
+    int16_t args[3] = {0, 0, 0};
     for(int itr=0; asmtok[itr+1] != NULL;itr++){
-      args[itr] = (uint8_t)atoi(asmtok[itr+1]);
+      args[itr] = get_regnum(asmtok[itr+1]);
     }
     inst.set(opcode, args[0], args[1], args[2]);
   }
+}
+
+int rm_comment(char *line, const char *keys){
+  for(int i=0; line[i] != 0;i++)
+    for(int j=0; keys[j] != 0;j++)
+      if(line[i] == keys[j])return i;
 }
 
 
@@ -150,9 +167,12 @@ int decode(char *srcpath){
 
   ifstream fin(srcpath);
   
+  // 必要な行だけを抜き取り、labelをtableに入れる
   while( fin.getline(input[romindex],MAX_LINE) ){
     if(input[romindex] == NULL || input[romindex][0] == 0)
       continue;
+    if(int comment = rm_comment(input[romindex], "#;"))
+       input[romindex][comment] = 0;
     if(input[romindex][0] == '.' || input[romindex][1] == '.'){		// ignore    
       continue;
     }

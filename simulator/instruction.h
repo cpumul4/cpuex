@@ -17,7 +17,7 @@ public:
   instr(uint8_t _op = 0, uint8_t _rd = 0, uint8_t _rs = 0, int16_t _rt = 0);
   void set(uint8_t _op, uint8_t _rd = 0, uint8_t _rs = 0, int16_t _rt = 0);
   void set_imm(uint8_t _op, int16_t _imm);
-  void exec_asm();
+  void exec_asm(void);
   void show();
 };
 

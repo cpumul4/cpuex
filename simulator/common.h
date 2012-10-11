@@ -5,6 +5,17 @@
 #define FLOATREG_NUM 32
 #define RAM_SIZE  1024*1024*8/4
 #define ROM_SIZE  1024*10
+
+/* register */
+#define ZR ireg[0]
+#define RR ireg[1]
+#define GPR ireg[28]
+#define FPR ireg[29]
+#define SPR ireg[30]
+#define LR  ireg[31]
+#define LR_INIT UINT_MAX
+
+
 // R
 #define ADD    1
 #define SUB    2
