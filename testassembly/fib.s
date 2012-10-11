@@ -1,33 +1,29 @@
-.text
+.text  
 	.align 2
 	.globl fib
 fib:
-	cmpwi %cr7, %r3, 0	;r3 == 0
-	beq %cr7, Zero		;goto zero
-	cmpwi %cr7, %r3, 1	;r3 == 1
-	beq %cr7, One		;goto one
+	beq  r1, r0, Zero		;goto zero
+	addi r7, r0, 1	;r3 == 1
+	beq  r1, r7, One		;goto one
 
-	swi   r1, r1, -128 	
-	sub   r1, r1,  128
-	
-	mflr %r0		; move from link register
-	swi r0, r1, 144
-	swi r3, r1, 152
-	subi %r3, %r3, 1
+	swi r29 , r29, -128 	
+	subi r29 , r29,  128	
+	swi r31, r29, 144	;link registerの退避
+	swi r1, r29, 152
+	subi r1, r1, 1
 	jl fib
-	std %r3,160(%r1) 
-	ld %r3, 152(%r1)
-	subi %r3, %r3, 2
-	bl fib
-	ld %r4, 160(%r1)
-	add %r3, %r3, %r4
-	ld %r0, 144(%r1)
-	mtlr %r0		; move to link register
-	addi %r1, %r1, 128
-	blr
+	swi r1, r29, 160 
+	lwi r1, r29, 152
+	subi r1, r1, 2
+	jl fib
+	lwi r4, r29, 160
+	add r1, r1, r4
+	lwi r31, r29, 144	;link registerを取ってくる
+	addi r29, r29, 128
+	jr   r31
 Zero:
-	li %r3, 0
-	blr
+	mv r1, r0
+	jr r31
 One:
-	li %r3, 1
-	blr
+	addi r1, r0, 1
+	jr r31

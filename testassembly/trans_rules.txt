@@ -1,0 +1,10 @@
+[ 0 と比較して分岐する ]
+cmpwi r2, r3, 0
+beq r2, Label
+		->beq r3, r0, Label
+
+[ 定数と比較して飛ぶ ]
+cmpwi rx, ry, const
+beq   rx, Label
+		-> addi rx, r0, 1
+		-> beq  ry, rx, Label
