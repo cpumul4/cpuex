@@ -23,7 +23,7 @@ int instr_count[64];
 
 int simulate(char *srcpath){
   uint exec_count = 0;
-  int step;
+  int step = 0;
 
   decode(srcpath);
 

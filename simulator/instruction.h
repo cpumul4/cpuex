@@ -117,7 +117,7 @@ inline void instr_stat(int all_count){
   cout << "--- 各命令が何回実行されたか ----\n";
   for(int i = 0;i < 64; i++){
     if(instr_count[i] != 0)
-      cout << encode((uint8_t)i) << "\t: " <<100*instr_count[i]/all_count << "%\n";
+      cout << encode((uint8_t)i) << "\t: " <<(int)(((float)instr_count[i]/all_count)*100) << "%\n";
   }
   cout << "------------------------------\n";
 }
@@ -138,7 +138,7 @@ inline void instr::exec_asm(void){
 #define D ireg[rd]
 #define S ireg[rs]
 #define T ireg[rt]
-#define c(_op,_expr) case _op: _expr break
+#define c(_op,_expr) case _op: _expr instr_count[_op]++; break
   switch(opcode) {
     //  ----------- R 形式の命令 ---------------
     c(ADD , D = S + T;);
