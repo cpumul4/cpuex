@@ -9,9 +9,15 @@
 /* register */
 #define ZR ireg[0]
 #define RR ireg[1]
-#define GPR ireg[28]
-#define FPR ireg[29]
-#define SPR ireg[30]
+#define AR1 ireg[2]
+#define AR2 ireg[3]
+#define AR3 ireg[4]
+#define AR4 ireg[5]
+
+
+
+#define GPR ireg[29]
+#define SPR ireg[30] 
 #define LR  ireg[31]
 #define LR_INIT UINT_MAX
 

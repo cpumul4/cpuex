@@ -1,30 +1,12 @@
-# CC = g++
-# WARNOPTS = -Wall -Wextra -Wformat=2 -Wstrict-aliasing=2 -Wcast-qual -Wcast-align -Wwrite-strings -Wfloat-equal -Wpointer-arith -Wswitch-enum -Wshadow
-# CFLAGS = -O2 -g 
-
-# TARGET = simulator
-# SRCS = $(wildcard *.cpp)
-# OBJS = $(SRCS:.cpp=.o)
-# RM = rm -f
-
-# $(TARGET): $(OBJS)
-# 	$(CC) $(CFLAGS)  -o $@ $^
-
-# clean:
-# 	$(RM) $(TARGET) $(OBJS) *~
-
-# check-syntax:
-# 	$(CC) $(WARNOPTS) -S -fsyntax-only $(CHK_SOURCES)
-
-# .PHONY: clean check-syntax
-
-
-PROGRAM := hoge
+PROGRAM := simulator
 SOURCES := $(wildcard *.cpp)
 OBJS := $(SOURCES:.cpp=.o)
 DEPENDS := $(SOURCES:.cpp=.depend~)
 CXX := g++
-CPPFLAGS := -O3
+CPPFLAGS := -O2
+WARNOPTS = -Wall -Wextra -Wformat=2 -Wstrict-aliasing=2 -Wcast-qual -Wcast-align -Wwrite-strings -Wfloat-equal -Wpointer-arith -Wswitch-enum -Wshadow
+
+
 
 .PHONY: all
 all: $(PROGRAM)
@@ -41,8 +23,12 @@ ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEPENDS)
 endif
 
-.PHONY : clean
+.PHONY : clean check-syntax
 clean:
 	rm -f $(PROGRAM)
 	rm -f $(OBJS)
 	rm -f *.depend~
+
+check-syntax:
+	$(CXX) $(WARNOPTS) -S -fsyntax-only $(CHK_SOURCES)
+

@@ -42,8 +42,10 @@ uint ltable::get_index(const char *_label){
 
 
 inline int get_regnum(char *reg){
-  if(reg[0] == 'r' || reg[0] == 'f')
-    return (int)atoi(reg + 1);
+  if(reg[0] == '$'){
+    if(reg[1] == 'r' || reg[1] == 'f')
+      return (int)atoi(reg + 2);
+  }
   else 
     return (int)atoi(reg);
 }
@@ -51,7 +53,7 @@ inline int get_regnum(char *reg){
 
 void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   char *asmtok[10];
-  char delims[] = ", \t\n";
+  char delims[] = " \t\n";
 
   while(*assm == ' ' || *assm == '\t')
     assm++;
@@ -171,8 +173,6 @@ int decode(char *srcpath){
   
   // 必要な行だけを抜き取り、labelをtableに入れる
   while( fin.getline(input[romindex],MAX_LINE) ){
-    cerr << romindex;
-    
     if(input[romindex] == NULL || input[romindex][0] == 0){
       cerr << "";		// これつけると高速化する
 

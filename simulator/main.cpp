@@ -11,34 +11,40 @@ float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ�
   return (float)(t2.tv_sec - t1.tv_sec) + (t2.tv_usec - t1.tv_usec)/1000000.0;
 }
 
+inline void show_regs(void){
+  cout << "[registers not zero]";
+  for(int i = 0; i < INTREG_NUM; i++){
+    if(ireg[i] != 0)
+      cout << "r" << i << "=" << ireg[i] << ", ";
+  }
+}
+
 int simulate(char *srcpath){
   uint exec_count = 0;
-  uint step;
+  int step;
 
   decode(srcpath);
 
-  cerr << "何命令毎に停止して欲しいか述べよ(0だと停止しない): ";
+  cerr << "何命令毎に停止して欲しい?(0だと停止しないよ): ";
   cin >> step;
-  
   pc = 0;
-  LR = LR_INIT;
-  FPR = INT_MAX/2;
-  ireg[1] =31;
+  ZR = 0;
+  LR  = LR_INIT;
+  GPR = 0x000fffff;
 
   while(pc != LR_INIT){
-
     if(step != 0 && exec_count % step == 0){
-      for(int i = 0; i < INTREG_NUM; i++){
-    	if(ireg[i] != 0)
-    	  cout << "r" << i << "=" << ireg[i] << ", ";
-      }
+      cout <<"\n -------------- break at " << exec_count << " --------------\n";
+      show_regs();
       string a;
-      cout << "input a char if continue\n";
-      cin >> a;
+
+    cout << "\n" << "[next instruction]" << pc << ": ";
+    rom[pc].show();
+
+    cout << "----- 今後は何命令毎に停止する? ----- \n";
+    cin >> step;
     }
     pc++;
-    // cout << "\n" << '[' << pc-1 << ']';
-    //    rom[pc-1].show();
     rom[pc-1].exec_asm();
     exec_count++;
   }
