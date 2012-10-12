@@ -17,6 +17,7 @@
 
 word = 32bit
 
+
 命令形式
  - R   Rレジスタ*3
        opcode(31-26),rs(25-21),rt(20-16),rd(15-11),amt(10-6),func(5-0)
@@ -62,7 +63,7 @@ R  sll  rd rs amt  R[rd] = R[rs] <<  amt    // shift left logical
 R  srl  rd rs amt  R[rd] = R[rs] >>  amt    // shift right logical
 R  sra  rd rs amt  R[rd] = R[rs] >>> amt    // shift right arith.
 
-**ロード/ストア命令**
+**ロード/ストア命令**（メモリには32bit毎にアクセス）
 R  lw   rd rs rt   R[rd] = M[R[rs] + R[rt]]    // load word
 I  lwi  rt rs imm  R[rt] = M[R[rs] + imm]      // 即値は符号付き
 R  sw   rd rs rt   M[R[rs] + R[rt]] = R[rd]    // store word
