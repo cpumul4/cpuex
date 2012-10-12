@@ -10,6 +10,7 @@ using namespace std;
 #include <stdint.h>
 #include <math.h>
 
+
 class instr {
   uint8_t opcode;
   uint8_t rd;
@@ -23,10 +24,11 @@ public:
   void exec_asm(void);
 };
 
-
+#endif // _INSTRUCTION
 
 // J 形式: IMMのみに入れる
 // 他は前から順番に入れれば良い
+
 
 inline instr::instr(uint8_t _op, uint8_t _rd, uint8_t _rs, int16_t _rt){
   opcode = _op;
@@ -46,8 +48,6 @@ inline void instr::set_imm(uint8_t _op, int16_t _imm){
   opcode = _op;
   rt = _imm;
 }
-
-
 
 inline string encode(uint8_t opcode){
 #define op(str,code,form) \
@@ -110,18 +110,6 @@ inline string encode(uint8_t opcode){
 }
 
 
-extern int instr_count[64];
-inline void instr_stat(int all_count){
-
-  cout << "--- 各命令が何回実行されたか ----\n";
-  for(int i = 0;i < 64; i++){
-    if(instr_count[i] != 0)
-      cout << encode((uint8_t)i) << "\t: " <<100*instr_count[i]/all_count << "%\n";
-  }
-  cout << "----------------------------------------------\n";
-}
-
-
 inline void instr::show(){
   cout << encode(opcode) << ' ' << (int)rd << ' ' << (int)rs << ' ' << (int)rt << '\n';
 }
@@ -137,7 +125,7 @@ inline void instr::exec_asm(void){
 #define D ireg[rd]
 #define S ireg[rs]
 #define T ireg[rt]
-#define c(_op,_expr) case _op: _expr instr_count[_op]++;  break
+#define c(_op,_expr) case _op: _expr break
   switch(opcode) {
     //  ----------- R 形式の命令 ---------------
     c(ADD , D = S + T;);
@@ -200,7 +188,7 @@ inline void instr::exec_asm(void){
     // ------------- MI形式 --------------------
 #define S ireg[rs]
     c(LWIF, FD = ram[S + IMM];);
-    c(SWIF, ram[S + IMM] = FD.b;); // myfloatの実装が外に出てしまっている
+    c(SWIF, ram[S + IMM] = FD.i;); // myfloatの実装が外に出てしまっている
 #undef IMM 
     // ------------- MR形式 --------------------
 #define T ireg[rt]
@@ -222,4 +210,3 @@ inline void instr::exec_asm(void){
 
 
 #undef c
-#endif // _INSTRUCTION

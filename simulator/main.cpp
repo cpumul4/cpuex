@@ -19,9 +19,6 @@ inline void show_regs(void){
   }
 }
 
-
-int instr_count[64];
-
 int simulate(char *srcpath){
   uint exec_count = 0;
   int step;
@@ -34,8 +31,6 @@ int simulate(char *srcpath){
   ZR = 0;
   LR  = LR_INIT;
   GPR = 0x000fffff;
-
-  RR = 30;
 
   while(pc != LR_INIT){
     if(step != 0 && exec_count % step == 0){
@@ -54,9 +49,6 @@ int simulate(char *srcpath){
     exec_count++;
   }
   cout << "return value is " << ireg[1] << '\n';
-
-  instr_stat(exec_count);
-
 
   return exec_count;
 }
