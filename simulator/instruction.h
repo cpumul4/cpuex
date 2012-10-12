@@ -1,6 +1,7 @@
 #ifndef _INSTRUCTION
 #define _INSTRUCTION
 
+
 #include "./memory.h"
 #include "./common.h"
 #include <iostream>
@@ -107,6 +108,18 @@ inline string encode(uint8_t opcode){
     else return "unknown";
 
 #undef op
+}
+
+
+extern int instr_count[64];
+inline void instr_stat(int all_count){
+
+  cout << "--- 各命令が何回実行されたか ----\n";
+  for(int i = 0;i < 64; i++){
+    if(instr_count[i] != 0)
+      cout << encode((uint8_t)i) << "\t: " <<100*instr_count[i]/all_count << "%\n";
+  }
+  cout << "------------------------------\n";
 }
 
 

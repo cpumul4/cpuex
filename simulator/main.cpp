@@ -19,6 +19,8 @@ inline void show_regs(void){
   }
 }
 
+int instr_count[64];
+
 int simulate(char *srcpath){
   uint exec_count = 0;
   int step;
@@ -49,6 +51,7 @@ int simulate(char *srcpath){
     exec_count++;
   }
   cout << "return value is " << ireg[1] << '\n';
+  instr_stat(exec_count);
 
   return exec_count;
 }
