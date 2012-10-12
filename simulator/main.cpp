@@ -13,28 +13,34 @@ float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ�
 
 int simulate(char *srcpath){
   uint exec_count = 0;
+  uint step;
+
   decode(srcpath);
 
+  cerr << "何命令毎に停止して欲しいか述べよ(0だと停止しない): ";
+  cin >> step;
   
   pc = 0;
   LR = LR_INIT;
   FPR = INT_MAX/2;
-  //  ireg[1] =35;
+  ireg[1] =31;
 
   while(pc != LR_INIT){
-    // if(exec_count % 10 == 0){
-    //   string a;
-    //   cin >> a;
-    // }
+
+    if(step != 0 && exec_count % step == 0){
+      for(int i = 0; i < INTREG_NUM; i++){
+    	if(ireg[i] != 0)
+    	  cout << "r" << i << "=" << ireg[i] << ", ";
+      }
+      string a;
+      cout << "input a char if continue\n";
+      cin >> a;
+    }
     pc++;
     // cout << "\n" << '[' << pc-1 << ']';
     //    rom[pc-1].show();
     rom[pc-1].exec_asm();
     exec_count++;
-    // //    for(int i = 0; i < INTREG_NUM; i++){
-    //   if(ireg[i] != 0)
-    // 	cout << "r" << i << "=" << ireg[i] << ", ";
-    //    }
   }
   cout << "return value is " << ireg[1] << '\n';
 

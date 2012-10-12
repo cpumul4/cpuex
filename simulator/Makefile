@@ -24,7 +24,7 @@ SOURCES := $(wildcard *.cpp)
 OBJS := $(SOURCES:.cpp=.o)
 DEPENDS := $(SOURCES:.cpp=.depend~)
 CXX := g++
-CPPFLAGS := -O2
+CPPFLAGS := -O3
 
 .PHONY: all
 all: $(PROGRAM)

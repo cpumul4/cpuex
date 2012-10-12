@@ -16,6 +16,8 @@
 #define LR_INIT UINT_MAX
 
 
+
+
 // R
 #define ADD    1
 #define SUB    2
@@ -60,6 +62,7 @@
 // J
 #define J    34			
 #define JL   35
+#define JLR  49
 // R
 #define JR   36
 // I

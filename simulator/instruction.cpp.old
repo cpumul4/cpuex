@@ -1,50 +1,23 @@
-#ifndef _INSTRUCTION
-#define _INSTRUCTION
-
-#include "./memory.h"
 #include "./common.h"
-#include <iostream>
-using namespace std;
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
+#include "./instruction.h"
 #include <math.h>
+#include "./memory.h"
 
-
-class instr {
-  uint8_t opcode;
-  uint8_t rd;
-  uint8_t rs;
-  int16_t rt;			// immediate, addr, register index
-public:
-  instr(uint8_t _op = 0, uint8_t _rd = 0, uint8_t _rs = 0, int16_t _rt = 0);
-  void set(uint8_t _op, uint8_t _rd = 0, uint8_t _rs = 0, int16_t _rt = 0);
-  void set_imm(uint8_t _op, int16_t _imm);
-  void show();
-  void exec_asm(void);
-};
-
-#endif // _INSTRUCTION
-
-// J 形式: IMMのみに入れる
-// 他は前から順番に入れれば良い
-
-
-inline instr::instr(uint8_t _op, uint8_t _rd, uint8_t _rs, int16_t _rt){
+instr::instr(uint8_t _op, uint8_t _rd, uint8_t _rs, int16_t _rt){
   opcode = _op;
   rd = _rd;
   rs = _rs;
   rt = _rt;
 }
 
-inline void instr::set(uint8_t _op, uint8_t _rd, uint8_t _rs, int16_t _rt){
+void instr::set(uint8_t _op, uint8_t _rd, uint8_t _rs, int16_t _rt){
   opcode = _op;
   rd = _rd;
   rs = _rs;
   rt = _rt;
 }
 
-inline void instr::set_imm(uint8_t _op, int16_t _imm){
+void instr::set_imm(uint8_t _op, int16_t _imm){
   opcode = _op;
   rt = _imm;
 }
@@ -105,12 +78,10 @@ inline string encode(uint8_t opcode){
     op(rst , RST , none) 
     op(halt, HALT, none)
     else return "unknown";
-
-#undef op
 }
 
 
-inline void instr::show(){
+void instr::show(){
   cout << encode(opcode) << ' ' << (int)rd << ' ' << (int)rs << ' ' << (int)rt << '\n';
 }
 
@@ -118,7 +89,7 @@ inline uint32_t get_pc(uint32_t pc, uint16_t imm){
   return ((pc >> 26) << 26) | imm;
 }
 
-inline void instr::exec_asm(void){ 
+void instr::exec_asm(void){ 
 
   union conv { uint32_t i; float f; };
 
@@ -209,4 +180,3 @@ inline void instr::exec_asm(void){
 }
 
 
-#undef c

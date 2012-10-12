@@ -105,6 +105,8 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(j   , J   , j)
     op(jl  , JL  , j)
     op(jr  , JR  , r)
+    op(jlr , JLR , r)
+
     op(beq , BEQ , branch)
     op(bne , BNE , branch)
     op(beqf, BEQF, branch)
@@ -169,11 +171,20 @@ int decode(char *srcpath){
   
   // 必要な行だけを抜き取り、labelをtableに入れる
   while( fin.getline(input[romindex],MAX_LINE) ){
-    if(input[romindex] == NULL || input[romindex][0] == 0)
+    cerr << romindex;
+    
+    if(input[romindex] == NULL || input[romindex][0] == 0){
+      cerr << "";		// これつけると高速化する
+
+
       continue;
+    }
     if(int comment = rm_comment(input[romindex], "#;"))
        input[romindex][comment] = 0;
-    if(input[romindex][0] == '.' || input[romindex][1] == '.'){		// ignore    
+    if(input[romindex][0] == '.' || input[romindex][1] == '.'){		// ignore      
+      cerr << "";		// なんかこれつけると高速化する
+
+
       continue;
     }
     else if(input[romindex][0] == '\t'){
