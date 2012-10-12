@@ -34,8 +34,6 @@ int simulate(char *srcpath){
   LR  = LR_INIT;
   SPR = 0x000fffff;
 
-  AR1 = 35;
-
   while(pc != LR_INIT){
     if(step != 0 && exec_count % step == 0){
       cout <<"\n -------------- break at " << exec_count << " --------------\n";
