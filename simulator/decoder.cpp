@@ -139,7 +139,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   else if(format == branch){
     uint8_t args[2] = {0, 0};
     for(int itr=0; itr < 2;itr++){
-      args[itr] = get_regnum(asmtok[itr+1]);
+      args[itr] = (uint8_t)get_regnum(asmtok[itr+1]);
     }
 
     int16_t imm;
@@ -149,11 +149,11 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
 
   }
   else {  
-    int16_t args[3] = {0, 0, 0};
+    int args[3] = {0, 0, 0};
     for(int itr=0; asmtok[itr+1] != NULL;itr++){
       args[itr] = get_regnum(asmtok[itr+1]);
     }
-    inst.set(opcode, args[0], args[1], args[2]);
+    inst.set(opcode, (uint8_t)args[0], (uint8_t)args[1], (int16_t)args[2]);
   }
 }
 

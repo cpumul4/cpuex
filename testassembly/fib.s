@@ -2,24 +2,24 @@
 	.align 2
 	.globl fib
 fib:
-	beq  $r1 $r0 Zero		;goto zero
+	beq  $r2 $r0 Zero		;goto zero
 	addi $r7 $r0 1	;r3 == 1
-	beq  $r1 $r7 One		;goto one
+	beq  $r2 $r7 One		;goto one
 
-	swi $r29  $r29 -32 	# comment test
-	subi $r29  $r29  32	
-	swi $r31 $r29 36	;link $registe$rの退避
-	swi $r1 $r29 38
-	subi $r1 $r1 1
+	swi $r30  $r30 -32 	# comment test
+	subi $r30  $r30  32	
+	swi $r31 $r30 36	;link $registe$rの退避
+	swi $r2 $r30 38
+	subi $r2 $r2 1
 	jl fib
-	swi $r1 $r29 40 
-	lwi $r1 $r29 38
-	subi $r1 $r1 2
+	swi $r1 $r30 40 
+	lwi $r2 $r30 38
+	subi $r2 $r2 2
 	jl fib
-	lwi $r4 $r29 40
-	add $r1 $r1 $r4
-	lwi $r31 $r29 36	;link registerを取ってくる
-	addi $r29 $r29 32
+	lwi $r6 $r30 40
+	add $r1 $r1 $r6
+	lwi $r31 $r30 36	;link registerを取ってくる
+	addi $r30 $r30 32
 	jr   $r31
 Zero:
 	mv $r1 $r0

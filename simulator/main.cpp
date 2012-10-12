@@ -32,7 +32,9 @@ int simulate(char *srcpath){
   pc = 0;
   ZR = 0;
   LR  = LR_INIT;
-  GPR = 0x000fffff;
+  SPR = 0x000fffff;
+
+  AR1 = 35;
 
   while(pc != LR_INIT){
     if(step != 0 && exec_count % step == 0){
