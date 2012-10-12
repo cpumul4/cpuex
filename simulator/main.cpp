@@ -19,7 +19,7 @@ int simulate(char *srcpath){
   pc = 0;
   LR = LR_INIT;
   FPR = INT_MAX/2;
-  ireg[1] =33;
+  //  ireg[1] =35;
 
   while(pc != LR_INIT){
     // if(exec_count % 10 == 0){
