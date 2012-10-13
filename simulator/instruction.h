@@ -10,7 +10,7 @@ using namespace std;
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
-
+#include <limits.h>
 
 class instr {
   uint8_t opcode;
@@ -213,7 +213,7 @@ inline void instr::exec_asm(void){
     // ------------- その他 ---------------------
     c(NOP, ;);
     c(DBG,  ;);			// TODO
-    c(HALT, exit(0););			// TODO
+    c(HALT, pc = LR_INIT;);			// TODO
     c(RST,  ;);			// TODO
 #undef c
   default:

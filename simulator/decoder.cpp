@@ -53,15 +53,12 @@ inline int get_regnum(char *reg){
 
 void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   char *asmtok[10];
-  char delims[] = " \t\n";
+  char delims[] = " \t\r\n";
 
   while(*assm == ' ' || *assm == '\t')
     assm++;
   asmtok[0] = strtok(assm, delims);
   for(int itr=1; (asmtok[itr] = strtok(NULL, delims)) != NULL;itr++);  
-  // コメントに対する処理がまだ
-
-
 
   enum {r,i,j, branch, none} format;
 #define op(str,code,form) \
