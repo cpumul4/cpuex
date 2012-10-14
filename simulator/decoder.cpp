@@ -158,6 +158,7 @@ int rm_comment(char *line, const char *keys){
   for(int i=0; line[i] != 0;i++)
     for(int j=0; keys[j] != 0;j++)
       if(line[i] == keys[j])return i;
+  return 0;
 }
 
 
