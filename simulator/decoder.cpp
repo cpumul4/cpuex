@@ -70,27 +70,41 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     format = r;
   }
   op(sub , SUB, r)
-    op(mul , MUL , r)
-    op(div , DIV , r)
     op(addf, ADDF, r)
     op(subf, SUBF, r)
     op(mulf, MULF, r)
     op(divf, DIVF, r)
+
+    op(sqrt, SQRT, r)
+
     op(addi, ADDI, i)
     op(subi, SUBI, i)
-    op(abs , ABS , r)
-    op(neg , NEG , r)
-    op(absf, ABSF, r)
-    op(negf, NEGF, r)
-    op(sqrt, SQRT, r)
+
     op(and ,  AND, r)
     op(or  ,  OR , r)
     op(nor , NOR , r)
+    op(xor , XOR , r)
+
     op(andi, ANDI, i)
     op(ori , ORI , i)
+
     op(sll , SLL , r)
     op(srl , SRL , r)
     op(sra , SRA , r)
+
+    op(cmp , CMP , r)
+    op(cmpf, CMPF, r)
+
+    op(mvr  , MVR  , r)
+    op(mvf , MVF , r)
+    op(mvrf, MVRF, r)
+    op(mvfr, MVFR, r)
+
+    op(lui , LUI , i)
+    op(lli , LLI , i)
+    op(luif, LUIF, i)
+    op(llif, LLIF, i)
+
     op(lw  , LW  , r)
     op(lwi , LWI , r)
     op(sw  , SW  , r)
@@ -99,25 +113,36 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(lwif, LWIF, i)
     op(swf , SWF , r)
     op(swif, SWIF, i)
-    op(clt , CLT , r)
-    op(cltf, CLTF, r)
+
     op(j   , J   , j)
     op(jl  , JL  , j)
     op(jr  , JR  , r)
     op(jlr , JLR , r)
 
+
     op(beq , BEQ , branch)
     op(bne , BNE , branch)
     op(beqf, BEQF, branch)
     op(bnef, BNEF, branch)
-    op(mv  , MV  , r)
-    op(mvf , MVF , r)
-    op(mfhi, MFHI, r)
-    op(mflo, MFLO, r)
+
+
     op(nop , NOP , none)
     op(dgb , DBG , none)
     op(rst , RST , none) 
     op(halt, HALT, none)
+
+    op(in , IN  ,  r)	// TODO
+    op(inf, INF ,  r)	// TODO
+    op(outa,OUTA, r)	// TODO
+    op(outb,OUTB, r)	// TODO
+    op(outc,OUTC, r)	// TODO
+    op(outd,OUTD, r)	// TODO
+    op(outaf,OUTAF, r)	// TODO
+    op(outbf,OUTBF, r)	// TODO
+    op(outcf,OUTCF, r)	// TODO
+    op(outdf,OUTDF, r)	// TODO
+
+
   else {
     cerr << "unknown opcode: " << asmtok[0] << '\n';
     exit(1);

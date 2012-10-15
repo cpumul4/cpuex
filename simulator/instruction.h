@@ -12,6 +12,8 @@ using namespace std;
 #include <math.h>
 #include <limits.h>
 
+extern int instr_count[64];
+
 class instr {
   uint8_t opcode;
   uint8_t rd;
@@ -26,6 +28,8 @@ public:
 };
 
 #endif // _INSTRUCTION
+
+
 
 // J 形式: IMMのみに入れる
 // 他は前から順番に入れれば良い
@@ -58,77 +62,122 @@ inline string encode(uint8_t opcode){
     return "add";
   }
   op(sub , SUB, r)
-    op(mul , MUL , r)
-    op(div , DIV , r)
+
     op(addf, ADDF, r)
     op(subf, SUBF, r)
     op(mulf, MULF, r)
     op(divf, DIVF, r)
+
     op(addi, ADDI, i)
     op(subi, SUBI, i)
-    op(abs , ABS , r)
-    op(neg , NEG , r)
-    op(absf, ABSF, r)
-    op(negf, NEGF, r)
+
     op(sqrt, SQRT, r)
+
     op(and ,  AND, r)
     op(or  ,  OR , r)
     op(nor , NOR , r)
+    op(xor , XOR , r)
+
     op(andi, ANDI, i)
     op(ori , ORI , i)
+
     op(sll , SLL , r)
     op(srl , SRL , r)
     op(sra , SRA , r)
+
     op(lw  , LW  , r)
     op(lwi , LWI , r)
     op(sw  , SW  , r)
     op(swi , SWI , i)
+
+    op(lui , LUI , i)
+    op(lli , LLI , i)
+    op(luif, LUIF, i)
+    op(llif, LLIF, i)
+
     op(lwf , LWF , r)
     op(lwif, LWIF, i)
     op(swf , SWF , r)
     op(swif, SWIF, i)
-    op(clt , CLT , r)
-    op(cltf, CLTF, r)
+
+    op(cmp , CMP , r)
+    op(cmpf, CMPF, r)
+
     op(j   , J   , j)
     op(jl  , JL  , j)
     op(jr  , JR  , r)
     op(jlr , JLR , r)
+
     op(beq , BEQ , branch)
     op(bne , BNE , branch)
     op(beqf, BEQF, branch)
     op(bnef, BNEF, branch)
-    op(mv  , MV  , r)
+
+    op(mvr , MVR , r)
     op(mvf , MVF , r)
-    op(mfhi, MFHI, r)
-    op(mflo, MFLO, r)
+    op(mvrf, MVRF, r)
+    op(mvfr, MVFR, r)
+
     op(nop , NOP , none)
     op(dgb , DBG , none)
     op(rst , RST , none) 
     op(halt, HALT, none)
+
+    op(in  , IN  , r)
+    op(inf , INF , r)
+    op(outa, OUTA, r)
+    op(outb, OUTB, r)
+    op(outc, OUTC, r)
+    op(outd, OUTD, r)
+    op(outaf, OUTAF, r)
+    op(outbf, OUTBF, r)
+    op(outcf, OUTCF, r)
+    op(outdf, OUTDF, r)
+
     else return "unknown";
 
 #undef op
 }
 
+inline uint32_t lowbits(uint32_t b, int need){ // 下位need bitを取り出す
+  int unwanted = 32 - need;
+  return (b << unwanted) >> unwanted;
+}
 
-extern int instr_count[64];
+inline uint32_t lowbits(myint b, int need){ // 下位need bitを取り出す
+  int unwanted = 32 - need;
+  return (b << unwanted) >> unwanted;
+}
+  
+
 inline void instr_stat(int all_count){
-
-  cout << "--- 各命令が何回実行されたか ----\n";
+  cerr << "--- 各命令が何回実行されたか ----\n";
   for(int i = 0;i < 64; i++){
     if(instr_count[i] != 0)
-      cout << encode((uint8_t)i) << "\t: " <<(int)(((float)instr_count[i]/all_count)*100) << "%\n";
+      cerr << encode((uint8_t)i) << "\t: " <<(int)(((float)instr_count[i]/all_count)*100) << "%\n";
   }
-  cout << "------------------------------\n";
+  cerr << "------------------------------\n";
 }
 
 
 inline void instr::show(){
-  cout << encode(opcode) << ' ' << (int)rd << ' ' << (int)rs << ' ' << (int)rt << '\n';
+  cerr << encode(opcode) << ' ' << (int)rd << ' ' << (int)rs << ' ' << (int)rt << '\n';
 }
 
-inline uint32_t get_pc(uint32_t pc, uint16_t imm){
+inline uint32_t get_pc(uint16_t imm){
   return ((pc >> 26) << 26) | imm;
+}
+
+inline uint32_t sra(myint mi, int shift){
+  uint32_t rt = mi.b;
+  if(mi.i < 0)
+    for(int i=0;i < shift; i++){
+      rt >>= 1;
+      rt += pow(2,31);
+    }
+  else
+    rt >>= shift;
+  return rt;
 }
 
 inline void instr::exec_asm(void){ 
@@ -138,83 +187,92 @@ inline void instr::exec_asm(void){
 #define D ireg[rd]
 #define S ireg[rs]
 #define T ireg[rt]
+#define FD freg[rd]
+#define FS freg[rs]
+#define FT freg[rt]
+#define IMM rt
 #define c(_op,_expr) case _op: _expr instr_count[_op]++; break
   switch(opcode) {
     //  ----------- R 形式の命令 ---------------
     c(ADD , D = S + T;);
     c(SUB , D = S - T;);
-    c(AND , D = S & T;);
-    c(OR  , D = S | T;);
-    c(NOR , D = ~(S | T););
-    c(LW  , D = ram[S+T];);
-    c(SW  , ram[S+T] = D;);	// D regが distになってない
-    c(CLT , D = S <= T;);
-    c(ABS , D = abs(S););
-    c(NEG , D = -S;);
-    c(MV  , D = S;);
 
-    c(JR  , pc = D;);		// D reg が distになってない
-    c(JLR  ,LR = pc;pc = D;);		// D reg が distになってない
-
-    c(MFHI, D = high;);
-    c(MFLO, D = low;);
-#undef T
-    // -------------- I形式 ---------------
-#define IMM rt
-    c(ADDI, D = S + IMM;);
-    c(SUBI, D = S - IMM;);
-    c(ANDI, D = S & IMM;);
-    c(ORI , D = S | IMM;);
-    c(SLL , D = S << IMM;);
-    c(SRL , D = S >> IMM;);	// ****** 論理シフトじゃないかも
-    c(SRA , D = S >> IMM;);	// ****** TODO:算術シフトじゃないかも
-
-    c(LWI , D = ram[S + IMM];);
-    c(SWI , ram[S + IMM] = D;); // **********D,Sの順番に注意********
-    c(BEQ , if(D == S)pc = pc + IMM;); // この後pcが変更される可能性もあるので注意
-    c(BNE , if(D != S)pc = pc + IMM;);
-#undef S
-#undef D
-    // -------------- J形式 --------------
-    c(J , pc = get_pc(pc,IMM););
-    c(JL, LR = pc;pc = get_pc(pc,IMM););
-#undef IMM
-    // -------------- FR形式 -------------
-#define FD freg[rd]
-#define FS freg[rs]
-#define FT freg[rt]
     c(ADDF , FD = FS + FT;);
     c(SUBF , FD = FS - FT;);
     c(MULF , FD = FS * FT;);
     c(DIVF , FD = FS / FT;);
-    c(ABSF , FD = (float)abs(FS.f););  // myfloatの実装が外に出てしまっている
-    c(NEGF , FD = -FS.f;);             // myfloatの実装が外に出てしまっている
-    c(SQRT , FD = (float)sqrt(FS.f);); // myfloatの実装が外に出てしまっている
-    c(CLTF , FD = FS <= FT;);
-    c(MVF  , FD = FS;);
-#undef FT
-    // ------------- FI形式 --------------------
-#define IMM rt
-    c(BEQF , if(FD == FS)pc += IMM;); // この後pcが変更される可能性もあるので注意
-    c(BNEF , if(FD != FS)pc += IMM;);
-#undef FS
-    // ------------- MI形式 --------------------
-#define S ireg[rs]
-    c(LWIF, FD = ram[S + IMM];);
-    c(SWIF, ram[S + IMM] = FD.i;); // myfloatの実装が外に出てしまっている
-#undef IMM 
-    // ------------- MR形式 --------------------
-#define T ireg[rt]
+
+    c(ADDI, D = S + IMM;);
+    c(SUBI, D = S - IMM;);
+
+    c(AND , D = S & T;);       
+    c(OR  , D = S | T;);
+    c(NOR , D = ~(S | T););
+    c(XOR , D = S ^ T;);
+
+    c(ANDI, D = S & IMM;);
+    c(ORI , D = S | IMM;);
+
+    c(SLL , D = S << IMM;);
+    c(SRL , D = S >> IMM;);	// ****** 論理シフトじゃないかも
+    c(SRA , D = sra(S,IMM););	// ****** TODO:算術シフトじゃないかも
+
+    c(CMP , D = S <= T;);	// myint
+    c(CMPF, D = FS <= FT;);	
+
+    c(MVR , D = S;);
+    c(MVF , FD = FS;);
+    c(MVRF, FD.b = S.b;);		// myint,myfloat
+    c(MVFR, D.b  = FS.b;);		// myint,myfloat
+
+    c(LUI , D = (IMM << 16) | lowbits(S, 16);); 
+    c(LLI , D = (S << 16) | IMM;);
+    c(LUIF, FD = (IMM << 16) | lowbits(FS.b, 16);); // FT.b
+    c(LLIF, FD = (FS.b << 16) | IMM;);
+
+    c(LW  , D = ram[S+T];);
+    c(SW  , ram[S+T] = D.b;);	// D regが distになってない
+    c(LWI , D = ram[S + IMM];);
+    c(SWI , ram[S + IMM] = D.b;); // **********D,Sの順番に注意********
+
     c(LWF, FD = ram[S + T];);
     c(SWF, FD = ram[S + T];);
-#undef T
-#undef S
-#undef FD
-    // ------------- その他 ---------------------
+    c(LWIF, FD = ram[S + IMM];);
+    c(SWIF, ram[S + IMM] = FD.b;); // myfloatの実装が外に出てしまっている
+
+    // -------------- J形式 --------------
+    c(J , pc = get_pc(IMM););
+    c(JL, LR = pc;pc = get_pc(IMM););
+
+    c(JR  , pc = D.i;);		// D reg が distになってない
+    c(JLR  ,LR = pc;pc = D.i;);		// D reg が distになってない
+
+    c(BEQ , if(D == S)pc = pc + IMM;);
+    c(BNE , if(D != S)pc = pc + IMM;);
+    c(BEQF , if(FD == FS)pc += IMM;);
+    c(BNEF , if(FD != FS)pc += IMM;);
+
+    // -------------- FR形式 -------------
+    c(SQRT , FD = (float)sqrt(FS.f);); // myfloatの実装が外に出てしまっている
+
     c(NOP, ;);
     c(DBG,  ;);			// TODO
     c(HALT, pc = LR_INIT;);			// TODO
     c(RST,  ;);			// TODO
+
+    c(IN ,  ;);			// TODO
+    c(INF ,  ;);			// TODO
+
+    c(OUTA, ;);
+    c(OUTB, ;);
+    c(OUTC, ;);
+    c(OUTD, ;);
+    c(OUTAF, ;);
+    c(OUTBF, ;);
+    c(OUTCF, ;);
+    c(OUTDF, ;);
+
+
 #undef c
   default:
     cerr << " unknown opcode " << (int)opcode;
@@ -223,3 +281,38 @@ inline void instr::exec_asm(void){
 
 
 #undef c
+
+
+    // case System:
+    //   switch (funct)
+    // 	{
+    // 	case INPUTB_F:
+    // 	  IRS = getchar() & 0xff;
+    // 	  break;
+    // 	case INPUTW_F:
+    // 	  IRS = (getchar() & 0xff) << 24;
+    // 	  IRS |=(getchar() & 0xff) << 16;
+    // 	  IRS |= (getchar() & 0xff) << 8;
+    // 	  IRS |= (getchar() & 0xff);
+    // 	  break;
+    // 	case INPUTF_F:
+    // 	  FRS = (getchar() & 0xff) << 24;
+    // 	  FRS |=(getchar() & 0xff) << 16;
+    // 	  FRS |= (getchar() & 0xff) << 8;
+    // 	  FRS |= (getchar() & 0xff);
+    // 	  break;
+    // 	case OUTPUTB_F:
+    // 	  cout << (char)IRS << flush;
+    // 	  break;
+    // 	case OUTPUTW_F:
+    // 	  cout << (int32_t)IRS << flush;
+    // 	  break;
+    // 	case OUTPUTF_F:
+    // 	  cout << (float)FRS << flush;
+    // 	  break;
+    // 	case HALT_F:
+    // 	  break;
+    // 	default:
+    // 	  break;
+    // 	}			
+    //   break;

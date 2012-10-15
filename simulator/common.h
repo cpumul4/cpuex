@@ -22,55 +22,58 @@
 #define LR_INIT UINT_MAX
 
 
-
+//3,4,11,12,13,14
 
 // R
 #define ADD    1
 #define SUB    2
-#define MUL    3
-#define DIV    4
 // FR
-#define ADDF   5
-#define SUBF   6
-#define MULF   7
-#define DIVF   8
+#define ADDF   3
+#define SUBF   4
+#define MULF   5
+#define DIVF   6
 // I
-#define ADDI   9
-#define SUBI   10
-// R2
-#define ABS    11
-#define NEG    12
+#define ADDI   7
+#define SUBI   8
 // FR2
-#define ABSF   13
-#define NEGF   14
-#define SQRT   15
+#define SQRT   9
 // R
-#define AND    16
-#define OR     17
-#define NOR    18
+#define AND    10
+#define OR     11
+#define NOR    12
+#define XOR    13
 // I
-#define ANDI 19
-#define ORI  20
-#define SLL  21			// SIMLATOR的にはI（行かSRAまで同様）
-#define SRL  22
-#define SRA  23
+#define ANDI 14
+#define ORI  15
 
-#define LW   24			// R
+#define SLL  16			// SIMLATOR的にはI（行かSRAまで同様）
+#define SRL  17
+#define SRA  18
+
+#define CMP  19
+#define CMPF 20
+
+#define LUI  21
+#define LLI  22
+#define LUIF 23
+#define LLIF 24
+
+#define LW   25			// R
 #define SW   26			// R
-#define LWI  25			// I
-#define SWI  27			// I
-#define LWF  28			// FR
+#define LWI  27			// I
+#define SWI  28			// I
+
+#define LWF  29			// FR
 #define SWF  30			// FR
-#define LWIF 29			// FI
-#define SWIF 31			// FI
-#define CLT  32			// R
-#define CLTF 33			// FR
+#define LWIF 31			// FI
+#define SWIF 32			// FI
+
 // J
-#define J    34			
-#define JL   35
-#define JLR  49
+#define J    33			
+#define JL   34
 // R
-#define JR   36
+#define JR   35
+#define JLR  36
 // I
 #define BEQ  37
 #define BNE  38
@@ -78,17 +81,27 @@
 #define BEQF 39
 #define BNEF 40
 
-#define MV   41			// R
-#define MVF  42			// FR
 // R
-#define MFHI 43
-#define MFLO 44
+#define MVR  41			// R
+#define MVF  42			// FR
+#define MVRF 43
+#define MVFR 44
 // OTHER
 #define NOP  45
 #define DBG  46
 #define HALT 47
 #define RST  48
 
+#define IN   49
+#define INF  50
+#define OUTA 51
+#define OUTB 52
+#define OUTC 53
+#define OUTD 54			// 実際にレイトレが使う
+#define OUTAF 55
+#define OUTBF 56
+#define OUTCF 57
+#define OUTDF 58
 
 
 
