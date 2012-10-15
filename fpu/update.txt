@@ -1,0 +1,1 @@
+2012/10/15 design.txtに各モジュールの大まかな動作を記入 float.c,float.h,testf.cをディレクトリに追加 
