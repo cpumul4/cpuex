@@ -53,15 +53,12 @@ int interpret_operand(char *operand, ltable table){
 
 
 
-
-
-
 enum format { r, i, j};
 
 format dec_operator(char *op, uint &opcode, uint &funct){
 #define subst(opstr,opc,fnc) opcode = opc ## opstr; funct = fnc ## opstr;
 #define op(_op) if(strcmp(op,#_op) == 0){subst(_op, opc_, fnc_)}
-  // (ex) macro(arg1, arg2)  arg1 ## arg2というマクロを作って
+  // (例) macro(arg1, arg2)  arg1 ## arg2というマクロを作って
   // int ab;
   // macro(a,b) = 32; 
   // と書くと、ab = 32;と解釈される
@@ -185,8 +182,8 @@ int main(int argc, char *argv[]){
   // レジスタなどの解析
   // 32bit列に治す
   // 出力
-  ofstream fout(argv[2]);
+  ofstream fout(argv[2]);	// binary modeでオープンしないといけない
 
-  fout.write(output,inum);
+  fout.write(output,inum);	// 
  
 }
