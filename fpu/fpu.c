@@ -16,6 +16,7 @@ float fadd(float f1,float f2){
     f1_b.f = f2;
     f2_b.f = f1;
   } 
+  if(f2_b.b.exp == 0) return f1_b.f;
   shift = (f1_b.b.exp - f2_b.b.exp);
   if (shift < 2) {
     fraction = ((8388608 + f2_b.b.fraction) << (2-shift));
