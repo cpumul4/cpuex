@@ -121,6 +121,8 @@ I   bne    if (R[rs] != R[rt]) PC = PC + imm    // branch on not equal
 FI  beqf   if (F[fs] == F[ft]) PC = PC + imm
 FI  bnef   if (F[fs] != F[ft]) PC = PC + imm
 
+●疑似命令
+    setl   レジスタにラベルアドレスを代入    // setl $r** label  ->  addi $r** $r0 addr
 
 ●その他
 -   nop
