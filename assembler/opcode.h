@@ -1,5 +1,3 @@
-
-
 #define	 opc_add	0b110000  
 #define  fnc_add        0b001000 
 
