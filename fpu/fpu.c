@@ -52,9 +52,13 @@ float fadd(float f1,float f2){
     exp = f1_b.b.exp;
     if ((fraction >> 1) < 8388608) { //二数のexpの差が0又は1で桁落ちが発生した場合
       exp = exp - 2;
-      while(fraction < 8388608) {
-	fraction = fraction << 1;
-	exp = exp - 1;
+      if (fraction == 0) { 
+       exp = 0;
+     } else {
+       while(fraction < 8388608) {
+	 fraction = fraction << 1;
+	 exp = exp - 1;
+       }
       }
     }
     else if ((fraction >> 2) < 8388608) { //正規化で１だけexpをずらすかもしれないとき
@@ -139,6 +143,7 @@ float fdiv(float f1,float f2){
   fraction = ((unsigned long)(0x800000+f1_b.b.fraction) << 25) / (unsigned long)(0x800000+f2_b.b.fraction);
   mod = ((unsigned long)(0x800000+f1_b.b.fraction) << 25) % (unsigned long)(0x800000+f2_b.b.fraction);
   exp = f1_b.b.exp - f2_b.b.exp + 127;
+  if (f1_b.b.exp == 0) exp = 0;
 
   if (fraction < 0x2000000) { //仮数部の商が1.0未満
     if((fraction&0x1) == 1 && (mod > 0 || (fraction&0x2) > 0)) fraction += 2;
