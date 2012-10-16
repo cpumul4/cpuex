@@ -2,7 +2,7 @@
 #define _COMMON
 
 #define INTREG_NUM   32
-#define FLOATREG_NUM 32
+#define FLOATREG_NUM 32		// rst命令でINTREG_NUM == FLOATREG_NUMを仮定しているので注意
 #define RAM_SIZE  1024*1024*8/4
 #define ROM_SIZE  1024*10
 

@@ -74,7 +74,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   }
 
   op(add , ADD, r)
-  op(sub , SUB, r)
+    op(sub , SUB, r)
     op(addf, ADDF, r)
     op(subf, SUBF, r)
     op(mulf, MULF, r)
@@ -101,7 +101,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(cmp , CMP , r)
     op(cmpf, CMPF, r)
 
-    op(mvr  , MVR  , r)
+    op(mvr , MVR , r)
     op(mvf , MVF , r)
     op(mvrf, MVRF, r)
     op(mvfr, MVFR, r)
@@ -133,7 +133,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
 
 
     op(nop , NOP , none)
-    op(dgb , DBG , none)
+    op(dbg , DBG , none)
     op(rst , RST , none) 
     op(halt, HALT, none)
 
@@ -227,13 +227,13 @@ int decode(char *srcpath){
   }
 
   for(uint i=0; i < romindex;i++)
-    cout << input[i] << endl;
+    cerr << input[i] << endl;
   for(uint i=0;i < romindex;i++){
     put_rom(input[i], table, rom[i], i);    
   }
 
   for(uint i=0;i < romindex; i++){
-    cout << '[' << (int)i << ']';
+    cerr << '[' << (int)i << ']';
     rom[i].show();
   }
 
