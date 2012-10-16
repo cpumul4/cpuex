@@ -226,7 +226,7 @@ inline void instr::exec_asm(void){
     c(MVFR, D.b  = FS.b;);		// myint,myfloat
 
     c(LUI , D = (IMM << 16) | lowbits(S, 16);); 
-    c(LLI , D = (S << 16) | IMM;);
+    c(LLI , D = ((S >> 16) << 16) | IMM;);
     c(LUIF, FD = (IMM << 16) | lowbits(FS.b, 16);); // FT.b
     c(LLIF, FD = (FS.b << 16) | IMM;);
 
