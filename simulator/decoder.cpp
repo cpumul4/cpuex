@@ -55,6 +55,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   char *asmtok[10];
   char delims[] = " \t\r\n";
 
+
   while(*assm == ' ' || *assm == '\t')
     assm++;
   asmtok[0] = strtok(assm, delims);
@@ -65,10 +66,14 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   else if (strcmp(asmtok[0],#str) == 0){opcode = code;format = form;}
 
   uint8_t opcode;
-  if(strcmp(assm,"add") == 0){
-    opcode = ADD;
-    format = r;
+  // 擬似命令setl
+  if(strcmp(assm,"setl") == 0){	
+    int16_t reg = get_regnum(asmtok[1]), addr = table.get_index(asmtok[2]);
+    inst.set(ADDI, reg, 0, addr);
+    return;
   }
+
+  op(add , ADD, r)
   op(sub , SUB, r)
     op(addf, ADDF, r)
     op(subf, SUBF, r)
@@ -78,6 +83,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(sqrt, SQRT, r)
 
     op(addi, ADDI, i)
+    op(setl, ADDI, i)
     op(subi, SUBI, i)
 
     op(and ,  AND, r)
@@ -175,6 +181,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     for(int itr=0; asmtok[itr+1] != NULL;itr++){
       args[itr] = get_regnum(asmtok[itr+1]);
     }
+
     inst.set(opcode, (uint8_t)args[0], (uint8_t)args[1], (int16_t)args[2]);
   }
 }
