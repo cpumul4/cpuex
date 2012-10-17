@@ -4,7 +4,7 @@
 #include <limits.h>
 #include <sys/time.h>
 #include <fstream>
-#define DEBUG 1
+#define DEBUG 0
 
 extern void print_bit(float);
 
@@ -76,7 +76,7 @@ int simulate(char *srcpath, char *tgtpath){
   LR  = LR_INIT;
   SPR = SPR_INIT;
 
-  AR1 = 10;
+  freg[1].b = 0;
 
   while(pc != LR_INIT){
     if(step != 0 && exec_count % step == 0){
