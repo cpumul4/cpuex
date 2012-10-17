@@ -16,10 +16,30 @@ float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ�
 
 inline void show_regs(void){
   cerr << "非0のレジスタ:";
-  for(int i = 0; i < INTREG_NUM; i++){
+  if(ireg[1] != 0)
+    cerr << "$v(r1)=" << ireg[1].i << ",";
+
+  for(int i = 2; i <= GENR_MAX; i++){
     if(ireg[i] != 0)
       cerr << "$r" << i << "=" << ireg[i].i << ", ";
   }
+  cerr << endl << "\t";
+#define print(reg,regname) cerr << #regname << "=" << reg.i << ", ";
+  print(SWR, $swap)
+    print(CLR, $closure)
+    print(CPR, $cmp)
+  if(GPR != 0)
+    cerr << "$globalp=" << GPR.i << ", ";
+  if(SPR != 0)
+    cerr << "$stackp=" << (SPR.i - SPR_INIT) << ", ";
+  if(LR != 0)
+    cerr << "$linkr=" << LR.i;
+#undef print
+
+  cerr << endl;
+  for(int i=0; i < FLOATREG_NUM; i++)
+    if(freg[i].b != 0)		// 非正規化数などに対応してない
+      cerr << "$f" << i << "=" << freg[i].f << ", ";
 }
 
 int instr_count[64];
@@ -46,7 +66,7 @@ int simulate(char *srcpath, char *tgtpath){
   pc = 0;
   ZR = 0;
   LR  = LR_INIT;
-  SPR = 0x000fffff;
+  SPR = SPR_INIT;
 
   AR1 = 10;
 

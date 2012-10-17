@@ -13,11 +13,14 @@
 #define AR2 ireg[3]
 #define AR3 ireg[4]
 #define AR4 ireg[5]
+#define GENR_MAX 25
 
-
-
+#define SWR ireg[26]
+#define CLR ireg[27]
+#define CPR ireg[28]
 #define GPR ireg[29]
 #define SPR ireg[30] 
+#define SPR_INIT 0x000fffff
 #define LR  ireg[31]
 #define LR_INIT UINT_MAX
 
