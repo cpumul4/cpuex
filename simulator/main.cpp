@@ -4,10 +4,7 @@
 #include <limits.h>
 #include <sys/time.h>
 #include <fstream>
-#define DEBUG 1
 
-extern void print_bit(float);
-extern void print_bit(myint);
 extern int decode(char *);
 extern instr rom[];
 ofstream fout;
@@ -17,40 +14,6 @@ float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ�
   return (float)(t2.tv_sec - t1.tv_sec) + (t2.tv_usec - t1.tv_usec)/1000000.0;
 }
 
-inline void show_regs(void){
-  cerr << "非0のレジスタ:";
-  if(ireg[1] != 0){
-    cerr << "$v(r1)=" << ireg[1].i << ",";
-  }
-  for(int i = 2; i <= GENR_MAX; i++){
-    if(ireg[i] != 0){
-      cerr << "$r" << i << "=" << ireg[i].i << ", ";
-      print_bit(ireg[i]);
-    }
-  }
-  cerr << endl << "\t";
-#define print(reg,regname) cerr << #regname << "=" << reg.i << ", ";
-  print(SWR, $swap)
-    print(CLR, $closure)
-    print(CPR, $cmp)
-  if(GPR != 0)
-    cerr << "$globalp=" << GPR.i << ", ";
-  if(SPR != 0)
-    cerr << "$stackp=" << (SPR.i - SPR_INIT) << ", ";
-  if(LR != 0)
-    cerr << "$linkr=" << LR.i;
-#undef print
-
-  cerr << endl;
-  for(int i=0; i < FLOATREG_NUM; i++)
-
-    if(freg[i].b != 0){		// 非正規化数などに対応してない
-#if DEBUG
-      print_bit(freg[i].f);
-#endif
-      cerr << "$f" << i << "=" << freg[i].f << ", ";
-    }
-}
 
 int instr_count[64];
 int step = 0;
@@ -93,6 +56,20 @@ int simulate(char *srcpath, char *tgtpath){
     cin >> step;
     }
     pc++;
+
+    if(SPR.i < 0){
+      cerr << "スタックポインタが負です\n";
+      pc = LR_INIT;
+    }
+    if(GPR.i < 0){
+      cerr << "グローバルポインタが負です\n";
+      pc = LR_INIT;
+    }
+    if(LR.i < 0){
+      cerr << "リンクレジスタが負です\n";
+      pc = LR_INIT;	
+    }
+
     rom[pc-1].exec_asm();
     exec_count++;
   }
