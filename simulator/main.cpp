@@ -30,10 +30,15 @@ int simulate(char *srcpath, char *tgtpath){
 
   decode(srcpath);
 
-  fout.open(tgtpath, ios::binary);
-  if(!fout.is_open()){
-    cerr << "ERROR: " << tgtpath << " が開けませんでした\n";
-    exit(1);
+  if(tgtpath != NULL){
+    fout.open(tgtpath, ios::binary);
+    if(!fout.is_open()){
+      cerr << "ERROR: " << tgtpath << " が開けませんでした\n";
+      exit(1);
+    }
+  }
+  else {
+    cerr << "出力用ファイルが指定されていないのでoutput命令が来たらエラーで停止します\n";
   }
   
   cerr << "何命令毎に停止するか(0だと停止しない): ";
@@ -72,9 +77,13 @@ int main(int argc, char *argv[]){
   uint count;
   
   if(argc < 2){
-    cerr << "USAGE: ./simulator infile\n";
+    cerr << "USAGE: ./simulator assemblyfile (outfile) \n";
     return 1;
   }
+  else if(argc == 2) {
+    argv[2] = NULL;
+  }
+
   cerr << "<simulation has started!>\n";
 
   gettimeofday(&t1,NULL);
