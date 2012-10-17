@@ -210,7 +210,7 @@ int decode(char *srcpath){
     }
     if(int comment = rm_comment(input[romindex], "#;"))
        input[romindex][comment] = 0;
-    if(input[romindex][0] == '.' || input[romindex][1] == '.'){		// ignore      
+    if(input[romindex][0] == '.' || (input[romindex][0] = '\t' && input[romindex][1] == '.')){		// ignore      
       cerr << "";		// なんかこれつけると高速化する
 
 
