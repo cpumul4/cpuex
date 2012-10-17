@@ -19,13 +19,16 @@
 #define defbit(_op)						\
   uint32_t operator _op (myint     t){ return b _op t.b; };	\
   uint32_t operator _op (int16_t _b){				\
-  union {							\
-    int16_t sign;						\
+    union {								\
+      struct {								\
+	int16_t sign:16;						\
+	int16_t dummy:16;						\
+      } i;								\
     uint32_t unsign;							\
   } tmp;								\
-  tmp.unsign = 0;							\
-  tmp.sign = _b;							\
-  return (b _op tmp.unsign);  };  
+    tmp.i.sign = _b;							\
+    tmp.i.dummy = 0;							\
+    return (b _op tmp.unsign);  };  
 
 union myint {
   uint32_t b;

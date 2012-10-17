@@ -228,7 +228,6 @@ inline void instr::exec_asm(){
     c(SUBF , FD = FS - FT;);
     c(MULF , FD = FS * FT;);
     c(DIVF , FD = FS / FT;);
-
     c(ADDI, D = S + IMM;);
     c(SUBI, D = S - IMM;);
 
@@ -241,8 +240,8 @@ inline void instr::exec_asm(){
     c(ORI , D = S | IMM;);
 
     c(SLL , D = S << IMM;);
-    c(SRL , D = S >> IMM;);	// ****** 論理シフトじゃないかも
-    c(SRA , D = sra(S,IMM););	// ****** TODO:算術シフトじゃないかも
+    c(SRL , D = S >> IMM;);	
+    c(SRA , D = sra(S,IMM););	
 
     c(CMP , D = S <= T;);	// myint
     c(CMPF, D = FS <= FT;);	
@@ -253,7 +252,7 @@ inline void instr::exec_asm(){
     c(MVFR, D.b  = FS.b;);		// myint,myfloat
 
     c(LUI , D = (IMM << 16) | lowbits(S, 16);); 
-    c(LLI , D = ((S >> 16) << 16) | IMM;);
+    c(LLI , D = ((S >> 16) << 16) | lowbits((uint32_t)IMM,16););
     c(LUIF, FD = (int16_to_uint32(IMM) << 16) | lowbits(FS.b, 16);); // FT.b
     c(LLIF, FD = ((FS.b >> 16) << 16) | int16_to_uint32(IMM););
 
@@ -262,13 +261,14 @@ inline void instr::exec_asm(){
     c(LWI , D = ram[S + IMM];);
     c(SWI , ram[S + IMM] = D.b;); // **********D,Sの順番に注意********
 
+
     c(LWF, FD = ram[S + T];);
     c(SWF, FD = ram[S + T];);
     c(LWIF, FD = ram[S + IMM];);
     c(SWIF, ram[S + IMM] = FD.b;); // myfloatの実装が外に出てしまっている
 
     // -------------- J形式 --------------
-    c(J , pc = get_pc(IMM););
+    c(J , pc = get_pc(IMM);); 
     c(JL, LR = pc;pc = get_pc(IMM););
 
     c(JR  , pc = D.i;);		// D reg が distになってない
@@ -280,6 +280,7 @@ inline void instr::exec_asm(){
     c(BNEF , if(FD != FS)pc += IMM;);
 
     // -------------- FR形式 -------------
+
     c(SQRT , FD = (float)sqrt(FS.f);); // myfloatの実装が外に出てしまっている
 
     c(NOP, ;);
@@ -294,6 +295,7 @@ inline void instr::exec_asm(){
 	freg[i].b = 0;
       });
 
+    // ここまでちゃんと動く10\17 15:00
     c(IN ,  cin >> D.i;);			// TODO
     c(INF , cin >> FD.f ;);			// TODO
 

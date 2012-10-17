@@ -26,13 +26,13 @@
 0-31  $f0-$f31
 
 ●命令形式
-R-family : opcode(31-26),s(25-21),t(20-16),d(15-11),amt(10-6),func(5-0)
+R-family : opcode(31-26),s(25-21),t(20-16),d(15-11),amt(10-6),func(5-0)（amtはunsigned）
            レジスタ*3、シフト幅、機能コード
 	    - R   : opcode,rs,rt,rd,amt,func
 	    - FR  : opcode,fs,ft,fd,amt,func
 	    - FR1 : opcode,rs,rt,fd,amt,func
 	    - FR2 : opcode,fs,ft,rd,amt,func
-I-family : opcode(31-26),s(25-21),t(20-16),imm(15-0)
+I-family : opcode(31-26),s(25-21),t(20-16),imm(15-0)（immはsignedとして32bitに符号拡張して使われる）
            レジスタ*2、16bit即値
 	    - I   : opcode,rs,rt,imm
 	    - FI  : opcode,fs,ft,imm
@@ -52,8 +52,8 @@ FR  divf   F[fd] = F[fs] /. F[ft]
 
 FR  sqrt   F[fd] = sqrt(F[fs])    // 平方根
 
-I   addi   R[rt] = R[rs] + imm
-I   subi   R[rt] = R[rs] - imm
+I   addi   R[rt] = R[rs] + imm 
+I   subi   R[rt] = R[rs] - imm 
 
 ●論理演算命令
 R   and    R[rd] = R[rs] and R[rt]

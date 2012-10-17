@@ -4,10 +4,10 @@
 #include <limits.h>
 #include <sys/time.h>
 #include <fstream>
-#define DEBUG 0
+#define DEBUG 1
 
 extern void print_bit(float);
-
+extern void print_bit(myint);
 extern int decode(char *);
 extern instr rom[];
 ofstream fout;
@@ -19,12 +19,14 @@ float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ�
 
 inline void show_regs(void){
   cerr << "非0のレジスタ:";
-  if(ireg[1] != 0)
+  if(ireg[1] != 0){
     cerr << "$v(r1)=" << ireg[1].i << ",";
-
+  }
   for(int i = 2; i <= GENR_MAX; i++){
-    if(ireg[i] != 0)
+    if(ireg[i] != 0){
       cerr << "$r" << i << "=" << ireg[i].i << ", ";
+      print_bit(ireg[i]);
+    }
   }
   cerr << endl << "\t";
 #define print(reg,regname) cerr << #regname << "=" << reg.i << ", ";

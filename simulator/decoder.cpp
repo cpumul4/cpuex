@@ -185,11 +185,11 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   }
 }
 
-int rm_comment(char *line, const char *keys){
+void rm_comment(char *line, const char *keys){
   for(int i=0; line[i] != 0;i++)
     for(int j=0; keys[j] != 0;j++)
-      if(line[i] == keys[j])return i;
-  return 0;
+      if(line[i] == keys[j])
+	line[i] = 0;
 }
 
 
@@ -203,14 +203,13 @@ int decode(char *srcpath){
   // 必要な行だけを抜き取り、labelをtableに入れる
   while( fin.getline(input[romindex],MAX_LINE) ){
     if(input[romindex] == NULL || input[romindex][0] == 0){
-      cerr << "";		// これつけると高速化する
+      cerr << "aa";		// これつけると高速化する
 
 
       continue;
     }
-    if(int comment = rm_comment(input[romindex], "#;"))
-       input[romindex][comment] = 0;
-    else if(input[romindex][0] == '\t'){
+    rm_comment(input[romindex], "#;");
+    if(input[romindex][0] == '\t'){
       romindex++;		// 今読んだ入力を保持して、次の入力を読みに行く
     }
     else {
