@@ -4,6 +4,9 @@
 #include <limits.h>
 #include <sys/time.h>
 #include <fstream>
+#define DEBUG 1
+
+extern void print_bit(float);
 
 extern int decode(char *);
 extern instr rom[];
@@ -38,8 +41,13 @@ inline void show_regs(void){
 
   cerr << endl;
   for(int i=0; i < FLOATREG_NUM; i++)
-    if(freg[i].b != 0)		// 非正規化数などに対応してない
+
+    if(freg[i].b != 0){		// 非正規化数などに対応してない
+#if DEBUG
+      print_bit(freg[i].f);
+#endif
       cerr << "$f" << i << "=" << freg[i].f << ", ";
+    }
 }
 
 int instr_count[64];
@@ -95,6 +103,8 @@ int simulate(char *srcpath, char *tgtpath){
 int main(int argc, char *argv[]){
   struct timeval t1, t2;
   uint count;
+  
+  freg[1].f = 0.00000001;
   
   if(argc < 2){
     cerr << "USAGE: ./simulator assemblyfile (outfile) \n";

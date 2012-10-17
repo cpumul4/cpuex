@@ -13,6 +13,7 @@ using namespace std;
 #include <math.h>
 #include <limits.h>
 
+extern uint32_t int16_to_uint32(int16_t); // memory.cpp
 extern int instr_count[64];
 extern int step;
 extern ofstream fout;
@@ -253,8 +254,8 @@ inline void instr::exec_asm(){
 
     c(LUI , D = (IMM << 16) | lowbits(S, 16);); 
     c(LLI , D = ((S >> 16) << 16) | IMM;);
-    c(LUIF, FD = (IMM << 16) | lowbits(FS.b, 16);); // FT.b
-    c(LLIF, FD = (FS.b << 16) | IMM;);
+    c(LUIF, FD = (int16_to_uint32(IMM) << 16) | lowbits(FS.b, 16);); // FT.b
+    c(LLIF, FD = ((FS.b >> 16) << 16) | int16_to_uint32(IMM););
 
     c(LW  , D = ram[S+T];);
     c(SW  , ram[S+T] = D.b;);	// D regが distになってない
@@ -283,6 +284,7 @@ inline void instr::exec_asm(){
 
     c(NOP, ;);
     c(DBG,  cerr << "DEBUG命令に到達しました\n";step = 1;);
+  case(0):
     c(HALT, pc = LR_INIT;);
     c(RST,  
       cerr << "reset命令に到達しました. GPR, SPR, LR以外の全レジスタを0にします.\n";

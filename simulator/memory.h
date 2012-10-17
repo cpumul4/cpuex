@@ -18,7 +18,14 @@
 
 #define defbit(_op)						\
   uint32_t operator _op (myint     t){ return b _op t.b; };	\
-  uint32_t operator _op (uint32_t ub){ return b _op ub;  };  
+  uint32_t operator _op (int16_t _b){				\
+  union {							\
+    int16_t sign;						\
+    uint32_t unsign;							\
+  } tmp;								\
+  tmp.unsign = 0;							\
+  tmp.sign = _b;							\
+  return (b _op tmp.unsign);  };  
 
 union myint {
   uint32_t b;
@@ -66,5 +73,7 @@ extern uint32_t lreg;
 extern uint32_t high;
 extern uint32_t low;
 extern uint32_t pc;
+extern bool is_zero(myfloat);
+
 
 #endif //_MEMORY
