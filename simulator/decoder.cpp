@@ -210,12 +210,6 @@ int decode(char *srcpath){
     }
     if(int comment = rm_comment(input[romindex], "#;"))
        input[romindex][comment] = 0;
-    if(input[romindex][0] == '.' || (input[romindex][0] = '\t' && input[romindex][1] == '.')){		// ignore      
-      cerr << "";		// なんかこれつけると高速化する
-
-
-      continue;
-    }
     else if(input[romindex][0] == '\t'){
       romindex++;		// 今読んだ入力を保持して、次の入力を読みに行く
     }
