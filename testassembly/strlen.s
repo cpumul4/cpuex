@@ -11,5 +11,5 @@ Loop:
 	j Loop
 End:
 	mv 3 4
-	halt
+	jr r31
 

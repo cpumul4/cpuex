@@ -19,7 +19,7 @@ beq_else.24:
 beq_else.25:
 	subi	$r2 $r1 1
 	swi	$r1 $r29 0
-	mv	$r1 $r2
+	mvr	$r1 $r2
 	swi	$r31 $r29 1
 	addi	$r29 $r29 2
 	jl	fib.10
@@ -28,7 +28,7 @@ beq_else.25:
 	lwi	$r2 $r29 0
 	subi	$r2 $r2 2
 	swi	$r1 $r29 1
-	mv	$r1 $r2
+	mvr	$r1 $r2
 	swi	$r31 $r29 2
 	addi	$r29 $r29 3
 	jl	fib.10

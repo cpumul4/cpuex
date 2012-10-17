@@ -5,6 +5,7 @@
 #include "./memory.h"
 #include "./common.h"
 #include <iostream>
+#include <fstream>
 using namespace std;
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,6 +14,8 @@ using namespace std;
 #include <limits.h>
 
 extern int instr_count[64];
+extern int step;
+extern ofstream fout;
 
 class instr {
   uint8_t opcode;
@@ -180,7 +183,30 @@ inline uint32_t sra(myint mi, int shift){
   return rt;
 }
 
-inline void instr::exec_asm(void){ 
+inline void exec_output(myint reg, int which_byte){
+  union {
+    char byte[4];
+    int32_t word;
+  } tmp;
+
+  tmp.word = reg.i;
+  fout.put(tmp.byte[which_byte]);
+  return;
+}
+
+inline void exec_output(myfloat reg, int which_byte){
+  union {
+    char byte[4];
+    float word;
+  } tmp;
+
+  tmp.word = reg.f;
+  cout << tmp.byte[which_byte] << flush;
+  return;
+}
+  
+
+inline void instr::exec_asm(){ 
 
   union conv { uint32_t i; float f; };
 
@@ -256,21 +282,28 @@ inline void instr::exec_asm(void){
     c(SQRT , FD = (float)sqrt(FS.f);); // myfloatの実装が外に出てしまっている
 
     c(NOP, ;);
-    c(DBG,  ;);			// TODO
-    c(HALT, pc = LR_INIT;);			// TODO
-    c(RST,  ;);			// TODO
+    c(DBG,  cerr << "DEBUG命令に到達しました\n";step = 1;);
+    c(HALT, pc = LR_INIT;);
+    c(RST,  
+      cerr << "reset命令に到達しました. GPR, SPR, LR以外の全レジスタを0にします.\n";
+      for(int i=0;i<INTREG_NUM;i++){
+	if(i < 29)
+	  ireg[i] = 0;
+	freg[i].b = 0;
+      });
 
-    c(IN ,  ;);			// TODO
-    c(INF ,  ;);			// TODO
+    c(IN ,  cin >> D.i;);			// TODO
+    c(INF , cin >> FD.f ;);			// TODO
 
-    c(OUTA, ;);
-    c(OUTB, ;);
-    c(OUTC, ;);
-    c(OUTD, ;);
-    c(OUTAF, ;);
-    c(OUTBF, ;);
-    c(OUTCF, ;);
-    c(OUTDF, ;);
+    c(OUTA, exec_output(D,1););
+    c(OUTB, exec_output(D,2););
+    c(OUTC, exec_output(D,3););
+    c(OUTD, exec_output(D,4););
+    c(OUTAF, exec_output(FD,1););
+    c(OUTBF, exec_output(FD,2););
+    c(OUTCF, exec_output(FD,3););
+    c(OUTDF, exec_output(FD,4););
+
 
 
 #undef c
@@ -283,36 +316,3 @@ inline void instr::exec_asm(void){
 #undef c
 
 
-    // case System:
-    //   switch (funct)
-    // 	{
-    // 	case INPUTB_F:
-    // 	  IRS = getchar() & 0xff;
-    // 	  break;
-    // 	case INPUTW_F:
-    // 	  IRS = (getchar() & 0xff) << 24;
-    // 	  IRS |=(getchar() & 0xff) << 16;
-    // 	  IRS |= (getchar() & 0xff) << 8;
-    // 	  IRS |= (getchar() & 0xff);
-    // 	  break;
-    // 	case INPUTF_F:
-    // 	  FRS = (getchar() & 0xff) << 24;
-    // 	  FRS |=(getchar() & 0xff) << 16;
-    // 	  FRS |= (getchar() & 0xff) << 8;
-    // 	  FRS |= (getchar() & 0xff);
-    // 	  break;
-    // 	case OUTPUTB_F:
-    // 	  cout << (char)IRS << flush;
-    // 	  break;
-    // 	case OUTPUTW_F:
-    // 	  cout << (int32_t)IRS << flush;
-    // 	  break;
-    // 	case OUTPUTF_F:
-    // 	  cout << (float)FRS << flush;
-    // 	  break;
-    // 	case HALT_F:
-    // 	  break;
-    // 	default:
-    // 	  break;
-    // 	}			
-    //   break;

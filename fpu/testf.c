@@ -59,7 +59,7 @@ int main() {
 
   srand(time(NULL));
 
-  while(i < 1000000) {
+  while(i < 1000000) { //正規化数ランダム
     f1.ieee.sign = rand()%2;
     f1.ieee.exp = rand()%254+1;
     f1.ieee.fraction = rand()%8388608;
@@ -112,7 +112,125 @@ int main() {
   }
 
   printf("fadd:%d fmul:%d fdiv:%d sqrt:%d\n",c1,c2,c3,c4);
-  
+
+  i = 0;
+  c1 = 0;
+  c2 = 0;
+  c3 = 0;
+  c4 = 0;
+
+  while(i < 1000000) { //0.0に対する計算
+    f1.ieee.sign = rand()%2;
+    f1.ieee.exp = (rand()%254+1)*(i%2);
+    f1.ieee.fraction = rand()%8388608;
+    f2.ieee.sign = rand()%2;
+    f2.ieee.exp = (rand()%254+1)*((i+1)%2);
+    f2.ieee.fraction = rand()%8388608;
+
+    if (i%2 == 1) f3.f = f1.f;
+    else f3.f = f2.f;
+    f4.f = fadd(f1.f,f2.f);
+    if (f3.f != f4.f) {
+      printf("%f+%f=%f\n",f1.f,f2.f,f3.f);
+      print_bit(f3);
+      print_bit(f4);
+    } else {
+      c1++;
+    }
+
+    f3.ieee.sign = (f1.ieee.sign + f2.ieee.sign)%2;
+    f3.ieee.exp = 0;
+    f3.ieee.fraction = f1.ieee.fraction;
+    f4.f = fmul(f1.f,f2.f);
+    if (f3.f != f4.f) {
+      printf("%f*%f=%f\n",f1.f,f2.f,f3.f);
+      print_bit(f3);
+      print_bit(f4);
+    } else {
+      c2++;
+    }
+
+    if (i%2 == 1) {
+      f3.ieee.sign = f1.ieee.sign + f2.ieee.sign;
+      f3.ieee.exp = 255;
+      f3.ieee.fraction = f1.ieee.fraction;
+    } else {
+      f3.f = 0.0 / f2.f;
+    }
+    f4.f = fdiv(f1.f,f2.f);
+    if ((f3.ieee.sign != f4.ieee.sign || f3.ieee.exp != f4.ieee.exp || f3.ieee.fraction != f4.ieee.fraction) && (i%2 == 1 || (f3.ieee.exp != 0 && f3.ieee.exp != 255) || (f4.ieee.exp != 0 && f4.ieee.exp != 255))) {
+      printf("%f/%f=%f\n",f1.f,f2.f,f3.f);
+      print_bit(f3);
+      print_bit(f4);
+    } else {
+      c3++;
+    }
+
+    f1.ieee.sign = 0;
+    if (i%2 == 1) f3.f = sqrtf(f1.f);
+    else f3.f = f1.f;
+    f4.f = sqrt_m(f1.f);
+    if (f3.f != f4.f) {
+      printf("sqrt(%f)=%f\n",f1.f,f3.f);
+      print_bit(f3);
+      print_bit(f4);
+    } else {
+      c4++;
+    }
+
+    i++;
+  }
+
+  printf("コーナーケース\n");
+  printf("0.0(とみなされる数)の演算 fadd:%d fmul:%d fdiv:%d sqrt:%d\n",c1,c2,c3,c4);
+
+  i = 0;
+  c1 = 0;
+  c2 = 0;
+  c3 = 0;
+  c4 = 0;
+
+  while(i < 1000000) { 
+    f1.ieee.sign = rand()%2;
+    f1.ieee.exp = (rand()%254+1);
+    f1.ieee.fraction = rand()%8388608;
+    f2.ieee.sign = rand()%2;
+    f2.ieee.exp = f1.ieee.exp + (rand()%3-1);
+    f2.ieee.fraction = rand()%8388608;
+    if (f2.ieee.exp == 255) f2.ieee.exp = 254;
+    if (f2.ieee.exp == 0) f2.ieee.exp = 1;
+
+    f3.f = f1.f + f2.f;
+    f4.f = fadd(f1.f,f2.f);
+    if (f3.f != f4.f  && (f3.ieee.exp != 0 || f4.ieee.exp != 0) && (f3.ieee.exp != 255 || f4.ieee.exp != 255)) {
+      print_bit(f1);
+      print_bit(f2);
+      printf("%f+%f=%f\n",f1.f,f2.f,f3.f);
+      print_bit(f3);
+      print_bit(f4);
+    } else {
+      c1++;
+    }
+
+    f2.f = f1.f;
+    f2.ieee.sign = f1.ieee.sign + 1;
+
+    f3.f = f1.f + f2.f;
+    f4.f = fadd(f1.f,f2.f);
+    if (f3.f != f4.f  && (f3.ieee.exp != 0 || f4.ieee.exp != 0) && (f3.ieee.exp != 255 || f4.ieee.exp != 255)) {
+      printf("%f+%f=%f\n",f1.f,f2.f,f3.f);
+      print_bit(f3);
+      print_bit(f4);
+    } else {
+      c2++;
+    }
+
+    i++;
+  }
+
+  printf("指数の差が高々1 fadd:%d\n",c1);
+  printf("絶対値が等しく符号が逆 fadd:%d\n",c2);
+
   return 0;
 }
 

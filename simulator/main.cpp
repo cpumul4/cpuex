@@ -3,10 +3,12 @@
 #include "./instruction.h"
 #include <limits.h>
 #include <sys/time.h>
-
+#include <fstream>
 
 extern int decode(char *);
 extern instr rom[];
+ofstream fout;
+
 
 float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ秒 */
   return (float)(t2.tv_sec - t1.tv_sec) + (t2.tv_usec - t1.tv_usec)/1000000.0;
@@ -21,13 +23,19 @@ inline void show_regs(void){
 }
 
 int instr_count[64];
+int step = 0;
 
-int simulate(char *srcpath){
+int simulate(char *srcpath, char *tgtpath){
   uint exec_count = 0;
-  int step = 0;
 
   decode(srcpath);
 
+  fout.open(tgtpath, ios::binary);
+  if(!fout.is_open()){
+    cerr << "ERROR: " << tgtpath << " が開けませんでした\n";
+    exit(1);
+  }
+  
   cerr << "何命令毎に停止するか(0だと停止しない): ";
   cin >> step;
   pc = 0;
@@ -70,7 +78,7 @@ int main(int argc, char *argv[]){
   cerr << "<simulation has started!>\n";
 
   gettimeofday(&t1,NULL);
-  cerr << "実行命令数: " << (count = (uint)simulate(argv[1])) << '\n';
+  cerr << "実行命令数: " << (count = (uint)simulate(argv[1], argv[2])) << '\n';
   gettimeofday(&t2,NULL);
 
   printf("実行命令数/sec:%f\n", count/time_diff(t1,t2));

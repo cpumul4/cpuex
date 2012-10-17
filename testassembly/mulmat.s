@@ -2,6 +2,8 @@
 .text
 	.align 2
 	.globl mul_mat
+prepare:
+	;; mendou
 mul_mat:
 	subi r3, r3, 8
 	subi r4, r4, 8
