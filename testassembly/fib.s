@@ -1,5 +1,5 @@
-fib:
 	addi $r2 $r2 20
+fib:
 	beq  $r2 $r0 Zero		;goto zero
 	addi $r7 $r0 1	;r3 == 1
 	beq  $r2 $r7 One		;goto one
