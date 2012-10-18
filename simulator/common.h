@@ -24,7 +24,7 @@
 #define SPR ireg[30] 
 #define SPR_INIT 0x000fffff
 #define LR  ireg[31]
-#define LR_INIT UINT_MAX
+#define LR_INIT INT_MAX
 
 
 //3,4,11,12,13,14

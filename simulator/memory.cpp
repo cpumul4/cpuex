@@ -44,6 +44,12 @@ bool is_zero(myfloat num){
     return false;
 }
 
+void show_ram(void){
+  for(int i=0;i < ROM_SIZE;i++)
+    if(ram[i] != 0)
+      cerr << "ram[" << i << "]=" << ram[i] << ", ";
+}
+
 void show_regs(void){
   cerr << "非0のレジスタ:";
   if(ireg[1] != 0){

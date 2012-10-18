@@ -1,7 +1,5 @@
-.text  
-	.align 2
-	.globl fib
 fib:
+	addi $r2 $r2 20
 	beq  $r2 $r0 Zero		;goto zero
 	addi $r7 $r0 1	;r3 == 1
 	beq  $r2 $r7 One		;goto one
@@ -22,7 +20,7 @@ fib:
 	addi $r30 $r30 32
 	jr   $r31
 Zero:
-	mv $r1 $r0
+	mvr $r1 $r0
 	jr $r31
 One:
 	addi $r1 $r0 1

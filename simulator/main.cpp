@@ -47,6 +47,7 @@ int simulate(char *srcpath, char *tgtpath){
     if(step != 0 && exec_count % step == 0){
       cerr <<"\n -------------- 命令実行数:" << exec_count << " --------------\n";
       show_regs();
+      show_ram();
       string a;
 
     cerr << "\n" << "[next instruction]" << pc << ": ";
