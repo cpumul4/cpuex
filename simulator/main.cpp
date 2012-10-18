@@ -59,15 +59,15 @@ int simulate(char *srcpath, char *tgtpath){
     pc++;
 
     if(SPR.i < 0){
-      cerr << "スタックポインタが負です\n";
+      cerr << "!!!!!!!!!!!スタックポインタが負です\n";
       pc = LR_INIT;
     }
     if(GPR.i < 0){
-      cerr << "グローバルポインタが負です\n";
+      cerr << "!!!!!!!!!!!グローバルポインタが負です\n";
       pc = LR_INIT;
     }
     if(LR.i < 0){
-      cerr << "リンクレジスタが負です\n";
+      cerr << "!!!!!!!!!!!リンクレジスタが負です\n";
       pc = LR_INIT;	
     }
 

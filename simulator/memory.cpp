@@ -45,9 +45,29 @@ bool is_zero(myfloat num){
 }
 
 void show_ram(void){
-  for(int i=0;i < ROM_SIZE;i++)
+  static bool show = true;
+  int first;
+  int last;
+
+  if(!show)return;
+
+  cerr << "ram[i]~ram[j]を表示（i,jを$stackpの初期値からの相対値で入力してください）（i=j=0だと今後ずっと非表示）\n";
+  cin >> first;
+  cin >> last;
+  
+  if(first == 0 && last == 0)
+    show = false;
+  
+  if(first > last){
+    int tmp = first;
+    first = last;
+    last = tmp;
+  }
+  first += SPR_INIT;
+  last += SPR_INIT;
+  for(int i=first;i <= last;i++)
     if(ram[i] != 0)
-      cerr << "ram[" << i << "]=" << ram[i] << ", ";
+      cerr << "ram[" << (i - SPR_INIT) << "]=" << ram[i] << ", ";
 }
 
 void show_regs(void){
