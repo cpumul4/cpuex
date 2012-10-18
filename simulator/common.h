@@ -1,7 +1,7 @@
 #ifndef _COMMON
 #define _COMMON
 
-#define DEBUG 1
+#define DEBUG 0
 
 #define INTREG_NUM   32
 #define FLOATREG_NUM 32		// rst命令でireg = fregを仮定している

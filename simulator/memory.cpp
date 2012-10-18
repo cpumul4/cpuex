@@ -69,7 +69,7 @@ void show_regs(void){
     print(CLR, $closure)
     print(CPR, $cmp)
     print(GPR, $globalp)
-    print(SPR, $stackp)
+    cerr << "$stackp（相対値）" << "=" << (SPR.i - SPR_INIT) << ", ";
     print(LR , $linkr)
 #undef print
 
