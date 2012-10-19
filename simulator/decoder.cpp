@@ -50,11 +50,9 @@ inline int get_regnum(char *reg){
     return (int)atoi(reg);
 }
 
-
 void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   char *asmtok[10];
   char delims[] = " \t\r\n";
-
 
   while(*assm == ' ' || *assm == '\t')
     assm++;
@@ -209,7 +207,7 @@ int decode(char *srcpath){
       continue;
     }
     rm_comment(input[romindex], "#;");
-    if(input[romindex][0] == '\t'){
+    if(input[romindex][0] == '\t' && input[romindex][1] != 0){
       romindex++;		// 今読んだ入力を保持して、次の入力を読みに行く
     }
     else {

@@ -108,6 +108,4 @@
 #define OUTCF 57
 #define OUTDF 58
 
-
-
 #endif //_COMMON

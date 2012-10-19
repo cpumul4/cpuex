@@ -8,6 +8,7 @@
 extern int decode(char *);
 extern instr rom[];
 ofstream fout;
+ifstream fin;
 
 
 float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ秒 */
@@ -18,10 +19,22 @@ float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ�
 int instr_count[64];
 int step = 0;
 
-int simulate(char *srcpath, char *tgtpath){
+int simulate(char *asmpath, char *srcpath, char *tgtpath){
   uint exec_count = 0;
 
-  decode(srcpath);
+  decode(asmpath);
+
+  if(srcpath != NULL){
+    fin.open(srcpath, ios::binary);
+    if(!fin.is_open()){
+      cerr << "ERROR: " << srcpath << " が開けませんでした\n";
+      exit(1);
+    }
+  }
+  else {
+    cerr << "no input file. input命令が来たらエラーで停止します\n";
+  }
+
 
   if(tgtpath != NULL){
     fout.open(tgtpath, ios::binary);
@@ -31,7 +44,7 @@ int simulate(char *srcpath, char *tgtpath){
     }
   }
   else {
-    cerr << "出力用ファイルが指定されていないのでoutput命令が来たらエラーで停止します\n";
+    cerr << "no output file. output命令が来たらエラーで停止します\n";
   }
   
   cerr << "何命令毎に停止するか(0だと停止しない): ";
@@ -74,7 +87,7 @@ int simulate(char *srcpath, char *tgtpath){
     rom[pc-1].exec_asm();
     exec_count++;
   }
-  cerr << "結果レジスタ($r1) = " << ireg[1].i << '\n';
+  cerr << "結果レジスタ($r1, $f0) = " << ireg[1].i << ", " << freg[0].f  << endl;
   instr_stat(exec_count);
 
   return exec_count;
@@ -87,17 +100,22 @@ int main(int argc, char *argv[]){
   freg[1].f = 0.00000001;
   
   if(argc < 2){
-    cerr << "USAGE: ./simulator assemblyfile (outfile) \n";
+    cerr << "USAGE: ./simulator assemblyfile (infile) (outfile) \n";
     return 1;
   }
-  else if(argc == 2) {
+  switch(argc) {
+  case 2:
     argv[2] = NULL;
+  case 3:
+    argv[3] = NULL;
+  default:
+    break;
   }
 
   cerr << "<simulation has started!>\n";
 
   gettimeofday(&t1,NULL);
-  cerr << "実行命令数: " << (count = (uint)simulate(argv[1], argv[2])) << '\n';
+  cerr << "実行命令数: " << (count = (uint)simulate(argv[1], argv[2], argv[3])) << '\n';
   gettimeofday(&t2,NULL);
 
   printf("実行命令数/sec:%f\n", count/time_diff(t1,t2));

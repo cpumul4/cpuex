@@ -1,0 +1,2 @@
+	addi r2 r0 50
+	outa r2

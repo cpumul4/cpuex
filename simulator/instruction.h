@@ -1,7 +1,5 @@
 #ifndef _INSTRUCTION
 #define _INSTRUCTION
-
-
 #include "./memory.h"
 #include "./common.h"
 #include <iostream>
@@ -17,6 +15,7 @@ extern uint32_t int16_to_uint32(int16_t); // memory.cpp
 extern int instr_count[64];
 extern int step;
 extern ofstream fout;
+extern ifstream fin;
 
 class instr {
   uint8_t opcode;
@@ -60,7 +59,7 @@ inline void instr::set_imm(uint8_t _op, int16_t _imm){
 
 inline string encode(uint8_t opcode){
 #define op(str,code,form) \
-    else if (opcode == code){return #str;}
+    else if (opcode == code){return #str; }
 
   if(opcode == ADD){
     return "add";
@@ -191,7 +190,11 @@ inline void exec_output(myint reg, int which_byte){
   } tmp;
 
   tmp.word = reg.i;
-  fout.put(tmp.byte[which_byte]);
+  fout.write(tmp.byte + which_byte, 1);
+  if( fout.bad() ) {
+    cerr << "fatal Error:データ読み込みエラー" << endl;
+    LR = LR_INIT;
+  }
   return;
 }
 
@@ -202,10 +205,33 @@ inline void exec_output(myfloat reg, int which_byte){
   } tmp;
 
   tmp.word = reg.f;
-  cout << tmp.byte[which_byte] << flush;
+  fout.write(tmp.byte + which_byte, 1);
+  if( fout.bad() ) {
+    cerr << "fatal Error:データ書き込みエラー" << endl;
+    LR = LR_INIT;
+  }
+
   return;
 }
-  
+
+inline void exec_input(uint32_t &regbitseq){
+  union {
+    char byte[4];
+    uint32_t word;
+  } tmp;
+
+  fin.read(tmp.byte, 4);
+  if( fin.bad() ) {
+    cerr << "fatal Error:データ読み込みエラー" << endl;
+    LR = LR_INIT;
+  }
+  if( fin.eof() ){
+    cerr << "EOFを読みました" << endl;
+  }
+
+  regbitseq = tmp.word;
+  return;
+}
 
 inline void instr::exec_asm(){ 
 
@@ -296,17 +322,18 @@ inline void instr::exec_asm(){
       });
 
     // ここまでちゃんと動く10\17 15:00
-    c(IN ,  cin >> D.i;);			// TODO
-    c(INF , cin >> FD.f ;);			// TODO
+    c(IN  , exec_input(D.b););
+    c(INF , exec_input(FD.b););
 
-    c(OUTA, exec_output(D,1););
-    c(OUTB, exec_output(D,2););
-    c(OUTC, exec_output(D,3););
-    c(OUTD, exec_output(D,4););
-    c(OUTAF, exec_output(FD,1););
-    c(OUTBF, exec_output(FD,2););
-    c(OUTCF, exec_output(FD,3););
-    c(OUTDF, exec_output(FD,4););
+    c(OUTA, exec_output(D,0););
+    c(OUTB, exec_output(D,1););
+    c(OUTC, exec_output(D,2););
+    c(OUTD, exec_output(D,3););
+    c(OUTAF, exec_output(FD,0););
+    c(OUTBF, exec_output(FD,1););
+    c(OUTCF, exec_output(FD,2););
+    c(OUTDF, exec_output(FD,3););
+    // ここまでちゃんと動く 10/19 22:00
 
 
 
