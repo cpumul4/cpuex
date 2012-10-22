@@ -44,7 +44,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     }
   }
   else {
-    cerr << "no output file. output命令が来たらエラーで停止します\n";
+    cerr << "no output file. output命令は使えません\n";
   }
   
   cerr << "何命令毎に停止するか(0だと停止しない): ";
@@ -60,6 +60,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     if(step != 0 && exec_count % step == 0){
       cerr <<"\n -------------- 命令実行数:" << exec_count << " --------------\n";
       show_regs();
+      print_bit(ireg[1]);
       show_ram();
       string a;
 
