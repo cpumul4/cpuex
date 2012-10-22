@@ -325,14 +325,14 @@ inline void instr::exec_asm(){
     c(IN  , exec_input(D.b););
     c(INF , exec_input(FD.b););
 
-    c(OUTA, exec_output(D,0););
-    c(OUTB, exec_output(D,1););
-    c(OUTC, exec_output(D,2););
-    c(OUTD, exec_output(D,3););
-    c(OUTAF, exec_output(FD,0););
-    c(OUTBF, exec_output(FD,1););
-    c(OUTCF, exec_output(FD,2););
-    c(OUTDF, exec_output(FD,3););
+    c(OUTA, exec_output(D,3););
+    c(OUTB, exec_output(D,2););
+    c(OUTC, exec_output(D,1););
+    c(OUTD, exec_output(D,0););
+    c(OUTAF, exec_output(FD,3););
+    c(OUTBF, exec_output(FD,2););
+    c(OUTCF, exec_output(FD,1););
+    c(OUTDF, exec_output(FD,0););
     // ここまでちゃんと動く 10/19 22:00
 
 
