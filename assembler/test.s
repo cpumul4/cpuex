@@ -1,11 +1,37 @@
-	add $r7 $r15 $r31
-	add $r0 $r0 $r0
+a:
+aa:	
+aaa:	
+	;; add $r0 $r0 $r0
+	;; add $r0 $r1 $r1
+	;; add $r0 $r0 $r16
+	;; sub $r0 $r0 $r0
 	;; addf $r0 $r0 $r0
-
-;; p   y  us  sp   0 nul nul  sp
-;; 70 79  1f  20
-;; 01110000 01111001 00011111 00100000
-
-	79f0 201f 0030 2000
-
-11111001 11110000 00100000 00011111
+	;; subf $r0 $r0 $r0
+	;; mulf $r0 $r0 $r0
+	;; divf $r0 $r0 $r0
+	;; and $r0 $r0 $r0
+	;; or $r0 $r0 $r0
+	;; nor $r0 $r0 $r0
+	;; xor $r0 $r0 $r0
+	;; sll $r0 $r0 $r0
+	;; srl $r0 $r0 $r0
+	;; sra $r0 $r0 $r0
+	addi $r0 $r0 aaa
+	addi $r1 $r0 0
+	addi $r16 $r0 0
+	;; addi $r0 $r1 0
+	;; addi $r0 $r16 0
+	;; addi $r31 $r31 0
+	;; subi $r0 $r0 0
+	;; andi $r0 $r0 0
+	;; ori $r0 $r0 0
+;; aaa:	
+;; 	j aaa
+;; bbb:	
+;; 	j bbb
+;; ccc:	
+;; 	beq $r0 $r0 aaa
+;; ddd:	
+;; 	beq $r0 $r0 bbb
+;; 	j ccc
+;; 	j ddd

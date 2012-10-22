@@ -10,7 +10,7 @@
 using namespace std;
 #define MAX_CHAR  30
 #define MAX_LINE  10000
-#define DEBUG 1
+#define DEBUG 0
 #define debug(expr) cerr << #expr << endl
 
   
@@ -57,64 +57,106 @@ int interpret_operand(char *operand, ltable table){
 
 
 
-enum format { r, i, j};
+enum format { r, i, j, branch};
 
 format dec_operator(char *op, uint &opcode, uint &funct){
 #define subst(opstr,opc,fnc) opcode = opc ## opstr; funct = fnc ## opstr;
-#define op(_op) if(strcmp(op,#_op) == 0){ subst(_op, opc_, fnc_) }
+#define op(_op) else if(strcmp(op,#_op) == 0){ subst(_op, opc_, fnc_) }
+#define subst_nofunct(opstr,_opc) opcode = _opc ## opstr;
+#define op_nofunct(_op) else if(strcmp(op,#_op) == 0){ subst_nofunct(_op,opc_) } 
   // (例) macro(arg1, arg2)  arg1 ## arg2というマクロを作って
   // int ab;
   // macro(a,b) = 32;
   // と書くと、ab = 32;と解釈される
+  if(strcmp(op, "add") == 0){
+    subst(add,opc_,fnc_);
+  }
+  
   op(add)
-  else op(sub)
-  else op(addf)
-  else op(subf)
-  else op(mulf)
-  else op(divf)
-  else op(and)
-    else op(or)
-      else op(xor)
-	else op(nor)
-	  else op(sll)
-		 
-	 ;
+    op(sub)
+    op(addf)
+    op(subf)
+    op(mulf)
+    op(divf)
+    op_nofunct(addi)
+    op_nofunct(subi)
+    op_nofunct(andi)
+    op_nofunct(ori)
+    op(sqrt)
+    op(and)
+    op(or)
+    op(nor)
+    op(xor)
+    op(sll)
+    op(srl)
+    op(sra)
+    op(cmp)
+    op(cmpf)
+    op(mvr)
+    op(mvf)
+    op(lw)
+    op(sw)
+    op_nofunct(lwi)
+    op_nofunct(swi)
+    op_nofunct(j)
+    op_nofunct(jl)
+    op(lwf)
+    op(swf)
+    op(jr)
+    op_nofunct(beq)
+    op_nofunct(bne)
+    op_nofunct(beqf)
+    op_nofunct(bnef)
+    op(nop)
+    op(dbg)
+    op(halt)
+    op(rst)	 
+    ;
 #undef subst
 #undef op
-
+  
   if(opcode >= 0b100000)
     return r;
-  else if(opcode == 0b011111 || opcode == 0b0111110)
+  else if(opcode == opc_jl || opcode == opc_j)
     return j;
-  else 
+  else if(opcode == opc_beq  || opcode == opc_bne ||
+	  opcode == opc_beqf || opcode == opc_bnef)
+    return branch;
+  else
     return i;
 }
 
 
-
-uint32_t rformbin(uint opcode, uint funct, int *operand){
-#if DEBUG
+uint32_t rformbin(uint opcode, uint funct, int *operand, int amt){
+#if 0
   cerr << "opcode=" << opcode << ", funct=" << funct << endl;
   cerr << operand[0] << " " << operand[1] << " " << operand[2] << endl;
 #endif
   
-  return //(opcode << 25)
-     (operand[0] << 16)
-    | (operand[1] << 11)
-    | (operand[2] << 6)
-    ;//    | funct;
+  return (opcode  << 26)
+    | (operand[0] << 21)
+    | (operand[1] << 16)
+    | (operand[2] << 11)
+    | (amt        <<  6)
+    | funct;
 }
 
-uint32_t iformbin(uint opcode, int *operand){
+uint32_t iformbin(const uint opcode, const int *operand){
+  const uint16_t imm = operand[2];
   return (opcode << 26)
     | (operand[0] << 21)
     | (operand[1] << 16)
-    | operand[2];
+    | imm;
 }
 
 uint32_t jformbin(uint opcode, int addr){
-  return (opcode << 26) | addr;
+  if(addr < 0){
+    cerr << "ERROR:j, jlのaddrが負です\n";
+    exit(1);
+  }
+  return (opcode << 26) | addr;	
 }
+
 
 
 int main(int argc, char *argv[]){
@@ -151,14 +193,22 @@ int main(int argc, char *argv[]){
        char *label = strtok(input[inum], ":");
        table.set_label(inum,label);
     }
-    switch(*skip_chars(input[inum],delims)){
-    case 0: case '.':		// 無視
-      continue;
-    default:			// 命令
-      inum++;
-      break;
+    else {
+      switch(*skip_chars(input[inum],delims)){
+      case 0: case '.':		// 無視
+	continue;
+      default:			// 命令
+	inum++;
+	break;
+      }
     }
   }
+
+#if DEBUG
+  for(int __i=0;input[__i][0] != 0; __i++)
+    printf("%s\n", input[__i]);
+#endif
+
 
   for(int itr=0; itr< inum; itr++){
   // 命令コード文字列を取り出す
@@ -182,26 +232,39 @@ int main(int argc, char *argv[]){
 #endif
     
 
-    int oprd[3] = {0,0,0};
+    int oprd[3] = {0,0,0}, amt = 0;
     for(int n=0; n < 3 && token[n+1] != NULL;n++){
-      oprd[n] = interpret_operand(token[n+1], table);
+      if(n == 2 && opcode == opc_sll && 
+	 (funct == fnc_sll || funct == fnc_srl || funct == fnc_sra))
+	amt = interpret_operand(token[n+1], table);
+      else if(n == 2 && f == branch)
+	oprd[n] = table.get_index(token[n+1]) - itr - 1;
+      else 
+	oprd[n] = interpret_operand(token[n+1], table);
     }
 
-    instruction instr;
+#if 0
+    printf("%d, %d, %d, \n",oprd[0],oprd[1],oprd[2]);
+#endif
+
+    // instruction instr;
     switch(f){
     case r:
-      instr.r.set(opcode,oprd[0],oprd[1],oprd[2],0,funct);
+      // instr.r.set(opcode,oprd[0],oprd[1],oprd[2],0,funct);
+      output[itr] = rformbin(opcode,funct,oprd, amt);
       break;
 
-    case i:
-      instr.i.set(opcode,oprd[0],oprd[1],oprd[2]);
+    case i:case branch:
+      output[itr] = iformbin(opcode,oprd);
+      // instr.i.set(opcode,oprd[0],oprd[1],oprd[2]);
       break;
 
     case j:
-      instr.j.set(opcode,oprd[0]);
+      output[itr] = jformbin(opcode,oprd[0]);
+      // instr.j.set(opcode,oprd[0]);
       break;
     }
-    output[itr] = instr.get_binary();
+    // output[itr] = instr.get_binary();
 
   }
 
@@ -214,21 +277,20 @@ int main(int argc, char *argv[]){
     exit(1);
   }
   
+#if 1
+  for(int __i =0; __i < inum; __i++)
+    printf("%ud\n",output[__i].word);
+#endif
 
   for(int a = 0; a < inum;a++){
     fout.write(output[a].byte,4);   
-#if DEBUG
-#define aa output[a].byte
-    printf("%d, %d, %d, %d\n",aa[0],aa[1],aa[2],aa[3]);
-#undef aa
-#endif
   }
   
-  char test;
-  for(int i = 0; i > -256 ; i--){
-    test = i;
-    fout.put(test);
-    printf("%d: %c\n",test, test);
-  }
+  // char test;
+  // for(int i = 0; i > -256 ; i--){
+  //   test = i;
+  //   fout.put(test);
+  //   printf("%d: %c\n",test, test);
+  // }
 }
 

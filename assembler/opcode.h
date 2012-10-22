@@ -41,8 +41,8 @@
 #define fnc_cmp        0b001100
 #define	opc_cmpf	0b100100	
 #define fnc_cmpf        0b001100
-#define	opc_mv        0b110000	
-#define fnc_mv        0b001110
+#define	opc_mvr        0b110000	
+#define fnc_mvr        0b001110
 #define	opc_mvf	        0b100000	
 #define fnc_mvf        0b001110
 #define	opc_lw        0b111011	

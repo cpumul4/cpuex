@@ -3,28 +3,29 @@
 #include <stdio.h>
 
 struct formR {
-  uint opcode:6; 
-  uint rd:5;
-  uint rs:5;
-  uint rt:5;
-  uint amt:5;
   uint funct:6;
+  uint amt:5;
+  uint rt:5;
+  uint rs:5;
+  uint rd:5;
+  uint opcode:6; 
+
   void set(uint o,uint d, uint s, uint t, uint a ,uint f){
     opcode = o; rd = d; rs = s; rt = t; amt = a; funct = f;  
     printf("opcode=%d, rd=%d, rs=%d, rt=%d, funct=%d\n",opcode,rd,rs,rt,funct);};
 };
 
 struct formI {
-  uint opcode:6;
-  uint rd:5;
-  uint rs:5;
   uint imm:16;
+  uint rs:5;
+  uint rd:5;
+  uint opcode:6;
   void set(uint o,uint d, uint s, uint i){opcode = o; rd = d; rs = s; imm = i;  };
 };
 
 struct formJ {
-  uint opcode:6;
   uint addr:26;
+  uint opcode:6;
   void set(uint o,uint a){ opcode = o; addr = a;  };
 };
 
