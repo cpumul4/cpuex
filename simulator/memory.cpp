@@ -44,20 +44,7 @@ bool is_zero(myfloat num){
     return false;
 }
 
-void show_ram(void){
-  static bool show = true;
-  int first;
-  int last;
-
-  if(!show)return;
-
-  cerr << "ram[i]~ram[j]を表示（i,jを$stackpの初期値からの相対値で入力してください）（i=j=0だと今後ずっと非表示）\n";
-  cin >> first;
-  cin >> last;
-  
-  if(first == 0 && last == 0)
-    show = false;
-  
+void show_ram(int first, int last){
   if(first > last){
     int tmp = first;
     first = last;
@@ -85,12 +72,12 @@ void show_regs(void){
   }
   cerr << endl << "\t";
 #define print(reg,regname) cerr << #regname << "=" << reg.i << ", ";
-  print(SWR, $swap)
-    print(CLR, $closure)
+  print(SWR, $swp)
+    print(CLR, $clos)
     print(CPR, $cmp)
-    print(GPR, $globalp)
-    cerr << "$stackp（相対値）" << "=" << (SPR.i - SPR_INIT) << ", ";
-    print(LR , $linkr)
+    print(GPR, $glbp)
+    cerr << "$stkp(relative)" << "=" << (SPR.i - SPR_INIT) << ", ";
+    print(LR , $lnkr)
 #undef print
 
   cerr << endl;

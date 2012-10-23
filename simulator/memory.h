@@ -69,7 +69,7 @@ extern uint32_t low;
 extern uint32_t pc;
 extern bool is_zero(myfloat);
 extern void show_regs(void);
-extern void show_ram(void);
+extern void show_ram(int, int);
 extern void print_bit(float);
 extern void print_bit(myint);
 #endif //_MEMORY

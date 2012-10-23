@@ -1,6 +1,7 @@
 aaa:
-	ori $r1 $r0 -1
-	nop
+	addi $r1 $r1 1000
+	mvrf $r1 $f1	
+	j aaa
 	halt
 	;; in $r0
 	;; outd $r0
