@@ -1,5 +1,5 @@
-#include "./instruction.h"
-#include "./common.h"
+#include "./instruction.hpp"
+#include "./common.hpp"
 #include <fstream>
 #include <cstring>
 

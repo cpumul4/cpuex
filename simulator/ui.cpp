@@ -2,9 +2,9 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
-#include "./common.h"
-#include "./memory.h"
-#include "./instruction.h"
+#include "./common.hpp"
+#include "./memory.hpp"
+#include "./instruction.hpp"
 #include "./ui.hpp"
 using namespace std;
 
@@ -261,7 +261,7 @@ int ui(void){
       "\n-----------------------------------------------------------------\n\
  ; if (条件式)\t... 条件式を満たすときに停止\n\
  ;\t（条件式）... $r1 = 4, $f4 < 4.0, $f4 != 0.2など. $は省略可\n\
- ;\t if regname change ... regnameの値が変わったら停止する\n\
+ ; if regname change ... regnameの値が変わったら停止する\n\
  ;rmif [enl] regname ... regnameに関する条件式を削除\n\
  ;\t [enl] ... eかnかlのどれか１文字。eなら =の条件を, nなら !=を, lなら <を削除\n\
  ;\t [enl]を省略した場合、e,n,lの全てから消す。\n\

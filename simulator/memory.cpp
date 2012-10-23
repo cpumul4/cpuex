@@ -1,5 +1,5 @@
-#include "./common.h"
-#include "./memory.h"
+#include "./common.hpp"
+#include "./memory.hpp"
 #include <iostream>
 using namespace std;
 

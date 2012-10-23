@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
-#include "./memory.h"
+#include "./memory.hpp"
 #define ZERO    1
 
 

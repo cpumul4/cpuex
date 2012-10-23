@@ -1,6 +1,6 @@
-#include "./common.h"
-#include "./memory.h"
-#include "./instruction.h"
+#include "./common.hpp"
+#include "./memory.hpp"
+#include "./instruction.hpp"
 #include <limits.h>
 #include <sys/time.h>
 #include <fstream>
