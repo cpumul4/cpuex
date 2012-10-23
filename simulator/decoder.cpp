@@ -3,7 +3,7 @@
 #include <fstream>
 #include <cstring>
 
-#define MAX_CHAR  30
+#define MAX_CHAR  100
 #define MAX_LINE  10000
 #define LABEL_TABLE_NUM 1000
 

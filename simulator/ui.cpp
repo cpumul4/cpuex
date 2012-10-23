@@ -266,7 +266,7 @@ int ui(void){
  ;\t [enl] ... eかnかlのどれか１文字。eなら =の条件を, nなら !=を, lなら <を削除\n\
  ;\t [enl]を省略した場合、e,n,lの全てから消す。\n\
  ; ram int1 int2\t... int1~int2のメモリを表示(int1,2は相対値)\n\
- ; step int\t... int命令毎に実行停止(0で非停止)\n\
+ ; step int\t... int命令毎に実行停止(0で非停止). stepは省略可.\n\
  ; Enterキー\t... 実行再開\n\
  ; quit\t...終了\n\
  ; トークンの間に半角スペースやタブを必ず入れて下さい\n\
@@ -341,6 +341,8 @@ int ui(void){
     }
     else if(strcmp(tokens[0], "step") == 0)
       step = atoi(tokens[1]);
+    else if('0' <= tokens[0][0] && tokens[0][0] <= '9')
+      step = atoi(tokens[0]);
   }
 
 
