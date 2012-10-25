@@ -1,4 +1,4 @@
-#include "../simulator/common.hpp"
+#include "./common.hpp"
 #include "ltable.h"
 #include "opcode.h"
 #include "assembler.h"
