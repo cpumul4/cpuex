@@ -13,7 +13,7 @@ using namespace std;
 #define DEBUG 0
 #define debug(expr) cerr << #expr << endl
 
-  
+extern void print_bit(uint32_t);
 
 // 文字列を処理する関数
 char *skip_chars(char *str, const char *keys){
@@ -308,7 +308,7 @@ int main(int argc, char *argv[]){
   
 #if 1
   for(int __i =0; __i < inum; __i++)
-    printf("%ud\n",output[__i].word);
+    print_bit(output[__i].word);
 #endif
 
   for(int a = 0; a < inum;a++){
