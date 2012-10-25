@@ -165,12 +165,13 @@ uint32_t rformbin(uint opcode, uint funct, int *operand, int amt){
 
   uint d=0,s=0,t=0;
 
-  if(opcode == opc_jl || opcode == opc_jlr){
+  if(opcode == opc_jr || opcode == opc_jlr){
     s = operand[0];
+    
     
   }
   else if(opcode < 4)		// if output命令
-    d = operand[0];
+    s = operand[0];
   else {
     d = operand[0];
     s = operand[1];
