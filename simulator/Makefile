@@ -2,8 +2,8 @@ PROGRAM := simulator
 SOURCES := $(wildcard *.cpp)
 OBJS := $(SOURCES:.cpp=.o)
 DEPENDS := $(SOURCES:.cpp=.depend~)
-CXX := g++
-CPPFLAGS := -O2
+CXX := g++ -std=c++0x
+CPPFLAGS := -O3
 WARNOPTS = -Wall -Wextra -Wformat=2 -Wstrict-aliasing=2 -Wcast-qual -Wcast-align -Wwrite-strings -Wfloat-equal -Wpointer-arith -Wswitch-enum -Wshadow
 
 

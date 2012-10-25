@@ -12,8 +12,8 @@ class instr;
 
 extern instr rom[];
 extern uint exec_count;
-extern int step;
 
+int step = 0;
 const int bpsize = 100;
 
 void checkarray::add(uint32_t *key, uint32_t *val, regtype _t){
@@ -253,6 +253,9 @@ int ui(void){
   if(!does_stop){ // 停止しない条件
     return 0;
   }
+#if OPTIMIZATION
+  if(1)return 0;
+#endif
 
   if(init_stop){
     for(int i=0; i< bpsize; i++)

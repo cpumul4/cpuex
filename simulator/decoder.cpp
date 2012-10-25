@@ -2,13 +2,14 @@
 #include "./common.hpp"
 #include <fstream>
 #include <cstring>
+#include <stdlib.h>
 
 #define MAX_CHAR  100
-#define MAX_LINE  10000
+#define MAX_LINE  11000
 #define LABEL_TABLE_NUM 1000
 
+extern instr rom[];
 
-instr rom[ROM_SIZE];
 
 class ltable {
   uint index[LABEL_TABLE_NUM];
@@ -25,7 +26,7 @@ public:
 void ltable::set_label(uint i, const char *l){
   uint itr = 0;
   while(label[itr] != NULL)itr++;
-  label[itr] = (char *)malloc(sizeof(char) * strlen(l));
+  label[itr] = (char *)malloc(sizeof(char) * strlen(l) + 1);
   strcpy(label[itr],l);
   index[itr] = i;
 }
@@ -53,6 +54,8 @@ inline int get_regnum(char *reg){
 void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   char *asmtok[10];
   char delims[] = " \t\r\n";
+  static int count = 0;
+  cerr << count++ << "  "  << romindex <<endl;
 
   while(*assm == ' ' || *assm == '\t')
     assm++;
@@ -197,9 +200,9 @@ int decode(char *srcpath){
   uint romindex = 0;
 
   ifstream fin(srcpath);
-  
+
   // 必要な行だけを抜き取り、labelをtableに入れる
-  while( fin.getline(input[romindex],MAX_LINE) ){
+  while( fin.getline(input[romindex],MAX_CHAR) ){
     if(input[romindex] == NULL || input[romindex][0] == 0){
       cerr << "aa";		// これつけると高速化する
 
@@ -207,6 +210,10 @@ int decode(char *srcpath){
       continue;
     }
     rm_comment(input[romindex], "#;");
+    if(input[romindex] == NULL || input[romindex][0] == 0){
+      continue;
+    }
+
     if(input[romindex][0] == '\t' && input[romindex][1] != 0){
       romindex++;		// 今読んだ入力を保持して、次の入力を読みに行く
     }
@@ -216,8 +223,8 @@ int decode(char *srcpath){
     }
   }
 
-  for(uint i=0; i < romindex;i++)
-    cerr << input[i] << endl;
+  // for(uint i=0; i < romindex;i++)
+  //   cerr << input[i] << endl;
   for(uint i=0;i < romindex;i++){
     put_rom(input[i], table, rom[i], i);    
   }

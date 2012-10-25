@@ -7,9 +7,7 @@ uint32_t ram[RAM_SIZE];
 myint ireg[INTREG_NUM];
 myfloat freg[FLOATREG_NUM];
 uint32_t lreg;
-uint32_t high;
-uint32_t low;
-uint32_t pc;
+int32_t pc;
 
 uint32_t int16_to_uint32(int16_t sign){
   union {
