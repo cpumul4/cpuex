@@ -14,6 +14,7 @@ using namespace std;
 #define debug(expr) cerr << #expr << endl
 
 extern void print_bit(uint32_t);
+extern void print_bit_instr(uint32_t);
 
 // 文字列を処理する関数
 char *skip_chars(char *str, const char *keys){
@@ -163,8 +164,8 @@ uint32_t rformbin(uint opcode, uint funct, int *operand, int amt){
 #endif
   
   return (opcode  << 26)
-    | (operand[0] << 21)
-    | (operand[1] << 16)
+    | (operand[1] << 21)
+    | (operand[0] << 16)
     | (operand[2] << 11)
     | (amt        <<  6)
     | funct;
@@ -173,8 +174,8 @@ uint32_t rformbin(uint opcode, uint funct, int *operand, int amt){
 uint32_t iformbin(const uint opcode, const int *operand){
   const uint16_t imm = operand[2];
   return (opcode << 26)
-    | (operand[0] << 21)
-    | (operand[1] << 16)
+    | (operand[1] << 21)
+    | (operand[0] << 16)
     | imm;
 }
 
@@ -306,9 +307,15 @@ int main(int argc, char *argv[]){
     exit(1);
   }
   
-#if 1
   for(int __i =0; __i < inum; __i++)
     print_bit(output[__i].word);
+
+  cout <<  "----------------------上と下は同じ命令です-------------------------\n";
+
+  
+#if 1
+  for(int __i =0; __i < inum; __i++)
+    print_bit_instr(output[__i].word);
 #endif
 
   for(int a = 0; a < inum;a++){
