@@ -1,4 +1,4 @@
-#include "../simulator/common.h"
+#include "../simulator/common.hpp"
 #include "ltable.h"
 #include "opcode.h"
 #include "assembler.h"
@@ -78,44 +78,73 @@ format dec_operator(char *op, uint &opcode, uint &funct){
     op(subf)
     op(mulf)
     op(divf)
+
     op_nofunct(addi)
     op_nofunct(subi)
     op_nofunct(andi)
     op_nofunct(ori)
     op(sqrt)
+
     op(and)
     op(or)
     op(nor)
     op(xor)
+
     op(sll)
     op(srl)
     op(sra)
+
     op(cmp)
     op(cmpf)
+
     op(mvr)
     op(mvf)
+    op(mvrf)
+    op(mvfr)
+    
+    op_nofunct(lui)
+    op_nofunct(lli)
+    op_nofunct(luif)
+    op_nofunct(llif)
+    
     op(lw)
     op(sw)
     op_nofunct(lwi)
     op_nofunct(swi)
-    op_nofunct(j)
-    op_nofunct(jl)
+    op_nofunct(lwif)
+    op_nofunct(swif)
     op(lwf)
     op(swf)
+
+    op_nofunct(j)
+    op_nofunct(jl)
     op(jr)
+    op(jlr)
+
     op_nofunct(beq)
     op_nofunct(bne)
     op_nofunct(beqf)
     op_nofunct(bnef)
+
     op(nop)
     op(dbg)
     op(halt)
-    op(rst)	 
+
+    op(in)
+    op(inf)
+    op(outa)
+    op(outb)
+    op(outc)
+    op(outd)
+    op(outaf)
+    op(outbf)
+    op(outcf)
+    op(outdf)
     ;
 #undef subst
 #undef op
   
-  if(opcode >= 0b100000)
+  if((opcode & 0b000001) == 0b000001)
     return r;
   else if(opcode == opc_jl || opcode == opc_j)
     return j;
