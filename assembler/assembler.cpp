@@ -1,7 +1,6 @@
-#include "./common.hpp"
-#include "ltable.h"
-#include "opcode.h"
-#include "assembler.h"
+#include "ltable.hpp"
+#include "opcode.hpp"
+#include "assembler.hpp"
 #include <stdint.h>
 #include <stdlib.h>
 #include <cstring>
@@ -314,8 +313,10 @@ int main(int argc, char *argv[]){
 
   
 #if 1
-  for(int __i =0; __i < inum; __i++)
+  for(int __i =0; __i < inum; __i++){
+    printf("%s\t", input[__i]);
     print_bit_instr(output[__i].word);
+  }
 #endif
 
   for(int a = 0; a < inum;a++){
