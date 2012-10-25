@@ -1,38 +1,49 @@
-a:
-aa:	
+	add  $r4 $r1 $r2
+	sub  $r4 $r1 $r2
+	addf  $r4 $r1 $r2
+	subf  $r4 $r1 $r2
+	mulf  $r4 $r1 $r2
+	divf  $r4 $r1 $r2
+	sqrt  $r4 $r1
+	addi  $r4 $r1  31
+	subi  $r4 $r1  31
+	and  $r4 $r1 $r2
+	or   $r4 $r1 $r2
+	nor  $r4 $r1 $r2
+	xor  $r4 $r1 $r2
+
+	sll  $r4 $r1  15
+	srl  $r4 $r1  15
+	sra  $r4 $r1  15
+	cmp  $r4 $r1 $r2
+	cmpf $r4 $r1 $r2
+	mvr  $r4 $r1
+	mvf  $r4 $r1
+	mvrf  $r4 $r1
+	mvfr  $r4 $r1
+	lui  $r4 $r1  31
+	lli  $r4 $r1  31
+	luif  $r4 $r1  31
+	llif  $r4 $r1  31
+	lwf  $r4 $r1 $r2
+	swf  $r4 $r1 $r2
+	lwif  $r4 $r1 31
+	swif  $r4 $r1 31
+
+	in $r31
+	inf $r31
+	
+	outa $r31
+	outb $r31
+	outc $r31
+	outd $r31
+	outaf $r31
+	outbf $r31
+	outcf $r31
+	outdf $r31
 aaa:	
-	;; add $r0 $r0 $r0
-	;; add $r0 $r1 $r1
-	;; add $r0 $r0 $r16
-	;; sub $r0 $r0 $r0
-	;; addf $r0 $r0 $r0
-	;; subf $r0 $r0 $r0
-	;; mulf $r0 $r0 $r0
-	;; divf $r0 $r0 $r0
-	;; and $r0 $r0 $r0
-	;; or $r0 $r0 $r0
-	;; nor $r0 $r0 $r0
-	;; xor $r0 $r0 $r0
-	;; sll $r0 $r0 $r0
-	;; srl $r0 $r0 $r0
-	;; sra $r0 $r0 $r0
-	lui $r2 $r1 30
-	addi $r0 $r0 aaa
-	addi $r1 $r0 0
-	addi $r16 $r0 0
-	;; addi $r0 $r1 0
-	;; addi $r0 $r16 0
-	;; addi $r31 $r31 0
-	;; subi $r0 $r0 0
-	;; andi $r0 $r0 0
-	;; ori $r0 $r0 0
-;; aaa:	
-;; 	j aaa
-;; bbb:	
-;; 	j bbb
-;; ccc:	
-;; 	beq $r0 $r0 aaa
-;; ddd:	
-;; 	beq $r0 $r0 bbb
-;; 	j ccc
-;; 	j ddd
+	j aaa
+	jl aaa
+	jr $r31
+	jlr $r31
+	setl $r31 aaa
