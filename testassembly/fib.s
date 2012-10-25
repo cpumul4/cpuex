@@ -1,4 +1,4 @@
-	addi $r2 $r2 20
+	addi $r2 $r2 30
 fib:
 	beq  $r2 $r0 Zero		;goto zero
 	addi $r7 $r0 1	;r3 == 1

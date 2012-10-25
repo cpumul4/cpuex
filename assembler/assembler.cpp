@@ -186,9 +186,20 @@ uint32_t rformbin(uint opcode, uint funct, int *operand, int amt){
 
 uint32_t iformbin(const uint opcode, const int *operand){
   const uint16_t imm = operand[2];
+  uint s=0,t=0;
+  
+  if(0b010000 <= opcode && opcode <= 0b010110){
+    s = operand[0];
+    t = operand[1];
+  }
+  else {
+    s = operand[1];
+    t = operand[0];
+  }
+
   return (opcode << 26)
-    | (operand[1] << 21)
-    | (operand[0] << 16)
+    | (s << 21)
+    | (t << 16)
     | imm;
 }
 
