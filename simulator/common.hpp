@@ -1,7 +1,7 @@
 #ifndef _COMMON
 #define _COMMON
 
-#define OPTIMIZATION 1
+#define OPTIMIZATION 0
 
 
 //3,4,11,12,13,14
