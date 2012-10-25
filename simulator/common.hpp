@@ -1,34 +1,13 @@
 #ifndef _COMMON
 #define _COMMON
 
-
-#define INTREG_NUM   32
-#define FLOATREG_NUM 32		// rst命令でireg = fregを仮定している
-#define RAM_SIZE  1024*1024*8/4
-#define ROM_SIZE  1024*10
-
-/* register */
-#define ZR ireg[0]
-#define RR ireg[1]
-#define AR1 ireg[2]
-#define AR2 ireg[3]
-#define AR3 ireg[4]
-#define AR4 ireg[5]
-#define GENR_MAX 25
-
-#define SWR ireg[26]
-#define CLR ireg[27]
-#define CPR ireg[28]
-#define GPR ireg[29]
-#define SPR ireg[30] 
-#define SPR_INIT 0x000fffff
-#define LR  ireg[31]
-#define LR_INIT INT_MAX
+#define OPTIMIZATION 1
 
 
 //3,4,11,12,13,14
 
 // R
+
 #define ADD    1
 #define SUB    2
 // FR

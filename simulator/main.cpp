@@ -1,25 +1,20 @@
-#include "./common.hpp"
 #include "./memory.hpp"
 #include "./instruction.hpp"
-#include <limits.h>
+#include <stdlib.h>
 #include <sys/time.h>
 #include <fstream>
 
 extern int ui(void);
 extern int decode(char *);
-extern instr rom[];
+
+instr rom[ROM_SIZE];
 ofstream fout;
 ifstream fin;
-
+uint exec_count = 0;
 
 float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ秒 */
   return (float)(t2.tv_sec - t1.tv_sec) + (t2.tv_usec - t1.tv_usec)/1000000.0;
 }
-
-
-int instr_count[64];
-int step = 0;
-uint exec_count = 0;
 
 int simulate(char *asmpath, char *srcpath, char *tgtpath){
 
@@ -48,8 +43,6 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     cerr << "no output file. output命令は使えません\n";
   }
   
-  // cerr << "何命令毎に停止するか(0だと停止しない): ";
-  // cin >> step;
   pc = 0;
   ZR = 0;
   LR  = LR_INIT;
@@ -59,19 +52,6 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
 
   while(pc != LR_INIT){
     ui();
-    // if(step != 0 && exec_count % step == 0){
-    //   cerr <<"\n -------------- 命令実行数:" << exec_count << " --------------\n";
-    //   show_regs();
-    //   print_bit(ireg[1]);
-    //   show_ram();
-    //   string a;
-
-    // cerr << "\n" << "[next instruction]" << pc << ": ";
-    // rom[pc].show();
-
-    // cerr << "----- 次からは何命令毎に停止するか ----- \n";
-    // cin >> step;
-    // }
     pc++;
 
     if(SPR.i < 0){
@@ -125,7 +105,3 @@ int main(int argc, char *argv[]){
 
   return 0;
 }
-
-
-
-

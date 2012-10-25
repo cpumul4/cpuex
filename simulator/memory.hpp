@@ -1,9 +1,32 @@
 #ifndef _MEMORY
 #define _MEMORY
 
-#include "./common.hpp"
 #include <stdint.h>
+#include <limits.h>
 
+
+#define INTREG_NUM   32
+#define FLOATREG_NUM 32		// rst命令でireg = fregを仮定している
+#define RAM_SIZE  1024*1024
+#define ROM_SIZE  1024*11
+
+/* register */
+#define ZR ireg[0]
+#define RR ireg[1]
+#define AR1 ireg[2]
+#define AR2 ireg[3]
+#define AR3 ireg[4]
+#define AR4 ireg[5]
+const int GENR_MAX = 25;
+#define SWR ireg[26]
+#define CLR ireg[27]
+#define CPR ireg[28]
+#define GPR ireg[29]
+#define SPR ireg[30] 
+#define LR  ireg[31]
+
+const int SPR_INIT = 0x000fffff;
+const int LR_INIT = INT_MAX;
 
 // myintに関する演算を定義するためのマクロ
 #define defarith(_op)				     \
@@ -61,15 +84,14 @@ public:
 };
    
 extern uint32_t ram[RAM_SIZE];
-extern myint ireg[INTREG_NUM];
-extern myfloat freg[FLOATREG_NUM];
+extern myint    ireg[INTREG_NUM];
+extern myfloat  freg[FLOATREG_NUM];
 extern uint32_t lreg;
-extern uint32_t high;
-extern uint32_t low;
-extern uint32_t pc;
+extern int32_t pc;
 extern bool is_zero(myfloat);
 extern void show_regs(void);
 extern void show_ram(int, int);
 extern void print_bit(float);
 extern void print_bit(myint);
+
 #endif //_MEMORY
