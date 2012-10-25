@@ -47,6 +47,7 @@ int interpret_operand(char *operand, ltable table){
     return regnum;
 
   regnum = table.get_index(operand);
+
   if(regnum >= 0)
     return regnum;
 
@@ -161,11 +162,24 @@ uint32_t rformbin(uint opcode, uint funct, int *operand, int amt){
   cerr << "opcode=" << opcode << ", funct=" << funct << endl;
   cerr << operand[0] << " " << operand[1] << " " << operand[2] << endl;
 #endif
-  
+
+  uint d=0,s=0,t=0;
+
+  if(opcode == opc_jl || opcode == opc_jlr){
+    s = operand[0];
+    
+  }
+  else if(opcode < 4)		// if output命令
+    d = operand[0];
+  else {
+    d = operand[0];
+    s = operand[1];
+    t = operand[2];
+  }
   return (opcode  << 26)
-    | (operand[1] << 21)
-    | (operand[0] << 16)
-    | (operand[2] << 11)
+    | (s << 21)
+    | (t << 16)
+    | (d << 11)
     | (amt        <<  6)
     | funct;
 }
@@ -268,8 +282,9 @@ int main(int argc, char *argv[]){
 	amt = interpret_operand(token[n+1], table);
       else if(n == 2 && f == branch)
 	oprd[n] = table.get_index(token[n+1]) - itr - 1;
-      else 
+      else {
 	oprd[n] = interpret_operand(token[n+1], table);
+      }
     }
 
 #if 0

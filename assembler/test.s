@@ -16,6 +16,7 @@ aaa:
 	;; sll $r0 $r0 $r0
 	;; srl $r0 $r0 $r0
 	;; sra $r0 $r0 $r0
+	lui $r2 $r1 30
 	addi $r0 $r0 aaa
 	addi $r1 $r0 0
 	addi $r16 $r0 0
