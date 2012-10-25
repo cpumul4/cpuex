@@ -1,0 +1,44 @@
+*** stack smashing detected ***: ./simulator terminated
+======= Backtrace: =========
+/lib/x86_64-linux-gnu/libc.so.6(__fortify_fail+0x37)[0x7f06241a61d7]
+/lib/x86_64-linux-gnu/libc.so.6(__fortify_fail+0x0)[0x7f06241a61a0]
+./simulator[0x402603]
+./simulator[0x402ac0]
+./simulator[0x403639]
+./simulator[0x403b49]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xff)[0x7f06240c6eff]
+./simulator[0x401bc9]
+======= Memory map: ========
+00400000-00409000 r-xp 00000000 08:05 1842540                            /home/hs/lecture/cpuex/my-caml1/simulator
+00608000-00609000 r--p 00008000 08:05 1842540                            /home/hs/lecture/cpuex/my-caml1/simulator
+00609000-0060a000 rw-p 00009000 08:05 1842540                            /home/hs/lecture/cpuex/my-caml1/simulator
+0060a000-00e1b000 rw-p 00000000 00:00 0 
+01796000-017b7000 rw-p 00000000 00:00 0                                  [heap]
+7f06240a8000-7f0624232000 r-xp 00000000 08:05 2228243                    /lib/x86_64-linux-gnu/libc-2.13.so
+7f0624232000-7f0624431000 ---p 0018a000 08:05 2228243                    /lib/x86_64-linux-gnu/libc-2.13.so
+7f0624431000-7f0624435000 r--p 00189000 08:05 2228243                    /lib/x86_64-linux-gnu/libc-2.13.so
+7f0624435000-7f0624436000 rw-p 0018d000 08:05 2228243                    /lib/x86_64-linux-gnu/libc-2.13.so
+7f0624436000-7f062443c000 rw-p 00000000 00:00 0 
+7f062443c000-7f0624451000 r-xp 00000000 08:05 2228268                    /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f0624451000-7f0624650000 ---p 00015000 08:05 2228268                    /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f0624650000-7f0624651000 r--p 00014000 08:05 2228268                    /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f0624651000-7f0624652000 rw-p 00015000 08:05 2228268                    /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f0624652000-7f06246d6000 r-xp 00000000 08:05 2228251                    /lib/x86_64-linux-gnu/libm-2.13.so
+7f06246d6000-7f06248d5000 ---p 00084000 08:05 2228251                    /lib/x86_64-linux-gnu/libm-2.13.so
+7f06248d5000-7f06248d6000 r--p 00083000 08:05 2228251                    /lib/x86_64-linux-gnu/libm-2.13.so
+7f06248d6000-7f06248d7000 rw-p 00084000 08:05 2228251                    /lib/x86_64-linux-gnu/libm-2.13.so
+7f06248d7000-7f06249bf000 r-xp 00000000 08:05 135696                     /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.14
+7f06249bf000-7f0624bbe000 ---p 000e8000 08:05 135696                     /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.14
+7f0624bbe000-7f0624bc6000 r--p 000e7000 08:05 135696                     /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.14
+7f0624bc6000-7f0624bc8000 rw-p 000ef000 08:05 135696                     /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.14
+7f0624bc8000-7f0624bdd000 rw-p 00000000 00:00 0 
+7f0624bdd000-7f0624bfe000 r-xp 00000000 08:05 2228240                    /lib/x86_64-linux-gnu/ld-2.13.so
+7f0624dd7000-7f0624ddc000 rw-p 00000000 00:00 0 
+7f0624dfb000-7f0624dfd000 rw-p 00000000 00:00 0 
+7f0624dfd000-7f0624dfe000 r--p 00020000 08:05 2228240                    /lib/x86_64-linux-gnu/ld-2.13.so
+7f0624dfe000-7f0624e00000 rw-p 00021000 08:05 2228240                    /lib/x86_64-linux-gnu/ld-2.13.so
+7fffaf60d000-7fffaf70a000 rw-p 00000000 00:00 0                          [stack]
+7fffaf7ff000-7fffaf800000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+中止
+
