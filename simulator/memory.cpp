@@ -1,5 +1,6 @@
 #include "./common.hpp"
 #include "./memory.hpp"
+#include <stdio.h>
 #include <iostream>
 using namespace std;
 
@@ -42,6 +43,12 @@ bool is_zero(myfloat num){
     return false;
 }
 
+
+void ram_string(int i, char *str){
+  sprintf(str, "ram[%x]",i);
+  return;
+}
+
 void show_ram(int first, int last){
   if(first > last){
     int tmp = first;
@@ -70,7 +77,7 @@ void show_regs(void){
   }
   cerr << endl << "\t";
 #define print(reg,regname) cerr << #regname << "=" << reg.i << ", ";
-  print(SWR, $swp)
+  print(SWR, $swp(r26))
     print(CLR, $clos)
     print(CPR, $cmp)
     print(GPR, $glbp)
@@ -88,3 +95,5 @@ void show_regs(void){
       cerr << "$f" << i << "=" << freg[i].f << ", ";
     }
 }
+
+

@@ -93,5 +93,5 @@ extern void show_regs(void);
 extern void show_ram(int, int);
 extern void print_bit(float);
 extern void print_bit(myint);
-
+extern void ram_string(int, char *);
 #endif //_MEMORY

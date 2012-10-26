@@ -1,8 +1,11 @@
 #include "./instruction.hpp"
 #include "./memory.hpp"
+#include <stdlib.h>
 #include <math.h>
 
 int instr_count[64];
+
+
 
 inline uint32_t get_pc(uint16_t imm){
   return ((pc >> 26) << 26) | imm;
@@ -63,22 +66,39 @@ inline uint32_t lowbits(myint b, int need){ // 下位need bitを取り出す
   return (b << unwanted) >> unwanted;
 }
 
-inline void exec_input(uint32_t &regbitseq){
+inline void exec_input(uint32_t &regbitseq, uint opcode){
+  const int strlength = 10;
+  
   union {
-    char byte[4];
-    uint32_t word;
-  } tmp;
+    int32_t i;
+    float f;
+    uint32_t b;
+  } conv;
 
-  fin.read(tmp.byte, 4);
+  char *string = new char[strlength];
+
+  for(int i=0; i < strlength; i++){
+    fin.get(string[i]);
+    if(string[i] == ' ' || string[i] == '\n' || string[i] == '\r'){
+      string[i] = 0;
+      break;
+    }
+  }
+
   if( fin.bad() ) {
     cerr << "fatal Error:データ読み込みエラー" << endl;
     LR = LR_INIT;
   }
   if( fin.eof() ){
-    cerr << "EOFを読みました" << endl;
+    cerr << "ファイルの内容を全て読みました" << endl;
   }
 
-  regbitseq = tmp.word;
+  if(opcode == IN)conv.i = atoi(string);
+  else            conv.f = atof(string);
+
+  regbitseq = conv.b;
+
+  delete string;
   return;
 }
 
@@ -169,8 +189,8 @@ void instr::exec_asm(){
       });
 
     // ここまでちゃんと動く10\17 15:00
-    c(IN  , exec_input(D.b););
-    c(INF , exec_input(FD.b););
+    c(IN  , exec_input(D.b, IN););
+    c(INF , exec_input(FD.b, INF););
 
     c(OUTA, exec_output(D,3););
     c(OUTB, exec_output(D,2););

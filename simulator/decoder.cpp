@@ -26,7 +26,7 @@ public:
 void ltable::set_label(uint i, const char *l){
   uint itr = 0;
   while(label[itr] != NULL)itr++;
-  label[itr] = (char *)malloc(sizeof(char) * strlen(l) + 1);
+  label[itr] = new char[strlen(l) + 1];
   strcpy(label[itr],l);
   index[itr] = i;
 }
@@ -54,8 +54,6 @@ inline int get_regnum(char *reg){
 void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   char *asmtok[10];
   char delims[] = " \t\r\n";
-  static int count = 0;
-  cerr << count++ << "  "  << romindex <<endl;
 
   while(*assm == ' ' || *assm == '\t')
     assm++;
@@ -137,16 +135,16 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(rst , RST , none) 
     op(halt, HALT, none)
 
-    op(in , IN  ,  r)	// TODO
-    op(inf, INF ,  r)	// TODO
-    op(outa,OUTA, r)	// TODO
-    op(outb,OUTB, r)	// TODO
-    op(outc,OUTC, r)	// TODO
-    op(outd,OUTD, r)	// TODO
-    op(outaf,OUTAF, r)	// TODO
-    op(outbf,OUTBF, r)	// TODO
-    op(outcf,OUTCF, r)	// TODO
-    op(outdf,OUTDF, r)	// TODO
+    op(in , IN  , r)
+    op(inf, INF , r)
+    op(outa,OUTA, r)
+    op(outb,OUTB, r)
+    op(outc,OUTC, r)
+    op(outd,OUTD, r)
+    op(outaf,OUTAF, r)
+    op(outbf,OUTBF, r)
+    op(outcf,OUTCF, r)
+    op(outdf,OUTDF, r)
 
 
   else {
@@ -205,8 +203,6 @@ int decode(char *srcpath){
   while( fin.getline(input[romindex],MAX_CHAR) ){
     if(input[romindex] == NULL || input[romindex][0] == 0){
       cerr << "aa";		// これつけると高速化する
-
-
       continue;
     }
     rm_comment(input[romindex], "#;");
@@ -223,16 +219,15 @@ int decode(char *srcpath){
     }
   }
 
-  // for(uint i=0; i < romindex;i++)
-  //   cerr << input[i] << endl;
   for(uint i=0;i < romindex;i++){
     put_rom(input[i], table, rom[i], i);    
   }
 
-  for(uint i=0;i < romindex; i++){
-    cerr << '[' << (int)i << ']';
-    rom[i].show();
-  }
+  // for(uint i=0;i < romindex; i++){
+  //   cerr << '[' << (int)i << ']';
+  //   rom[i].show();
+  // }
 
+  cerr << "<デコード終了>\n";
   return 0;
 }

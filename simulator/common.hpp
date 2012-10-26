@@ -3,9 +3,6 @@
 
 #define OPTIMIZATION 0
 
-
-//3,4,11,12,13,14
-
 // R
 
 #define ADD    1

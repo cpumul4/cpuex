@@ -2,13 +2,17 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
+#include <map>
 #include "./common.hpp"
 #include "./memory.hpp"
 #include "./instruction.hpp"
 #include "./ui.hpp"
+#include "./watchmem.hpp"
 using namespace std;
 
 class instr;
+typedef map<int, uint32_t> cells;
+
 
 extern instr rom[];
 extern uint exec_count;
@@ -242,6 +246,7 @@ int ui(void){
   static noteqarray nearray;
   static int breakpoints[bpsize];
   static bool init_stop = true;
+  static cells nonzeroram;
   bool does_stop = false;
   const int max_line = 30;
   char line[max_line] = {0};
@@ -276,7 +281,11 @@ int ui(void){
  ------------------------------------------------------------------\n";
   }
       
-  cerr <<"\n -------------- 命令実行数:" << exec_count << " --------------\n";
+  cerr <<
+    "\n ----------------------- 命令実行数:" << exec_count << 
+    " -----------------------\n";
+  print_change_index(nonzeroram);
+  get_writed_index(nonzeroram);
   show_regs();
   // print_bit(ireg[1]);
   
@@ -354,25 +363,6 @@ int ui(void){
   
   
   
-// if x = y
-// if x < y
-//        if x > y
-// if $r0 = 5
-// if $r1 = $r0
-// if $r0 change
-
-// uint32_t *kansi[100][2];
-// uint32_t *change[100];
-
-
-// $r0 := 0
-
-// diff all
-// diff mem
-// diff reg
-// 前見た場所を覚えておく。
-
-
 // break 3
 // == if lr 3
 

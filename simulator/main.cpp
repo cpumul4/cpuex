@@ -21,7 +21,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
   decode(asmpath);
 
   if(srcpath != NULL){
-    fin.open(srcpath, ios::binary);
+    fin.open(srcpath);
     if(!fin.is_open()){
       cerr << "ERROR: " << srcpath << " が開けませんでした\n";
       exit(1);
