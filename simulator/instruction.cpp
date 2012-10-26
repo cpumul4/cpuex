@@ -136,7 +136,7 @@ void instr::exec_asm(){
 
 
     c(LWF, FD = ram[S + T];);
-    c(SWF, FD = ram[S + T];);
+    c(SWF, ram[S + T] = FD.b;);
     c(LWIF, FD = ram[S + IMM];);
     c(SWIF, ram[S + IMM] = FD.b;); // myfloatの実装が外に出てしまっている
 
