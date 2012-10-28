@@ -1,12 +1,12 @@
 -- 整数レジスタ
--- Block RAMを使ったwrite-firstのRAM
+-- 真面目にバイパスしているがBlock RAMに推論されないwrite-firstのRAM
 -- アドレス幅5bit,容量32ワード
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
-entity int_register is
+entity int_register_b is
   port (
     clk  : in  std_logic;
     as   : in  std_logic_vector(4 downto 0);
@@ -19,9 +19,9 @@ entity int_register is
     dd   : out std_logic_vector(31 downto 0);
     EN   : in  std_logic;
     WE   : in  std_logic);
-end int_register;
+end int_register_b;
 
-architecture box of int_register is
+architecture box of int_register_b is
   type reg_t is array(0 to 31) of std_logic_vector(31 downto 0);
   signal reg : reg_t :=
     (x"00000000",x"00000000",x"00000000",x"00000000",
@@ -33,8 +33,6 @@ architecture box of int_register is
      x"00000000",x"00000000",x"00000000",x"00000000",
      x"00000000",x"00000000",x"000FFFFF",x"00000000");  -- $r30はスタックポインタ
 
-  signal readas, readat, readad : std_logic_vector(4 downto 0);
-  
 begin
   main : process(clk)
   begin
@@ -42,27 +40,27 @@ begin
       if EN = '1' then
         if WE = '1' and addr /= "00000" then
           reg(conv_integer(addr)) <= din;
-        end if;
-        if as = addr then
-          readas <= addr;
+          if as = addr then
+            ds <= din;
+          else        
+            ds <= reg(conv_integer(as));
+          end if;
+          if at = addr then
+            dt <= din;
+          else        
+            dt <= reg(conv_integer(at));
+          end if;
+          if ad = addr then
+            dd <= din;
+          else        
+            dd <= reg(conv_integer(ad));
+          end if;
         else
-          readas <= as;
-        end if;
-        if at = addr then
-          readat <= addr;
-        else
-          readat <= at;
-        end if;
-        if ad = addr then
-          readad <= addr;
-        else
-          readad <= ad;
+          ds <= reg(conv_integer(as));
+          dt <= reg(conv_integer(at));
+          dd <= reg(conv_integer(ad));
         end if;
       end if;
     end if;
   end process;
-
-  ds <= reg(conv_integer(readas));
-  dt <= reg(conv_integer(readat));
-  dd <= reg(conv_integer(readad));
 end box;

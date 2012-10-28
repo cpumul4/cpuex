@@ -1,6 +1,6 @@
 -- 命令メモリ
 -- Block RAMを使ったRAM(read-firstだが、実際には書き込みと読み出しは同時には行われない)
--- アドレス幅16bit,容量64Kワード
+-- アドレス幅15bit(形式的に16bitで与える),容量32Kワード
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -17,7 +17,7 @@ entity inst_mem is
 end inst_mem;
 
 architecture box of inst_mem is
-  type mem_t is array(0 to 65535) of std_logic_vector(31 downto 0);
+  type mem_t is array(0 to 32767) of std_logic_vector(31 downto 0);
   signal mem : mem_t;
 
 begin
@@ -26,9 +26,9 @@ begin
     if rising_edge(clk) then
       if EN = '1' then
         if WE = '1' then
-          mem(conv_integer(addr)) <= din;
+          mem(conv_integer(addr(14 downto 0))) <= din;
         end if;
-        inst <= mem(conv_integer(addr));
+        inst <= mem(conv_integer(addr(14 downto 0)));
       end if;
     end if;
   end process;

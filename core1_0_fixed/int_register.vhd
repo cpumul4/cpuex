@@ -1,4 +1,4 @@
--- 浮動小数点数レジスタ
+-- 整数レジスタ
 -- Block RAMを使ったwrite-firstのRAM
 -- アドレス幅5bit,容量32ワード
 
@@ -6,7 +6,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
-entity fp_register is
+entity int_register is
   port (
     clk  : in  std_logic;
     as   : in  std_logic_vector(4 downto 0);
@@ -19,9 +19,9 @@ entity fp_register is
     dd   : out std_logic_vector(31 downto 0);
     EN   : in  std_logic;
     WE   : in  std_logic);
-end fp_register;
+end int_register;
 
-architecture box of fp_register is
+architecture box of int_register is
   type reg_t is array(0 to 31) of std_logic_vector(31 downto 0);
   signal reg : reg_t :=
     (x"00000000",x"00000000",x"00000000",x"00000000",
@@ -31,7 +31,7 @@ architecture box of fp_register is
      x"00000000",x"00000000",x"00000000",x"00000000",
      x"00000000",x"00000000",x"00000000",x"00000000",
      x"00000000",x"00000000",x"00000000",x"00000000",
-     x"00000000",x"00000000",x"00000000",x"00000000");
+     x"00000000",x"00000000",x"000FFFFF",x"00000000");  -- $r30はスタックポインタ
 
   signal readas, readat, readad : std_logic_vector(4 downto 0);
   
@@ -40,24 +40,12 @@ begin
   begin
     if rising_edge(clk) then
       if EN = '1' then
-        if WE = '1' then
+        if WE = '1' and addr /= "00000" then
           reg(conv_integer(addr)) <= din;
         end if;
-        if as = addr then
-          readas <= addr;
-        else
-          readas <= as;
-        end if;
-        if at = addr then
-          readat <= addr;
-        else
-          readat <= at;
-        end if;
-        if ad = addr then
-          readad <= addr;
-        else
-          readad <= ad;
-        end if;
+        readas <= as;
+        readat <= at;
+        readad <= ad;
       end if;
     end if;
   end process;

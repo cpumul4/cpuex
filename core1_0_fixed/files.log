@@ -32,18 +32,33 @@
 + alu.vhd : ALU
 + shifter.vhd : シフタ
 
+fpu.vhd : FPU(今はただの箱)
+
 . shifter_sim.vhd : シフタのシミュレーション
 . alu_sim.vhd : ALUの固定値シミュレーション
 . alu_sim2.vhd : ALUの固定値テストのシミュレーション
 . alu_test.vhd : ALUの固定値テスト
+. alu_cmp_sim.vhd : ALU比較のテスト
 
 ○レジスタ
-+ int_register.vhd : 整数レジスタ(アドレス幅5bit,容量32ワード)
++ int_register.vhd : 整数レジスタ(アドレス幅5bit,容量32ワード)←正しく動作しない
 + fp_register.vhd : 浮動小数点数レジスタ(アドレス幅5bit,容量32ワード)
++ int_register_b.vhd : 整数レジスタ(アドレス幅5bit,容量32ワード)(バイパスしててラッチ実装)←これは正しく動作する
 
 . reg_sim.vhd : 汎用レジスタのシミュレーション
 
 ○命令メモリ
-+ inst_mem.vhd : 命令メモリ(アドレス幅16bit,容量64Kワード) !!容量オーバー!!
++ inst_mem.vhd : 命令メモリ(アドレス幅15bit(形式的に16bitで与える),容量32Kワード)
++ inst_mem_fixed.vhd : プログラムで初期化した命令メモリ
 
 . mem_sim.vhd : 命令メモリのシミュレーション
+
+○制御
++ decoder.vhd : ステートマシンのデコーダ(次のPCを決める)
++ decoder_.vhd : ステートマシンでないデコーダ
+
+. decoder_sim.vhd : デコーダのシミュレーション
+
+○コア
++ core1_0_fixed.vhd : 1stアーキテクチャの逐次実行整数演算コア(固定値の命令メモリを使用)
+. core1_0_sim.vhd : 1stアーキテクチャの逐次実行整数演算コアのシミュレーション(固定値の命令メモリを使用)
