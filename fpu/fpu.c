@@ -171,11 +171,12 @@ float sqrt_m(float f1) {
   unsigned exp = 0;
   ieee_f f1_b,f_b;
   int j = 0;
+  int zero = 0;
 
   f_b.f = 0;
   f1_b.f = f1;
 
-  if (f1_b.b.exp == 0) return f1;
+  if (f1_b.b.exp == 0) zero = 1;
 
   f_b.b.sign = 0;  
 
@@ -204,9 +205,10 @@ float sqrt_m(float f1) {
   fraction = fraction >> 1;
   exp = exp - 1;
 
+  if(zero == 1) exp = 0;
+
   f_b.b.fraction = (unsigned)(fraction - 0x800000);
   f_b.b.exp = exp;
 
   return f_b.f;
 }
-

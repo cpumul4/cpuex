@@ -39,7 +39,6 @@ end be3;
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
-use WORK.PACK.all;
 
 entity float_mul is
   Port (

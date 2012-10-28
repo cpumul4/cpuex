@@ -41,7 +41,7 @@ architecture fadd of float_add is
   signal tmp4 : std_logic_vector(23 downto 0); --step4
   signal e : std_logic_vector(7 downto 0); --step4
 begin
-  ans <= f;  
+  ans <= f;
   step1 : process(CLK,f1,f2,shift,br1,s1,s2,e1,fr1,fr2,f1_1,f2_1,f1_2,f2_2,tmp1) --exchange operands
   begin
     if rising_edge(CLK) then
