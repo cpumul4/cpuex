@@ -15,9 +15,8 @@ typedef map<int, uint32_t> cells;
 
 
 extern instr rom[];
-extern uint exec_count;
+extern long int exec_count;
 
-int step = 0;
 const int bpsize = 100;
 
 void checkarray::add(uint32_t *key, uint32_t *val, regtype _t){
@@ -31,7 +30,7 @@ void checkarray::add(uint32_t *key, uint32_t *val, regtype _t){
 void checkarray::remove(uint32_t *rmkey){
   for(int i= 0; i< last; i++)
     if(rmkey == array[i].key){
-      cout << find_regnum(rmkey, array[i].t) << " removed from condition\n";
+      cerr << find_regnum(rmkey, array[i].t) << " removed from condition\n";
       last--;
       array[i].key = array[last].key;
       array[i].val = array[last].val;
@@ -241,30 +240,33 @@ bool does_break(int bps[]){
 }
 
 int ui(void){
+  static int step = 0;
   static equalarray eqarray;
   static lessthanarray ltarray;
   static noteqarray nearray;
-  static int breakpoints[bpsize];
+  // static int breakpoints[bpsize];
   static bool init_stop = true;
-  static cells nonzeroram;
-  bool does_stop = false;
+  // static cells nonzeroram;
   const int max_line = 30;
   char line[max_line] = {0};
   char *tokens[5];
 
-
-  does_stop = init_stop || (step != 0 && exec_count % step == 0) 
-    || eqarray.check() || ltarray.check() || nearray.check();
-  if(!does_stop){ // 停止しない条件
+  if(init_stop);
+  else if (step == 0){ // 停止しない条件
     return 0;
   }
+  else if(!(exec_count % step == 0
+	    || eqarray.check() || ltarray.check() || nearray.check()))
+    return 0;
 #if OPTIMIZATION
   if(1)return 0;
 #endif
 
+  cerr << "exec_count is " << exec_count << " and step is " << step;
+
   if(init_stop){
-    for(int i=0; i< bpsize; i++)
-      breakpoints[i] = -1;
+    // for(int i=0; i< bpsize; i++)
+    //   breakpoints[i] = -1;
     cerr << 
       "\n-----------------------------------------------------------------\n\
  ; if (条件式)\t... 条件式を満たすときに停止\n\
@@ -284,8 +286,8 @@ int ui(void){
   cout <<
     "\n ----------------------- 命令実行数:" << exec_count << 
     " -----------------------\n";
-  print_change_index(nonzeroram);
-  get_writed_index(nonzeroram);
+  // print_change_index(nonzeroram);
+  // get_writed_index(nonzeroram);
   show_regs();
   // print_bit(ireg[1]);
   
@@ -327,11 +329,11 @@ int ui(void){
 	}
       }
     }
-    else if(strcmp(tokens[0], "break") == 0){
-      int i=0;
-      while( breakpoints[i] >= 0)i++;
-      breakpoints[i] = atoi(tokens[1]);
-    }
+    // else if(strcmp(tokens[0], "break") == 0){
+    //   int i=0;
+    //   // while( breakpoints[i] >= 0)i++;
+    //   // breakpoints[i] = atoi(tokens[1]);
+    // }
     else if(strcmp(tokens[0], "ram") == 0)
       show_ram(atoi(tokens[1]), atoi(tokens[2]));
     else if(strcmp(tokens[0], "if") == 0){

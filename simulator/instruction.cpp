@@ -3,13 +3,14 @@
 #include <stdlib.h>
 #include <math.h>
 
-int instr_count[64];
+long int instr_count[64];
 
 
 
 inline uint32_t get_pc(uint16_t imm){
   return ((pc >> 26) << 26) | imm;
 }
+
 
 inline uint32_t sra(myint mi, int shift){
   uint32_t rt = mi.b;
@@ -54,6 +55,10 @@ inline void exec_output(myfloat reg, int which_byte){
 
   return;
 }
+
+// inline uint32_t highbits(uint32_t, int need){
+  
+// }
 
 inline uint32_t lowbits(uint32_t b, int need){ // 下位need bitを取り出す
   int unwanted = 32 - need;

@@ -8,8 +8,7 @@ using namespace std;
 
 
 extern uint32_t int16_to_uint32(int16_t); // memory.cpp
-extern int instr_count[64];
-extern int step;
+extern long int instr_count[64];
 extern ofstream fout;
 extern ifstream fin;
 
@@ -139,7 +138,7 @@ inline string encode(uint8_t opcode){
 
   
 
-inline void instr_stat(int all_count){
+inline void instr_stat(long int all_count){
   cout << "--- 各命令が何回実行されたか ----\n";
   for(int i = 0;i < 64; i++){
     if(instr_count[i] != 0)

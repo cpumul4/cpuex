@@ -3,7 +3,7 @@
 
 #define OPTIMIZATION 0
 
-// R
+// R 5000万命令/sec.
 
 #define ADD    1
 #define SUB    2
