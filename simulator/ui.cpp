@@ -15,9 +15,10 @@ typedef map<int, uint32_t> cells;
 
 
 extern instr rom[];
-extern long int exec_count;
+extern long long int exec_count;
 
 const int bpsize = 100;
+int step = 0;
 
 void checkarray::add(uint32_t *key, uint32_t *val, regtype _t){
   array[last].key = key;
@@ -240,7 +241,6 @@ bool does_break(int bps[]){
 }
 
 int ui(void){
-  static int step = 0;
   static equalarray eqarray;
   static lessthanarray ltarray;
   static noteqarray nearray;

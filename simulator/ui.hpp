@@ -38,6 +38,8 @@ public:
   void add_change(const char *);
 };
 
+
+extern int step;
 extern int ui(void);
 
 #endif

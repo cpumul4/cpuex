@@ -4,7 +4,7 @@
 #include <math.h>
 
 long int instr_count[64];
-
+extern int step;
 
 
 inline uint32_t get_pc(uint16_t imm){

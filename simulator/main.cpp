@@ -10,7 +10,7 @@ extern int decode(char *);
 instr rom[ROM_SIZE];
 ofstream fout;
 ifstream fin;
-long int exec_count = 0;
+long long int exec_count = 0;
 
 float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ秒 */
   return (float)(t2.tv_sec - t1.tv_sec) + (t2.tv_usec - t1.tv_usec)/1000000.0;
