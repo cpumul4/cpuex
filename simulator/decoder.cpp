@@ -202,7 +202,6 @@ int decode(char *srcpath){
   // 必要な行だけを抜き取り、labelをtableに入れる
   while( fin.getline(input[romindex],MAX_CHAR) ){
     if(input[romindex] == NULL || input[romindex][0] == 0){
-      cerr << "aa";		// これつけると高速化する
       continue;
     }
     rm_comment(input[romindex], "#;");
@@ -224,7 +223,7 @@ int decode(char *srcpath){
   }
 
   // for(uint i=0;i < romindex; i++){
-  //   cerr << '[' << (int)i << ']';
+  //   cout << '[' << (int)i << ']';
   //   rom[i].show();
   // }
 

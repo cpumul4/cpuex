@@ -140,18 +140,18 @@ inline string encode(uint8_t opcode){
   
 
 inline void instr_stat(int all_count){
-  cerr << "--- 各命令が何回実行されたか ----\n";
+  cout << "--- 各命令が何回実行されたか ----\n";
   for(int i = 0;i < 64; i++){
     if(instr_count[i] != 0)
-      cerr << encode((uint8_t)i) << "\t: " 
+      cout << encode((uint8_t)i) << "\t: " 
 	   <<(int)(((float)instr_count[i]/all_count)*100) << "%\n";
   }
-  cerr << "------------------------------\n";
+  cout << "------------------------------\n";
 }
 
 
 inline void instr::show(){
-  cerr << encode(opcode) << ' ' 
+  cout << encode(opcode) << ' ' 
        << (int)rd << ' ' 
        << (int)rs << ' ' 
        << (int)rt << '\n';

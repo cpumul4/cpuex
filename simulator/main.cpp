@@ -70,7 +70,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     rom[pc-1].exec_asm();
     exec_count++;
   }
-  cerr << "結果レジスタ($r1, $f0) = " << ireg[1].i << ", " << freg[0].f  << endl;
+  cout << "結果レジスタ($r1, $f0) = " << ireg[1].i << ", " << freg[0].f  << endl;
   instr_stat(exec_count);
 
   return exec_count;
@@ -98,7 +98,7 @@ int main(int argc, char *argv[]){
   cerr << "<simulation has started!>\n";
 
   gettimeofday(&t1,NULL);
-  cerr << "実行命令数: " << (count = (uint)simulate(argv[1], argv[2], argv[3])) << '\n';
+  cout << "実行命令数: " << (count = (uint)simulate(argv[1], argv[2], argv[3])) << '\n';
   gettimeofday(&t2,NULL);
 
   printf("実行命令数/sec:%f\n", count/time_diff(t1,t2));

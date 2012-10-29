@@ -33,7 +33,7 @@ inline void exec_output(myint reg, int which_byte){
   tmp.word = reg.i;
   fout.write(tmp.byte + which_byte, 1);
   if( fout.bad() ) {
-    cerr << "fatal Error:データ読み込みエラー" << endl;
+    cout << "fatal Error:データ読み込みエラー" << endl;
     LR = LR_INIT;
   }
   return;
@@ -48,7 +48,7 @@ inline void exec_output(myfloat reg, int which_byte){
   tmp.word = reg.f;
   fout.write(tmp.byte + which_byte, 1);
   if( fout.bad() ) {
-    cerr << "fatal Error:データ書き込みエラー" << endl;
+    cout << "fatal Error:データ書き込みエラー" << endl;
     LR = LR_INIT;
   }
 
@@ -94,11 +94,11 @@ inline void exec_input(uint32_t &regbitseq, uint opcode){
 
 
   if( fin.bad() ) {
-    cerr << "fatal Error:データ読み込みエラー" << endl;
+    cout << "fatal Error:データ読み込みエラー" << endl;
     LR = LR_INIT;
   }
   if( fin.eof() ){
-    cerr << "ファイルの内容を全て読みました" << endl;
+    cout << "ファイルの内容を全て読みました" << endl;
   }
 
   if(opcode == IN)conv.i = atoi(string);
@@ -185,11 +185,11 @@ void instr::exec_asm(){
     c(SQRT , FD = (float)sqrt(FS.f);); // myfloatの実装が外に出てしまっている
 
     c(NOP, ;);
-    c(DBG,  cerr << "DEBUG命令に到達しました\n";step = 1;);
+    c(DBG,  cout << "DEBUG命令に到達しました\n";step = 1;);
   case(0):
     c(HALT, pc = LR_INIT;);
     c(RST,  
-      cerr << "reset命令に到達しました. GPR, SPR, LR以外の全レジスタを0にします.\n";
+      cout << "reset命令に到達しました. GPR, SPR, LR以外の全レジスタを0にします.\n";
       for(int i=0;i<INTREG_NUM;i++){
 	if(i < 29)
 	  ireg[i] = 0;
@@ -210,7 +210,7 @@ void instr::exec_asm(){
     c(OUTDF, exec_output(FD,0););
     // ここまでちゃんと動く 10/19 22:00
   default:
-    cerr << " unknown opcode " << (int)opcode;
+    cout << " unknown opcode " << (int)opcode;
   }
 #undef D 
 #undef S 

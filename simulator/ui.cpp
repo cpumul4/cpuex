@@ -31,7 +31,7 @@ void checkarray::add(uint32_t *key, uint32_t *val, regtype _t){
 void checkarray::remove(uint32_t *rmkey){
   for(int i= 0; i< last; i++)
     if(rmkey == array[i].key){
-      cerr << find_regnum(rmkey, array[i].t) << " removed from condition\n";
+      cout << find_regnum(rmkey, array[i].t) << " removed from condition\n";
       last--;
       array[i].key = array[last].key;
       array[i].val = array[last].val;
@@ -203,7 +203,7 @@ void noteqarray::add_change(const char *str){
   t = see_type(str);
   reg = ptr_to_memreg(str);
   *regval = *reg;
-  cerr << reg;
+  cout << reg;
   add(reg, regval, t);
   return ;
 }
@@ -211,25 +211,25 @@ void noteqarray::add_change(const char *str){
 
 void checkarray::show(const char *op){
   char *strkey, *strval;
-  cerr << " - : ";
+  cout << " - : ";
   for(int i=0; i< last; i++){
-    cerr << "(";
+    cout << "(";
     strkey = find_regnum(array[i].key, array[i].t);
     if(strkey != NULL)
-      cerr << strkey;
+      cout << strkey;
     else 
-      cerr << *array[i].key;
-    cerr << ' ' << op << ' ';
+      cout << *array[i].key;
+    cout << ' ' << op << ' ';
 
     strval = find_regnum(array[i].val, array[i].t);
     if(strval != NULL)
-      cerr << strval;
+      cout << strval;
     else 
-      cerr << *array[i].val;
+      cout << *array[i].val;
     
-    cerr << "), ";
+    cout << "), ";
   }
-  cerr << endl;
+  cout << endl;
 
 };
   
@@ -281,7 +281,7 @@ int ui(void){
  ------------------------------------------------------------------\n";
   }
       
-  cerr <<
+  cout <<
     "\n ----------------------- 命令実行数:" << exec_count << 
     " -----------------------\n";
   print_change_index(nonzeroram);
@@ -289,12 +289,12 @@ int ui(void){
   show_regs();
   // print_bit(ireg[1]);
   
-  cerr << "\n" << "[next instruction:" << pc << "]\t";
+  cout << "\n" << "[next instruction:" << pc << "]\t";
   rom[pc].show();
 
   init_stop = false;
   while(1){
-    cerr << "$ ";
+    cout << "$ ";
     cin.getline(line, max_line);
     
     if(line == NULL || line[0] == 0){

@@ -15,7 +15,7 @@ void get_writed_index(cells &writed){
 }
 
 void print_change_index(cells &prev){
-  cerr << "-----前回停止時から値が変わった番地-----\n";
+  cout << "-----前回停止時から値が変わった番地-----\n";
   for(int i = SPR_INIT; i >= 0; i--)
     if(ram[i] != 0){
       if(prev.find(i) == prev.end() || prev[i] != ram[i]) 
