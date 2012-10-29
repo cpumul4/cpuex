@@ -109,3 +109,4 @@
 #define	opc_rst        0b110111
 #define fnc_rst        0b001111
 
+#define opc_setl       0b1111110 // R形式にならないように最下位が0

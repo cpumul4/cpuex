@@ -69,8 +69,8 @@ format dec_operator(char *op, uint &opcode, uint &funct){
   // int ab;
   // macro(a,b) = 32;
   // と書くと、ab = 32;と解釈される
-  if(strcmp(op, "add") == 0){
-    subst(add,opc_,fnc_);
+  if(strcmp(op, "setl") == 0){
+    subst_nofunct(setl,opc_);
   }
   
   op(add)
@@ -185,19 +185,28 @@ uint32_t rformbin(uint opcode, uint funct, int *operand, int amt){
     | funct;
 }
 
-uint32_t iformbin(const uint opcode, const int *operand){
-  const uint16_t imm = operand[2];
+uint32_t iformbin(uint opcode, const int *operand){
+  uint16_t imm = operand[2];
   uint s=0,t=0;
   
-  if(0b010000 <= opcode && opcode <= 0b010110){
-    s = operand[0];
-    t = operand[1];
-  }
-  else {
-    s = operand[1];
+  if(opcode == opc_setl){
+    s = 0;
     t = operand[0];
+    imm = operand[1];
+    opcode = opc_addi;
   }
+    
+  else { 
+    if(0b010000 <= opcode && opcode <= 0b010110){
+      s = operand[0];
+      t = operand[1];
 
+    }
+    else {
+      s = operand[1];
+      t = operand[0];
+    }
+  }
   return (opcode << 26)
     | (s << 21)
     | (t << 16)
@@ -295,6 +304,7 @@ int main(int argc, char *argv[]){
       else if(n == 2 && f == branch)
 	oprd[n] = table.get_index(token[n+1]) - itr - 1;
       else {
+
 	oprd[n] = interpret_operand(token[n+1], table);
       }
     }
