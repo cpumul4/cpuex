@@ -16,13 +16,13 @@ void get_writed_index(cells &writed){
 
 void print_change_index(cells &prev){
   cerr << "-----前回停止時から値が変わった番地-----\n";
-  for(int i = 0; i<RAM_SIZE; i++)
+  for(int i = SPR_INIT; i >= 0; i--)
     if(ram[i] != 0){
       if(prev.find(i) == prev.end() || prev[i] != ram[i]) 
-	cerr << "(ram[" << i - SPR_INIT<< "]:" << prev[i] << " ->" << ram[i] << "), ";
+	cout << "(ram[" << i - SPR_INIT<< "]:" << prev[i] << " ->" << (int)ram[i] << "), ";
     } else {
       if(prev.find(i) != prev.end()) // 
-	cerr << "(ram[" << i - SPR_INIT<< "]:" << prev[i] << " ->" << ram[i] << "), ";
+	cout << "(ram[" << i - SPR_INIT<< "]:" << prev[i] << " ->" << (int)ram[i] << "), ";
     }
-  cerr << endl << endl;
+  cout << endl << endl;
 }

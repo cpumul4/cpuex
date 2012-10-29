@@ -77,13 +77,21 @@ inline void exec_input(uint32_t &regbitseq, uint opcode){
 
   char *string = new char[strlength];
 
-  for(int i=0; i < strlength; i++){
+  
+  do {
+    fin.get(string[0]); 
+  }
+  while(string[0] == ' ' || string[0] == '\t' || string[0] == '\n' || string[0] == '\r');
+
+  for(int i=1; i < strlength; i++){
     fin.get(string[i]);
-    if(string[i] == ' ' || string[i] == '\n' || string[i] == '\r'){
+    if(string[i] == ' ' || string[i] == '\t' ||string[i] == '\n' || string[i] == '\r'){
       string[i] = 0;
       break;
     }
   }
+
+
 
   if( fin.bad() ) {
     cerr << "fatal Error:データ読み込みエラー" << endl;

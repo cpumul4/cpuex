@@ -57,9 +57,9 @@ void show_ram(int first, int last){
   }
   first += SPR_INIT;
   last += SPR_INIT;
-  for(int i=first;i <= last;i++)
+  for(int i=last;i >= first;i--)
     if(ram[i] != 0)
-      cerr << "ram[" << (i - SPR_INIT) << "]=" << ram[i] << ", ";
+      cerr << "ram[" << (i - SPR_INIT) << "]=" << (int)ram[i] << ", ";
 }
 
 void show_regs(void){
