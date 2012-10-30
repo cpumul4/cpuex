@@ -23,6 +23,10 @@ ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEPENDS)
 endif
 
+opt:
+	sed -e 's/#define OPTIMIZATION 0/#define OPTIMIZATION 1/' -i common.hpp
+	make 
+	sed -e 's/#define OPTIMIZATION 1/#define OPTIMIZATION 0/' -i common.hpp
 
 
 .PHONY : clean check-syntax
