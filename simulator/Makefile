@@ -23,6 +23,8 @@ ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEPENDS)
 endif
 
+
+
 .PHONY : clean check-syntax
 clean:
 	rm -f $(PROGRAM)
