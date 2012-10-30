@@ -25,23 +25,6 @@ uint32_t int16_to_uint32(int16_t sign){
   return ret.bits;
 }
 
-bool is_zero(myfloat num){
-  union {
-    float fl;
-    struct {
-      int fruc:23;
-      int exp:8;
-      int sign:1;
-    } bit;
-  } tmp;
-
-  tmp.fl = num.f;
- 
-  if(tmp.bit.exp == 0)
-    return true;
-  else
-    return false;
-}
 
 
 void ram_string(int i, char *str){

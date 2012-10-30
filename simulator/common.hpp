@@ -1,7 +1,7 @@
 #ifndef _COMMON
 #define _COMMON
 
-#define OPTIMIZATION 0
+#define OPTIMIZATION 1
 
 // R 5000万命令/sec.
 
