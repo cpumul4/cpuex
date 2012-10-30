@@ -1,11 +1,11 @@
 #include "./instruction.hpp"
 #include "./common.hpp"
+#include "./memory.hpp"
 #include <fstream>
 #include <cstring>
 #include <stdlib.h>
 
 #define MAX_CHAR  100
-#define MAX_LINE  11000
 #define LABEL_TABLE_NUM 1000
 
 extern instr rom[];
@@ -193,14 +193,14 @@ void rm_comment(char *line, const char *keys){
 
 
 int decode(char *srcpath){
-  char input[MAX_LINE][MAX_CHAR];
+  char input[ROM_SIZE][MAX_CHAR];
   ltable table;
   uint romindex = 0;
 
-  ifstream fin(srcpath);
+  ifstream fasm(srcpath);
 
   // 必要な行だけを抜き取り、labelをtableに入れる
-  while( fin.getline(input[romindex],MAX_CHAR) ){
+  while( fasm.getline(input[romindex],MAX_CHAR) ){
     if(input[romindex] == NULL || input[romindex][0] == 0){
       continue;
     }
@@ -210,7 +210,9 @@ int decode(char *srcpath){
     }
 
     if(input[romindex][0] == '\t' && input[romindex][1] != 0){
-      romindex++;		// 今読んだ入力を保持して、次の入力を読みに行く
+      if('a' <= input[romindex][1] && input[romindex][1] <= 'z')
+	romindex++;		// 今読んだ入力を保持して、次の入力を読みに行く
+      else continue;
     }
     else {
       char *label = strtok(input[romindex], ":");
