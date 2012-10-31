@@ -1,0 +1,474 @@
+m255
+K3
+13
+cModel Technology
+Z0 d/home/audrey/cpu_ex/core1_1/sim
+T_opt
+Z1 V[[2GzVGL_6NO2n<2Io52E3
+Z2 04 8 6 work core_sim ver1_1 1
+Z3 =1-782bcbd91dfc-508f7c18-9b2f1-12e5
+Z4 o-quiet -auto_acc_if_foreign -work core_sim
+Z5 n@_opt
+Z6 OE;O;6.6f_2;45
+Z7 d/home/audrey/cpu_ex/core1_1/sim
+Ealu
+Z8 w1350979377
+Z9 DPx4 ieee 15 std_logic_arith 0 22 GJbAT?7@hRQU9IQ702DT]2
+Z10 DPx4 ieee 18 std_logic_unsigned 0 22 hEMVMlaNCR^<OOoVNV;m90
+Z11 DPx4 ieee 14 std_logic_1164 0 22 GH1=`jDDBJ=`LM;:Ak`kf2
+R7
+Z12 8/home/audrey/cpu_ex/core1_1/alu.vhd
+Z13 F/home/audrey/cpu_ex/core1_1/alu.vhd
+l0
+L7
+Z14 V6gPdjT;ZCgZ61BNe3:ECb0
+Z15 OE;C;6.6f_2;45
+32
+Z16 o-work core_sim -2002 -explicit
+Z17 tExplicit 1
+Z18 !s100 dMgZWID7o:Vc;^EkNhBi83
+Aunit
+R9
+R10
+R11
+Z19 DEx4 work 3 alu 0 22 6gPdjT;ZCgZ61BNe3:ECb0
+l28
+L17
+Z20 VW4VOnPS3c8e]WTj5:INl81
+R15
+32
+Z21 Mx3 4 ieee 14 std_logic_1164
+Z22 Mx2 4 ieee 18 std_logic_unsigned
+Z23 Mx1 4 ieee 15 std_logic_arith
+R16
+R17
+Z24 !s100 0j3<Bc[3NTU_];olHXI7Z0
+Ecore_sim
+Z25 w1351571198
+Z26 DPx17 __model_tech/ieee 18 std_logic_unsigned 0 22 hEMVMlaNCR^<OOoVNV;m90
+Z27 DPx17 __model_tech/ieee 15 std_logic_arith 0 22 GJbAT?7@hRQU9IQ702DT]2
+Z28 DPx17 __model_tech/ieee 14 std_logic_1164 0 22 GH1=`jDDBJ=`LM;:Ak`kf2
+32
+R7
+Z29 8/home/audrey/cpu_ex/core1_1/core_sim.vhd
+Z30 F/home/audrey/cpu_ex/core1_1/core_sim.vhd
+l0
+L14
+Z31 Vhm`ZkLaP3_T``D:8]]n>d1
+R15
+R16
+R17
+Z32 !s100 ePC8iGYck=A5Ek<04FBCk2
+Aver1_1
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 6 sender 0 22 YF^n6Mmb@DazRNA=gagkJ3
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 8 receiver 0 22 =M4YHJlLUP<2FkR[Xm:kQ3
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 17 output_controller 0 22 kX^DhGfE@OKV968C5c0V@0
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 16 input_controller 0 22 88YK>ILd0m3WV54<dZS3R1
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 7 shifter 0 22 2PXPFY[9PLl8hc[cJ6CR13
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 13 io_controller 0 22 3fD^kRUH8X@F`G?fHbG5P3
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 10 sram_model 0 22 57F9aCA9Id;R80]J_VP_M0
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 3 fpu 0 22 CRA2V@4z?GUHJ_=ML^TfT1
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 3 alu 0 22 6gPdjT;ZCgZ61BNe3:ECb0
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 11 fp_register 0 22 HJYIZIFn7B?9R8;IkNTQG1
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 12 int_register 0 22 RZ@3429kOj<Z`]]^8SEiT0
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 7 decoder 0 22 hDAEf5HAl?E`Z7a[8`hc>2
+Z33 DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 14 inst_mem_fixed 0 22 3]M8=3BD>NGSb1TKglR7a1
+R26
+R27
+R28
+DEx40 /home/audrey/cpu_ex/core1_1/sim/core_sim 8 core_sim 0 22 hm`ZkLaP3_T``D:8]]n>d1
+32
+Z34 Mx3 17 __model_tech/ieee 14 std_logic_1164
+Mx2 17 __model_tech/ieee 15 std_logic_arith
+Mx1 17 __model_tech/ieee 18 std_logic_unsigned
+l165
+L36
+Z35 VgN2lQa^HdfXZMj<:Z;FDX3
+R15
+R16
+R17
+Z36 !s100 oG7TgD;?>o8M]8gOJM]T;0
+Edecoder
+Z37 w1351571114
+R9
+R10
+R11
+R7
+Z38 8/home/audrey/cpu_ex/core1_1/decoder.vhd
+Z39 F/home/audrey/cpu_ex/core1_1/decoder.vhd
+l0
+L10
+Z40 VhDAEf5HAl?E`Z7a[8`hc>2
+R15
+32
+R16
+R17
+Z41 !s100 [?;Uo@h_Hm]K7Q[J85Dm62
+Aunit
+R9
+R10
+R11
+Z42 DEx4 work 7 decoder 0 22 hDAEf5HAl?E`Z7a[8`hc>2
+l45
+L38
+Z43 VzLBZmF0zJnElRaEbLK^eC1
+R15
+32
+R21
+R22
+R23
+R16
+R17
+Z44 !s100 NdbWO@N?NLjV^g@SPoUkU1
+Efp_register
+Z45 w1351220162
+R9
+R10
+R11
+R7
+Z46 8/home/audrey/cpu_ex/core1_1/fp_register.vhd
+Z47 F/home/audrey/cpu_ex/core1_1/fp_register.vhd
+l0
+L9
+Z48 VHJYIZIFn7B?9R8;IkNTQG1
+R15
+32
+R16
+R17
+Z49 !s100 lbY9;7;zLFQFjd]JO8^G_1
+Abox
+R9
+R10
+R11
+Z50 DEx4 work 11 fp_register 0 22 HJYIZIFn7B?9R8;IkNTQG1
+l38
+L24
+Z51 V6N:O628@3WOnW[7Ego4?53
+R15
+32
+R21
+R22
+R23
+R16
+R17
+Z52 !s100 O7AeHeNJ]^ZzAc<PC2bho3
+Efpu
+Z53 w1351065278
+R9
+R10
+R11
+R7
+Z54 8/home/audrey/cpu_ex/core1_1/fpu.vhd
+Z55 F/home/audrey/cpu_ex/core1_1/fpu.vhd
+l0
+L8
+Z56 VCRA2V@4z?GUHJ_=ML^TfT1
+R15
+32
+R16
+R17
+Z57 !s100 K8C3?kHTQ7@XB7z6eN>gH0
+Aunit
+R9
+R10
+R11
+Z58 DEx4 work 3 fpu 0 22 CRA2V@4z?GUHJ_=ML^TfT1
+l19
+L17
+Z59 VXE=z1^??P]69`E_JEj5UD0
+R15
+32
+R21
+R22
+R23
+R16
+R17
+Z60 !s100 e0C;>9BcaoT]Ql9QYAcX:2
+Einput_controller
+Z61 w1350377104
+R10
+R9
+R11
+R7
+Z62 8/home/audrey/cpu_ex/core1_1/input_controller.vhd
+Z63 F/home/audrey/cpu_ex/core1_1/input_controller.vhd
+l0
+L10
+Z64 V88YK>ILd0m3WV54<dZS3R1
+R15
+32
+R16
+R17
+Z65 !s100 NP:7>Ao:TBlP[E9LR?j@Y3
+Abox
+R10
+R9
+R11
+Z66 DEx4 work 16 input_controller 0 22 88YK>ILd0m3WV54<dZS3R1
+l40
+L19
+Z67 VzKF6M[2oHUaniT0`NLc0S3
+R15
+32
+R21
+Z68 Mx2 4 ieee 15 std_logic_arith
+Z69 Mx1 4 ieee 18 std_logic_unsigned
+R16
+R17
+Z70 !s100 1`Be@:Ue_l:A4X]F2I;K01
+Einst_mem_fixed
+Z71 w1351512058
+R27
+R26
+R28
+32
+R7
+Z72 8/home/audrey/cpu_ex/core1_1/inst_mem_fixed.vhd
+Z73 F/home/audrey/cpu_ex/core1_1/inst_mem_fixed.vhd
+l0
+L10
+Z74 V3]M8=3BD>NGSb1TKglR7a1
+R15
+R16
+R17
+Z75 !s100 Ff_YC1KldlTL5VJcPVNob3
+Abox
+R27
+R26
+R28
+R33
+32
+R34
+Mx2 17 __model_tech/ieee 18 std_logic_unsigned
+Mx1 17 __model_tech/ieee 15 std_logic_arith
+l75
+L20
+Z76 V=bFQYAdhgb:4<eE5Vlfdo2
+R15
+R16
+R17
+Z77 !s100 MgQ8^7;><iC0e>5@m3hc32
+Eint_register
+Z78 w1351569794
+R9
+R10
+R11
+R7
+Z79 8/home/audrey/cpu_ex/core1_1/int_register.vhd
+Z80 F/home/audrey/cpu_ex/core1_1/int_register.vhd
+l0
+L9
+Z81 VRZ@3429kOj<Z`]]^8SEiT0
+R15
+32
+R16
+R17
+Z82 !s100 g`5ozLJnjB9:FIMCXgAf:3
+Abox
+R9
+R10
+R11
+Z83 DEx4 work 12 int_register 0 22 RZ@3429kOj<Z`]]^8SEiT0
+l36
+L24
+Z84 V`QOK<1AS1jR7TKJN]:klc3
+R15
+32
+R21
+R22
+R23
+R16
+R17
+Z85 !s100 <N5K?3I3CGeGmPoM?3>EJ2
+Eio_controller
+Z86 w1350374969
+R10
+R9
+R11
+R7
+Z87 8/home/audrey/cpu_ex/core1_1/io_controller.vhd
+Z88 F/home/audrey/cpu_ex/core1_1/io_controller.vhd
+l0
+L10
+Z89 V3fD^kRUH8X@F`G?fHbG5P3
+R15
+32
+R16
+R17
+Z90 !s100 =ddbL?>3dAY`YR[T=@VN;2
+Abox
+R10
+R9
+R11
+Z91 DEx4 work 13 io_controller 0 22 3fD^kRUH8X@F`G?fHbG5P3
+l44
+L24
+Z92 Vgfgk^VM2gDY93CmnlZbaT0
+R15
+32
+R21
+R68
+R69
+R16
+R17
+Z93 !s100 em<1TaVil3g7ol[eM<n@?3
+Eoutput_controller
+Z94 w1350376054
+R10
+R9
+R11
+R7
+Z95 8/home/audrey/cpu_ex/core1_1/output_controller.vhd
+Z96 F/home/audrey/cpu_ex/core1_1/output_controller.vhd
+l0
+L10
+Z97 VkX^DhGfE@OKV968C5c0V@0
+R15
+32
+R16
+R17
+Z98 !s100 T;ZE6TAQW2cGAGijCGEm32
+Abox
+R10
+R9
+R11
+Z99 DEx4 work 17 output_controller 0 22 kX^DhGfE@OKV968C5c0V@0
+l42
+L20
+Z100 VQe`@^1O2`U33Q@5HH1K2f0
+R15
+32
+R21
+R68
+R69
+R16
+R17
+Z101 !s100 <93W;MoJnI61iAERdh;1l1
+Ereceiver
+Z102 w1350367515
+R10
+R9
+R11
+R7
+Z103 8/home/audrey/cpu_ex/core1_1/receiver.vhd
+Z104 F/home/audrey/cpu_ex/core1_1/receiver.vhd
+l0
+L9
+Z105 V=M4YHJlLUP<2FkR[Xm:kQ3
+R15
+32
+R16
+R17
+Z106 !s100 ECO;CLZCHaBeF<X5E51dk1
+Abox
+R10
+R9
+R11
+Z107 DEx4 work 8 receiver 0 22 =M4YHJlLUP<2FkR[Xm:kQ3
+l25
+L19
+Z108 Vm@YFWQ@bg[?<2[XWP:3mQ2
+R15
+32
+R21
+R68
+R69
+R16
+R17
+Z109 !s100 RJ`aBO3Sn4<C3_oe[Y=U@2
+Esender
+Z110 w1350367522
+R9
+R10
+R11
+R7
+Z111 8/home/audrey/cpu_ex/core1_1/sender.vhd
+Z112 F/home/audrey/cpu_ex/core1_1/sender.vhd
+l0
+L8
+Z113 VYF^n6Mmb@DazRNA=gagkJ3
+R15
+32
+R16
+R17
+Z114 !s100 68EhAFzzLDCQ9:VL]eAg]3
+Abox
+R9
+R10
+R11
+Z115 DEx4 work 6 sender 0 22 YF^n6Mmb@DazRNA=gagkJ3
+l24
+L19
+Z116 V]OAb6?k8f9ODQ]:YSc11h2
+R15
+32
+R21
+R22
+R23
+R16
+R17
+Z117 !s100 G9XDJf^fe:X[:ggF[XZOZ0
+Eshifter
+Z118 w1350719072
+R9
+R10
+R11
+R7
+Z119 8/home/audrey/cpu_ex/core1_1/shifter.vhd
+Z120 F/home/audrey/cpu_ex/core1_1/shifter.vhd
+l0
+L7
+Z121 V2PXPFY[9PLl8hc[cJ6CR13
+R15
+32
+R16
+R17
+Z122 !s100 UOgcc1A1B1mK6?<GL@:3]2
+Aunit
+R9
+R10
+R11
+Z123 DEx4 work 7 shifter 0 22 2PXPFY[9PLl8hc[cJ6CR13
+l18
+L15
+Z124 VG0QIBJDLXQWJ;dRVeHn6S2
+R15
+32
+R21
+R22
+R23
+R16
+R17
+Z125 !s100 9L?fSVDFJ[;o12@n4WA6j1
+Esram_model
+Z126 w1350891603
+R9
+R10
+R11
+R7
+Z127 8/home/audrey/cpu_ex/core1_1/sram_model.vhd
+Z128 F/home/audrey/cpu_ex/core1_1/sram_model.vhd
+l0
+L8
+Z129 V57F9aCA9Id;R80]J_VP_M0
+R15
+32
+R16
+R17
+Z130 !s100 L`DNd7E0A]e_]MlB7ceHH2
+Abox
+R9
+R10
+R11
+Z131 DEx4 work 10 sram_model 0 22 57F9aCA9Id;R80]J_VP_M0
+l23
+L18
+Z132 VdS@oVczCkK4:@5`jKbRP:1
+R15
+32
+R21
+R22
+R23
+R16
+R17
+Z133 !s100 H1FgBADdYzSoNL1:l<Q5H2

@@ -1,0 +1,1313 @@
+Release 13.4 - xst O.87xd (lin64)
+Copyright (c) 1995-2011 Xilinx, Inc.  All rights reserved.
+--> 
+Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.07 secs
+ 
+--> 
+Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.07 secs
+ 
+--> 
+Reading design: core.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+	9.1) Device utilization summary
+	9.2) Partition Resource Summary
+	9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "core.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "core"
+Output Format                      : NGC
+Target Device                      : xc5vlx50t-1-ff1136
+
+---- Source Options
+Top Module Name                    : core
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : LUT
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Mux Style                          : Auto
+Decoder Extraction                 : YES
+Priority Encoder Extraction        : Yes
+Shift Register Extraction          : YES
+Logical Shifter Extraction         : YES
+XOR Collapsing                     : YES
+ROM Style                          : Auto
+Mux Extraction                     : Yes
+Resource Sharing                   : YES
+Asynchronous To Synchronous        : NO
+Use DSP Block                      : Auto
+Automatic Register Balancing       : No
+
+---- Target Options
+LUT Combining                      : Auto
+Reduce Control Sets                : Auto
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 100000
+Add Generic Clock Buffer(BUFG)     : 32
+Register Duplication               : YES
+Slice Packing                      : YES
+Optimize Instantiated Primitives   : NO
+Use Clock Enable                   : Auto
+Use Synchronous Set                : Auto
+Use Synchronous Reset              : Auto
+Pack IO Registers into IOBs        : Auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Power Reduction                    : NO
+Keep Hierarchy                     : No
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+DSP48 Utilization Ratio            : 100
+Verilog 2001                       : YES
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/sender.vhd" in Library work.
+Entity <sender> compiled.
+Entity <sender> (Architecture <box>) compiled.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/receiver.vhd" in Library work.
+Entity <receiver> compiled.
+Entity <receiver> (Architecture <box>) compiled.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/input_controller.vhd" in Library work.
+Architecture box of Entity input_controller is up to date.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/output_controller.vhd" in Library work.
+Architecture box of Entity output_controller is up to date.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/shifter.vhd" in Library work.
+Architecture unit of Entity shifter is up to date.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/inst_mem_fixed.vhd" in Library work.
+Architecture box of Entity inst_mem_fixed is up to date.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/decoder.vhd" in Library work.
+Architecture unit of Entity decoder is up to date.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/int_register.vhd" in Library work.
+Architecture box of Entity int_register is up to date.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/fp_register.vhd" in Library work.
+Architecture box of Entity fp_register is up to date.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/alu.vhd" in Library work.
+Architecture unit of Entity alu is up to date.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/fpu.vhd" in Library work.
+Architecture unit of Entity fpu is up to date.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/sram_controller.vhd" in Library work.
+Architecture box of Entity sram_controller is up to date.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/io_controller.vhd" in Library work.
+Architecture box of Entity io_controller is up to date.
+Compiling vhdl file "/home/audrey/cpu_ex/core1_1/core.vhd" in Library work.
+Architecture ver1_1 of Entity core is up to date.
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for entity <core> in library <work> (architecture <ver1_1>).
+
+Analyzing hierarchy for entity <inst_mem_fixed> in library <work> (architecture <box>).
+
+Analyzing hierarchy for entity <decoder> in library <work> (architecture <unit>).
+
+Analyzing hierarchy for entity <int_register> in library <work> (architecture <box>).
+
+Analyzing hierarchy for entity <fp_register> in library <work> (architecture <box>).
+
+Analyzing hierarchy for entity <alu> in library <work> (architecture <unit>).
+
+Analyzing hierarchy for entity <fpu> in library <work> (architecture <unit>).
+
+Analyzing hierarchy for entity <sram_controller> in library <work> (architecture <box>).
+
+Analyzing hierarchy for entity <io_controller> in library <work> (architecture <box>).
+
+Analyzing hierarchy for entity <shifter> in library <work> (architecture <unit>).
+
+Analyzing hierarchy for entity <input_controller> in library <work> (architecture <box>).
+
+Analyzing hierarchy for entity <output_controller> in library <work> (architecture <box>).
+
+Analyzing hierarchy for entity <receiver> in library <work> (architecture <box>) with generics.
+	wtime = "001000111100"
+
+Analyzing hierarchy for entity <sender> in library <work> (architecture <box>) with generics.
+	wtime = "001000111100"
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing Entity <core> in library <work> (Architecture <ver1_1>).
+    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <ib> in unit <core>.
+    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <ib> in unit <core>.
+    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <ib> in unit <core>.
+    Set user-defined property "IOSTANDARD =  DEFAULT" for instance <ib> in unit <core>.
+Entity <core> analyzed. Unit <core> generated.
+
+Analyzing Entity <inst_mem_fixed> in library <work> (Architecture <box>).
+Entity <inst_mem_fixed> analyzed. Unit <inst_mem_fixed> generated.
+
+Analyzing Entity <decoder> in library <work> (Architecture <unit>).
+Entity <decoder> analyzed. Unit <decoder> generated.
+
+Analyzing Entity <int_register> in library <work> (Architecture <box>).
+Entity <int_register> analyzed. Unit <int_register> generated.
+
+Analyzing Entity <fp_register> in library <work> (Architecture <box>).
+Entity <fp_register> analyzed. Unit <fp_register> generated.
+
+Analyzing Entity <alu> in library <work> (Architecture <unit>).
+Entity <alu> analyzed. Unit <alu> generated.
+
+Analyzing Entity <shifter> in library <work> (Architecture <unit>).
+Entity <shifter> analyzed. Unit <shifter> generated.
+
+Analyzing Entity <fpu> in library <work> (Architecture <unit>).
+Entity <fpu> analyzed. Unit <fpu> generated.
+
+Analyzing Entity <sram_controller> in library <work> (Architecture <box>).
+Entity <sram_controller> analyzed. Unit <sram_controller> generated.
+
+Analyzing Entity <io_controller> in library <work> (Architecture <box>).
+Entity <io_controller> analyzed. Unit <io_controller> generated.
+
+Analyzing Entity <input_controller> in library <work> (Architecture <box>).
+Entity <input_controller> analyzed. Unit <input_controller> generated.
+
+Analyzing generic Entity <receiver> in library <work> (Architecture <box>).
+	wtime = "001000111100"
+Entity <receiver> analyzed. Unit <receiver> generated.
+
+Analyzing Entity <output_controller> in library <work> (Architecture <box>).
+Entity <output_controller> analyzed. Unit <output_controller> generated.
+
+Analyzing generic Entity <sender> in library <work> (Architecture <box>).
+	wtime = "001000111100"
+Entity <sender> analyzed. Unit <sender> generated.
+
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <inst_mem_fixed>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/inst_mem_fixed.vhd".
+WARNING:Xst:647 - Input <addr<15:6>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found 64x32-bit single-port RAM <Mram_mem> for signal <mem>.
+    Found 32-bit register for signal <inst>.
+    Summary:
+	inferred   1 RAM(s).
+	inferred  32 D-type flip-flop(s).
+Unit <inst_mem_fixed> synthesized.
+
+
+Synthesizing Unit <decoder>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/decoder.vhd".
+WARNING:Xst:647 - Input <inst<25:4>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found finite state machine <FSM_0> for signal <state>.
+    -----------------------------------------------------------------------
+    | States             | 5                                              |
+    | Transitions        | 10                                             |
+    | Inputs             | 4                                              |
+    | Outputs            | 5                                              |
+    | Clock              | clk                       (rising_edge)        |
+    | Power Up State     | 100                                            |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 16-bit register for signal <pcout>.
+    Found 4-bit register for signal <OP>.
+    Found 2-bit register for signal <REGIN>.
+    Found 1-bit register for signal <IN1>.
+    Found 1-bit register for signal <IN2>.
+    Found 1-bit register for signal <IOIN>.
+    Found 2-bit register for signal <BYTE>.
+    Found 2-bit register for signal <SRAMIN>.
+    Found 2-bit register for signal <REGADDR>.
+    Found 1-bit register for signal <FREGWE_i>.
+    Found 1-bit register for signal <IORE_i>.
+    Found 1-bit register for signal <IOWE_i>.
+    Found 3-bit register for signal <NEXTPC>.
+    Found 3-bit register for signal <NEXTPC_1>.
+    Found 16-bit subtractor for signal <pcout$addsub0000> created at line 197.
+    Found 1-bit xor2 for signal <pcout$xor0000> created at line 205.
+    Found 1-bit xor2 for signal <pcout$xor0001> created at line 205.
+    Found 1-bit register for signal <RREGWE_i>.
+    Found 1-bit xor2 for signal <RREGWE_i$xor0000> created at line 139.
+    Found 1-bit register for signal <SRAMWE_i>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred  42 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+Unit <decoder> synthesized.
+
+
+Synthesizing Unit <int_register>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/int_register.vhd".
+    Found 32x32-bit dual-port RAM <Mram_reg> for signal <reg>.
+    Found 32x32-bit dual-port RAM <Mram_reg_ren> for signal <reg>.
+    Found 32x32-bit dual-port RAM <Mram_reg_ren_1> for signal <reg>.
+    Found 32-bit register for signal <dd>.
+    Found 32-bit register for signal <ds>.
+    Found 32-bit register for signal <dt>.
+    Found 5-bit comparator equal for signal <dd$cmp_eq0000> created at line 53.
+    Found 5-bit comparator equal for signal <ds$cmp_eq0000> created at line 43.
+    Found 5-bit comparator equal for signal <dt$cmp_eq0000> created at line 48.
+    Summary:
+	inferred   3 RAM(s).
+	inferred  96 D-type flip-flop(s).
+	inferred   3 Comparator(s).
+Unit <int_register> synthesized.
+
+
+Synthesizing Unit <fp_register>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/fp_register.vhd".
+    Found 32x32-bit dual-port RAM <Mram_reg> for signal <reg>.
+    Found 32x32-bit dual-port RAM <Mram_reg_ren> for signal <reg>.
+    Found 32x32-bit dual-port RAM <Mram_reg_ren_1> for signal <reg>.
+    Found 5-bit register for signal <readad>.
+    Found 5-bit register for signal <readas>.
+    Found 5-bit register for signal <readat>.
+    Summary:
+	inferred   3 RAM(s).
+	inferred  15 D-type flip-flop(s).
+Unit <fp_register> synthesized.
+
+
+Synthesizing Unit <fpu>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/fpu.vhd".
+    Found 32-bit comparator equal for signal <EQ$cmp_eq0000> created at line 22.
+    Summary:
+	inferred   1 Comparator(s).
+Unit <fpu> synthesized.
+
+
+Synthesizing Unit <sram_controller>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/sram_controller.vhd".
+WARNING:Xst:646 - Signal <we2> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 32-bit tristate buffer for signal <DQ>.
+    Found 4-bit tristate buffer for signal <DQP>.
+    Found 20-bit register for signal <A>.
+    Found 1-bit register for signal <W>.
+    Found 32-bit register for signal <din1>.
+    Found 32-bit register for signal <Mtridata_DQ> created at line 70.
+    Found 4-bit register for signal <Mtridata_DQP> created at line 72.
+    Found 1-bit register for signal <Mtrien_DQ> created at line 70.
+    Found 1-bit register for signal <Mtrien_DQP> created at line 72.
+    Found 1-bit register for signal <we1>.
+    Summary:
+	inferred  92 D-type flip-flop(s).
+	inferred  36 Tristate(s).
+Unit <sram_controller> synthesized.
+
+
+Synthesizing Unit <shifter>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/shifter.vhd".
+Unit <shifter> synthesized.
+
+
+Synthesizing Unit <receiver>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/receiver.vhd".
+    Found 9-bit register for signal <buf>.
+    Found 12-bit register for signal <count>.
+    Found 12-bit subtractor for signal <count$addsub0000> created at line 56.
+    Found 1-bit register for signal <done_i>.
+    Found 4-bit register for signal <state>.
+    Found 4-bit subtractor for signal <state$addsub0000> created at line 53.
+    Summary:
+	inferred  26 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+Unit <receiver> synthesized.
+
+
+Synthesizing Unit <sender>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/sender.vhd".
+    Found 9-bit register for signal <buf>.
+    Found 12-bit register for signal <count>.
+    Found 12-bit subtractor for signal <count$addsub0000> created at line 48.
+    Found 4-bit register for signal <state>.
+    Found 4-bit subtractor for signal <state$addsub0000> created at line 45.
+    Summary:
+	inferred  25 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+Unit <sender> synthesized.
+
+
+Synthesizing Unit <alu>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/alu.vhd".
+    Found 32-bit adder for signal <add_in2$addsub0000>.
+    Found 32-bit adder for signal <add_out>.
+    Found 32-bit comparator equal for signal <EQ$cmp_eq0000> created at line 92.
+    Found 32-bit xor2 for signal <xor_out>.
+    Summary:
+	inferred   2 Adder/Subtractor(s).
+	inferred   1 Comparator(s).
+Unit <alu> synthesized.
+
+
+Synthesizing Unit <input_controller>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/input_controller.vhd".
+    Found 256x8-bit dual-port RAM <Mram_buf> for signal <buf>.
+    Found 256x8-bit dual-port RAM <Mram_buf_ren> for signal <buf>.
+    Found 256x8-bit dual-port RAM <Mram_buf_ren_1> for signal <buf>.
+    Found 256x8-bit dual-port RAM <Mram_buf_ren_2> for signal <buf>.
+    Found 32-bit register for signal <dout>.
+    Found 8-bit up counter for signal <bottom>.
+    Found 8-bit adder for signal <buf$add0000> created at line 54.
+    Found 8-bit adder for signal <buf$add0001> created at line 54.
+    Found 8-bit adder for signal <buf$add0002> created at line 54.
+    Found 8-bit register for signal <data_i>.
+    Found 1-bit register for signal <done_i>.
+    Found 1-bit register for signal <empty>.
+    Found 8-bit adder for signal <empty$addsub0000> created at line 60.
+    Found 8-bit adder for signal <empty$addsub0001> created at line 60.
+    Found 8-bit adder for signal <empty$addsub0002> created at line 60.
+    Found 8-bit adder for signal <empty$addsub0003> created at line 60.
+    Found 8-bit comparator not equal for signal <empty$cmp_ne0000> created at line 60.
+    Found 8-bit comparator not equal for signal <empty$cmp_ne0001> created at line 60.
+    Found 8-bit comparator not equal for signal <empty$cmp_ne0002> created at line 60.
+    Found 8-bit comparator not equal for signal <empty$cmp_ne0003> created at line 60.
+    Found 8-bit comparator not equal for signal <empty$cmp_ne0004> created at line 75.
+    Found 1-bit register for signal <full>.
+    Found 8-bit adder for signal <full$add0000> created at line 78.
+    Found 8-bit comparator not equal for signal <full$cmp_ne0000> created at line 78.
+    Found 8-bit up accumulator for signal <top>.
+    Summary:
+	inferred   4 RAM(s).
+	inferred   1 Counter(s).
+	inferred   1 Accumulator(s).
+	inferred  43 D-type flip-flop(s).
+	inferred   8 Adder/Subtractor(s).
+	inferred   6 Comparator(s).
+Unit <input_controller> synthesized.
+
+
+Synthesizing Unit <output_controller>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/output_controller.vhd".
+    Found 256x8-bit dual-port RAM <Mram_buf> for signal <buf>.
+    Found 8-bit up counter for signal <bottom>.
+    Found 8-bit register for signal <data>.
+    Found 1-bit register for signal <empty>.
+    Found 8-bit adder for signal <empty$addsub0000> created at line 76.
+    Found 8-bit comparator not equal for signal <empty$cmp_ne0000> created at line 76.
+    Found 1-bit register for signal <full>.
+    Found 8-bit adder for signal <full$addsub0000> created at line 68.
+    Found 8-bit comparator not equal for signal <full$cmp_ne0000> created at line 68.
+    Found 1-bit register for signal <go>.
+    Found 8-bit up counter for signal <top>.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   2 Counter(s).
+	inferred  11 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+Unit <output_controller> synthesized.
+
+
+Synthesizing Unit <io_controller>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/io_controller.vhd".
+Unit <io_controller> synthesized.
+
+
+Synthesizing Unit <core>.
+    Related source file is "/home/audrey/cpu_ex/core1_1/core.vhd".
+    Found 5-bit register for signal <ad_1>.
+    Found 5-bit register for signal <ad_2>.
+    Found 5-bit register for signal <ad_3>.
+    Found 32-bit register for signal <aluin1>.
+    Found 32-bit register for signal <aluin2>.
+    Found 32-bit register for signal <aluout_1>.
+    Found 32-bit register for signal <aluout_2>.
+    Found 5-bit register for signal <amt_1>.
+    Found 5-bit register for signal <amt_2>.
+    Found 5-bit register for signal <at_1>.
+    Found 5-bit register for signal <at_2>.
+    Found 5-bit register for signal <at_3>.
+    Found 16-bit register for signal <baddr_1>.
+    Found 16-bit adder for signal <baddr_1$add0000> created at line 333.
+    Found 16-bit register for signal <baddr_2>.
+    Found 2-bit register for signal <BYTE_1>.
+    Found 32-bit register for signal <fpuin1>.
+    Found 32-bit register for signal <fpuin2>.
+    Found 32-bit register for signal <fpuout_1>.
+    Found 32-bit register for signal <fpuout_2>.
+    Found 1-bit register for signal <FREGWE_1>.
+    Found 1-bit register for signal <FREGWE_2>.
+    Found 1-bit register for signal <FREGWE_3>.
+    Found 32-bit register for signal <imm>.
+    Found 32-bit register for signal <iodin>.
+    Found 32-bit register for signal <iodout_1>.
+    Found 1-bit register for signal <IORE_1>.
+    Found 1-bit register for signal <IOWE_1>.
+    Found 16-bit register for signal <jaddr_1>.
+    Found 16-bit register for signal <jaddr_2>.
+    Found 16-bit register for signal <jraddr>.
+    Found 4-bit register for signal <OP_1>.
+    Found 16-bit register for signal <pc_1>.
+    Found 16-bit adder for signal <pc_1$add0000> created at line 330.
+    Found 16-bit register for signal <pc_2>.
+    Found 16-bit register for signal <pc_3>.
+    Found 2-bit register for signal <REGADDR_1>.
+    Found 2-bit register for signal <REGADDR_2>.
+    Found 2-bit register for signal <REGIN_1>.
+    Found 2-bit register for signal <REGIN_2>.
+    Found 2-bit register for signal <REGIN_3>.
+    Found 5-bit register for signal <regwaddr>.
+    Found 1-bit register for signal <RREGWE_1>.
+    Found 1-bit register for signal <RREGWE_2>.
+    Found 1-bit register for signal <RREGWE_3>.
+    Found 32-bit register for signal <sramdin>.
+    Found 1-bit register for signal <SRAMWE_1>.
+    Summary:
+	inferred 582 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+Unit <core> synthesized.
+
+INFO:Xst:1767 - HDL ADVISOR - Resource sharing has identified that some arithmetic operations in this design can share the same physical resources for reduced device utilization. For improved clock frequency you may try to disable resource sharing.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 12
+ 256x8-bit dual-port RAM                               : 5
+ 32x32-bit dual-port RAM                               : 6
+ 64x32-bit single-port RAM                             : 1
+# Adders/Subtractors                                   : 19
+ 12-bit subtractor                                     : 2
+ 16-bit adder                                          : 2
+ 16-bit subtractor                                     : 1
+ 32-bit adder                                          : 2
+ 4-bit subtractor                                      : 2
+ 8-bit adder                                           : 10
+# Counters                                             : 3
+ 8-bit up counter                                      : 3
+# Accumulators                                         : 1
+ 8-bit up accumulator                                  : 1
+# Registers                                            : 92
+ 1-bit register                                        : 28
+ 12-bit register                                       : 2
+ 16-bit register                                       : 9
+ 2-bit register                                        : 10
+ 20-bit register                                       : 1
+ 3-bit register                                        : 2
+ 32-bit register                                       : 19
+ 4-bit register                                        : 5
+ 5-bit register                                        : 12
+ 8-bit register                                        : 2
+ 9-bit register                                        : 2
+# Comparators                                          : 13
+ 32-bit comparator equal                               : 2
+ 5-bit comparator equal                                : 3
+ 8-bit comparator not equal                            : 8
+# Tristates                                            : 2
+ 32-bit tristate buffer                                : 1
+ 4-bit tristate buffer                                 : 1
+# Xors                                                 : 4
+ 1-bit xor2                                            : 3
+ 32-bit xor2                                           : 1
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <decode/state/FSM> on signal <state[1:5]> with one-hot encoding.
+-------------------
+ State | Encoding
+-------------------
+ 000   | 10000
+ 001   | 01000
+ 010   | 00100
+ 011   | 00010
+ 100   | 00001
+-------------------
+INFO:Xst:2261 - The FF/Latch <IOIN> in Unit <decode> is equivalent to the following FF/Latch, which will be removed : <SRAMIN_1> 
+INFO:Xst:2261 - The FF/Latch <IN2> in Unit <decode> is equivalent to the following FF/Latch, which will be removed : <REGADDR_0> 
+INFO:Xst:2261 - The FF/Latch <Mtridata_DQP_0> in Unit <sram> is equivalent to the following 3 FFs/Latches, which will be removed : <Mtridata_DQP_1> <Mtridata_DQP_2> <Mtridata_DQP_3> 
+WARNING:Xst:638 - in unit sram Conflict on KEEP property on signal Mtridata_DQP<0> and Mtridata_DQP<1> Mtridata_DQP<1> signal will be lost.
+WARNING:Xst:638 - in unit sram Conflict on KEEP property on signal Mtridata_DQP<0> and Mtridata_DQP<2> Mtridata_DQP<2> signal will be lost.
+WARNING:Xst:638 - in unit sram Conflict on KEEP property on signal Mtridata_DQP<0> and Mtridata_DQP<3> Mtridata_DQP<3> signal will be lost.
+WARNING:Xst:1426 - The value init of the FF/Latch FFd5 hinder the constant cleaning in the block FSM.
+   You should achieve better results by setting this init to 0.
+WARNING:Xst:1710 - FF/Latch <Mtridata_DQP_0> (without init value) has a constant value of 0 in block <sram>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:2404 -  FFs/Latches <Mtridata_DQP<3:0>> (without init value) have a constant value of 0 in block <sram_controller>.
+
+Synthesizing (advanced) Unit <core>.
+INFO:Xst:3226 - The RAM <freg/Mram_reg_ren> will be implemented as a BLOCK RAM, absorbing the following register(s): <freg/readas>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <FREGWE_3>      | high     |
+    |     addrA          | connected to signal <regwaddr>      |          |
+    |     diA            | connected to signal <regdin>        |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     addrB          | connected to signal <inst>          |          |
+    |     doB            | connected to signal <fas>           |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+INFO:Xst:3226 - The RAM <freg/Mram_reg_ren_1> will be implemented as a BLOCK RAM, absorbing the following register(s): <freg/readat>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <FREGWE_3>      | high     |
+    |     addrA          | connected to signal <regwaddr>      |          |
+    |     diA            | connected to signal <regdin>        |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     addrB          | connected to signal <inst>          |          |
+    |     doB            | connected to signal <fat>           |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+INFO:Xst:3226 - The RAM <freg/Mram_reg> will be implemented as a BLOCK RAM, absorbing the following register(s): <freg/readad>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <FREGWE_3>      | high     |
+    |     addrA          | connected to signal <regwaddr>      |          |
+    |     diA            | connected to signal <regdin>        |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     addrB          | connected to signal <inst>          |          |
+    |     doB            | connected to signal <fad>           |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+INFO:Xst:3226 - The RAM <rreg/Mram_reg_ren> will be implemented as a BLOCK RAM, absorbing the following register(s): <instr/inst>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <rreg/_and0000> | high     |
+    |     addrA          | connected to signal <regwaddr>      |          |
+    |     diA            | connected to signal <regdin>        |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     addrB          | connected to internal node          |          |
+    |     doB            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+INFO:Xst:3226 - The RAM <rreg/Mram_reg_ren_1> will be implemented as a BLOCK RAM, absorbing the following register(s): <instr/inst>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <rreg/_and0000> | high     |
+    |     addrA          | connected to signal <regwaddr>      |          |
+    |     diA            | connected to signal <regdin>        |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     addrB          | connected to internal node          |          |
+    |     doB            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+INFO:Xst:3226 - The RAM <rreg/Mram_reg> will be implemented as a BLOCK RAM, absorbing the following register(s): <instr/inst>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <rreg/_and0000> | high     |
+    |     addrA          | connected to signal <regwaddr>      |          |
+    |     diA            | connected to signal <regdin>        |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 32-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     addrB          | connected to internal node          |          |
+    |     doB            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+INFO:Xst:3225 - The RAM <instr/Mram_mem> will be implemented as BLOCK RAM
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 64-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <GND>           | high     |
+    |     addrA          | connected to signal <pc_0>          |          |
+    |     diA            | connected to signal <GND>           |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 64-word x 32-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     addrB          | connected to internal node          |          |
+    |     doB            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+Unit <core> synthesized (advanced).
+
+Synthesizing (advanced) Unit <input_controller>.
+INFO:Xst:3226 - The RAM <Mram_buf> will be implemented as a BLOCK RAM, absorbing the following register(s): <dout>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 256-word x 8-bit                    |          |
+    |     mode           | read-first                          |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <_or0000_0>     | high     |
+    |     addrA          | connected to signal <bottom>        |          |
+    |     diA            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 256-word x 8-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     enB            | connected to signal <top_and0000>   | high     |
+    |     addrB          | connected to internal node          |          |
+    |     doB            | connected to signal <dout>          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+INFO:Xst:3226 - The RAM <Mram_buf_ren> will be implemented as a BLOCK RAM, absorbing the following register(s): <dout_sliced>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 256-word x 8-bit                    |          |
+    |     mode           | read-first                          |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <_or0000_1>     | high     |
+    |     addrA          | connected to signal <bottom>        |          |
+    |     diA            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 256-word x 8-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     enB            | connected to signal <top_and0000>   | high     |
+    |     addrB          | connected to internal node          |          |
+    |     doB            | connected to signal <dout>          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+INFO:Xst:3226 - The RAM <Mram_buf_ren_1> will be implemented as a BLOCK RAM, absorbing the following register(s): <dout_sliced_sliced>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 256-word x 8-bit                    |          |
+    |     mode           | read-first                          |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <_or0000_2>     | high     |
+    |     addrA          | connected to signal <bottom>        |          |
+    |     diA            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 256-word x 8-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     enB            | connected to signal <top_and0000>   | high     |
+    |     addrB          | connected to internal node          |          |
+    |     doB            | connected to signal <dout>          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+INFO:Xst:3218 - HDL ADVISOR - The RAM <Mram_buf_ren_2> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 256-word x 8-bit                    |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <_or0000_3>     | high     |
+    |     addrA          | connected to signal <bottom>        |          |
+    |     diA            | connected to internal node          |          |
+    |     doA            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 256-word x 8-bit                    |          |
+    |     addrB          | connected to signal <top>           |          |
+    |     doB            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+Unit <input_controller> synthesized (advanced).
+
+Synthesizing (advanced) Unit <inst_mem_fixed>.
+INFO:Xst:3038 - The RAM <Mram_mem> appears to be read-only. If that was not your intent please check the write enable description.
+Unit <inst_mem_fixed> synthesized (advanced).
+
+Synthesizing (advanced) Unit <output_controller>.
+INFO:Xst:3226 - The RAM <Mram_buf> will be implemented as a BLOCK RAM, absorbing the following register(s): <data>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 256-word x 8-bit                    |          |
+    |     mode           | read-first                          |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <_and0000>      | high     |
+    |     addrA          | connected to signal <bottom>        |          |
+    |     diA            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 256-word x 8-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     enB            | connected to signal <top_not0001>   | high     |
+    |     addrB          | connected to signal <top>           |          |
+    |     doB            | connected to signal <data>          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+Unit <output_controller> synthesized (advanced).
+WARNING:Xst:2677 - Node <iodout_1_sliced3_-1> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_sliced3_0> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_8> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_9> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_10> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_11> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_12> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_13> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_14> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_15> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_16> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_17> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_18> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_19> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_20> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_21> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_22> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_23> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_24> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_25> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_26> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_27> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_28> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_29> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_30> of sequential type is unconnected in block <core>.
+WARNING:Xst:2677 - Node <iodout_1_31> of sequential type is unconnected in block <core>.
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 12
+ 256x8-bit dual-port block RAM                         : 4
+ 256x8-bit dual-port distributed RAM                   : 1
+ 32x32-bit dual-port block RAM                         : 6
+ 64x32-bit dual-port block RAM                         : 1
+# Adders/Subtractors                                   : 19
+ 12-bit subtractor                                     : 2
+ 16-bit adder                                          : 2
+ 16-bit subtractor                                     : 1
+ 32-bit adder                                          : 2
+ 4-bit subtractor                                      : 2
+ 8-bit adder                                           : 10
+# Counters                                             : 3
+ 8-bit up counter                                      : 3
+# Accumulators                                         : 1
+ 8-bit up accumulator                                  : 1
+# Registers                                            : 918
+ Flip-Flops                                            : 918
+# Comparators                                          : 13
+ 32-bit comparator equal                               : 2
+ 5-bit comparator equal                                : 3
+ 8-bit comparator not equal                            : 8
+# Xors                                                 : 4
+ 1-bit xor2                                            : 3
+ 32-bit xor2                                           : 1
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1426 - The value init of the FF/Latch FSM_FFd5 hinder the constant cleaning in the block FSM_0-parent.
+   You should achieve better results by setting this init to 0.
+INFO:Xst:2261 - The FF/Latch <jaddr_1_8> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <amt_1_2> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_5> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_5> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_9> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <amt_1_3> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_6> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_6> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_7> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_7> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_8> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_8> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_9> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_9> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_10> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <amt_1_4> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_11> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <ad_1_0> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_12> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <ad_1_1> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_13> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <ad_1_2> 
+INFO:Xst:2261 - The FF/Latch <decode/REGADDR_0> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <decode/IN2> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_14> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <ad_1_3> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_15> in Unit <core> is equivalent to the following 18 FFs/Latches, which will be removed : <ad_1_4> <imm_15> <imm_16> <imm_17> <imm_18> <imm_19> <imm_20> <imm_21> <imm_22> <imm_23> <imm_24> <imm_25> <imm_26> <imm_27> <imm_28> <imm_29> <imm_30> <imm_31> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_10> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_10> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_11> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_11> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_12> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_12> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_13> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_13> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_14> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_14> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_15> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_15> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_16> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_16> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_17> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_17> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_18> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_18> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_19> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_19> 
+INFO:Xst:2261 - The FF/Latch <decode/IOIN> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <decode/SRAMIN_1> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_0> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_0> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_1> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_1> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_2> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_2> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_6> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <amt_1_0> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_3> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_3> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_7> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <amt_1_1> 
+INFO:Xst:2261 - The FF/Latch <aluout_1_4> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <sram/A_4> 
+INFO:Xst:2261 - The FF/Latch <jaddr_2_9> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <amt_2_3> 
+INFO:Xst:2261 - The FF/Latch <jaddr_2_10> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <amt_2_4> 
+INFO:Xst:2261 - The FF/Latch <jaddr_2_11> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <ad_2_0> 
+INFO:Xst:2261 - The FF/Latch <jaddr_2_12> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <ad_2_1> 
+INFO:Xst:2261 - The FF/Latch <jaddr_2_13> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <ad_2_2> 
+INFO:Xst:2261 - The FF/Latch <jaddr_2_14> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <ad_2_3> 
+INFO:Xst:2261 - The FF/Latch <jaddr_2_15> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <ad_2_4> 
+INFO:Xst:2261 - The FF/Latch <jaddr_2_6> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <amt_2_0> 
+INFO:Xst:2261 - The FF/Latch <jaddr_2_7> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <amt_2_1> 
+INFO:Xst:2261 - The FF/Latch <jaddr_2_8> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <amt_2_2> 
+WARNING:Xst:1293 - FF/Latch <top_0> has a constant value of 0 in block <input_controller>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <top_1> has a constant value of 0 in block <input_controller>. This FF/Latch will be trimmed during the optimization process.
+
+Optimizing unit <core> ...
+INFO:Xst:2261 - The FF/Latch <jaddr_1_8> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_8> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_9> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_9> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_10> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_10> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_11> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_11> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_12> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_12> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_13> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_13> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_14> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_14> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_0> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_0> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_1> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_1> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_2> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_2> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_3> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_3> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_4> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_4> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_5> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_5> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_6> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_6> 
+INFO:Xst:2261 - The FF/Latch <jaddr_1_7> in Unit <core> is equivalent to the following FF/Latch, which will be removed : <imm_7> 
+
+Optimizing unit <shifter> ...
+
+Optimizing unit <fpu> ...
+
+Optimizing unit <receiver> ...
+
+Optimizing unit <sender> ...
+
+Optimizing unit <alu> ...
+
+Optimizing unit <input_controller> ...
+
+Optimizing unit <output_controller> ...
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block core, actual ratio is 6.
+
+Final Macro Processing ...
+
+Processing Unit <core> :
+	Found 2-bit shift register for signal <REGADDR_2_0>.
+	Found 2-bit shift register for signal <REGADDR_2_1>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<0>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<1>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<2>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<3>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<4>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<5>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<6>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<7>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<8>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<9>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<10>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<11>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<12>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<13>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<14>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<15>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<16>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<17>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<18>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<19>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<20>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<21>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<22>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<23>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<24>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<25>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<26>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<27>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<28>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<29>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<30>>.
+	Found 2-bit shift register for signal <sram/Mtridata_DQ<31>>.
+	Found 3-bit shift register for signal <FREGWE_3>.
+	Found 3-bit shift register for signal <RREGWE_3>.
+	Found 3-bit shift register for signal <REGIN_3_0>.
+	Found 3-bit shift register for signal <REGIN_3_1>.
+	Found 3-bit shift register for signal <at_3_0>.
+	Found 3-bit shift register for signal <at_3_1>.
+	Found 3-bit shift register for signal <at_3_2>.
+	Found 3-bit shift register for signal <at_3_3>.
+	Found 3-bit shift register for signal <at_3_4>.
+	Found 2-bit shift register for signal <baddr_2_0>.
+	Found 2-bit shift register for signal <baddr_2_1>.
+	Found 2-bit shift register for signal <baddr_2_2>.
+	Found 2-bit shift register for signal <baddr_2_3>.
+	Found 2-bit shift register for signal <baddr_2_4>.
+	Found 2-bit shift register for signal <baddr_2_5>.
+	Found 2-bit shift register for signal <baddr_2_6>.
+	Found 2-bit shift register for signal <baddr_2_7>.
+	Found 2-bit shift register for signal <baddr_2_8>.
+	Found 2-bit shift register for signal <baddr_2_9>.
+	Found 2-bit shift register for signal <baddr_2_10>.
+	Found 2-bit shift register for signal <baddr_2_11>.
+	Found 2-bit shift register for signal <baddr_2_12>.
+	Found 2-bit shift register for signal <baddr_2_13>.
+	Found 2-bit shift register for signal <baddr_2_14>.
+	Found 2-bit shift register for signal <baddr_2_15>.
+Unit <core> processed.
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 747
+ Flip-Flops                                            : 747
+# Shift Registers                                      : 59
+ 2-bit shift register                                  : 50
+ 3-bit shift register                                  : 9
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+RTL Top Level Output File Name     : core.ngr
+Top Level Output File Name         : core
+Output Format                      : NGC
+Optimization Goal                  : Speed
+Keep Hierarchy                     : No
+
+Design Statistics
+# IOs                              : 75
+
+Cell Usage :
+# BELS                             : 1456
+#      GND                         : 1
+#      INV                         : 44
+#      LUT1                        : 39
+#      LUT2                        : 84
+#      LUT3                        : 214
+#      LUT4                        : 85
+#      LUT5                        : 162
+#      LUT6                        : 433
+#      MUXCY                       : 172
+#      MUXF7                       : 61
+#      VCC                         : 1
+#      XORCY                       : 160
+# FlipFlops/Latches                : 806
+#      FD                          : 599
+#      FDE                         : 171
+#      FDR                         : 2
+#      FDS                         : 34
+# RAMS                             : 27
+#      RAM128X1D                   : 16
+#      RAMB18                      : 4
+#      RAMB18SDP                   : 7
+# Shift Registers                  : 59
+#      SRLC16E                     : 59
+# Clock Buffers                    : 1
+#      BUFG                        : 1
+# IO Buffers                       : 75
+#      IBUF                        : 1
+#      IBUFG                       : 1
+#      IOBUF                       : 32
+#      OBUF                        : 37
+#      OBUFT                       : 4
+=========================================================================
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 5vlx50tff1136-1 
+
+
+Slice Logic Utilization: 
+ Number of Slice Registers:             806  out of  28800     2%  
+ Number of Slice LUTs:                 1184  out of  28800     4%  
+    Number used as Logic:              1061  out of  28800     3%  
+    Number used as Memory:              123  out of   7680     1%  
+       Number used as RAM:               64
+       Number used as SRL:               59
+
+Slice Logic Distribution: 
+ Number of LUT Flip Flop pairs used:   1427
+   Number with an unused Flip Flop:     621  out of   1427    43%  
+   Number with an unused LUT:           243  out of   1427    17%  
+   Number of fully used LUT-FF pairs:   563  out of   1427    39%  
+   Number of unique control sets:        15
+
+IO Utilization: 
+ Number of IOs:                          75
+ Number of bonded IOBs:                  75  out of    480    15%  
+
+Specific Feature Utilization:
+ Number of Block RAM/FIFO:                6  out of     60    10%  
+    Number using Block RAM only:          6
+ Number of BUFG/BUFGCTRLs:                1  out of     32     3%  
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+TIMING REPORT
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+MCLK1                              | IBUFG+BUFG             | 892   |
+-----------------------------------+------------------------+-------+
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -1
+
+   Minimum period: 5.470ns (Maximum Frequency: 182.815MHz)
+   Minimum input arrival time before clock: 2.510ns
+   Maximum output required time after clock: 3.386ns
+   Maximum combinational path delay: No path found
+
+Timing Detail:
+--------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'MCLK1'
+  Clock period: 5.470ns (frequency: 182.815MHz)
+  Total number of paths / destination ports: 72823 / 1465
+-------------------------------------------------------------------------
+Delay:               5.470ns (Levels of Logic = 21)
+  Source:            aluin2_0 (FF)
+  Destination:       aluout_1_15 (FF)
+  Source Clock:      MCLK1 rising
+  Destination Clock: MCLK1 rising
+
+  Data Path: aluin2_0 to aluout_1_15
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FD:C->Q               9   0.471   1.113  aluin2_0 (aluin2_0)
+     LUT6:I0->O            1   0.094   0.000  asyn_alu/Madd_add_in2_addsub0000_lut<0> (asyn_alu/Madd_add_in2_addsub0000_lut<0>)
+     MUXCY:S->O            1   0.372   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<0> (asyn_alu/Madd_add_in2_addsub0000_cy<0>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<1> (asyn_alu/Madd_add_in2_addsub0000_cy<1>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<2> (asyn_alu/Madd_add_in2_addsub0000_cy<2>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<3> (asyn_alu/Madd_add_in2_addsub0000_cy<3>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<4> (asyn_alu/Madd_add_in2_addsub0000_cy<4>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<5> (asyn_alu/Madd_add_in2_addsub0000_cy<5>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<6> (asyn_alu/Madd_add_in2_addsub0000_cy<6>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<7> (asyn_alu/Madd_add_in2_addsub0000_cy<7>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<8> (asyn_alu/Madd_add_in2_addsub0000_cy<8>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<9> (asyn_alu/Madd_add_in2_addsub0000_cy<9>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<10> (asyn_alu/Madd_add_in2_addsub0000_cy<10>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<11> (asyn_alu/Madd_add_in2_addsub0000_cy<11>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<12> (asyn_alu/Madd_add_in2_addsub0000_cy<12>)
+     MUXCY:CI->O           1   0.026   0.000  asyn_alu/Madd_add_in2_addsub0000_cy<13> (asyn_alu/Madd_add_in2_addsub0000_cy<13>)
+     XORCY:CI->O           1   0.357   0.480  asyn_alu/Madd_add_in2_addsub0000_xor<14> (asyn_alu/add_in2_addsub0000<14>)
+     LUT4:I3->O            1   0.094   0.000  asyn_alu/Madd_add_out_lut<14> (asyn_alu/Madd_add_out_lut<14>)
+     MUXCY:S->O            1   0.372   0.000  asyn_alu/Madd_add_out_cy<14> (asyn_alu/Madd_add_out_cy<14>)
+     XORCY:CI->O           2   0.357   1.074  asyn_alu/Madd_add_out_xor<15> (asyn_alu/add_out<15>)
+     LUT6:I0->O            1   0.094   0.000  aluout_1_15_rstpot_G (N266)
+     MUXF7:I1->O           1   0.254   0.000  aluout_1_15_rstpot (aluout_1_15_rstpot)
+     FD:D                     -0.018          aluout_1_15
+    ----------------------------------------
+    Total                      5.470ns (2.803ns logic, 2.667ns route)
+                                       (51.2% logic, 48.8% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'MCLK1'
+  Total number of paths / destination ports: 314 / 314
+-------------------------------------------------------------------------
+Offset:              2.510ns (Levels of Logic = 2)
+  Source:            RS_RX (PAD)
+  Destination:       io/load/recv/count_0 (FF)
+  Destination Clock: MCLK1 rising
+
+  Data Path: RS_RX to io/load/recv/count_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             4   0.818   0.989  RS_RX_IBUF (RS_RX_IBUF)
+     LUT5:I0->O           12   0.094   0.396  io/load/recv/count_not00021 (io/load/recv/count_not0002)
+     FDE:CE                    0.213          io/load/recv/count_0
+    ----------------------------------------
+    Total                      2.510ns (1.125ns logic, 1.385ns route)
+                                       (44.8% logic, 55.2% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'MCLK1'
+  Total number of paths / destination ports: 90 / 58
+-------------------------------------------------------------------------
+Offset:              3.386ns (Levels of Logic = 1)
+  Source:            sram/Mtrien_DQ (FF)
+  Destination:       ZD<31> (PAD)
+  Source Clock:      MCLK1 rising
+
+  Data Path: sram/Mtrien_DQ to ZD<31>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q             32   0.471   0.463  sram/Mtrien_DQ (sram/Mtrien_DQ)
+     IOBUF:T->IO               2.452          ZD_31_IOBUF (ZD<31>)
+    ----------------------------------------
+    Total                      3.386ns (2.923ns logic, 0.463ns route)
+                                       (86.3% logic, 13.7% route)
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 34.00 secs
+Total CPU time to Xst completion: 33.20 secs
+ 
+--> 
+
+
+Total memory usage is 608716 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :   38 (   0 filtered)
+Number of infos    :   74 (   0 filtered)
+

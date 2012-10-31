@@ -1,0 +1,64 @@
+/home/audrey/cpu_ex/core1_1/sram_model.vhd {1 {vcom -work core_sim -2002 -explicit -vopt /home/audrey/cpu_ex/core1_1/sram_model.vhd
+Model Technology ModelSim SE vcom 6.6f_2 Compiler 2012.01 Jan 10 2012
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity sram_model
+-- Compiling architecture box of sram_model
+
+} {} {}} /home/audrey/cpu_ex/core1_1/fpu.vhd {1 {vcom -work core_sim -2002 -explicit -vopt /home/audrey/cpu_ex/core1_1/fpu.vhd
+Model Technology ModelSim SE vcom 6.6f_2 Compiler 2012.01 Jan 10 2012
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity fpu
+-- Compiling architecture unit of fpu
+
+} {} {}} /home/audrey/cpu_ex/core1_1/shifter.vhd {1 {vcom -work core_sim -2002 -explicit -vopt /home/audrey/cpu_ex/core1_1/shifter.vhd
+Model Technology ModelSim SE vcom 6.6f_2 Compiler 2012.01 Jan 10 2012
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity shifter
+-- Compiling architecture unit of shifter
+
+} {} {}} /home/audrey/cpu_ex/core1_1/alu.vhd {1 {vcom -work core_sim -2002 -explicit -vopt /home/audrey/cpu_ex/core1_1/alu.vhd
+Model Technology ModelSim SE vcom 6.6f_2 Compiler 2012.01 Jan 10 2012
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity alu
+-- Compiling architecture unit of alu
+
+} {} {}} /home/audrey/cpu_ex/core1_1/fp_register.vhd {1 {vcom -work core_sim -2002 -explicit -vopt /home/audrey/cpu_ex/core1_1/fp_register.vhd
+Model Technology ModelSim SE vcom 6.6f_2 Compiler 2012.01 Jan 10 2012
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity fp_register
+-- Compiling architecture box of fp_register
+
+} {} {}} /home/audrey/cpu_ex/core1_1/inst_mem_fixed.vhd {1 {vcom -work core_sim -2002 -explicit -vopt /home/audrey/cpu_ex/core1_1/inst_mem_fixed.vhd
+Model Technology ModelSim SE vcom 6.6f_2 Compiler 2012.01 Jan 10 2012
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity inst_mem_fixed
+-- Compiling architecture box of inst_mem_fixed
+
+} {} {}} /home/audrey/cpu_ex/core1_1/io_controller.vhd {1 {vcom -work core_sim -2002 -explicit -vopt /home/audrey/cpu_ex/core1_1/io_controller.vhd
+Model Technology ModelSim SE vcom 6.6f_2 Compiler 2012.01 Jan 10 2012
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity io_controller
+-- Compiling architecture box of io_controller
+
+} {} {}}

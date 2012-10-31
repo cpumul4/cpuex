@@ -1,0 +1,84 @@
+V3 58
+FL /home/audrey/cpu_ex/core1_1/alu.vhd 2012/10/23.17:02:57 O.87xd
+EN work/alu 1351654261 FL /home/audrey/cpu_ex/core1_1/alu.vhd \
+      PB ieee/std_logic_1164 1325952872 PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/alu/unit 1351654262 \
+      FL /home/audrey/cpu_ex/core1_1/alu.vhd EN work/alu 1351654261 CP shifter
+FL /home/audrey/cpu_ex/core1_1/core.vhd 2012/10/31.11:58:15 O.87xd
+EN work/core 1351654269 FL /home/audrey/cpu_ex/core1_1/core.vhd \
+      PB ieee/std_logic_1164 1325952872 PB ieee/std_logic_arith 1325952873 \
+      PB ieee/STD_LOGIC_UNSIGNED 1325952875 LB unisim PH unisim/VCOMPONENTS 1325952880
+AR work/core/ver1_1 1351654270 \
+      FL /home/audrey/cpu_ex/core1_1/core.vhd EN work/core 1351654269 CP ibufg \
+      CP bufg CP inst_mem_fixed CP decoder CP int_register CP fp_register CP alu \
+      CP fpu CP sram_controller CP io_controller
+FL /home/audrey/cpu_ex/core1_1/decoder.vhd 2012/10/31.11:56:25 O.87xd
+EN work/decoder 1351654255 FL /home/audrey/cpu_ex/core1_1/decoder.vhd \
+      PB ieee/std_logic_1164 1325952872 PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/decoder/unit 1351654256 \
+      FL /home/audrey/cpu_ex/core1_1/decoder.vhd EN work/decoder 1351654255
+FL /home/audrey/cpu_ex/core1_1/fpu.vhd 2012/10/24.16:54:38 O.87xd
+EN work/fpu 1351654263 FL /home/audrey/cpu_ex/core1_1/fpu.vhd \
+      PB ieee/std_logic_1164 1325952872 PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/fpu/unit 1351654264 \
+      FL /home/audrey/cpu_ex/core1_1/fpu.vhd EN work/fpu 1351654263
+FL /home/audrey/cpu_ex/core1_1/fp_register.vhd 2012/10/26.11:56:02 O.87xd
+EN work/fp_register 1351654259 FL /home/audrey/cpu_ex/core1_1/fp_register.vhd \
+      PB ieee/std_logic_1164 1325952872 PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/fp_register/box 1351654260 \
+      FL /home/audrey/cpu_ex/core1_1/fp_register.vhd EN work/fp_register 1351654259
+FL /home/audrey/cpu_ex/core1_1/input_controller.vhd 2012/10/31.12:00:22 O.87xd
+EN work/input_controller 1351654247 \
+      FL /home/audrey/cpu_ex/core1_1/input_controller.vhd PB ieee/std_logic_1164 1325952872 \
+      PB ieee/std_logic_arith 1325952873 PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/input_controller/box 1351654248 \
+      FL /home/audrey/cpu_ex/core1_1/input_controller.vhd \
+      EN work/input_controller 1351654247 CP receiver
+FL /home/audrey/cpu_ex/core1_1/inst_mem_fixed.vhd 2012/10/29.21:00:58 O.87xd
+EN work/inst_mem_fixed 1351654253 \
+      FL /home/audrey/cpu_ex/core1_1/inst_mem_fixed.vhd PB ieee/std_logic_1164 1325952872 \
+      PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/inst_mem_fixed/box 1351654254 \
+      FL /home/audrey/cpu_ex/core1_1/inst_mem_fixed.vhd EN work/inst_mem_fixed 1351654253
+FL /home/audrey/cpu_ex/core1_1/int_register.vhd 2012/10/30.16:27:39 O.87xd
+EN work/int_register 1351654257 FL /home/audrey/cpu_ex/core1_1/int_register.vhd \
+      PB ieee/std_logic_1164 1325952872 PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/int_register/box 1351654258 \
+      FL /home/audrey/cpu_ex/core1_1/int_register.vhd EN work/int_register 1351654257
+FL /home/audrey/cpu_ex/core1_1/io_controller.vhd 2012/10/16.17:09:29 O.87xd
+EN work/io_controller 1351654267 FL /home/audrey/cpu_ex/core1_1/io_controller.vhd \
+      PB ieee/std_logic_1164 1325952872 PB ieee/std_logic_arith 1325952873 \
+      PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/io_controller/box 1351654268 \
+      FL /home/audrey/cpu_ex/core1_1/io_controller.vhd EN work/io_controller 1351654267 \
+      CP input_controller CP output_controller
+FL /home/audrey/cpu_ex/core1_1/output_controller.vhd 2012/10/31.12:00:18 O.87xd
+EN work/output_controller 1351654249 \
+      FL /home/audrey/cpu_ex/core1_1/output_controller.vhd PB ieee/std_logic_1164 1325952872 \
+      PB ieee/std_logic_arith 1325952873 PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/output_controller/box 1351654250 \
+      FL /home/audrey/cpu_ex/core1_1/output_controller.vhd \
+      EN work/output_controller 1351654249 CP sender
+FL /home/audrey/cpu_ex/core1_1/receiver.vhd 2012/10/31.12:28:56 O.87xd
+EN work/receiver 1351654245 FL /home/audrey/cpu_ex/core1_1/receiver.vhd \
+      PB ieee/std_logic_1164 1325952872 PB ieee/std_logic_arith 1325952873 \
+      PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/receiver/box 1351654246 \
+      FL /home/audrey/cpu_ex/core1_1/receiver.vhd EN work/receiver 1351654245
+FL /home/audrey/cpu_ex/core1_1/sender.vhd 2012/10/31.12:30:30 O.87xd
+EN work/sender 1351654243 FL /home/audrey/cpu_ex/core1_1/sender.vhd \
+      PB ieee/std_logic_1164 1325952872 PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/sender/box 1351654244 \
+      FL /home/audrey/cpu_ex/core1_1/sender.vhd EN work/sender 1351654243
+FL /home/audrey/cpu_ex/core1_1/shifter.vhd 2012/10/20.16:44:32 O.87xd
+EN work/shifter 1351654251 FL /home/audrey/cpu_ex/core1_1/shifter.vhd \
+      PB ieee/std_logic_1164 1325952872 PB ieee/STD_LOGIC_UNSIGNED 1325952875
+AR work/shifter/unit 1351654252 \
+      FL /home/audrey/cpu_ex/core1_1/shifter.vhd EN work/shifter 1351654251
+FL /home/audrey/cpu_ex/core1_1/sram_controller.vhd 2012/10/19.19:23:55 O.87xd
+EN work/sram_controller 1351654265 \
+      FL /home/audrey/cpu_ex/core1_1/sram_controller.vhd PB ieee/std_logic_1164 1325952872 \
+      PB ieee/std_logic_arith 1325952873 PB ieee/STD_LOGIC_UNSIGNED 1325952875 \
+      LB unisim PH unisim/VCOMPONENTS 1325952880
+AR work/sram_controller/box 1351654266 \
+      FL /home/audrey/cpu_ex/core1_1/sram_controller.vhd EN work/sram_controller 1351654265

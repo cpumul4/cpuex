@@ -1,0 +1,8 @@
+INTSTYLE=ise
+INFILE=/home/audrey/cpu_ex/core1_1/core_test/core.ncd
+OUTFILE=/home/audrey/cpu_ex/core1_1/core_test/core.bit
+FAMILY=Virtex5
+PART=xc5vlx50t-1ff1136
+WORKINGDIR=/home/audrey/cpu_ex/core1_1/core_test
+LICENSE=ISE
+USER_INFO=208921728_178739220_208889460_365

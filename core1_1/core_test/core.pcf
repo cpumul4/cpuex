@@ -1,0 +1,484 @@
+//! **************************************************************************
+// Written by: Map O.87xd on Wed Oct 31 12:32:03 2012
+//! **************************************************************************
+
+SCHEMATIC START;
+COMP "E2A" LOCATE = SITE "Y34" LEVEL 1;
+COMP "XZBE<0>" LOCATE = SITE "W31" LEVEL 1;
+COMP "XZBE<1>" LOCATE = SITE "W32" LEVEL 1;
+COMP "XZBE<2>" LOCATE = SITE "AA34" LEVEL 1;
+COMP "XZBE<3>" LOCATE = SITE "Y33" LEVEL 1;
+COMP "XE1" LOCATE = SITE "W34" LEVEL 1;
+COMP "XE3" LOCATE = SITE "AA33" LEVEL 1;
+COMP "XGA" LOCATE = SITE "AD34" LEVEL 1;
+COMP "XFT" LOCATE = SITE "Y31" LEVEL 1;
+COMP "XWA" LOCATE = SITE "AC34" LEVEL 1;
+COMP "ZZA" LOCATE = SITE "AA31" LEVEL 1;
+COMP "ZCLKMA<0>" LOCATE = SITE "Y32" LEVEL 1;
+COMP "ZCLKMA<1>" LOCATE = SITE "AB33" LEVEL 1;
+COMP "ADVA" LOCATE = SITE "AE34" LEVEL 1;
+COMP "XLBO" LOCATE = SITE "AH34" LEVEL 1;
+COMP "MCLK1" LOCATE = SITE "J16" LEVEL 1;
+COMP "ZA<0>" LOCATE = SITE "AJ34" LEVEL 1;
+COMP "ZA<1>" LOCATE = SITE "AD32" LEVEL 1;
+COMP "ZA<2>" LOCATE = SITE "AC32" LEVEL 1;
+COMP "ZA<3>" LOCATE = SITE "AB31" LEVEL 1;
+COMP "ZA<4>" LOCATE = SITE "AB32" LEVEL 1;
+COMP "ZA<5>" LOCATE = SITE "AH33" LEVEL 1;
+COMP "ZA<6>" LOCATE = SITE "V34" LEVEL 1;
+COMP "ZA<7>" LOCATE = SITE "V33" LEVEL 1;
+COMP "ZA<8>" LOCATE = SITE "AF33" LEVEL 1;
+COMP "ZA<9>" LOCATE = SITE "AG33" LEVEL 1;
+COMP "ZD<0>" LOCATE = SITE "AJ30" LEVEL 1;
+COMP "ZD<1>" LOCATE = SITE "AH29" LEVEL 1;
+COMP "ZD<2>" LOCATE = SITE "AH30" LEVEL 1;
+COMP "ZD<3>" LOCATE = SITE "AG30" LEVEL 1;
+COMP "ZD<4>" LOCATE = SITE "AF29" LEVEL 1;
+COMP "ZD<5>" LOCATE = SITE "AF30" LEVEL 1;
+COMP "ZD<6>" LOCATE = SITE "AE29" LEVEL 1;
+COMP "ZD<7>" LOCATE = SITE "AD29" LEVEL 1;
+COMP "ZD<8>" LOCATE = SITE "V28" LEVEL 1;
+COMP "ZD<9>" LOCATE = SITE "W27" LEVEL 1;
+COMP "RS_RX" LOCATE = SITE "J11" LEVEL 1;
+COMP "RS_TX" LOCATE = SITE "K11" LEVEL 1;
+COMP "XZCKE" LOCATE = SITE "AC33" LEVEL 1;
+COMP "ZA<10>" LOCATE = SITE "V32" LEVEL 1;
+COMP "ZA<11>" LOCATE = SITE "AK34" LEVEL 1;
+COMP "ZA<12>" LOCATE = SITE "AK33" LEVEL 1;
+COMP "ZA<13>" LOCATE = SITE "AL34" LEVEL 1;
+COMP "ZA<14>" LOCATE = SITE "AL33" LEVEL 1;
+COMP "ZA<15>" LOCATE = SITE "AM33" LEVEL 1;
+COMP "ZA<16>" LOCATE = SITE "AN34" LEVEL 1;
+COMP "ZA<17>" LOCATE = SITE "AN33" LEVEL 1;
+COMP "ZA<18>" LOCATE = SITE "AF34" LEVEL 1;
+COMP "ZA<19>" LOCATE = SITE "AE33" LEVEL 1;
+COMP "ZD<10>" LOCATE = SITE "Y29" LEVEL 1;
+COMP "ZD<11>" LOCATE = SITE "Y28" LEVEL 1;
+COMP "ZD<20>" LOCATE = SITE "AK32" LEVEL 1;
+COMP "ZD<12>" LOCATE = SITE "AA30" LEVEL 1;
+COMP "ZD<21>" LOCATE = SITE "AJ31" LEVEL 1;
+COMP "ZD<13>" LOCATE = SITE "AA29" LEVEL 1;
+COMP "ZD<30>" LOCATE = SITE "AE31" LEVEL 1;
+COMP "ZD<22>" LOCATE = SITE "AJ32" LEVEL 1;
+COMP "ZD<14>" LOCATE = SITE "AB30" LEVEL 1;
+COMP "ZD<31>" LOCATE = SITE "AF31" LEVEL 1;
+COMP "ZD<23>" LOCATE = SITE "AH32" LEVEL 1;
+COMP "ZD<15>" LOCATE = SITE "AC30" LEVEL 1;
+COMP "ZD<24>" LOCATE = SITE "V30" LEVEL 1;
+COMP "ZD<16>" LOCATE = SITE "AP32" LEVEL 1;
+COMP "ZD<25>" LOCATE = SITE "V29" LEVEL 1;
+COMP "ZD<17>" LOCATE = SITE "AN32" LEVEL 1;
+COMP "ZD<26>" LOCATE = SITE "W30" LEVEL 1;
+COMP "ZD<18>" LOCATE = SITE "AM32" LEVEL 1;
+COMP "ZD<27>" LOCATE = SITE "W29" LEVEL 1;
+COMP "ZD<19>" LOCATE = SITE "AK31" LEVEL 1;
+COMP "ZD<28>" LOCATE = SITE "AD31" LEVEL 1;
+COMP "ZD<29>" LOCATE = SITE "AE32" LEVEL 1;
+COMP "ZDP<0>" LOCATE = SITE "AD30" LEVEL 1;
+COMP "ZDP<1>" LOCATE = SITE "AC29" LEVEL 1;
+COMP "ZDP<2>" LOCATE = SITE "AG31" LEVEL 1;
+COMP "ZDP<3>" LOCATE = SITE "AG32" LEVEL 1;
+PIN freg/Mram_reg_ren_1_pins<88> = BEL "freg/Mram_reg_ren_1" PINNAME RDCLKL;
+PIN freg/Mram_reg_ren_1_pins<90> = BEL "freg/Mram_reg_ren_1" PINNAME RDRCLKL;
+PIN freg/Mram_reg_ren_1_pins<122> = BEL "freg/Mram_reg_ren_1" PINNAME WRCLKL;
+PIN freg/Mram_reg_ren_pins<78> = BEL "freg/Mram_reg_ren" PINNAME RDCLKL;
+PIN freg/Mram_reg_ren_pins<80> = BEL "freg/Mram_reg_ren" PINNAME RDRCLKL;
+PIN freg/Mram_reg_ren_pins<106> = BEL "freg/Mram_reg_ren" PINNAME WRCLKL;
+PIN freg/Mram_reg_pins<87> = BEL "freg/Mram_reg" PINNAME RDCLKU;
+PIN freg/Mram_reg_pins<89> = BEL "freg/Mram_reg" PINNAME RDRCLKU;
+PIN freg/Mram_reg_pins<120> = BEL "freg/Mram_reg" PINNAME WRCLKU;
+PIN instr/Mram_mem_pins<78> = BEL "instr/Mram_mem" PINNAME RDCLKL;
+PIN instr/Mram_mem_pins<80> = BEL "instr/Mram_mem" PINNAME RDRCLKL;
+PIN instr/Mram_mem_pins<106> = BEL "instr/Mram_mem" PINNAME WRCLKL;
+PIN rreg/Mram_reg_ren_pins<78> = BEL "rreg/Mram_reg_ren" PINNAME RDCLKL;
+PIN rreg/Mram_reg_ren_pins<80> = BEL "rreg/Mram_reg_ren" PINNAME RDRCLKL;
+PIN rreg/Mram_reg_ren_pins<106> = BEL "rreg/Mram_reg_ren" PINNAME WRCLKL;
+PIN rreg/Mram_reg_ren_1_pins<78> = BEL "rreg/Mram_reg_ren_1" PINNAME RDCLKL;
+PIN rreg/Mram_reg_ren_1_pins<80> = BEL "rreg/Mram_reg_ren_1" PINNAME RDRCLKL;
+PIN rreg/Mram_reg_ren_1_pins<106> = BEL "rreg/Mram_reg_ren_1" PINNAME WRCLKL;
+PIN rreg/Mram_reg_pins<78> = BEL "rreg/Mram_reg" PINNAME RDCLKL;
+PIN rreg/Mram_reg_pins<80> = BEL "rreg/Mram_reg" PINNAME RDRCLKL;
+PIN rreg/Mram_reg_pins<106> = BEL "rreg/Mram_reg" PINNAME WRCLKL;
+PIN io/load/Mram_buf_pins<30> = BEL "io/load/Mram_buf" PINNAME CLKAU;
+PIN io/load/Mram_buf_pins<31> = BEL "io/load/Mram_buf" PINNAME CLKBU;
+PIN io/load/Mram_buf_pins<108> = BEL "io/load/Mram_buf" PINNAME REGCLKAU;
+PIN io/load/Mram_buf_pins<109> = BEL "io/load/Mram_buf" PINNAME REGCLKBU;
+PIN io/load/Mram_buf_ren_pins<24> = BEL "io/load/Mram_buf_ren" PINNAME CLKAL;
+PIN io/load/Mram_buf_ren_pins<25> = BEL "io/load/Mram_buf_ren" PINNAME CLKBL;
+PIN io/load/Mram_buf_ren_pins<47> = BEL "io/load/Mram_buf_ren" PINNAME
+        REGCLKAL;
+PIN io/load/Mram_buf_ren_pins<48> = BEL "io/load/Mram_buf_ren" PINNAME
+        REGCLKBL;
+PIN io/load/Mram_buf_ren_1_pins<24> = BEL "io/load/Mram_buf_ren_1" PINNAME
+        CLKAL;
+PIN io/load/Mram_buf_ren_1_pins<25> = BEL "io/load/Mram_buf_ren_1" PINNAME
+        CLKBL;
+PIN io/load/Mram_buf_ren_1_pins<47> = BEL "io/load/Mram_buf_ren_1" PINNAME
+        REGCLKAL;
+PIN io/load/Mram_buf_ren_1_pins<48> = BEL "io/load/Mram_buf_ren_1" PINNAME
+        REGCLKBL;
+PIN io/store/Mram_buf_pins<32> = BEL "io/store/Mram_buf" PINNAME CLKAL;
+PIN io/store/Mram_buf_pins<33> = BEL "io/store/Mram_buf" PINNAME CLKBL;
+PIN io/store/Mram_buf_pins<110> = BEL "io/store/Mram_buf" PINNAME REGCLKAL;
+PIN io/store/Mram_buf_pins<111> = BEL "io/store/Mram_buf" PINNAME REGCLKBL;
+TIMEGRP SYS_CLK = BEL "sramdin_0" BEL "sramdin_1" BEL "sramdin_2" BEL
+        "sramdin_3" BEL "sramdin_4" BEL "sramdin_5" BEL "sramdin_6" BEL
+        "sramdin_7" BEL "sramdin_8" BEL "sramdin_9" BEL "sramdin_10" BEL
+        "sramdin_11" BEL "sramdin_12" BEL "sramdin_13" BEL "sramdin_14" BEL
+        "sramdin_15" BEL "sramdin_16" BEL "sramdin_17" BEL "sramdin_18" BEL
+        "sramdin_19" BEL "sramdin_20" BEL "sramdin_21" BEL "sramdin_22" BEL
+        "sramdin_23" BEL "sramdin_24" BEL "sramdin_25" BEL "sramdin_26" BEL
+        "sramdin_27" BEL "sramdin_28" BEL "sramdin_29" BEL "sramdin_30" BEL
+        "sramdin_31" BEL "iodin_0" BEL "iodin_1" BEL "iodin_2" BEL "iodin_3"
+        BEL "iodin_4" BEL "iodin_5" BEL "iodin_6" BEL "iodin_7" BEL "iodin_8"
+        BEL "iodin_9" BEL "iodin_10" BEL "iodin_11" BEL "iodin_12" BEL
+        "iodin_13" BEL "iodin_14" BEL "iodin_15" BEL "iodin_16" BEL "iodin_17"
+        BEL "iodin_18" BEL "iodin_19" BEL "iodin_20" BEL "iodin_21" BEL
+        "iodin_22" BEL "iodin_23" BEL "iodin_24" BEL "iodin_25" BEL "iodin_26"
+        BEL "iodin_27" BEL "iodin_28" BEL "iodin_29" BEL "iodin_30" BEL
+        "iodin_31" BEL "regwaddr_0" BEL "regwaddr_1" BEL "regwaddr_2" BEL
+        "regwaddr_3" BEL "regwaddr_4" BEL "fpuin2_0" BEL "fpuin2_1" BEL
+        "fpuin2_2" BEL "fpuin2_3" BEL "fpuin2_4" BEL "fpuin2_5" BEL "fpuin2_6"
+        BEL "fpuin2_7" BEL "fpuin2_8" BEL "fpuin2_9" BEL "fpuin2_10" BEL
+        "fpuin2_11" BEL "fpuin2_12" BEL "fpuin2_13" BEL "fpuin2_14" BEL
+        "aluin1_0" BEL "aluin1_1" BEL "aluin1_2" BEL "aluin1_3" BEL "aluin1_4"
+        BEL "aluin1_5" BEL "aluin1_6" BEL "aluin1_7" BEL "aluin1_8" BEL
+        "aluin1_9" BEL "aluin1_10" BEL "aluin1_11" BEL "aluin1_12" BEL
+        "aluin1_13" BEL "aluin1_14" BEL "aluin1_15" BEL "aluin1_16" BEL
+        "aluin1_17" BEL "aluin1_18" BEL "aluin1_19" BEL "aluin1_20" BEL
+        "aluin1_21" BEL "aluin1_22" BEL "aluin1_23" BEL "aluin1_24" BEL
+        "aluin1_25" BEL "aluin1_26" BEL "aluin1_27" BEL "aluin1_28" BEL
+        "aluin1_29" BEL "aluin1_30" BEL "aluin1_31" BEL "aluin2_0" BEL
+        "aluin2_1" BEL "aluin2_2" BEL "aluin2_3" BEL "aluin2_4" BEL "aluin2_5"
+        BEL "aluin2_6" BEL "aluin2_7" BEL "aluin2_8" BEL "aluin2_9" BEL
+        "aluin2_10" BEL "aluin2_11" BEL "aluin2_12" BEL "aluin2_13" BEL
+        "aluin2_14" BEL "decode/pcout_0" BEL "decode/pcout_1" BEL
+        "decode/pcout_2" BEL "decode/pcout_3" BEL "decode/pcout_4" BEL
+        "decode/pcout_5" BEL "decode/IORE_i" BEL "decode/REGADDR_0" BEL
+        "decode/REGADDR_1" BEL "decode/REGIN_0" BEL "decode/REGIN_1" BEL
+        "decode/IN1" BEL "decode/SRAMWE_i" BEL "decode/NEXTPC_0" BEL
+        "decode/NEXTPC_11" BEL "decode/NEXTPC_2" BEL "decode/FREGWE_i" BEL
+        "decode/OP_0" BEL "decode/OP_1" BEL "decode/OP_2" BEL "decode/OP_3"
+        BEL "decode/IOWE_i" BEL "decode/RREGWE_i" BEL "rreg/ds_0" BEL
+        "rreg/ds_1" BEL "rreg/ds_2" BEL "rreg/ds_3" BEL "rreg/ds_4" BEL
+        "rreg/ds_5" BEL "rreg/ds_6" BEL "rreg/ds_7" BEL "rreg/ds_8" BEL
+        "rreg/ds_9" BEL "rreg/ds_10" BEL "rreg/ds_11" BEL "rreg/ds_12" BEL
+        "rreg/ds_13" BEL "rreg/ds_14" BEL "rreg/ds_15" BEL "rreg/ds_16" BEL
+        "rreg/ds_17" BEL "rreg/ds_18" BEL "rreg/ds_19" BEL "rreg/ds_20" BEL
+        "rreg/ds_21" BEL "rreg/ds_22" BEL "rreg/ds_23" BEL "rreg/ds_24" BEL
+        "rreg/ds_25" BEL "rreg/ds_26" BEL "rreg/ds_27" BEL "rreg/ds_28" BEL
+        "rreg/ds_29" BEL "rreg/ds_30" BEL "rreg/ds_31" BEL "rreg/dt_0" BEL
+        "rreg/dt_1" BEL "rreg/dt_2" BEL "rreg/dt_3" BEL "rreg/dt_4" BEL
+        "rreg/dt_5" BEL "rreg/dt_6" BEL "rreg/dt_7" BEL "rreg/dt_8" BEL
+        "rreg/dt_9" BEL "rreg/dt_10" BEL "rreg/dt_11" BEL "rreg/dt_12" BEL
+        "rreg/dt_13" BEL "rreg/dt_14" BEL "rreg/dt_15" BEL "rreg/dt_16" BEL
+        "rreg/dt_17" BEL "rreg/dt_18" BEL "rreg/dt_19" BEL "rreg/dt_20" BEL
+        "rreg/dt_21" BEL "rreg/dt_22" BEL "rreg/dt_23" BEL "rreg/dt_24" BEL
+        "rreg/dt_25" BEL "rreg/dt_26" BEL "rreg/dt_27" BEL "rreg/dt_28" BEL
+        "rreg/dt_29" BEL "rreg/dt_30" BEL "rreg/dt_31" BEL "rreg/dd_0" BEL
+        "rreg/dd_1" BEL "rreg/dd_2" BEL "rreg/dd_3" BEL "rreg/dd_4" BEL
+        "rreg/dd_5" BEL "rreg/dd_6" BEL "rreg/dd_7" BEL "rreg/dd_8" BEL
+        "rreg/dd_9" BEL "rreg/dd_10" BEL "rreg/dd_11" BEL "rreg/dd_12" BEL
+        "rreg/dd_13" BEL "rreg/dd_14" BEL "rreg/dd_15" BEL "rreg/dd_16" BEL
+        "rreg/dd_17" BEL "rreg/dd_18" BEL "rreg/dd_19" BEL "rreg/dd_20" BEL
+        "rreg/dd_21" BEL "rreg/dd_22" BEL "rreg/dd_23" BEL "rreg/dd_24" BEL
+        "rreg/dd_25" BEL "rreg/dd_26" BEL "rreg/dd_27" BEL "rreg/dd_28" BEL
+        "rreg/dd_29" BEL "rreg/dd_30" BEL "rreg/dd_31" BEL "SRAMWE_1" BEL
+        "OP_1_0" BEL "OP_1_1" BEL "OP_1_2" BEL "OP_1_3" BEL "jraddr_0" BEL
+        "jraddr_1" BEL "jraddr_2" BEL "jraddr_3" BEL "jraddr_4" BEL "jraddr_5"
+        BEL "jraddr_6" BEL "jraddr_7" BEL "jraddr_8" BEL "jraddr_9" BEL
+        "jraddr_10" BEL "jraddr_11" BEL "jraddr_12" BEL "jraddr_13" BEL
+        "jraddr_14" BEL "jraddr_15" BEL "IORE_1" BEL "IOWE_1" BEL
+        "decode/NEXTPC_1_0" BEL "decode/NEXTPC_1_1" BEL "decode/NEXTPC_1_2"
+        BEL "pc_1_0" BEL "pc_1_1" BEL "pc_1_2" BEL "pc_1_3" BEL "pc_1_4" BEL
+        "pc_1_5" BEL "pc_1_6" BEL "pc_1_7" BEL "pc_1_8" BEL "pc_1_9" BEL
+        "pc_1_10" BEL "pc_1_11" BEL "pc_1_12" BEL "pc_1_13" BEL "pc_1_14" BEL
+        "pc_1_15" BEL "instr/inst_0" BEL "instr/inst_1" BEL "instr/inst_2" BEL
+        "instr/inst_3" BEL "instr/inst_4" BEL "instr/inst_5" BEL
+        "instr/inst_6" BEL "instr/inst_7" BEL "instr/inst_8" BEL
+        "instr/inst_9" BEL "instr/inst_10" BEL "instr/inst_11" BEL
+        "instr/inst_12" BEL "instr/inst_13" BEL "instr/inst_14" BEL
+        "instr/inst_15" BEL "instr/inst_16" BEL "instr/inst_17" BEL
+        "instr/inst_18" BEL "instr/inst_19" BEL "instr/inst_20" BEL
+        "instr/inst_21" BEL "instr/inst_22" BEL "instr/inst_23" BEL
+        "instr/inst_24" BEL "instr/inst_25" BEL "instr/inst_26" BEL
+        "instr/inst_27" BEL "instr/inst_28" BEL "instr/inst_29" BEL
+        "instr/inst_30" BEL "instr/inst_31" BEL "sram/we1" BEL "pc_2_0" BEL
+        "pc_2_1" BEL "pc_2_2" BEL "pc_2_3" BEL "pc_2_4" BEL "pc_2_5" BEL
+        "pc_2_6" BEL "pc_2_7" BEL "pc_2_8" BEL "pc_2_9" BEL "pc_2_10" BEL
+        "pc_2_11" BEL "pc_2_12" BEL "pc_2_13" BEL "pc_2_14" BEL "pc_2_15" BEL
+        "jaddr_1_0" BEL "jaddr_1_1" BEL "jaddr_1_2" BEL "jaddr_1_3" BEL
+        "jaddr_1_4" BEL "jaddr_1_5" BEL "jaddr_1_6" BEL "jaddr_1_7" BEL
+        "jaddr_1_8" BEL "jaddr_1_9" BEL "jaddr_1_10" BEL "jaddr_1_11" BEL
+        "jaddr_1_12" BEL "jaddr_1_13" BEL "jaddr_1_14" BEL "jaddr_1_15" BEL
+        "decode/IOIN" BEL "decode/SRAMIN_0" BEL "decode/BYTE_0" BEL
+        "decode/BYTE_1" BEL "sram/Mtrien_DQ" BEL "sram/Mtrien_DQP" BEL
+        "pc_3_0" BEL "pc_3_1" BEL "pc_3_2" BEL "pc_3_3" BEL "pc_3_4" BEL
+        "pc_3_5" BEL "pc_3_6" BEL "pc_3_7" BEL "pc_3_8" BEL "pc_3_9" BEL
+        "pc_3_10" BEL "pc_3_11" BEL "pc_3_12" BEL "pc_3_13" BEL "pc_3_14" BEL
+        "pc_3_15" BEL "jaddr_2_0" BEL "jaddr_2_1" BEL "jaddr_2_2" BEL
+        "jaddr_2_3" BEL "jaddr_2_4" BEL "jaddr_2_5" BEL "jaddr_2_6" BEL
+        "jaddr_2_7" BEL "jaddr_2_8" BEL "jaddr_2_9" BEL "jaddr_2_10" BEL
+        "jaddr_2_11" BEL "jaddr_2_12" BEL "jaddr_2_13" BEL "jaddr_2_14" BEL
+        "jaddr_2_15" BEL "BYTE_1_0" BEL "BYTE_1_1" BEL "ad_3_0" BEL "ad_3_1"
+        BEL "ad_3_2" BEL "ad_3_3" BEL "ad_3_4" BEL "fpuin1_0" BEL "fpuin1_1"
+        BEL "fpuin1_2" BEL "fpuin1_3" BEL "fpuin1_4" BEL "fpuin1_5" BEL
+        "fpuin1_6" BEL "fpuin1_7" BEL "fpuin1_8" BEL "fpuin1_9" BEL
+        "fpuin1_10" BEL "fpuin1_11" BEL "fpuin1_12" BEL "fpuin1_13" BEL
+        "fpuin1_14" BEL "fpuin1_15" BEL "fpuin1_16" BEL "fpuin1_17" BEL
+        "fpuin1_18" BEL "fpuin1_19" BEL "fpuin1_20" BEL "fpuin1_21" BEL
+        "fpuin1_22" BEL "fpuin1_23" BEL "fpuin1_24" BEL "fpuin1_25" BEL
+        "fpuin1_26" BEL "fpuin1_27" BEL "fpuin1_28" BEL "fpuin1_29" BEL
+        "fpuin1_30" BEL "fpuin1_31" BEL "iodout_1_0" BEL "iodout_1_1" BEL
+        "iodout_1_2" BEL "iodout_1_3" BEL "iodout_1_4" BEL "iodout_1_5" BEL
+        "iodout_1_6" BEL "iodout_1_7" BEL "iodout_1_sliced_7" BEL
+        "iodout_1_sliced_6" BEL "iodout_1_sliced_5" BEL "iodout_1_sliced_4"
+        BEL "iodout_1_sliced_3" BEL "iodout_1_sliced_2" BEL
+        "iodout_1_sliced_1" BEL "iodout_1_sliced_0" BEL "iodout_1_sliced1_7"
+        BEL "iodout_1_sliced1_6" BEL "iodout_1_sliced1_5" BEL
+        "iodout_1_sliced1_4" BEL "iodout_1_sliced1_3" BEL "iodout_1_sliced1_2"
+        BEL "iodout_1_sliced1_1" BEL "iodout_1_sliced1_0" BEL
+        "iodout_1_sliced2_7" BEL "iodout_1_sliced2_6" BEL "iodout_1_sliced2_5"
+        BEL "iodout_1_sliced2_4" BEL "iodout_1_sliced2_3" BEL
+        "iodout_1_sliced2_2" BEL "iodout_1_sliced2_1" BEL "iodout_1_sliced2_0"
+        BEL "fpuout_1_0" BEL "fpuout_1_1" BEL "fpuout_1_2" BEL "fpuout_1_3"
+        BEL "fpuout_1_4" BEL "fpuout_1_5" BEL "fpuout_1_6" BEL "fpuout_1_7"
+        BEL "fpuout_1_8" BEL "fpuout_1_9" BEL "fpuout_1_10" BEL "fpuout_1_11"
+        BEL "fpuout_1_12" BEL "fpuout_1_13" BEL "fpuout_1_14" BEL
+        "fpuout_1_15" BEL "fpuout_1_16" BEL "fpuout_1_17" BEL "fpuout_1_18"
+        BEL "fpuout_1_19" BEL "fpuout_1_20" BEL "fpuout_1_21" BEL
+        "fpuout_1_22" BEL "fpuout_1_23" BEL "fpuout_1_24" BEL "fpuout_1_25"
+        BEL "fpuout_1_26" BEL "fpuout_1_27" BEL "fpuout_1_28" BEL
+        "fpuout_1_29" BEL "fpuout_1_30" BEL "fpuout_1_31" BEL "aluout_2_0" BEL
+        "aluout_2_1" BEL "aluout_2_2" BEL "aluout_2_3" BEL "aluout_2_4" BEL
+        "aluout_2_5" BEL "aluout_2_6" BEL "aluout_2_7" BEL "aluout_2_8" BEL
+        "aluout_2_9" BEL "aluout_2_10" BEL "aluout_2_11" BEL "aluout_2_12" BEL
+        "aluout_2_13" BEL "aluout_2_14" BEL "aluout_2_15" BEL "aluout_2_16"
+        BEL "aluout_2_17" BEL "aluout_2_18" BEL "aluout_2_19" BEL
+        "aluout_2_20" BEL "aluout_2_21" BEL "aluout_2_22" BEL "aluout_2_23"
+        BEL "aluout_2_24" BEL "aluout_2_25" BEL "aluout_2_26" BEL
+        "aluout_2_27" BEL "aluout_2_28" BEL "aluout_2_29" BEL "aluout_2_30"
+        BEL "aluout_2_31" BEL "fpuout_2_0" BEL "fpuout_2_1" BEL "fpuout_2_2"
+        BEL "fpuout_2_3" BEL "fpuout_2_4" BEL "fpuout_2_5" BEL "fpuout_2_6"
+        BEL "fpuout_2_7" BEL "fpuout_2_8" BEL "fpuout_2_9" BEL "fpuout_2_10"
+        BEL "fpuout_2_11" BEL "fpuout_2_12" BEL "fpuout_2_13" BEL
+        "fpuout_2_14" BEL "fpuout_2_15" BEL "fpuout_2_16" BEL "fpuout_2_17"
+        BEL "fpuout_2_18" BEL "fpuout_2_19" BEL "fpuout_2_20" BEL
+        "fpuout_2_21" BEL "fpuout_2_22" BEL "fpuout_2_23" BEL "fpuout_2_24"
+        BEL "fpuout_2_25" BEL "fpuout_2_26" BEL "fpuout_2_27" BEL
+        "fpuout_2_28" BEL "fpuout_2_29" BEL "fpuout_2_30" BEL "fpuout_2_31"
+        BEL "bg" BEL "decode/state_FSM_FFd2" BEL "decode/state_FSM_FFd1" BEL
+        "decode/state_FSM_FFd5" BEL "decode/state_FSM_FFd3" BEL
+        "io/load/recv/state_0" BEL "io/load/recv/state_1" BEL
+        "io/load/recv/state_2" BEL "io/load/recv/state_3" BEL
+        "io/load/recv/count_0" BEL "io/load/recv/count_1" BEL
+        "io/load/recv/count_2" BEL "io/load/recv/count_3" BEL
+        "io/load/recv/count_4" BEL "io/load/recv/count_5" BEL
+        "io/load/recv/count_6" BEL "io/load/recv/count_7" BEL
+        "io/load/recv/count_8" BEL "io/load/recv/count_9" BEL
+        "io/load/recv/count_10" BEL "io/load/recv/count_11" BEL
+        "io/load/recv/buf_0" BEL "io/load/recv/buf_1" BEL "io/load/recv/buf_2"
+        BEL "io/load/recv/buf_3" BEL "io/load/recv/buf_4" BEL
+        "io/load/recv/buf_5" BEL "io/load/recv/buf_6" BEL "io/load/recv/buf_7"
+        BEL "io/load/recv/buf_8" BEL "io/load/bottom_7" BEL "io/load/bottom_6"
+        BEL "io/load/bottom_5" BEL "io/load/bottom_4" BEL "io/load/bottom_3"
+        BEL "io/load/bottom_2" BEL "io/load/bottom_1" BEL "io/load/bottom_0"
+        BEL "io/load/top_7" BEL "io/load/top_6" BEL "io/load/top_5" BEL
+        "io/load/top_4" BEL "io/load/top_3" BEL "io/load/top_2" BEL
+        "io/load/dout_sliced_sliced_sliced_0" BEL
+        "io/load/dout_sliced_sliced_sliced_1" BEL
+        "io/load/dout_sliced_sliced_sliced_2" BEL
+        "io/load/dout_sliced_sliced_sliced_3" BEL
+        "io/load/dout_sliced_sliced_sliced_4" BEL
+        "io/load/dout_sliced_sliced_sliced_5" BEL
+        "io/load/dout_sliced_sliced_sliced_6" BEL
+        "io/load/dout_sliced_sliced_sliced_7" BEL "io/load/data_i_7" BEL
+        "io/load/data_i_6" BEL "io/load/data_i_5" BEL "io/load/data_i_4" BEL
+        "io/load/data_i_3" BEL "io/load/data_i_2" BEL "io/load/data_i_1" BEL
+        "io/load/data_i_0" BEL "io/store/send/state_0" BEL
+        "io/store/send/state_1" BEL "io/store/send/state_2" BEL
+        "io/store/send/state_3" BEL "io/store/send/count_0" BEL
+        "io/store/send/count_1" BEL "io/store/send/count_2" BEL
+        "io/store/send/count_3" BEL "io/store/send/count_4" BEL
+        "io/store/send/count_5" BEL "io/store/send/count_6" BEL
+        "io/store/send/count_7" BEL "io/store/send/count_8" BEL
+        "io/store/send/count_9" BEL "io/store/send/count_10" BEL
+        "io/store/send/count_11" BEL "io/store/send/buf_0" BEL
+        "io/store/send/buf_1" BEL "io/store/send/buf_2" BEL
+        "io/store/send/buf_3" BEL "io/store/send/buf_4" BEL
+        "io/store/send/buf_5" BEL "io/store/send/buf_6" BEL
+        "io/store/send/buf_7" BEL "io/store/send/buf_8" BEL
+        "io/store/bottom_7" BEL "io/store/bottom_6" BEL "io/store/bottom_5"
+        BEL "io/store/bottom_4" BEL "io/store/bottom_3" BEL
+        "io/store/bottom_2" BEL "io/store/bottom_1" BEL "io/store/bottom_0"
+        BEL "io/store/top_7" BEL "io/store/top_6" BEL "io/store/top_5" BEL
+        "io/store/top_4" BEL "io/store/top_3" BEL "io/store/top_2" BEL
+        "io/store/top_1" BEL "io/store/top_0" BEL "fpuin2_15" BEL "fpuin2_16"
+        BEL "fpuin2_17" BEL "fpuin2_18" BEL "fpuin2_19" BEL "fpuin2_20" BEL
+        "fpuin2_21" BEL "fpuin2_22" BEL "fpuin2_23" BEL "fpuin2_24" BEL
+        "fpuin2_25" BEL "fpuin2_26" BEL "fpuin2_27" BEL "fpuin2_28" BEL
+        "fpuin2_29" BEL "fpuin2_30" BEL "fpuin2_31" BEL "aluin2_15" BEL
+        "aluin2_16" BEL "aluin2_17" BEL "aluin2_18" BEL "aluin2_19" BEL
+        "aluin2_20" BEL "aluin2_21" BEL "aluin2_22" BEL "aluin2_23" BEL
+        "aluin2_24" BEL "aluin2_25" BEL "aluin2_26" BEL "aluin2_27" BEL
+        "aluin2_28" BEL "aluin2_29" BEL "aluin2_30" BEL "aluin2_31" BEL
+        "sram/W" BEL "io/load/empty" BEL "io/load/done_i" BEL "io/store/full"
+        BEL "decode/pcout_6" BEL "decode/pcout_7" BEL "decode/pcout_8" BEL
+        "decode/pcout_9" BEL "decode/pcout_10" BEL "decode/pcout_11" BEL
+        "decode/pcout_12" BEL "decode/pcout_13" BEL "decode/pcout_14" BEL
+        "decode/pcout_15" BEL "aluout_1_0" BEL "aluout_1_1" BEL "aluout_1_2"
+        BEL "aluout_1_3" BEL "aluout_1_4" BEL "aluout_1_5" BEL "aluout_1_6"
+        BEL "aluout_1_7" BEL "aluout_1_8" BEL "aluout_1_9" BEL "aluout_1_10"
+        BEL "aluout_1_11" BEL "aluout_1_12" BEL "aluout_1_13" BEL
+        "aluout_1_14" BEL "aluout_1_15" BEL "aluout_1_16" BEL "aluout_1_17"
+        BEL "aluout_1_18" BEL "aluout_1_19" BEL "aluout_1_20" BEL
+        "aluout_1_21" BEL "aluout_1_22" BEL "aluout_1_23" BEL "aluout_1_24"
+        BEL "aluout_1_25" BEL "aluout_1_26" BEL "aluout_1_27" BEL
+        "aluout_1_28" BEL "aluout_1_29" BEL "aluout_1_30" BEL "aluout_1_31"
+        BEL "io/load/recv/done_i" BEL "io/load/full" BEL "io/store/empty" BEL
+        "io/store/go" BEL "decode/state_FSM_FFd4" PIN
+        "freg/Mram_reg_ren_1_pins<88>" PIN "freg/Mram_reg_ren_1_pins<90>" PIN
+        "freg/Mram_reg_ren_1_pins<122>" PIN "freg/Mram_reg_ren_1_pins<88>" PIN
+        "freg/Mram_reg_ren_1_pins<90>" PIN "freg/Mram_reg_ren_1_pins<122>" PIN
+        "freg/Mram_reg_ren_pins<78>" PIN "freg/Mram_reg_ren_pins<80>" PIN
+        "freg/Mram_reg_ren_pins<106>" PIN "freg/Mram_reg_ren_pins<78>" PIN
+        "freg/Mram_reg_ren_pins<80>" PIN "freg/Mram_reg_ren_pins<106>" PIN
+        "freg/Mram_reg_pins<87>" PIN "freg/Mram_reg_pins<89>" PIN
+        "freg/Mram_reg_pins<120>" PIN "freg/Mram_reg_pins<87>" PIN
+        "freg/Mram_reg_pins<89>" PIN "freg/Mram_reg_pins<120>" PIN
+        "instr/Mram_mem_pins<78>" PIN "instr/Mram_mem_pins<80>" PIN
+        "instr/Mram_mem_pins<106>" PIN "instr/Mram_mem_pins<78>" PIN
+        "instr/Mram_mem_pins<80>" PIN "instr/Mram_mem_pins<106>" PIN
+        "rreg/Mram_reg_ren_pins<78>" PIN "rreg/Mram_reg_ren_pins<80>" PIN
+        "rreg/Mram_reg_ren_pins<106>" PIN "rreg/Mram_reg_ren_pins<78>" PIN
+        "rreg/Mram_reg_ren_pins<80>" PIN "rreg/Mram_reg_ren_pins<106>" PIN
+        "rreg/Mram_reg_ren_1_pins<78>" PIN "rreg/Mram_reg_ren_1_pins<80>" PIN
+        "rreg/Mram_reg_ren_1_pins<106>" PIN "rreg/Mram_reg_ren_1_pins<78>" PIN
+        "rreg/Mram_reg_ren_1_pins<80>" PIN "rreg/Mram_reg_ren_1_pins<106>" PIN
+        "rreg/Mram_reg_pins<78>" PIN "rreg/Mram_reg_pins<80>" PIN
+        "rreg/Mram_reg_pins<106>" PIN "rreg/Mram_reg_pins<78>" PIN
+        "rreg/Mram_reg_pins<80>" PIN "rreg/Mram_reg_pins<106>" BEL
+        "Mshreg_REGADDR_2_0" BEL "REGADDR_2_0" BEL "Mshreg_REGADDR_2_1" BEL
+        "REGADDR_2_1" BEL "sram/Mshreg_Mtridata_DQ_0" BEL "sram/Mtridata_DQ_0"
+        BEL "sram/Mshreg_Mtridata_DQ_1" BEL "sram/Mtridata_DQ_1" BEL
+        "sram/Mshreg_Mtridata_DQ_2" BEL "sram/Mtridata_DQ_2" BEL
+        "sram/Mshreg_Mtridata_DQ_3" BEL "sram/Mtridata_DQ_3" BEL
+        "sram/Mshreg_Mtridata_DQ_4" BEL "sram/Mtridata_DQ_4" BEL
+        "sram/Mshreg_Mtridata_DQ_5" BEL "sram/Mtridata_DQ_5" BEL
+        "sram/Mshreg_Mtridata_DQ_6" BEL "sram/Mtridata_DQ_6" BEL
+        "sram/Mshreg_Mtridata_DQ_7" BEL "sram/Mtridata_DQ_7" BEL
+        "sram/Mshreg_Mtridata_DQ_8" BEL "sram/Mtridata_DQ_8" BEL
+        "sram/Mshreg_Mtridata_DQ_9" BEL "sram/Mtridata_DQ_9" BEL
+        "sram/Mshreg_Mtridata_DQ_12" BEL "sram/Mtridata_DQ_12" BEL
+        "sram/Mshreg_Mtridata_DQ_10" BEL "sram/Mtridata_DQ_10" BEL
+        "sram/Mshreg_Mtridata_DQ_11" BEL "sram/Mtridata_DQ_11" BEL
+        "sram/Mshreg_Mtridata_DQ_13" BEL "sram/Mtridata_DQ_13" BEL
+        "sram/Mshreg_Mtridata_DQ_14" BEL "sram/Mtridata_DQ_14" BEL
+        "sram/Mshreg_Mtridata_DQ_15" BEL "sram/Mtridata_DQ_15" BEL
+        "sram/Mshreg_Mtridata_DQ_16" BEL "sram/Mtridata_DQ_16" BEL
+        "sram/Mshreg_Mtridata_DQ_17" BEL "sram/Mtridata_DQ_17" BEL
+        "sram/Mshreg_Mtridata_DQ_18" BEL "sram/Mtridata_DQ_18" BEL
+        "sram/Mshreg_Mtridata_DQ_19" BEL "sram/Mtridata_DQ_19" BEL
+        "sram/Mshreg_Mtridata_DQ_20" BEL "sram/Mtridata_DQ_20" BEL
+        "sram/Mshreg_Mtridata_DQ_21" BEL "sram/Mtridata_DQ_21" BEL
+        "sram/Mshreg_Mtridata_DQ_22" BEL "sram/Mtridata_DQ_22" BEL
+        "sram/Mshreg_Mtridata_DQ_23" BEL "sram/Mtridata_DQ_23" BEL
+        "sram/Mshreg_Mtridata_DQ_24" BEL "sram/Mtridata_DQ_24" BEL
+        "sram/Mshreg_Mtridata_DQ_27" BEL "sram/Mtridata_DQ_27" BEL
+        "sram/Mshreg_Mtridata_DQ_25" BEL "sram/Mtridata_DQ_25" BEL
+        "sram/Mshreg_Mtridata_DQ_26" BEL "sram/Mtridata_DQ_26" BEL
+        "sram/Mshreg_Mtridata_DQ_28" BEL "sram/Mtridata_DQ_28" BEL
+        "sram/Mshreg_Mtridata_DQ_29" BEL "sram/Mtridata_DQ_29" BEL
+        "sram/Mshreg_Mtridata_DQ_30" BEL "sram/Mtridata_DQ_30" BEL
+        "sram/Mshreg_Mtridata_DQ_31" BEL "sram/Mtridata_DQ_31" BEL
+        "Mshreg_FREGWE_3" BEL "FREGWE_3" BEL "Mshreg_RREGWE_3" BEL "RREGWE_3"
+        BEL "Mshreg_REGIN_3_0" BEL "REGIN_3_0" BEL "Mshreg_REGIN_3_1" BEL
+        "REGIN_3_1" BEL "Mshreg_at_3_0" BEL "at_3_0" BEL "Mshreg_at_3_1" BEL
+        "at_3_1" BEL "Mshreg_at_3_2" BEL "at_3_2" BEL "Mshreg_at_3_3" BEL
+        "at_3_3" BEL "Mshreg_baddr_2_1" BEL "baddr_2_1" BEL "Mshreg_at_3_4"
+        BEL "at_3_4" BEL "Mshreg_baddr_2_0" BEL "baddr_2_0" BEL
+        "Mshreg_baddr_2_2" BEL "baddr_2_2" BEL "Mshreg_baddr_2_3" BEL
+        "baddr_2_3" BEL "Mshreg_baddr_2_4" BEL "baddr_2_4" BEL
+        "Mshreg_baddr_2_5" BEL "baddr_2_5" BEL "Mshreg_baddr_2_8" BEL
+        "baddr_2_8" BEL "Mshreg_baddr_2_6" BEL "baddr_2_6" BEL
+        "Mshreg_baddr_2_7" BEL "baddr_2_7" BEL "Mshreg_baddr_2_9" BEL
+        "baddr_2_9" BEL "Mshreg_baddr_2_10" BEL "baddr_2_10" BEL
+        "Mshreg_baddr_2_11" BEL "baddr_2_11" BEL "Mshreg_baddr_2_12" BEL
+        "baddr_2_12" BEL "Mshreg_baddr_2_15" BEL "baddr_2_15" BEL
+        "Mshreg_baddr_2_13" BEL "baddr_2_13" BEL "Mshreg_baddr_2_14" BEL
+        "baddr_2_14" BEL "ZCLKMA<0>" BEL "ZCLKMA<1>" BEL
+        "io/load/Mram_buf_ren_215/SP.HIGH" BEL
+        "io/load/Mram_buf_ren_215/SP.LOW" BEL
+        "io/load/Mram_buf_ren_215/DP.HIGH" BEL
+        "io/load/Mram_buf_ren_215/DP.LOW" BEL
+        "io/load/Mram_buf_ren_214/SP.HIGH" BEL
+        "io/load/Mram_buf_ren_214/SP.LOW" BEL
+        "io/load/Mram_buf_ren_214/DP.HIGH" BEL
+        "io/load/Mram_buf_ren_214/DP.LOW" BEL
+        "io/load/Mram_buf_ren_216/SP.HIGH" BEL
+        "io/load/Mram_buf_ren_216/SP.LOW" BEL
+        "io/load/Mram_buf_ren_216/DP.HIGH" BEL
+        "io/load/Mram_buf_ren_216/DP.LOW" BEL
+        "io/load/Mram_buf_ren_212/SP.HIGH" BEL
+        "io/load/Mram_buf_ren_212/SP.LOW" BEL
+        "io/load/Mram_buf_ren_212/DP.HIGH" BEL
+        "io/load/Mram_buf_ren_212/DP.LOW" BEL
+        "io/load/Mram_buf_ren_211/SP.HIGH" BEL
+        "io/load/Mram_buf_ren_211/SP.LOW" BEL
+        "io/load/Mram_buf_ren_211/DP.HIGH" BEL
+        "io/load/Mram_buf_ren_211/DP.LOW" BEL
+        "io/load/Mram_buf_ren_213/SP.HIGH" BEL
+        "io/load/Mram_buf_ren_213/SP.LOW" BEL
+        "io/load/Mram_buf_ren_213/DP.HIGH" BEL
+        "io/load/Mram_buf_ren_213/DP.LOW" BEL
+        "io/load/Mram_buf_ren_210/SP.HIGH" BEL
+        "io/load/Mram_buf_ren_210/SP.LOW" BEL
+        "io/load/Mram_buf_ren_210/DP.HIGH" BEL
+        "io/load/Mram_buf_ren_210/DP.LOW" BEL
+        "io/load/Mram_buf_ren_29/SP.HIGH" BEL "io/load/Mram_buf_ren_29/SP.LOW"
+        BEL "io/load/Mram_buf_ren_29/DP.HIGH" BEL
+        "io/load/Mram_buf_ren_29/DP.LOW" BEL "io/load/Mram_buf_ren_28/SP.HIGH"
+        BEL "io/load/Mram_buf_ren_28/SP.LOW" BEL
+        "io/load/Mram_buf_ren_28/DP.HIGH" BEL "io/load/Mram_buf_ren_28/DP.LOW"
+        BEL "io/load/Mram_buf_ren_27/SP.HIGH" BEL
+        "io/load/Mram_buf_ren_27/SP.LOW" BEL "io/load/Mram_buf_ren_27/DP.HIGH"
+        BEL "io/load/Mram_buf_ren_27/DP.LOW" BEL
+        "io/load/Mram_buf_ren_25/SP.HIGH" BEL "io/load/Mram_buf_ren_25/SP.LOW"
+        BEL "io/load/Mram_buf_ren_25/DP.HIGH" BEL
+        "io/load/Mram_buf_ren_25/DP.LOW" BEL "io/load/Mram_buf_ren_24/SP.HIGH"
+        BEL "io/load/Mram_buf_ren_24/SP.LOW" BEL
+        "io/load/Mram_buf_ren_24/DP.HIGH" BEL "io/load/Mram_buf_ren_24/DP.LOW"
+        BEL "io/load/Mram_buf_ren_26/SP.HIGH" BEL
+        "io/load/Mram_buf_ren_26/SP.LOW" BEL "io/load/Mram_buf_ren_26/DP.HIGH"
+        BEL "io/load/Mram_buf_ren_26/DP.LOW" BEL
+        "io/load/Mram_buf_ren_22/SP.HIGH" BEL "io/load/Mram_buf_ren_22/SP.LOW"
+        BEL "io/load/Mram_buf_ren_22/DP.HIGH" BEL
+        "io/load/Mram_buf_ren_22/DP.LOW" BEL "io/load/Mram_buf_ren_21/SP.HIGH"
+        BEL "io/load/Mram_buf_ren_21/SP.LOW" BEL
+        "io/load/Mram_buf_ren_21/DP.HIGH" BEL "io/load/Mram_buf_ren_21/DP.LOW"
+        BEL "io/load/Mram_buf_ren_23/SP.HIGH" BEL
+        "io/load/Mram_buf_ren_23/SP.LOW" BEL "io/load/Mram_buf_ren_23/DP.HIGH"
+        BEL "io/load/Mram_buf_ren_23/DP.LOW" PIN "io/load/Mram_buf_pins<30>"
+        PIN "io/load/Mram_buf_pins<31>" PIN "io/load/Mram_buf_pins<108>" PIN
+        "io/load/Mram_buf_pins<109>" PIN "io/load/Mram_buf_pins<30>" PIN
+        "io/load/Mram_buf_pins<31>" PIN "io/load/Mram_buf_pins<108>" PIN
+        "io/load/Mram_buf_pins<109>" PIN "io/load/Mram_buf_ren_pins<24>" PIN
+        "io/load/Mram_buf_ren_pins<25>" PIN "io/load/Mram_buf_ren_pins<47>"
+        PIN "io/load/Mram_buf_ren_pins<48>" PIN
+        "io/load/Mram_buf_ren_pins<24>" PIN "io/load/Mram_buf_ren_pins<25>"
+        PIN "io/load/Mram_buf_ren_pins<47>" PIN
+        "io/load/Mram_buf_ren_pins<48>" PIN "io/load/Mram_buf_ren_1_pins<24>"
+        PIN "io/load/Mram_buf_ren_1_pins<25>" PIN
+        "io/load/Mram_buf_ren_1_pins<47>" PIN
+        "io/load/Mram_buf_ren_1_pins<48>" PIN
+        "io/load/Mram_buf_ren_1_pins<24>" PIN
+        "io/load/Mram_buf_ren_1_pins<25>" PIN
+        "io/load/Mram_buf_ren_1_pins<47>" PIN
+        "io/load/Mram_buf_ren_1_pins<48>" PIN "io/store/Mram_buf_pins<32>" PIN
+        "io/store/Mram_buf_pins<33>" PIN "io/store/Mram_buf_pins<110>" PIN
+        "io/store/Mram_buf_pins<111>" PIN "io/store/Mram_buf_pins<32>" PIN
+        "io/store/Mram_buf_pins<33>" PIN "io/store/Mram_buf_pins<110>" PIN
+        "io/store/Mram_buf_pins<111>";
+TS_SYS_CLK = PERIOD TIMEGRP "SYS_CLK" 14.52 ns HIGH 50%;
+SCHEMATIC END;
+
