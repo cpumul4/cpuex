@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 #define MAX_CHAR  100
-#define LABEL_TABLE_NUM 1000
+#define LABEL_TABLE_NUM 4000
 
 extern instr rom[];
 
