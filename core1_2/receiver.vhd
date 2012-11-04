@@ -37,7 +37,7 @@ begin
           done_i <= '0';
         when others =>
           if count = 0 then
-            if state = "0001" then
+            if state = "0010" then--"0001" then
               count <= "0" & wtime(11 downto 1);  -- wtime * 0.5
             else
               count <= wtime;

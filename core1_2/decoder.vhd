@@ -2,6 +2,7 @@
 -- ステートマシン
 -- 次のPCを決める
 -- ver1.1 : RE,WE系の信号(5つ)の初期値を与える
+-- ver1.2 : 命令ローダ搭載
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -19,6 +20,9 @@ entity decoder is
     jraddr  : in  std_logic_vector(15 downto 0);
     ALUEQ   : in  std_logic;
     FPUEQ   : in  std_logic;
+    instin  : in  std_logic_vector(5 downto 0);
+    INSTWE  : out std_logic;
+    INSTOUT : out std_logic;
     pcout   : out std_logic_vector(15 downto 0);
     IN1     : out std_logic;
     IN2     : out std_logic;
@@ -36,10 +40,13 @@ entity decoder is
 end decoder;
 
 architecture unit of decoder is
-  signal state : std_logic_vector(2 downto 0) := "100";
+  signal state : std_logic_vector(3 downto 0) := "1000";
   signal NEXTPC, NEXTPC_1 : std_logic_vector(2 downto 0);
 
-  signal SRAMWE_i, IOWE_i, IORE_i, RREGWE_i, FREGWE_i : std_logic := '0';
+  signal pcout_i : std_logic_vector(15 downto 0) := (others => '1');
+  signal INSTWE_i, SRAMWE_i, IOWE_i, IORE_i, RREGWE_i, FREGWE_i : std_logic := '0';
+
+  signal first1, first2 : std_logic := '1';
   
 begin
   main : process(clk)
@@ -47,9 +54,49 @@ begin
     if rising_edge(clk) then
       NEXTPC_1 <= NEXTPC;
       case state is
-        when "011" =>
+        when "1011" =>
+          if pcout_i = x"0010" and first2 = '0' then
+            pcout_i <= (others => '0');
+            INSTOUT <= '0';
+            state <= "0000";
+          elsif STOREEN = '1' then
+            first2 <= '0';
+            pcout_i <= pcout_i + 1;
+            IOIN <= '1';
+            INSTOUT <= '1';
+            BYTE <= "00";
+            IOWE_i <= '1';
+            state <= state - 1;
+          end if;
+        when "1010" =>
+          IOWE_i <= '0';
+          state <= state - 1;
+        when "1001" =>
+          state <= "1011";
+        when "1000" =>                  -- start
+          state <= state - 1;
+        when "0111" =>
+          if instin = "000000" and first1 = '0' then
+            pcout_i <= (others => '0');
+            state <= "1011";
+          elsif LOADEN = '1' then
+            first1 <= '0';
+            IORE_i <= '1';
+            INSTWE_i <= '1';
+            pcout_i <= pcout_i + 1;
+            state <= state - 1;
+          end if;
+        when "0110" =>
+          IORE_i <= '0';
+          INSTWE_i <= '0';
+          state <= state - 1;
+        when "0101" =>
+          state <= state - 1;
+        when "0100" =>
+          state <= "0111";
+        when "0011" =>
           if (inst(31 downto 28) = "0001" and LOADEN = '0') or (inst(31 downto 28) = "0000" and STOREEN = '0') then
-            state <= "011";
+            state <= "0011";
           else
             if inst(31 downto 29) = "011" then
               IN1 <= '0';
@@ -184,45 +231,44 @@ begin
             end if;
             state <= state - 1;
           end if;
-        when "010" =>
+        when "0010" =>
           SRAMWE_i <= '0';
           IOWE_i <= '0';
           IORE_i <= '0';
           RREGWE_i <= '0';
           FREGWE_i <= '0';
           state <= state - 1;
-        when "001" =>
+        when "0001" =>
           case NEXTPC_1 is
             when "011" =>
-              pcout <= pcin - 1;
+              pcout_i <= pcin - 1;
             when "000" =>
-              pcout <= pcin;
+              pcout_i <= pcin;
             when "001" =>
-              pcout <= jaddr;
+              pcout_i <= jaddr;
             when "010" =>
-              pcout <= jraddr;
+              pcout_i <= jraddr;
             when others =>
               if (NEXTPC_1(0) = '1' and ALUEQ = NEXTPC_1(1)) or (NEXTPC_1(0) = '0' and FPUEQ = NEXTPC_1(1)) then
-                pcout <= baddr;
+                pcout_i <= baddr;
               else
-                pcout <= pcin;
+                pcout_i <= pcin;
               end if;
           end case;
           state <= state - 1;
-        when "000" =>
-          state <= "011";
-        when "100" =>
-          pcout <= (others => '0');
-          state <= "000";
+        when "0000" =>
+          state <= "0011";
         when others =>
           state <= state;
       end case;
     end if;
   end process;
 
+  INSTWE <= INSTWE_i;
   SRAMWE <= SRAMWE_i;
   IOWE <= IOWE_i;
   IORE <= IORE_i;
   RREGWE <= RREGWE_i;
   FREGWE <= FREGWE_i;
+  pcout <= pcout_i;
 end unit;

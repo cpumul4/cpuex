@@ -1,6 +1,6 @@
--- ver 1.1
+-- ver1.2
 -- 1stアーキテクチャの逐次実行整数演算コアのシミュレーション
--- 固定値の命令メモリを使用(命令ローダなし)
+-- 命令ローダ搭載
 -- CPI固定
 
 library ieee;
@@ -33,8 +33,8 @@ entity core_sim is
     RS_TX  : out   std_logic);
 end core_sim;
 
-architecture ver1_1 of core_sim is
-  component inst_mem_fixed
+architecture ver1_2 of core_sim is
+  component inst_mem
     port (
       clk  : in  std_logic;
       addr : in  std_logic_vector(15 downto 0);
@@ -56,6 +56,9 @@ architecture ver1_1 of core_sim is
       jraddr  : in  std_logic_vector(15 downto 0);
       ALUEQ   : in  std_logic;
       FPUEQ   : in  std_logic;
+      instin  : in  std_logic_vector(5 downto 0);
+      INSTWE  : out std_logic;
+      INSTOUT : out std_logic;
       pcout   : out std_logic_vector(15 downto 0);
       IN1     : out std_logic;
       IN2     : out std_logic;
@@ -151,6 +154,7 @@ architecture ver1_1 of core_sim is
   signal inst : std_logic_vector(31 downto 0);
   signal imm, ras, rat, rad, fas, fat, fad : std_logic_vector(31 downto 0);
   signal aluin1, aluin2, fpuin1, fpuin2, aluout, aluout_1, aluout_2, fpuout, fpuout_1, fpuout_2, sramdin, iodin, sramdout, iodout, iodout_1, regdin : std_logic_vector(31 downto 0);
+  
   signal amt_1, amt_2 : std_logic_vector(4 downto 0) := (others => '0');
   signal at_1, at_2, at_3, ad_1, ad_2, ad_3, regwaddr : std_logic_vector(4 downto 0);
 
@@ -158,7 +162,7 @@ architecture ver1_1 of core_sim is
   signal SRAMIN : std_logic_vector(1 downto 0);
   signal OP, OP_1 : std_logic_vector(3 downto 0);
   signal BYTE, BYTE_1 : std_logic_vector(1 downto 0);
-  signal SRAMWE, SRAMWE_1, IOWE, IOWE_1, IORE, IORE_1 : std_logic;
+  signal INSTOUT, INSTWE, INSTWE_1, INSTWE_2, INSTWE_3, SRAMWE, SRAMWE_1, IOWE, IOWE_1, IORE, IORE_1 : std_logic;
   signal REGIN, REGIN_1, REGIN_2, REGIN_3, REGADDR, REGADDR_1, REGADDR_2 : std_logic_vector(1 downto 0);
   signal RREGWE, RREGWE_1, RREGWE_2, RREGWE_3, FREGWE, FREGWE_1, FREGWE_2, FREGWE_3 : std_logic;
 
@@ -173,14 +177,14 @@ begin
 --      i => iclk,
 --      o => clk);
 
-  instr : inst_mem_fixed
+  instr : inst_mem
     port map (
       clk => clk,
       addr => pc_0,
-      din => x"00000000",
+      din => iodout_1,
       inst => inst,
       EN => '1',
-      WE => '0');
+      WE => INSTWE_3);
 
   decode : decoder
     port map (
@@ -194,6 +198,9 @@ begin
       jraddr => jraddr,
       ALUEQ => ALUEQ,
       FPUEQ => FPUEQ,
+      instin => iodout_1(31 downto 26),
+      INSTWE => INSTWE,
+      INSTOUT => INSTOUT,
       pcout => pc_0,
       IN1 => IN1,
       IN2 => IN2,
@@ -338,10 +345,14 @@ begin
           sramdin <= fad;
       end case;
 
-      if IOIN = '1' then
-        iodin <= ras;
+      if INSTOUT = '1' then
+        iodin <= inst;
       else
-        iodin <= fas;
+        if IOIN = '1' then
+          iodin <= ras;
+        else
+          iodin <= fas;
+        end if;
       end if;
 
       iodout_1 <= iodout;
@@ -367,6 +378,9 @@ begin
 
       OP_1 <= OP;
       BYTE_1 <= BYTE;
+      INSTWE_1 <= INSTWE;
+      INSTWE_2 <= INSTWE_1;
+      INSTWE_3 <= INSTWE_2;
       SRAMWE_1 <= SRAMWE;
       IOWE_1 <= IOWE;
       IORE_1 <= IORE;
@@ -383,4 +397,4 @@ begin
       FREGWE_3 <= FREGWE_2;
     end if;
   end process;
-end ver1_1;
+end ver1_2;

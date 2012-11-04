@@ -33,24 +33,34 @@ architecture box of fp_register is
      x"00000000",x"00000000",x"00000000",x"00000000",
      x"00000000",x"00000000",x"00000000",x"00000000");
 
-  signal readas, readat, readad : std_logic_vector(4 downto 0);
-  
 begin
   main : process(clk)
   begin
     if rising_edge(clk) then
       if EN = '1' then
-        if WE = '1' then
+        if WE = '1' then -- and addr /= "00000" then
           reg(conv_integer(addr)) <= din;
+          if as = addr then
+            ds <= din;
+          else        
+            ds <= reg(conv_integer(as));
+          end if;
+          if at = addr then
+            dt <= din;
+          else        
+            dt <= reg(conv_integer(at));
+          end if;
+          if ad = addr then
+            dd <= din;
+          else        
+            dd <= reg(conv_integer(ad));
+          end if;
+        else
+          ds <= reg(conv_integer(as));
+          dt <= reg(conv_integer(at));
+          dd <= reg(conv_integer(ad));
         end if;
-        readas <= as;
-        readat <= at;
-        readad <= ad;
       end if;
     end if;
   end process;
-
-  ds <= reg(conv_integer(readas));
-  dt <= reg(conv_integer(readat));
-  dd <= reg(conv_integer(readad));
 end box;
