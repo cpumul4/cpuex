@@ -3,8 +3,9 @@
 
 #include <cstring>
 #include <stdlib.h>
-
-#define LABEL_TABLE_NUM 1000
+#include <iostream>
+using namespace std;
+#define LABEL_TABLE_NUM 5000
 
 
 class ltable {
@@ -17,14 +18,21 @@ public:
   }
   void set_label(uint ,const char *);
   int get_index(const char *);
+  void print();
 };
+
+void ltable::print(){
+  for(int i = 0; label[i] != NULL; i++)
+    cout << label[i] << " -> " << index[i] << endl;
+}
 
 void ltable::set_label(uint i, const char *l){
   uint itr = 0;
   while(label[itr] != NULL)itr++;
-  label[itr] = (char *)malloc(sizeof(char) * strlen(l));
+  label[itr] = (char *)malloc(sizeof(char) * (strlen(l) + 1));
   strcpy(label[itr],l);
   index[itr] = i;
+  // cerr << l << " set. " << itr << " and " <<  i << endl;
 }
 
 int ltable::get_index(const char *_label){

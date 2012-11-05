@@ -7,8 +7,6 @@
 #include <iostream>
 #include <fstream>
 using namespace std;
-#define MAX_CHAR  30
-#define MAX_LINE  10000
 #define DEBUG 0
 #define debug(expr) cerr << #expr << endl
 
@@ -224,6 +222,9 @@ uint32_t jformbin(uint opcode, int addr){
 
 
 int main(int argc, char *argv[]){
+  const int MAX_CHAR  = 100;
+ const int MAX_LINE  = 20000;
+
   char delims[] = " \t\r";
   char combegin[] = "#;";
   int inum = 0;
@@ -235,6 +236,7 @@ int main(int argc, char *argv[]){
   } output[MAX_LINE];
   ltable table;
 
+
   if(argc != 3){
     cerr << "USAGE: assembler infile outfile\n";
     return 1;
@@ -242,7 +244,7 @@ int main(int argc, char *argv[]){
 
   ifstream fin(argv[1]);
   
-
+  // ラベル表の作成
   while( fin.getline(input[inum], MAX_CHAR) ){
     if(input[inum] == NULL || input[inum][0] == 0){ // 何も読まなかった
       continue;
@@ -273,7 +275,11 @@ int main(int argc, char *argv[]){
     printf("%s\n", input[__i]);
 #endif
 
+#if DEBUG
+  table.print();
+#endif
 
+  // 命令の解釈
   for(int itr=0; itr< inum; itr++){
   // 命令コード文字列を取り出す
     char *opertstr, *token[4] = { NULL, NULL, NULL, NULL };
@@ -294,17 +300,21 @@ int main(int argc, char *argv[]){
 #if DEBUG
     cerr << "opcode= " << opcode << ", funct = " << funct << endl;
 #endif
-    
 
     int oprd[3] = {0,0,0}, amt = 0;
     for(int n=0; n < 3 && token[n+1] != NULL;n++){
       if(n == 2 && opcode == opc_sll && 
 	 (funct == fnc_sll || funct == fnc_srl || funct == fnc_sra))
 	amt = interpret_operand(token[n+1], table);
-      else if(n == 2 && f == branch)
+      else if(n == 2 && f == branch){
+	int b = table.get_index(token[n+1]);
+	if(b < 0){
+	  cerr << "[ERROR]Not found: "  << token[n+1] << endl;
+	  return -1;
+	}
 	oprd[n] = table.get_index(token[n+1]) - itr - 1;
+      }
       else {
-
 	oprd[n] = interpret_operand(token[n+1], table);
       }
     }
@@ -346,10 +356,10 @@ int main(int argc, char *argv[]){
   for(int __i =0; __i < inum; __i++)
     print_bit(output[__i].word);
 
-  cout <<  "----------------------上と下は同じ命令です-------------------------\n";
 
   
-#if 1
+#if DEBUG
+  cout <<  "----------------------上と下は同じ命令です-------------------------\n";
   for(int __i =0; __i < inum; __i++){
     printf("%s\t", input[__i]);
     print_bit_instr(output[__i].word);
