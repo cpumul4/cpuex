@@ -1,3 +1,6 @@
+2012/11/06
+fadd.vhdを修正
+
 2012/11/05
 fdiv.vhdを修正
 comp.vhdを追加
