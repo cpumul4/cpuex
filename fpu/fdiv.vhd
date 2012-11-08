@@ -17,7 +17,7 @@ architecture c_p_a of cpa is
 begin
   add : process(sin,cin,g,p,c,p1,g1)
   begin
-    g(0) <= (cin(3) and sin(3)) or ((cin(2) and sin(2)) and (cin(3) or sin(3))) or ((cin(1) and sin(2)) and (cin(2) or sin(2)) and (cin(3) or sin(3))) or ((cin(0) and sin(0)) and (cin(1) or sin(2)) and (cin(2) or sin(2)) and (cin(3) or sin(3)));
+    g(0) <= (cin(3) and sin(3)) or ((cin(2) and sin(2)) and (cin(3) or sin(3))) or ((cin(1) and sin(1)) and (cin(2) or sin(2)) and (cin(3) or sin(3))) or ((cin(0) and sin(0)) and (cin(1) or sin(1)) and (cin(2) or sin(2)) and (cin(3) or sin(3)));
     for L in 1 to 3 loop
       g(L) <= (cin(5*L+3) and sin(5*L+3)) or ((cin(5*L+2) and sin(5*L+2)) and (cin(5*L+3) or sin(5*L+3))) or ((cin(5*L+1) and sin(5*L+1)) and (cin(5*L+2) or sin(5*L+2)) and (cin(5*L+3) or sin(5*L+3))) or ((cin(5*L) and sin(5*L)) and (cin(5*L+1) or sin(5*L+1)) and (cin(5*L+2) or sin(5*L+2)) and (cin(5*L+3) or sin(5*L+3))) or ((cin(5*L-1) and sin(5*L-1)) and (cin(5*L) or sin(5*L)) and (cin(5*L+1) or sin(5*L+1)) and (cin(5*L+2) or sin(5*L+2)) and (cin(5*L+3) or sin(5*L+3)));
       p(L-1) <= (cin(5*L+3) or sin(5*L+3)) and (cin(5*L+2) or sin(5*L+2)) and (cin(5*L+1) or sin(5*L+1)) and (cin(5*L) or sin(5*L)) and (cin(5*L-1) or sin(5*L-1));
@@ -116,17 +116,14 @@ architecture fdiv of float_div is
   signal s1,s2 : std_logic; --sign bit
   signal e1 : std_logic_vector(8 downto 0); --exponent
   signal e2,e3 : std_logic_vector(7 downto 0); --exponent
-  signal fr1,fr5 : std_logic_vector(24 downto 0); --fraction
-  signal fr3,fr4 : std_logic_vector(25 downto 0); --fraction
-  signal fr2 : std_logic_vector(23 downto 0); --fraction
+  signal fr1 : std_logic_vector(24 downto 0); --fraction
+  signal fr2,fr5 : std_logic_vector(22 downto 0); --fraction
   signal z1,z2 : std_logic; --sqrt is zero
   signal pos1,pos2 : std_logic_vector(52 downto 0); 
   signal neg1,neg2 : std_logic_vector(51 downto 0);
-  signal r_s : std_logic_vector(24 downto 0); --for round
-  signal r_c : std_logic_vector(23 downto 0); --for round
   signal f1_1,f1_2 : std_logic_vector(31 downto 0); --step1
   signal s : std_logic; -- step1
-  signal e : std_logic_vector(8 downto 0); --step1
+  signal e,e_div : std_logic_vector(8 downto 0); --step1
   signal key1,key2 : std_logic_vector(4 downto 0); --step1_8
   signal key3,key4 : std_logic_vector(2 downto 0); --step1_8
   signal q1,q2 : std_logic_vector(1 downto 0); --step1_8
@@ -141,9 +138,8 @@ architecture fdiv of float_div is
   signal t_4_2,t_4_3 : std_logic_vector(31 downto 0); --step1_8
   signal t_2,t_5 : std_logic_vector(24 downto 0); --step1_8
   signal t_3,t_6 : std_logic_vector(23 downto 0); --step1_8
-  signal fr_t : std_logic_vector(23 downto 0); --step1_8
+  signal fr_t,fr_t2 : std_logic_vector(22 downto 0); --step1_8
   signal e_t : std_logic_vector(8 downto 0); --step1_8
-  signal div_tb_tmp : div_table2; -- step1_8
   signal r1 : std_logic; --step8
   signal tmp8_1 : std_logic_vector(25 downto 0); --step8
   signal tmp8_2 : std_logic_vector(24 downto 0); --step8
@@ -153,7 +149,7 @@ architecture fdiv of float_div is
   signal fr : std_logic_vector(22 downto 0); --step8
 begin
   ans <= f;
-  count : process(CLK,div,sqr,cnt8)
+  count : process(CLK,div,sqr,cnt8,op_div,op_sqr)
   begin
     if rising_edge(CLK) then
       op_div <= div;
@@ -174,27 +170,28 @@ begin
       goal <= '0';
     end if;
   end process;
-  
-  step1 : process(CLK,f1,f2,s1,e1,fr1,fr2,f1_1,f1_2,s,e)
+
+  div0 : process(f1_1,f1_2)
   begin
-    if rising_edge(clk) then
-      f1_1 <= f1;
-      f1_2 <= f2;
+    if (f1_2(30 downto 23) = x"00") then
+      --division by 0.0
+      e_div <= '0'&x"FF";
+      fr2 <= "000"&x"00000";
+    elsif (f1_1(30 downto 23) = x"00") then
+      e_div <= '0'&x"00";
+      fr2 <= f1_2(22 downto 0);
+    else
+      e_div <= ('0'&f1_1(30 downto 23)) - ('0'&f1_2(30 downto 23)) + 127;
+      fr2 <= f1_2(22 downto 0);
     end if;
+  end process;
+  
+  step1 : process(CLK,op_div,f1,f2,fr2,f1_1,f1_2,s,e,e_div)
+  begin
     if (op_div = '1') then
       s <= f1_1(31) xor f1_2(31);
-      if (f1_2(30 downto 23) = x"00") then
-        --division by 0.0
-        e <= '0'&x"FF";
-        fr2 <= x"800000";
-      elsif (f1_1(30 downto 23) = x"00") then
-        e <= '0'&x"00";
-        fr2 <= '1'&f1_2(22 downto 0);
-      else
-        e <= ('0'&f1_1(30 downto 23)) - ('0'&f1_2(30 downto 23)) + 127;
-        fr2 <= '1'&f1_2(22 downto 0);
-      end if;
       fr1 <= '1'&f1_1(22 downto 0)&'0';
+      e <= e_div;
     else
       s <= '0';
       if (f1_1(23) = '1') then
@@ -205,21 +202,53 @@ begin
         e <= '0'&(('0'&f1_1(30 downto 24)) + 63);
       end if;
     end if;
-    if rising_edge(CLK) then
+    if rising_edge(clk) then
+      f1_1 <= f1;
+      f1_2 <= f2;
       s1 <= s;
       e1 <= e;
       z1 <= sqr and (not ((f1_1(30) or f1_1(29) or f1_1(28) or f1_1(27)) or (f1_1(26) or f1_1(25) or f1_1(24) or f1_1(23))));
+      fr_t <= fr2;
     end if;
   end process;
 
   --step1_8
   addr1_1 : cpa port map (sin => pos1(52 downto 29), cin => neg1(51 downto 28), key => key1);
   addr2_1 : csa port map (sin => pos1(50 downto 26), cin => neg1(49 downto 26), opin => t_1, sign =>key1(4), sout => t_2, cout => t_3);  
+
+  mult_gen1_1 : process(cnt8,sqr_q1,t1,t_1_2)
+  begin
+    case sqr_q1 is
+      when "000"|"100" => t_1_1 <= "00"&x"000000";
+      when "001" => t_1_1 <= '0'&t1&"001";
+      when "010" => t_1_1 <= t1&"0100";
+      when "011" => t_1_1 <= ('0'&t1&"011")+(t1&"0110");
+      when "101" => t_1_1 <= ('0'&t1&"000")-("00"&x"000001");
+      when "110" => t_1_1 <= ((t1&"00")-x"000001")&"00";
+      when "111" => t_1_1 <= (('0'&t1&"000")-("00"&x"000003"))+(((t1&"000")-('0'&x"000003"))&'0');
+      when others => null;
+    end case;
+    if (cnt8(1) = '0') then
+      t_1_3 <= t_1_2(21 downto 0)&x"00";
+    else
+      t_1_3 <= t_1_2;
+    end if;
+  end process;
+
+  mult_gen1_2 : process(cnt8,pos1,neg1,t_1_1)
+  begin
+    t1 <= pos1(21 downto 0) - neg1(21 downto 0);
+    if (cnt8(0) = '0') then
+      t_1_2 <= t_1_1(25 downto 0)&"0000";
+    else
+      t_1_2 <= "0000"&t_1_1;
+    end if;
+  end process;
   
-  division1 : process(cnt8,fr1,fr2,q1,t1,t_1_1,t_1_2,t_1_3,t_2,t_3,pos1,neg1,div_q1,sqr_q1,div_tb_tmp,key1,key3,key4,fr_t)
+  division1 : process(cnt8,fr1,fr2,q1,t_1_3,t_2,t_3,pos1,neg1,div_q1,sqr_q1,key1,key3,key4,fr_t,op_sqr)
   begin   
     --division1
-    div_q1 <= div_tb_tmp(conv_integer(key1(4 downto 1)));
+    div_q1 <= div_tb(conv_integer(key1(4 downto 1)&fr_t(22)));
     sqr_q1(2) <= key1(4);
     if (key1(4) xor key1(3)) = '1' then
       sqr_q1(1 downto 0) <= "11";
@@ -228,27 +257,6 @@ begin
     end if;
     if (op_sqr = '1') then
       q1 <= sqr_q1(1 downto 0);
-      t1 <= pos1(21 downto 0) - neg1(21 downto 0);
-      case sqr_q1 is
-        when "000"|"100" => t_1_1 <= "00"&x"000000";
-        when "001" => t_1_1 <= '0'&t1&"001";
-        when "010" => t_1_1 <= t1&"0100";
-        when "011" => t_1_1 <= ('0'&t1&"011")+(t1&"0110");
-        when "101" => t_1_1 <= ('0'&t1&"000")-("00"&x"000001");
-        when "110" => t_1_1 <= ((t1&"00")-x"000001")&"00";
-        when "111" => t_1_1 <= (('0'&t1&"000")-("00"&x"000003"))+(((t1&"000")-('0'&x"000003"))&'0');
-        when others => null;
-      end case;
-      if (cnt8(0) = '0') then
-        t_1_2 <= t_1_1(25 downto 0)&"0000";
-      else
-        t_1_2 <= "0000"&t_1_1;
-      end if;
-      if (cnt8(1) = '0') then
-        t_1_3 <= t_1_2(21 downto 0)&x"00";
-      else
-        t_1_3 <= t_1_2;
-      end if;
       if (cnt8(2) = '0') then
         t_1 <= t_1_3(13 downto 0)&x"00"&"000";
       else
@@ -258,9 +266,9 @@ begin
       q1 <= div_q1;
       case q1 is
         when "00" => t_1 <= '0'&x"000000";
-        when "01" => t_1 <= '0'&fr_t;
-        when "10" => t_1 <= fr_t&'0';
-        when "11" => t_1 <= (fr_t&'0') + ('0'&fr_t);
+        when "01" => t_1 <= "01"&fr_t;
+        when "10" => t_1 <= '1'&fr_t&'0';
+        when "11" => t_1 <= ('1'&fr_t&'0') + ("01"&fr_t);
         when others => null;
       end case;
     end if;
@@ -294,18 +302,47 @@ begin
   
   addr1_2 : cpa port map (sin => pos2(52 downto 29), cin => neg2(51 downto 28), key => key2);
   addr2_2 : csa port map (sin => pos2(50 downto 26), cin => neg2(49 downto 26), opin => t_4, sign => key2(4), sout => t_5, cout => t_6);
+
+  mult_gen2_1 : process(cnt8,sqr_q2,t4,t_4_2)
+  begin   
+    case sqr_q2 is
+      when "000"|"100" => t_4_1 <= x"0000000";
+      when "001" => t_4_1 <= '0'&t4&"001";
+      when "010" => t_4_1 <= t4&"0100";
+      when "011" => t_4_1 <= ('0'&t4&"011")+(t4&"0110");
+      when "101" => t_4_1 <= ('0'&t4&"000")-(x"0000001");
+      when "110" => t_4_1 <= ((t4&"00")-("00"&x"000001"))&"00";
+      when "111" => t_4_1 <= (('0'&t4&"000")-(x"0000003"))+(((t4&"000")-("000"&x"000003"))&'0');
+      when others => null;
+    end case;
+    if (cnt8(1) = '0') then
+      t_4_3 <= t_4_2(23 downto 0)&x"00";
+    else
+      t_4_3 <= t_4_2;
+    end if;
+  end process;
   
-  division2 : process(CLK,s1,e1,fr1,fr2,z1,fr_t,pos2,neg2,t4,t_4_1,t_4_2,t_4_3,t_5,t_6,q2,div_q2,sqr_q2,div_tb_tmp,key2,key3,key4,e_t)
+  mult_gen2_2 : process(cnt8,pos2,neg2,t_4_1)
+  begin   
+    t4 <= pos2(23 downto 0) - neg2(23 downto 0);
+    if (cnt8(0) = '0') then
+      t_4_2 <= t_4_1&"0000";
+    else
+      t_4_2 <= "0000"&t_4_1;
+    end if;
+  end process;
+  
+  division2 : process(CLK,s1,e1,fr1,fr2,z1,fr_t,fr_t2,pos2,neg2,t_4_3,t_5,t_6,q2,div_q2,sqr_q2,key2,key3,key4,e_t,cnt8,op_sqr)
     variable index : std_logic_vector(3 downto 0);
   begin
-    fr_t <= fr2;
-    for L in 0 to 15 loop
-      index := conv_std_logic_vector(L,4);
-      div_tb_tmp(L) <= div_tb(conv_integer(index&fr2(22)));
-    end loop;
+    if (cnt8 = "000") then
+      fr_t2 <= fr2;
+    else
+      fr_t2 <= fr_t;
+    end if;
     
     --devision2
-    div_q2 <= div_tb(conv_integer(key2(4 downto 1)&fr2(22)));
+    div_q2 <= div_tb(conv_integer(key2(4 downto 1)&fr_t2(22)));
     sqr_q2(2) <= key2(4);
     if (key2(4) xor key2(3)) = '1' then
       sqr_q2(1 downto 0) <= "11";
@@ -323,27 +360,6 @@ begin
         end if;
       else
         q2 <= sqr_q2(1 downto 0);
-        t4 <= pos2(23 downto 0) - neg2(23 downto 0);
-        case sqr_q2 is
-          when "000"|"100" => t_4_1 <= x"0000000";
-          when "001" => t_4_1 <= '0'&t4&"001";
-          when "010" => t_4_1 <= t4&"0100";
-          when "011" => t_4_1 <= ('0'&t4&"011")+(t4&"0110");
-          when "101" => t_4_1 <= ('0'&t4&"000")-(x"0000001");
-          when "110" => t_4_1 <= ((t4&"00")-("00"&x"000001"))&"00";
-          when "111" => t_4_1 <= (('0'&t4&"000")-(x"0000003"))+(((t4&"000")-("000"&x"000003"))&'0');
-          when others => null;
-        end case;
-        if (cnt8(0) = '0') then
-          t_4_2 <= t_4_1&"0000";
-        else
-          t_4_2 <= "0000"&t_4_1;
-        end if;
-        if (cnt8(1) = '0') then
-          t_4_3 <= t_4_2(23 downto 0)&x"00";
-        else
-          t_4_3 <= t_4_2;
-        end if;
         if (cnt8(2) = '0') then
           t_4 <= t_4_3(15 downto 0)&'0'&x"00";
         else
@@ -354,9 +370,9 @@ begin
       q2 <= div_q2;
       case q2 is
         when "00" => t_4 <= '0'&x"000000";
-        when "01" => t_4 <= '0'&fr2;
-        when "10" => t_4 <= fr2&'0';
-        when "11" => t_4 <= (fr2&'0') + ('0'&fr2);
+        when "01" => t_4 <= "01"&fr_t2;
+        when "10" => t_4 <= '1'&fr_t2&'0';
+        when "11" => t_4 <= ('1'&fr_t2&'0') + ("01"&fr_t2);
         when others => null;
       end case;
     end if;
@@ -364,18 +380,12 @@ begin
     if rising_edge(CLK) then
       pos1(52 downto 2) <= t_5&pos2(25 downto 0);
       neg1(51 downto 2) <= t_6&neg2(25 downto 0);
-      fr3(25 downto 2) <= pos2(23 downto 0);
-      fr4(25 downto 2) <= neg2(23 downto 0);
       if (key2(4) = '1') then
         pos1(1 downto 0) <= "00";
         neg1(1 downto 0) <= q2;
-        fr3(1 downto 0) <= "00";
-        fr4(1 downto 0) <= q2;
       else
         pos1(1 downto 0) <= q2;
         neg1(1 downto 0) <= "00";
-        fr3(1 downto 0) <= q2;
-        fr4(1 downto 0) <= "00";
       end if;
       if (cnt8 = "000") then
         key3 <= '0'&q2(0)&'0';
@@ -401,27 +411,34 @@ begin
       else
         e3 <= e1(7 downto 0);
       end if;
-      fr5 <= fr2&'0';
-      r_s <= t_5;
-      r_c <= t_6;
+      fr5 <= fr_t;
       z2 <= z1;
     end if;
   end process;
 
-  c_rem : csa port map (sin => r_s, cin => r_c, opin => fr5, sign => '1', sout => r_s1, cout => r_c1);
+  c_rem : csa port map (sin => pos1(52 downto 28), cin => neg1(51 downto 28), opin(24) => '1', opin(23 downto 1) => fr5, opin(0) => '0', sign => '1', sout => r_s1, cout => r_c1);
+
+  normalize : process(r1,tmp8_1)
+  begin
+    if ((tmp8_1(0) and (r1 or tmp8_1(1))) = '1') then
+      tmp8_2 <= tmp8_1(25 downto 1) + 1;
+    else
+      tmp8_2 <= tmp8_1(25 downto 1);
+    end if;
+  end process;
   
-  step8 : process(CLK,s2,e2,e3,fr3,fr4,r_s,r_c,z2,f,r1,tmp8_1,tmp8_2,r_s1,r_c1,exp,fr)
+  step8 : process(CLK,pos1,neg1,s2,e2,e3,z2,f,r1,tmp8_1,tmp8_2,r_s1,r_c1,exp,fr,key1)
   begin
     if (key1(4) = '1') then
-      tmp8_1 <= fr3 + (not fr4);
+      tmp8_1 <= pos1(25 downto 0) + (not neg1(25 downto 0));
       if ((r_s1 = '0'&x"000000") and (r_c1 = x"000000")) then
         r1 <= '0';
       else
         r1 <= '1';
       end if;
     else
-      tmp8_1 <= fr3 - fr4;
-      if ((r_s = '0'&x"000000") and (r_c = x"000000")) then
+      tmp8_1 <= pos1(25 downto 0) - neg1(25 downto 0);
+      if ((pos1(52 downto 28) = '0'&x"000000") and (neg1(51 downto 28) = x"000000")) then
         r1 <= '0';
       else
         r1 <= '1';
@@ -435,11 +452,6 @@ begin
         fr <= tmp8_1(24 downto 2);
       end if;
     else
-      if ((tmp8_1(0) and (r1 or tmp8_1(1))) = '1') then
-        tmp8_2 <= tmp8_1(25 downto 1) + 1;
-      else
-        tmp8_2 <= tmp8_1(25 downto 1);
-      end if;
       if (tmp8_2(24) = '1') then
         exp <= e3;
         fr <= tmp8_2(23 downto 1);
