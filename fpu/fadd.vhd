@@ -11,7 +11,6 @@ entity float_add is
 end float_add;
 
 architecture fadd of float_add is
-  signal f : std_logic_vector(31 downto 0);
   signal s1,s2,s3,s4,s5,s6 : std_logic; --sign bit
   signal e1,e2,e3 : std_logic_vector(7 downto 0); --exponent
   signal fr1,fr3,fr5 : std_logic_vector(22 downto 0); --fraction
@@ -39,13 +38,11 @@ architecture fadd of float_add is
   signal tmp4 : std_logic_vector(23 downto 0); --step4
   signal e : std_logic_vector(7 downto 0); --step4
 begin
-  ans <= f;
+  ans <= s5&e&tmp4(22 downto 0);
   step1 : process(CLK,f1,f2,shift,br1,s1,s2,e1,fr1,fr2,f1_1,f2_1,f1_2,f2_2,tmp1) --exchange operands
   begin
-    if rising_edge(CLK) then
-      f1_1 <= f1;
-      f2_1 <= f2;
-    end if;
+    f1_1 <= f1;
+    f2_1 <= f2;
     if (f1_1(30 downto 23) = f2_1(30 downto 23)) then
       if (f1_1(22 downto 0) < f2_1(22 downto 0)) then
         f1_2 <= f2_1;
@@ -80,14 +77,26 @@ begin
     end if;
   end process;
 
-  shift_odd1 : process(shift,fr2,t2,g2,r1,st1)
+  step2 : process(CLK,shift,br1,s1,s2,e1,fr1,fr2,br2,s3,s4,e2,fr3,fr4,g_1,r_1,st_1,tmp2_1,tmp2_2,tmp2_3,ex,t1,t2,t3,t4,t5,g1,g2,g3,g4,g5,g2_1,r1,r2,r3,r4,st1,st2,st3,st4) --shift or add
   begin
+    --shift
     if (shift(0) = '1') then
       t1 <= '0'&fr2(23 downto 1);
       g1 <= fr2(0);
     else
       t1 <= fr2;
       g1 <= '0';
+    end if;
+    if (shift(1) = '1') then
+      t2 <= "00"&t1(23 downto 2);
+      g2 <= t1(1);
+      r1 <= t1(0);
+      st1 <= g1;
+    else
+      t2 <= t1;
+      g2 <= g1;
+      r1 <= '0';
+      st1 <= '0';
     end if; 
     if (shift(2) = '1') then
       t3 <= "0000"&t2(23 downto 4);
@@ -100,21 +109,6 @@ begin
       r2 <= r1;
       st2 <= st1;
     end if;
-  end process;
-
-  shift_even1 : process(shift,t1,t3,g1,g3,r2,st2)
-  begin
-    if (shift(1) = '1') then
-      t2 <= "00"&t1(23 downto 2);
-      g2 <= t1(1);
-      r1 <= t1(0);
-      st1 <= g1;
-    else
-      t2 <= t1;
-      g2 <= g1;
-      r1 <= '0';
-      st1 <= '0';
-    end if;
     if (shift(3) = '1') then
       t4 <= x"00"&t3(23 downto 8);
       g4 <= t3(7);
@@ -126,10 +120,8 @@ begin
       r3 <= r2;
       st3 <= st2;
     end if;
-  end process;
 
-  add1_1 : process(fr1,fr2,e1,s1,s2,shift,tmp2_3)
-  begin
+    --add
     if ((s1 xor s2) = '1') then
       tmp2_1 <= '1'&fr1&'0';
       if (shift(0) = '1') then
@@ -154,19 +146,12 @@ begin
         ex <= e1;
       end if;
     end if;
-  end process;
-  
-  add1_2 : process(s1,s2,tmp2_1,tmp2_2)
-  begin
     if ((s1 xor s2) = '1') then
       tmp2_3 <= tmp2_1 - tmp2_2;
     else
       tmp2_3 <= tmp2_1 + tmp2_2;
     end if;
-  end process;
-
-  step2 : process(CLK,shift,br1,s1,s2,e1,fr1,fr2,br2,s3,s4,e2,fr3,fr4,g_1,r_1,st_1,tmp2_1,tmp2_2,tmp2_3,ex,t1,t2,t3,t4,t5,g1,g2,g3,g4,g5,g2_1,r1,r2,r3,r4,st1,st2,st3,st4)
-  begin
+    
     if (br1 = '1') then
       --shift
       if (shift(7 downto 5) = "000") then
@@ -224,7 +209,6 @@ begin
     end if;
   end process;
 
-  --normalize
   --leading zero counter
   z1(11) <= not (fr4(23) or fr4(22));
   z1(10) <= not (fr4(21) or fr4(20));
@@ -253,54 +237,45 @@ begin
   z(1) <= ((not z(4)) and (((not z3(2)) and (((not z2(5)) and z1(11)) or (z2(5) and z1(9)))) or (z3(2) and (((not z2(3)) and z1(7)) or (z2(3) and z1(5)))))) or (z(4) and ((not z3(0)) and (((not z2(1)) and z1(3)) or (z2(1) and z1(1)))));
   z(0) <= ((not z(4)) and (((not z3(2)) and (((not z2(5)) and (((not z1(11)) and (not fr4(23))) or (z1(11) and (not fr4(21))))) or (z2(5) and (((not z1(9)) and (not fr4(19))) or (z1(9) and (not fr4(17))))))) or (z3(2) and (((not z2(3)) and (((not z1(7)) and (not fr4(15))) or (z1(7) and (not fr4(13))))) or (z2(3) and (((not z1(5)) and (not fr4(11))) or (z1(5) and (not fr4(9))))))))) or (z(4) and ((not z3(0)) and (((not z2(1)) and (((not z1(3)) and (not fr4(7))) or (z1(3) and (not fr4(5))))) or (z2(1) and (((not z1(1)) and (not fr4(3))) or (z1(1) and (not fr4(1))))))));
   
-  shift_odd2 : process(fr4,g_1,z,t3_2,t3_4)
+  step3 : process(CLK,br2,s3,s4,e2,fr3,fr4,g_1,r_1,st_1,s5,s6,e3,fr5,g_2,r_2,st_2,tmp3_1,s,z1,z2,z3,z,ex3,t3_1,t3_2,t3_3,t3_4,t3_5) --add or normalize
   begin
+    --add
+    s <= s3 xor s4;
+    if (s = '1') then
+      tmp3_1 <= '0'&(('1'&fr3&"00") - (fr4&g_1&r_1));
+    else
+      tmp3_1 <= (("01"&fr3) + ('0'&fr4))&g_1&r_1;
+    end if;
+
+    --normalize
+    ex3 <= ('0'&e2) - ("0000"&z);
+    --shift
     if (z(4) = '1') then
       t3_1 <= fr4(6 downto 0)&g_1&x"0000";
     else
       t3_1 <= fr4(22 downto 0)&g_1;
+    end if;
+    if (z(3) = '1') then
+      t3_2 <= t3_1(15 downto 0)&x"00";
+    else
+      t3_2 <= t3_1;
     end if;
     if (z(2) = '1') then
       t3_3 <= t3_2(19 downto 0)&"0000";
     else
       t3_3 <= t3_2;
     end if;
-    if (z(0) = '1') then
-      t3_5 <= t3_4(22 downto 0)&"0";
-    else
-      t3_5 <= t3_4;
-    end if;
-  end process;
-
-  shift_even2 : process(z,t3_1,t3_3)
-  begin
-    if (z(3) = '1') then
-      t3_2 <= t3_1(15 downto 0)&x"00";
-    else
-      t3_2 <= t3_1;
-    end if;
     if (z(1) = '1') then
       t3_4 <= t3_3(21 downto 0)&"00";
     else
       t3_4 <= t3_3;
     end if;
-  end process;
-
-  ex3 <= ('0'&e2) - ("0000"&z);
-
-  --add
-  s <= s3 xor s4;
-  add2 : process(s,fr3,fr4,g_1,r_1)
-  begin
-    if (s = '1') then
-      tmp3_1 <= '0'&(('1'&fr3&"00") - (fr4&g_1&r_1));
+    if (z(0) = '1') then
+      t3_5 <= t3_4(22 downto 0)&"0";
     else
-      tmp3_1 <= (("01"&fr3) + ('0'&fr4))&g_1&r_1;
+      t3_5 <= t3_4;
     end if;
-  end process;
-  
-  step3 : process(CLK,br2,s3,s4,e2,fr3,fr4,g_1,r_1,st_1,s5,s6,e3,fr5,g_2,r_2,st_2,tmp3_1,s,z1,z2,z3,z,ex3,t3_1,t3_2,t3_3,t3_4,t3_5)
-  begin
+    
     if (br2 = '1') then
       --add
       if rising_edge(CLK) then
@@ -345,7 +320,7 @@ begin
     end if;
   end process;
   
-  step4 : process(CLK,s5,s6,e3,fr5,g_2,r_2,st_2,f,tmp4,e)
+  step4 : process(CLK,s5,s6,e3,fr5,g_2,r_2,st_2,tmp4,e)
   begin
     if (((g_2 and r_2) or ((not s6) and g_2 and st_2) or (g_2 and (not st_2) and fr5(0)) or ((not s6) and g_2 and fr5(0))) = '1') then
       tmp4 <= '0'&fr5 + 1;
@@ -356,9 +331,6 @@ begin
       e <= e3 + 1;
     else
       e <= e3;
-    end if;
-    if rising_edge(CLK) then
-      f <= s5&e&tmp4(22 downto 0);
     end if;
   end process;
 end fadd;
