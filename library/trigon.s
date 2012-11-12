@@ -30,9 +30,12 @@ cos.suber<=theta<=2suber:		;f0 = theta, f4 = 2, f5 = 2pi, f6 = 2*f5
 	mvf	$f5 $f6
 	j	cos.suber<=theta<=2suber
 cos.division:		;f0 = theta, f4 = 2, f5 = 引く数, f30 = 2pi
+	cmpf	$r28 $f0 $f5
+	bne	$r28 $r0 suber/2
 	subf	$f0 $f0 $f5
 	cmpf	$r28 $f30 $f0
 	beq	$r28 $r0  cos.calc	;if(f30 > f0) calc
+suber/2:
 	divf	$f5 $f5 $f4
 	j cos.division
 cos.calc:	;; f0 = theta', f30 = 2pi, f29 = pi, f28 = pi/2, f27 = pi/4

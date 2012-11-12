@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <float.h>
 #include "./fpu.c"
 
 typedef union {
@@ -13,6 +14,46 @@ typedef union {
 extern void print_bit(float);
 
 const float pi = 3.1415927410125732421875;
+
+extern float reduction_pi4(float);
+extern float reduction_2pi(float);
+
+int is_good_spec_sin(float theta, float lib){
+  long double acr, t, epsilon, diff, mindiff = 100, reerr, minacr;
+  epsilon = (long double)pow(2, -126);
+  t = (long double)theta;
+  for(reerr = 1 - (long double)pow(2, -23);
+      reerr <= 1 + (long double)pow(2, -23); reerr += DBL_EPSILON*pow(2,19)){
+    /* printf("%.30Le\n",reerr); */
+    acr = sin(t*reerr);
+    diff = abs(acr - (long double)lib);
+    long double max = acr*(long double)pow(2,-18) > epsilon ? acr*(long double)pow(2,-18) : epsilon;
+    if(max > diff)
+      return 0;
+    if(mindiff > diff){
+      mindiff = diff;
+      minacr  = acr;
+    }
+  }
+  printf("-------------- wrong --------------\n");
+  printf("arg is %e/",theta);
+  print_bit(theta);
+
+  float the = reduction_pi4(reduction_2pi(theta));
+  printf("red'd arg is %.10e/", the);
+  print_bit(the);
+  
+  printf("diff is %Le\n", mindiff);
+ /* printf(",\tdiff is %d\n", diff); */
+  printf("lib sin is %e\t", lib);
+  print_bit(lib);
+  printf("x86 sin is %Le\t", minacr);
+  print_bit(acr);
+
+  return 1;
+}
+
+
 
 int flag(float theta){
   return theta > 0 ? 0 : 1;
@@ -94,40 +135,27 @@ int main(void){
   int diff, admit = 0;
   in.f = 3.0;
   printf("pi is %.30e\n", pi);
-  
-  for(in.b = 1000000000; in.b <= 0xff7fffff; in.b++){
-    /* uint32_t a = in.b; */
+  for(in.f = -26353650.9; in.f <= 0; in.b--){
     lib.f = mysin(in.f);
-    /* printf("in.b is %d, orign.b is %d\n", in.b, a); */
-    ac.f = sinf(in.f);
-    diff = lib.b - ac.b;
+    is_good_spec_sin(in.f, lib.f);
     
-    if(abs(diff) > admit){
-      printf("---------------- wrong ----------------- \n");
-      printf("arg is %e/",in.f);
-      print_bit(in.f);
-      float the = reduction_pi4(reduction_2pi(in.f));
-      printf("red'd arg is %.10e/", the);
-      print_bit(the);
-      if(the <= pi/4)printf("sin\n");
-      else printf("cos\n");
-
-      printf(",\tdiff is %d, %e\n", diff, lib.f - ac.f);
-      printf("lib sin is %e,\t", lib.f);
-      print_bit(lib.f);
-      printf("x86 sin is %e,\t", ac.f);
-      print_bit(ac.f);
-      ;
-      admit = abs(diff);
-
-      
-    }
     if(in.b % 0x00ffffff == 0){
       char string[100];
       sprintf(string, "%.10f", in.f);
       perror(string);
     }
   }
-  
+  for(in.f = 0; in.f <= 26353650.9; in.b++){
+    lib.f = mysin(in.f);
+    is_good_spec_sin(in.f, lib.f);
+    
+    if(in.b % 0x00ffffff == 0){
+      char string[100];
+      sprintf(string, "%.20f", in.f);
+      perror(string);
+    }
+  }
   return 0;
 }
+
+
