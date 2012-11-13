@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 #define MAX_CHAR  100
-#define LABEL_TABLE_NUM 4000
+#define LABEL_TABLE_NUM 10000
 
 extern instr rom[];
 
@@ -228,7 +228,9 @@ int decode(char *srcpath){
   //   cout << '[' << (int)i << ']';
   //   rom[i].show();
   // }
-
-  cerr << "<デコード終了>\n";
+  char string[50];
+  sprintf(string, "<デコード終了> 発行命令数:%d\n\n",romindex);
+  
+  cerr << string;
   return 0;
 }
