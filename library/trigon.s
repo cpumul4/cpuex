@@ -1,6 +1,6 @@
-	jl	cos.start
+	jl	cos
 	halt
-cos.start:
+cos:
 	;; PIを$f29にセット
 	luif	$f29 $f29 16457;0 10000000 10010010000111111011011 = +/- 3.14159274
 	llif	$f29 $f29 4059	;f29 = pi
@@ -31,11 +31,11 @@ cos.suber<=theta<=2suber:		;f0 = theta, f4 = 2, f5 = 2pi, f6 = 2*f5
 	j	cos.suber<=theta<=2suber
 cos.division:		;f0 = theta, f4 = 2, f5 = 引く数, f30 = 2pi
 	cmpf	$r28 $f0 $f5
-	bne	$r28 $r0 suber/2
+	bne	$r28 $r0 cos.suber/2
 	subf	$f0 $f0 $f5
 	cmpf	$r28 $f30 $f0
 	beq	$r28 $r0  cos.calc	;if(f30 > f0) calc
-suber/2:
+cos.suber/2:
 	divf	$f5 $f5 $f4
 	j cos.division
 cos.calc:	;; f0 = theta', f30 = 2pi, f29 = pi, f28 = pi/2, f27 = pi/4
@@ -127,10 +127,10 @@ cos.putsignbit:
 
 
 
-	;; $f0に引数が与えられるとする
-	jl	sin.start
-	halt
-sin.start:
+	;; ;; $f0に引数が与えられるとする
+	;; jl	sin.start
+	;; halt
+sin:
 	;; PIを$f29にセット
 	luif	$f29 $f29 16457;0 10000000 10010010000111111011011=3.14159274
 	llif	$f29 $f29 4059
@@ -159,9 +159,12 @@ sin.suber<=theta<=2suber:;f0 = theta, f4 = 2,0, f5 = 2pi, f6 = 2*f5
 	mvf	$f5 $f6
 	j	sin.suber<=theta<=2suber
 sin.division:		;f0 = theta, f4 = 2, f5 = 引く数, f30 = 2pi
+	cmpf	$r28 $f0 $f5
+	bne	$r28 $r0 sin.suber/2
 	subf	$f0 $f0 $f5
 	cmpf	$r28 $f30 $f0
 	beq	$r28 $r0  sin.calc	;if(f30 > f0) calc
+sin.suber/2:
 	divf	$f5 $f5 $f4
 	j sin.division
 sin.calc:	;; f0 = theta', f30 = 2pi, f29 = pi, f28 = pi/2, f27 = pi/4
