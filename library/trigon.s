@@ -1,6 +1,7 @@
-	jl	cos
-	halt
-cos:
+	;; j	min_caml_sin
+	;; jl	min_caml_cos
+	;; halt
+min_caml_cos:
 	;; PIを$f29にセット
 	luif	$f29 $f29 16457;0 10000000 10010010000111111011011 = +/- 3.14159274
 	llif	$f29 $f29 4059	;f29 = pi
@@ -19,9 +20,9 @@ cos:
 	xor	$r4 $r3 $r2	;abs(theta) = $f0
 	mvr	$r3 $r0		;sign = '+'
 	mvrf	$f0 $r4
-	;; abs(theta)の値を0~2PI以下にする。
-	cmpf	$r28 $f30 $f0
-	beq	$r28 $r0  cos.calc ;既に2pi以下ならcos.calcに飛ぶ
+	;; abs(theta)の値を0~2PI以下にする。	
+	cmpf	$r28 $f0 $f30 
+	bne	$r28 $r0  cos.calc ;既に2pi未満ならcos.calcに飛ぶ
 	mvf	$f5 $f30
 cos.suber<=theta<=2suber:		;f0 = theta, f4 = 2, f5 = 2pi, f6 = 2*f5
 	mulf	$f6 $f5	$f4
@@ -33,8 +34,8 @@ cos.division:		;f0 = theta, f4 = 2, f5 = 引く数, f30 = 2pi
 	cmpf	$r28 $f0 $f5
 	bne	$r28 $r0 cos.suber/2
 	subf	$f0 $f0 $f5
-	cmpf	$r28 $f30 $f0
-	beq	$r28 $r0  cos.calc	;if(f30 > f0) calc
+	cmpf	$r28 $f0 $f30 
+	bne	$r28 $r0  cos.calc ;既に2pi未満ならcos.calcに飛ぶ
 cos.suber/2:
 	divf	$f5 $f5 $f4
 	j cos.division
@@ -50,11 +51,11 @@ cos.theta<=pi:
 	bne	$r28 $r0 cos.theta<=pi/2
 	;; theta >= pi/2の場合
 	subf	$f0 $f29 $f0
-	beq	$r3 $r0 cos.plus_to_minus	; 符号の反転
-	mvr	$r3 $r0
-cos.plus_to_minus:
-	addi	$r3 $r3 1
-	sll	$r3 $r3 31
+	xor	$r3 $r3 $r1
+;; 	beq	$r3 $r0 cos.plus_to_minus	; 符号の反転
+;; 	mvr	$r3 $r0
+;; cos.plus_to_minus:
+;; 	mvr	$r3 $r1
 cos.theta<=pi/2:
 	cmpf	$r28 $f0 $f27
 	bne	$r28 $r0 cos.theta<=pi/4
@@ -130,7 +131,7 @@ cos.putsignbit:
 	;; ;; $f0に引数が与えられるとする
 	;; jl	sin.start
 	;; halt
-sin:
+min_caml_sin:
 	;; PIを$f29にセット
 	luif	$f29 $f29 16457;0 10000000 10010010000111111011011=3.14159274
 	llif	$f29 $f29 4059
@@ -149,8 +150,8 @@ sin:
 	xor	$r4 $r3 $r2
 	mvrf	$f0 $r4
 	;; abs(theta)の値を0~2PI以下にする。
-	cmpf	$r28 $f30 $f0
-	beq	$r28 $r0  sin.calc ;既に2pi以下ならsin.calcに飛ぶ
+	cmpf	$r28 $f0 $f30 
+	bne	$r28 $r0  sin.calc ;既に2pi未満ならcos.calcに飛ぶ
 	mvf	$f5 $f30
 sin.suber<=theta<=2suber:;f0 = theta, f4 = 2,0, f5 = 2pi, f6 = 2*f5
 	mulf	$f6 $f5	$f4
@@ -162,8 +163,8 @@ sin.division:		;f0 = theta, f4 = 2, f5 = 引く数, f30 = 2pi
 	cmpf	$r28 $f0 $f5
 	bne	$r28 $r0 sin.suber/2
 	subf	$f0 $f0 $f5
-	cmpf	$r28 $f30 $f0
-	beq	$r28 $r0  sin.calc	;if(f30 > f0) calc
+	cmpf	$r28 $f0 $f30 
+	bne	$r28 $r0  sin.calc ;既に2pi未満ならcos.calcに飛ぶ
 sin.suber/2:
 	divf	$f5 $f5 $f4
 	j sin.division
@@ -172,12 +173,7 @@ sin.calc:	;; f0 = theta', f30 = 2pi, f29 = pi, f28 = pi/2, f27 = pi/4
 	cmpf	$r28 $f0 $f29
 	bne	$r28 $r0 sin.theta<=pi ;if(f0 <= f29)goto theta<=pi
 	subf	$f0 $f0 $f29
-sin.reverse_sign:	
-	beq	$r3 $r0 sin.plus_to_minus
-	mvr	$r3 $r0
-sin.plus_to_minus:
-	addi	$r3 $r3 1
-	sll	$r3 $r3 31
+	xor	$r3 $r1 $r3
 sin.theta<=pi:	
 	cmpf	$r28 $f0 $f28
 	bne	$r28 $r0 sin.theta<=pi/2
