@@ -4,7 +4,6 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity float_comp is
   Port (
-    clk: in  STD_LOGIC;
     f1 : in  STD_LOGIC_VECTOR (31 downto 0);
     f2 : in  STD_LOGIC_VECTOR (31 downto 0);
     eq : out STD_LOGIC;
@@ -21,12 +20,10 @@ architecture compf of float_comp is
 begin
   eq <= o_eq;
   lte <= o_lte;
-  comp : process(CLK,f1,f2,f1_1,f2_1,o_eq,o_lte,zero1,zero2,s_eq,e_eq,fr_eq,s_lt,e_lt,fr_lt,t_eq,t_lte)
+  comp : process(f1,f2,f1_1,f2_1,o_eq,o_lte,zero1,zero2,s_eq,e_eq,fr_eq,s_lt,e_lt,fr_lt,t_eq,t_lte)
   begin
-    if rising_edge(CLK) then
-      f1_1 <= f1;
-      f2_1 <= f2;
-    end if;
+    f1_1 <= f1;
+    f2_1 <= f2;
 
     if (f1_1(30 downto 23) = x"00") then
       zero1 <= '1';
@@ -67,9 +64,7 @@ begin
 
     t_lte <= s_lt or (s_eq and e_lt) or (s_eq and e_eq and fr_lt) or t_eq;
 
-    if rising_edge(CLK) then
-      o_eq <= t_eq;
-      o_lte <= t_lte;
-    end if;
+    o_eq <= t_eq;
+    o_lte <= t_lte;
   end process;
 end compf;

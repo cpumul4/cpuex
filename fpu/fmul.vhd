@@ -90,7 +90,7 @@ architecture fmul of float_mul is
   signal fr : std_logic_vector(22 downto 0); --step5
 begin
   ans <= s4&exp&fr;
-  step1 : process(CLK,f1,f2,s1,e1,fr1,fr2,m_3,f1_1,f1_2,s,e,tmp1)
+  step1 : process(CLK,f1,f2,f1_1,f1_2,fr_2,s,e,tmp1)
   begin
     f1_1 <= f1;
     f1_2 <= f2;
@@ -108,7 +108,7 @@ begin
       s1 <= s;
       e1 <= e;
       fr1 <= f1_1(22 downto 0);
-      fr2 <= fr_2(22 downto 0);
+      fr2 <= fr_2;
       m_3 <= tmp1;
     end if;
   end process;
