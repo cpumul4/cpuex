@@ -110,7 +110,6 @@ architecture fdiv of float_div is
   type sqr_table is array(63 downto 0) of std_logic_vector(1 downto 0);
   constant div_tb : div_table1 := ("00", "00", "01", "01", "01", "10", "10", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "10", "11", "01", "10", "01", "01", "00", "00");
   constant sqr_tb : sqr_table := ("00", "00", "00", "01", "00", "01", "01", "01", "01", "01", "01", "01", "01", "01", "10", "10", "10", "10", "10", "10", "10", "10", "10", "11", "10", "10", "11", "11", "10", "10", "11", "11", "10", "10", "11", "11", "10", "10", "11", "11", "01", "01", "10", "10", "01", "01", "10", "10", "01", "01", "01", "01", "01", "01", "01", "01", "00", "00", "00", "00", "00", "00", "00", "00");
-  signal f : std_logic_vector(31 downto 0);
   signal op_div,op_sqr : std_logic;
   signal cnt8 : std_logic_vector(2 downto 0); --count 8clock
   signal s1,s2 : std_logic; --sign bit
@@ -151,18 +150,17 @@ architecture fdiv of float_div is
   signal exp : std_logic_vector(7 downto 0); --step8
   signal fr : std_logic_vector(22 downto 0); --step8
 begin
-  ans <= f;
+  f1_1 <= f1;
+  f1_2 <= f2;
   count : process(CLK,div,sqr,cnt8,op_div,op_sqr)
   begin
-    if rising_edge(CLK) then
-      op_div <= div;
-      op_sqr <= sqr;
-    end if;
+    op_div <= div;
+    op_sqr <= sqr;
     if ((op_div or op_sqr) = '1') then
       if rising_edge(CLK) then
         --in calculating
         cnt8 <= cnt8 + 1;
-        if (cnt8 = "111") then
+        if (cnt8 = "110") then
           goal <= '1';
         else
           goal <= '0';
@@ -204,11 +202,9 @@ begin
       e <= e_div;
     end if;
     if rising_edge(clk) then
-      f1_1 <= f1;
-      f1_2 <= f2;
       s1 <= s;
       e1 <= e;
-      z1 <= sqr and (not ((f1_1(30) or f1_1(29) or f1_1(28) or f1_1(27)) or (f1_1(26) or f1_1(25) or f1_1(24) or f1_1(23))));
+      z1 <= op_sqr and (not ((f1_1(30) or f1_1(29) or f1_1(28) or f1_1(27)) or (f1_1(26) or f1_1(25) or f1_1(24) or f1_1(23))));
       fr_t <= fr2;
     end if;
   end process;
@@ -217,12 +213,14 @@ begin
   addr1_1 : cpa port map (sin => pos1(52 downto 29), cin => neg1(51 downto 28), key => key1);
   addr2_1 : csa port map (sin => sin, cin => cin, opin => opin, sign =>sign, sout => t_2, cout => t_3);  
   
-  division1 : process(cnt8,fr1,fr2,q1,t_1_3,t_2,t_3,pos1,neg1,div_q1,sqr_q1,key1,key3,key4,fr_t,op_sqr)
+  division1 : process(cnt8,fr1,fr2,q1,t1,t_1,t_1_1,t_1_2,t_1_3,t_2,t_3,pos1,neg1,div_q1,sqr_q1,key1,key3,key4,fr_t,op_sqr,fr5)
   begin   
     --division1
     div_q1 <= div_tb(conv_integer(key1(4 downto 1)&fr_t(22)));
     sqr_q1(2) <= key1(4);
-    if (key1(4) xor key1(3)) = '1' then
+    if key1 = "01000" and key3(1 downto 0) = "11" then
+      sqr_q1(1 downto 0) <= "10";
+    elsif (key1(4) xor key1(3)) = '1' then
       sqr_q1(1 downto 0) <= "11";
     else
       sqr_q1(1 downto 0) <= sqr_tb(conv_integer(key1(4)&key1(2 downto 0)&key3(1 downto 0)));
@@ -308,7 +306,7 @@ begin
   addr1_2 : cpa port map (sin => pos2(52 downto 29), cin => neg2(51 downto 28), key => key2);
   addr2_2 : csa port map (sin => pos2(50 downto 26), cin => neg2(49 downto 26), opin => t_4, sign => key2(4), sout => t_5, cout => t_6);
   
-  division2 : process(CLK,s1,e1,fr1,fr2,z1,fr_t,fr_t2,pos2,neg2,t_4_3,t_5,t_6,q2,div_q2,sqr_q2,key2,key3,key4,e_t,cnt8,op_sqr)
+  division2 : process(CLK,s1,e1,fr1,fr2,z1,fr_t,fr_t2,pos2,neg2,t4,t_4,t_4_1,t_4_2,t_4_3,t_5,t_6,q2,div_q2,sqr_q2,key2,key3,key4,e_t,cnt8,op_sqr)
     variable index : std_logic_vector(3 downto 0);
   begin
     if (cnt8 = "000") then
@@ -320,7 +318,9 @@ begin
     --devision2
     div_q2 <= div_tb(conv_integer(key2(4 downto 1)&fr_t2(22)));
     sqr_q2(2) <= key2(4);
-    if (key2(4) xor key2(3)) = '1' then
+    if key2 = "01000" and key4(1 downto 0) = "11" then
+      sqr_q2(1 downto 0) <= "10";
+    elsif (key2(4) xor key2(3)) = '1' then
       sqr_q2(1 downto 0) <= "11";
     else
       sqr_q2(1 downto 0) <= sqr_tb(conv_integer(key2(4)&key2(2 downto 0)&key4(1 downto 0)));
@@ -415,14 +415,9 @@ begin
 
   normalize : process(r1,tmp8_1)
   begin
-    if ((tmp8_1(0) and (r1 or tmp8_1(1))) = '1') then
-      tmp8_2 <= tmp8_1(25 downto 1) + 1;
-    else
-      tmp8_2 <= tmp8_1(25 downto 1);
-    end if;
   end process;
   
-  step8 : process(CLK,pos1,neg1,s2,e2,e3,z2,f,r1,tmp8_1,tmp8_2,exp,fr,key1)
+  step8 : process(CLK,pos1,neg1,t_2,t_3,s2,e2,e3,z2,r1,tmp8_1,tmp8_2,exp,fr,key1,r_c,r_s,op_sqr)
   begin
     if (key1(4) = '1') then
       tmp8_1 <= pos1(25 downto 0) + (not neg1(25 downto 0));
@@ -438,9 +433,14 @@ begin
     else
       r1 <= '1';
     end if;
+    if ((tmp8_1(0) and (r1 or tmp8_1(1))) = '1') then
+      tmp8_2 <= tmp8_1(25 downto 1) + 1;
+    else
+      tmp8_2 <= tmp8_1(25 downto 1);
+    end if;
     if (tmp8_1(25) = '1') then
       exp <= e3;
-      if ((tmp8_1(1) and (tmp8_1(0) or r1 or tmp8_1(2))) = '1') then
+      if ((tmp8_1(1) and (tmp8_1(0) or r1 or tmp8_1(2))) = '1' and (not (tmp8_1(24 downto 2) = "111"&x"FFFFF"))) then
         fr <= tmp8_1(24 downto 2) + 1;
       else
         fr <= tmp8_1(24 downto 2);
@@ -454,12 +454,10 @@ begin
         fr <= tmp8_2(22 downto 0);
       end if;
     end if;
-    if rising_edge(CLK) then
-      if (z2 = '1') then
-        f <= s2&x"00"&fr;
-      else
-        f <= s2&exp&fr;
-      end if;
+    if (z2 = '1') then
+      ans <= s2&x"00"&fr;
+    else
+      ans <= s2&exp&fr;
     end if;
   end process;
 end fdiv;

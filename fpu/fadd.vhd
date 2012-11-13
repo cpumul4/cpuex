@@ -39,7 +39,7 @@ architecture fadd of float_add is
   signal e : std_logic_vector(7 downto 0); --step4
 begin
   ans <= s5&e&tmp4(22 downto 0);
-  step1 : process(CLK,f1,f2,shift,br1,s1,s2,e1,fr1,fr2,f1_1,f2_1,f1_2,f2_2,tmp1) --exchange operands
+  step1 : process(CLK,f1,f2,f1_1,f2_1,f1_2,f2_2,tmp1) --exchange operands
   begin
     f1_1 <= f1;
     f2_1 <= f2;
@@ -77,7 +77,7 @@ begin
     end if;
   end process;
 
-  step2 : process(CLK,shift,br1,s1,s2,e1,fr1,fr2,br2,s3,s4,e2,fr3,fr4,g_1,r_1,st_1,tmp2_1,tmp2_2,tmp2_3,ex,t1,t2,t3,t4,t5,g1,g2,g3,g4,g5,g2_1,r1,r2,r3,r4,st1,st2,st3,st4) --shift or add
+  step2 : process(CLK,shift,br1,s1,s2,e1,fr1,fr2,tmp2_1,tmp2_2,tmp2_3,ex,t1,t2,t3,t4,t5,g1,g2,g3,g4,g5,g2_1,r1,r2,r3,r4,st1,st2,st3,st4) --shift or add
   begin
     --shift
     if (shift(0) = '1') then
@@ -237,7 +237,7 @@ begin
   z(1) <= ((not z(4)) and (((not z3(2)) and (((not z2(5)) and z1(11)) or (z2(5) and z1(9)))) or (z3(2) and (((not z2(3)) and z1(7)) or (z2(3) and z1(5)))))) or (z(4) and ((not z3(0)) and (((not z2(1)) and z1(3)) or (z2(1) and z1(1)))));
   z(0) <= ((not z(4)) and (((not z3(2)) and (((not z2(5)) and (((not z1(11)) and (not fr4(23))) or (z1(11) and (not fr4(21))))) or (z2(5) and (((not z1(9)) and (not fr4(19))) or (z1(9) and (not fr4(17))))))) or (z3(2) and (((not z2(3)) and (((not z1(7)) and (not fr4(15))) or (z1(7) and (not fr4(13))))) or (z2(3) and (((not z1(5)) and (not fr4(11))) or (z1(5) and (not fr4(9))))))))) or (z(4) and ((not z3(0)) and (((not z2(1)) and (((not z1(3)) and (not fr4(7))) or (z1(3) and (not fr4(5))))) or (z2(1) and (((not z1(1)) and (not fr4(3))) or (z1(1) and (not fr4(1))))))));
   
-  step3 : process(CLK,br2,s3,s4,e2,fr3,fr4,g_1,r_1,st_1,s5,s6,e3,fr5,g_2,r_2,st_2,tmp3_1,s,z1,z2,z3,z,ex3,t3_1,t3_2,t3_3,t3_4,t3_5) --add or normalize
+  step3 : process(CLK,br2,s3,s4,e2,fr3,fr4,g_1,r_1,st_1,tmp3_1,s,z,ex3,t3_1,t3_2,t3_3,t3_4,t3_5) --add or normalize
   begin
     --add
     s <= s3 xor s4;
@@ -320,7 +320,7 @@ begin
     end if;
   end process;
   
-  step4 : process(CLK,s5,s6,e3,fr5,g_2,r_2,st_2,tmp4,e)
+  step4 : process(CLK,s6,e3,fr5,g_2,r_2,st_2,tmp4)
   begin
     if (((g_2 and r_2) or ((not s6) and g_2 and st_2) or (g_2 and (not st_2) and fr5(0)) or ((not s6) and g_2 and fr5(0))) = '1') then
       tmp4 <= '0'&fr5 + 1;
