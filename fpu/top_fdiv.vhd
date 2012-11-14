@@ -68,9 +68,9 @@ entity top is
 end top;
 
 architecture example of top is
-  signal clk,iclk,clk2x: std_logic;
+  signal clk,iclk: std_logic;
   component u232c
-    generic (wtime: std_logic_vector(15 downto 0) := x"0048");
+    generic (wtime: std_logic_vector(15 downto 0) := x"0096");
     Port ( clk  : in  STD_LOGIC;
            data : in  STD_LOGIC_VECTOR (7 downto 0);
            go   : in  STD_LOGIC;
@@ -118,7 +118,7 @@ architecture example of top is
   signal not_stop,not_send_stop : std_logic := '0';
   signal goal : std_logic;
   signal count : std_logic_vector(2 downto 0):="000";
-  signal ct,div,sqr : std_logic := '0';
+  signal div,sqr : std_logic := '0';
   
   COMPONENT float_div
   PORT (
@@ -143,7 +143,7 @@ begin
     ans => fdiv_result);
   
   --送信モジュール。
-  rs232c: u232c generic map (wtime=>x"0048")
+  rs232c: u232c generic map (wtime=>x"0096")
     port map (
       clk=>clk,
       data=>out_data,
@@ -184,15 +184,7 @@ begin
     o=>iclk);
   bg: BUFG port map (
     i=>iclk,
-    o=>clk2x);
-
-  clk_div:process(clk2x)
-  begin
-    if rising_edge(clk2x) then
-      ct <= not ct;
-    end if;
-  end process;
-  clk <= ct;
+    o=>clk);
   
   io_process:process(clk)
     variable tmp_buf: std_logic_vector(6 downto 0);
@@ -203,12 +195,12 @@ begin
       if state="1001" then
         if s_RS_RX='0' then
           state<="1000";
-          timer<=x"0018";
+          timer<=x"0032";
         end if;
         write_go<='0';
       else
         if timer=0 then
-          timer<=x"0048";
+          timer<=x"0096";
           if state="0000" then
             state<="1010";
             data_write_buf((31-8*conv_integer(read_pos(1 downto 0))) downto (24-8*conv_integer(read_pos(1 downto 0))))<=s_RS_RX&tmp_buf;                
@@ -294,7 +286,7 @@ begin
       --受信データは32ビット単位でまとめられ、fdivに投げられる。
       if count = "000" then
         if flush_flag='1' then
-          div <= '1';
+          sqr <= '1';
           tmp_pos:=res_data_write_pos_nat + 1;
           data_read_pos <= data_read_pos + 1;
           if data_read_pos = "01111111111" then
@@ -321,7 +313,7 @@ begin
       res_write_go<=(goal and pipe_res_data_write(1)(10));
       res_data_write_buf<=fdiv_result;
       if pipe_res_data_write(1) = "11111111111" and goal = '1' then
-        div <= '0';
+        sqr <= '0';
       end if;
 
       if data_read_pos = "01111111111" then
@@ -330,7 +322,7 @@ begin
         last_data <= last_data;
       end if;
 
-      sqr <= send_flag and flush_flag and (not div);
+      div <= send_flag and flush_flag and (not sqr);
     end if;
   end process;
   
