@@ -169,8 +169,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
---library UNISIM;
---use UNISIM.VComponents.all;
+library UNISIM;
+use UNISIM.VComponents.all;
 
 entity float_div is
   Port (
@@ -269,18 +269,18 @@ architecture fdiv of float_div is
   signal exp : std_logic_vector(7 downto 0); --step8
   signal fr : std_logic_vector(22 downto 0); --step8
 begin
-  --dll1 : CLKDLL port map (
-  --  CLKIN => clk,
-  --  CLKFB => clk0o,
-  --  RST   => '0',
-  --  CLK0  => clk0,
-  --  CLK2X => clk2);
-  --bg1: BUFG port map (
-  --  i=>clk0,
-  --  o=>clk0o);
-  --bg2: BUFG port map (
-  --  i=>clk2,
-  --  o=>clk2o);
+  dll1 : CLKDLL port map (
+    CLKIN => clk,
+    CLKFB => clk0o,
+    RST   => '0',
+    CLK0  => clk0,
+    CLK2X => clk2);
+  bg1: BUFG port map (
+    i=>clk0,
+    o=>clk0o);
+  bg2: BUFG port map (
+    i=>clk2,
+    o=>clk2o);
   
   f1_1 <= f1;
   f1_2 <= f2;
