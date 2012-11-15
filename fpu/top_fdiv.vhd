@@ -286,7 +286,7 @@ begin
       --受信データは32ビット単位でまとめられ、fdivに投げられる。
       if count = "000" then
         if flush_flag='1' then
-          sqr <= '1';
+          div <= '1';
           tmp_pos:=res_data_write_pos_nat + 1;
           data_read_pos <= data_read_pos + 1;
           if data_read_pos = "01111111111" then
@@ -313,7 +313,7 @@ begin
       res_write_go<=(goal and pipe_res_data_write(1)(10));
       res_data_write_buf<=fdiv_result;
       if pipe_res_data_write(1) = "11111111111" and goal = '1' then
-        sqr <= '0';
+        div <= '0';
       end if;
 
       if data_read_pos = "01111111111" then
@@ -322,7 +322,7 @@ begin
         last_data <= last_data;
       end if;
 
-      div <= send_flag and flush_flag and (not sqr);
+      sqr <= send_flag and flush_flag and (not div);
     end if;
   end process;
   

@@ -217,11 +217,13 @@ architecture fdiv of float_div is
 
   type div_table1 is array(31 downto 0) of std_logic_vector(1 downto 0);
   type div_table2 is array(15 downto 0) of std_logic_vector(1 downto 0);
-  type sqr_table is array(63 downto 0) of std_logic_vector(1 downto 0);
+  type sqr_table is array(63 downto 0) of std_logic_vector(2 downto 0);
+--  type sqr_table is array(63 downto 0) of std_logic_vector(1 downto 0);
   type sqr_multi is array(1 downto 0) of std_logic_vector(23 downto 0);
   type sqr_multi2 is array(1 downto 0) of std_logic_vector(24 downto 0);
   constant div_tb : div_table1 := ("00", "00", "01", "01", "01", "10", "10", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "11", "10", "11", "01", "10", "01", "01", "00", "00");
-  constant sqr_tb : sqr_table := ("00", "00", "00", "01", "00", "01", "01", "01", "01", "01", "01", "01", "01", "01", "10", "10", "10", "10", "10", "10", "10", "10", "10", "11", "10", "10", "11", "11", "10", "10", "11", "11", "10", "10", "11", "11", "10", "10", "10", "11", "01", "10", "10", "10", "01", "01", "10", "10", "01", "01", "01", "10", "01", "01", "01", "01", "00", "00", "00", "01", "00", "00", "00", "00");
+  --constant sqr_tb : sqr_table := ("00", "00", "00", "01", "00", "01", "01", "01", "01", "01", "01", "01", "01", "01", "10", "10", "10", "10", "10", "10", "10", "10", "10", "11", "10", "10", "11", "11", "10", "10", "11", "11", "10", "10", "11", "11", "10", "10", "10", "11", "01", "10", "10", "10", "01", "01", "10", "10", "01", "01", "01", "10", "01", "01", "01", "01", "00", "00", "00", "01", "00", "00", "00", "00");
+  constant sqr_tb : sqr_table := ("100", "100", "100", "101", "100", "101", "101", "101", "101", "101", "101", "101", "101", "101", "110", "110", "110", "110", "110", "110", "110", "110", "110", "111", "110", "110", "111", "111", "110", "110", "111", "111", "010", "010", "011", "011", "010", "010", "010", "011", "001", "010", "010", "010", "001", "001", "010", "010", "001", "001", "001", "010", "001", "001", "001", "001", "000", "000", "000", "001", "000", "000", "000", "000");
   signal op_div,op_sqr : std_logic;
   signal cnt8 : std_logic_vector(2 downto 0); --count 8clock
   signal cnt16 : std_logic_vector(3 downto 0); --count 16clock
@@ -234,7 +236,7 @@ architecture fdiv of float_div is
   signal z1,z2 : std_logic; --sqrt is zero
   signal pos : std_logic_vector(52 downto 0); 
   signal neg : std_logic_vector(51 downto 0);
-  signal mask : std_logic_vector(23 downto 0);
+  signal mask : std_logic_vector(11 downto 0);
   signal t1 : sqr_multi;
   signal t1x3 : sqr_multi2;
   signal r : std_logic;
@@ -245,10 +247,11 @@ architecture fdiv of float_div is
   signal key2 : std_logic_vector(2 downto 0); --step1_8
   signal q : std_logic_vector(1 downto 0); --step1_8
   signal div_q : std_logic_vector(1 downto 0); --step1_8
-  signal sqr_q : std_logic_vector(1 downto 0); --step1_8
+  signal sqr_q : std_logic_vector(2 downto 0); --step1_8
   signal t1_t,t1_n2 : std_logic_vector(23 downto 0); --step1_8
   signal t1_p,t1_n : std_logic_vector(23 downto 0); --step1_8
   signal t1x3_p,t1x3_n : std_logic_vector(24 downto 0); --step1_8
+  signal t1x3_p1,t1x3_n1 : std_logic_vector(24 downto 0); --step1_8
   signal t1_n1 : std_logic_vector(21 downto 0); --step1_8
   signal t_d : std_logic_vector(24 downto 0); --step1_8
   signal t_s1,t_s,t_s_3 : std_logic_vector(24 downto 0); --step1_8
@@ -347,16 +350,18 @@ begin
   addr2 : csa port map (sin => pos(50 downto 26), cin => neg(49 downto 26), opin => t_1, sign => key1(4), sout => t_2, cout => t_3);  
   sh1_1 : shift1 port map (arg => t1(0), count => cnt16, ans => t1_p);  
   sh1_2 : shift1 port map (arg => t1(1), count => cnt16, ans => t1_n);  
-  sh2_1 : shift2 port map (arg => t1x3(0), count => cnt16, ans => t1x3_p);  
-  sh2_2 : shift2 port map (arg => t1x3(1), count => cnt16, ans => t1x3_n);
+  sh2_1 : shift2 port map (arg => t1x3_p1, count => cnt16, ans => t1x3_p);  
+  sh2_2 : shift2 port map (arg => t1x3_n1, count => cnt16, ans => t1x3_n);
+--  sh2_1 : shift2 port map (arg => t1x3(0), count => cnt16, ans => t1x3_p);  
+--  sh2_2 : shift2 port map (arg => t1x3(1), count => cnt16, ans => t1x3_n);
   
-  division : process(clk0o,clk2o,cnt16,fr1,fr2,q,mask,t1,t1x3,t1_t,t1_n1,t1_n2,t1_p,t1_n,t1x3_p,t1x3_n,t_s,t_s1,t_d,t_1,t_2,t_3,pos,neg,div_q,sqr_q,key1,key2,fr_t,op_sqr)
+  division : process(clk0o,clk2o,cnt16,fr1,fr2,q,mask,t1,t1x3,t1_t,t1_n1,t1_n2,t1_p,t1_n,t1x3_p,t1x3_n,t1x3_p1,t1x3_n1,t_s,t_s1,t_s_1,t_s_2,t_s_3,t_d,t_1,t_2,t_3,pos,neg,div_q,sqr_q,key1,key2,fr_t,op_sqr)
   begin
     if rising_edge(clk2o) then
       if (cnt16 = "0000") then
         pos <= "00"&fr1&"00"&x"000000";
         neg <= (others => '0');
-        mask <= x"200000";
+        mask <= x"800";
         t1(0) <= x"000000";
         t1(1) <= x"000000";
         t1x3(0) <= '0'&x"000000";
@@ -364,7 +369,7 @@ begin
       else
         pos(52 downto 2) <= t_2&pos(25 downto 0);
         neg(51 downto 2) <= t_3&neg(25 downto 0);
-        mask <= "00"&mask(23 downto 2);
+        mask <= '0'&mask(11 downto 1);
         t1(0) <= t1_t;
         t1(1) <= t1_n2;
         t1x3(0) <= (t1_t&'1') + ('0'&t1_t);
@@ -398,39 +403,60 @@ begin
     div_q <= div_tb(conv_integer(key1(4 downto 1)&fr_t(22)));
     if (cnt16 = "0001") then
       if (fr1(24) = '0') then
-        sqr_q <= "10";
+        sqr_q <= "010";
         t_s1 <= '0'&x"800000";
       else
-        sqr_q <= "11";
+        sqr_q <= "011";
         t_s1 <= '1'&x"200000";
       end if;
     else
       t_s1 <= t_s;
       if key1 = "01000" and key2(1 downto 0) = "11" then
-        sqr_q(1 downto 0) <= "10";
+        sqr_q <= "010";
       elsif (key1(4) xor key1(3)) = '1' then
-        sqr_q(1 downto 0) <= "11";
+        sqr_q <= (not key1(3))&"11";
       else
         sqr_q <= sqr_tb(conv_integer(key1(4)&key1(2 downto 0)&key2(1 downto 0)));
       end if;
     end if;
     
     if (op_sqr = '1') then
-      q <= sqr_q;
+      q <= sqr_q(1 downto 0);
       t_1 <= t_s1;
     else
       q <= div_q;
       t_1 <= t_d;
     end if;
 
-    if key1(4) = '1' then
-      t_s_1 <= t1_n or mask or (mask(22 downto 0)&'0') or (mask(21 downto 0)&"00");
-      t_s_2 <= t1_n or  (mask(22 downto 0)&'0') or (mask(21 downto 0)&"00");
-      t_s_3 <= t1x3_n(24)&(t1x3_n(23 downto 0) or mask or (mask(22 downto 0)&'0') or (mask(21 downto 0)&"00"));
+    t1x3_p1 <= (t1(0)&'1')+('0'&t1(0));
+    t1x3_n1 <= (t1(1)&'1')+('0'&t1(1));
+    
+    if sqr_q(2) = '1' then
+      t_s_1(23 downto 18) <= (t1_n(23) or mask(11))&(t1_n(22) or mask(11))&(t1_n(21) or mask(11) or mask(10))&(t1_n(20) or mask(10))&(t1_n(19) or mask(10) or mask(9))&(t1_n(18) or mask(9));
+      t_s_1(17 downto 12) <= (t1_n(17) or mask(9) or mask(8))&(t1_n(16) or mask(8))&(t1_n(15) or mask(8) or mask(7))&(t1_n(14) or mask(7))&(t1_n(13) or mask(7) or mask(6))&(t1_n(12) or mask(6));
+      t_s_1(11 downto 6) <= (t1_n(11) or mask(6) or mask(5))&(t1_n(10) or mask(5))&(t1_n(9) or mask(5) or mask(4))&(t1_n(8) or mask(4))&(t1_n(7) or mask(4) or mask(3))&(t1_n(6) or mask(3));
+      t_s_1(5 downto 0) <= (t1_n(5) or mask(3) or mask(2))&(t1_n(4) or mask(2))&(t1_n(3) or mask(2) or mask(1))&(t1_n(2) or mask(1))&(t1_n(1) or mask(1) or mask(0))&(t1_n(0) or mask(0));
+      t_s_2(23 downto 18) <= (t1_n(23) or mask(11))&(t1_n(22) or mask(11))&(t1_n(21) or mask(10))&(t1_n(20) or mask(10))&(t1_n(19) or mask(9))&(t1_n(18) or mask(9));
+      t_s_2(17 downto 12) <= (t1_n(17) or mask(8))&(t1_n(16) or mask(8))&(t1_n(15) or mask(7))&(t1_n(14) or mask(7))&(t1_n(13) or mask(6))&(t1_n(12) or mask(6));
+      t_s_2(11 downto 6) <= (t1_n(11) or mask(5))&(t1_n(10) or mask(5))&(t1_n(9) or mask(4))&(t1_n(8) or mask(4))&(t1_n(7) or mask(3))&(t1_n(6) or mask(3));
+      t_s_2(5 downto 0) <= (t1_n(5) or mask(2))&(t1_n(4) or mask(2))&(t1_n(3) or mask(1))&(t1_n(2) or mask(1))&(t1_n(1) or mask(0))&(t1_n(0) or mask(0));
+      t_s_3(24 downto 18) <= t1x3_n(24)&(t1x3_n(23) or mask(11))&(t1x3_n(22) or mask(11))&(t1x3_n(21) or mask(11) or mask(10))&(t1x3_n(20) or mask(10))&(t1x3_n(19) or mask(10) or mask(9))&(t1x3_n(18) or mask(9));
+      t_s_3(17 downto 12) <= (t1x3_n(17) or mask(9) or mask(8))&(t1x3_n(16) or mask(8))&(t1x3_n(15) or mask(8) or mask(7))&(t1x3_n(14) or mask(7))&(t1x3_n(13) or mask(7) or mask(6))&(t1x3_n(12) or mask(6));
+      t_s_3(11 downto 6) <= (t1x3_n(11) or mask(6) or mask(5))&(t1x3_n(10) or mask(5))&(t1x3_n(9) or mask(5) or mask(4))&(t1x3_n(8) or mask(4))&(t1x3_n(7) or mask(4) or mask(3))&(t1x3_n(6) or mask(3));
+      t_s_3(5 downto 0) <= (t1x3_n(5) or mask(3) or mask(2))&(t1x3_n(4) or mask(2))&(t1x3_n(3) or mask(2) or mask(1))&(t1x3_n(2) or mask(1))&(t1x3_n(1) or mask(1) or mask(0))&(t1x3_n(0) or mask(0));
     else
-      t_s_1 <= t1_p or mask;
-      t_s_2 <= t1_p or (mask(22 downto 0)&'0');
-      t_s_3 <= t1x3_p(24)&(t1x3_p(23 downto 0) or mask);
+      t_s_1(23 downto 18) <= t1_p(23 downto 22)&(t1_p(21) or mask(11))&t1_p(20)&(t1_p(19) or mask(10))&t1_p(18);
+      t_s_1(17 downto 12) <= (t1_p(17) or mask(9))&t1_p(16)&(t1_p(15) or mask(8))&t1_p(14)&(t1_p(13) or mask(7))&t1_p(12);
+      t_s_1(11 downto 6) <= (t1_p(11) or mask(6))&t1_p(10)&(t1_p(9) or mask(5))&t1_p(8)&(t1_p(7) or mask(4))&t1_p(6);
+      t_s_1(5 downto 0) <= (t1_p(5) or mask(3))&t1_p(4)&(t1_p(3) or mask(2))&t1_p(2)&(t1_p(1) or mask(1))&t1_p(0);
+      t_s_2(23 downto 18) <= t1_p(23)&(t1_p(22) or mask(11))&t1_p(21)&(t1_p(20) or mask(10))&t1_p(19)&(t1_p(18) or mask(9));
+      t_s_2(17 downto 12) <= t1_p(17)&(t1_p(16) or mask(8))&t1_p(15)&(t1_p(14) or mask(7))&t1_p(13)&(t1_p(12) or mask(6));
+      t_s_2(11 downto 6) <= t1_p(11)&(t1_p(10) or mask(5))&t1_p(9)&(t1_p(8) or mask(4))&t1_p(7)&(t1_p(6) or mask(3));
+      t_s_2(5 downto 0) <= t1_p(5)&(t1_p(4) or mask(2))&t1_p(3)&(t1_p(2) or mask(1))&t1_p(1)&(t1_p(0) or mask(0));
+      t_s_3(24 downto 18) <= t1x3_p(24 downto 22)&(t1x3_p(21) or mask(11))&t1x3_p(20)&(t1x3_p(19) or mask(10))&t1x3_p(18);
+      t_s_3(17 downto 12) <= (t1x3_p(17) or mask(9))&t1x3_p(16)&(t1x3_p(15) or mask(8))&t1x3_p(14)&(t1x3_p(13) or mask(7))&t1x3_p(12);
+      t_s_3(11 downto 6) <= (t1x3_p(11) or mask(6))&t1x3_p(10)&(t1x3_p(9) or mask(5))&t1x3_p(8)&(t1x3_p(7) or mask(4))&t1x3_p(6);
+      t_s_3(5 downto 0) <= (t1x3_p(5) or mask(3))&t1x3_p(4)&(t1x3_p(3) or mask(2))&t1x3_p(2)&(t1x3_p(1) or mask(1))&t1x3_p(0);
     end if;
     
     case q is
@@ -450,11 +476,11 @@ begin
       t1_t <= t1(0)(21 downto 0)&"00";
       t1_n2 <= t1_n1&"11";
     else
-      if (key1(4) = '1') then
+      if (sqr_q(2) = '1') then
         t1_t <= t1_n1&(sqr_q(1) xor sqr_q(0))&sqr_q(0);
-        t1_n2 <= t1_n1&(not sqr_q);
+        t1_n2 <= t1_n1&(not sqr_q(1 downto 0));
       else
-        t1_t <= t1(0)(21 downto 0)&sqr_q;
+        t1_t <= t1(0)(21 downto 0)&sqr_q(1 downto 0);
         t1_n2 <= t1(0)(21 downto 0)&(sqr_q(1) and sqr_q(0))&(sqr_q(1) and (not sqr_q(0)));
       end if;
     end if;
@@ -476,7 +502,7 @@ begin
     end if;
   end process;
     
-  step8_1 : process(clk2o,pos,neg,r1,tmp8_1,key1)
+  step8_1 : process(clk2o,pos,neg,r1,tmp8_1,key1,fr3,r)
   begin
     if (key1(4) = '1') then
       tmp8_1 <= pos(25 downto 0) + (not neg(25 downto 0));
@@ -485,8 +511,13 @@ begin
     end if;
     
     if rising_edge(clk2o) then
-      fr3 <= tmp8_1;
-      r <= (not r1) or pos(28);
+      if cnt16 = "1110" then
+        fr3 <= tmp8_1;
+        r <= (not r1) or pos(28);
+      else
+        fr3 <= fr3;
+        r <= r;
+      end if;
     end if;
   end process;
 
