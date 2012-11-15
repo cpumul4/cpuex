@@ -97,9 +97,11 @@ architecture c_p_a of cpa is
   signal p : std_logic_vector(2 downto 0);
   signal c : std_logic_vector(4 downto 0);
   signal p1,g1 : std_logic;
-  signal tmp : std_logic_vector(18 downto 0);
+  signal tmp1 : std_logic_vector(4 downto 0);
+  signal tmp2 : std_logic_vector(18 downto 0);
 begin
-  add : process(sin,cin,g,p,c,p1,g1,tmp)    
+  key <= tmp1;
+  add : process(sin,cin,g,p,c,p1,g1,tmp1,tmp2)    
   begin
     g(0) <= (cin(3) and sin(3)) or ((cin(2) and sin(2)) and (cin(3) or sin(3))) or ((cin(1) and sin(1)) and (cin(2) or sin(2)) and (cin(3) or sin(3))) or ((cin(0) and sin(0)) and (cin(1) or sin(1)) and (cin(2) or sin(2)) and (cin(3) or sin(3)));
     for L in 1 to 3 loop
@@ -109,18 +111,18 @@ begin
     c(0) <= g(3) or (g(2) and p(2)) or (g(1) and p(1) and p(2)) or (g(0) and p(0) and p(1) and p(2));
     p1 <= (cin(21) or sin(21)) and (cin(20) or sin(20)) and (cin(19) or sin(19));
     g1 <= (cin(21) and sin(21)) or ((cin(20) and sin(20)) and (cin(21) or sin(21))) or ((cin(19) and sin(19)) and (cin(20) or sin(20)) and (cin(21) or sin(21)));
-    key(0) <= c(0) xor cin(19) xor sin(19);
+    tmp1(0) <= c(0) xor cin(19) xor sin(19);
     c(1) <= not ((c(0) nand cin(19)) and (c(0) nand sin(19)) and (cin(19) nand sin(19)));
-    key(1) <= c(1) xor cin(20) xor sin(20);
+    tmp1(1) <= c(1) xor cin(20) xor sin(20);
     c(2) <= not ((c(1) nand cin(20)) and (c(1) nand sin(20)) and (cin(20) nand sin(20)));
-    key(2) <= c(2) xor cin(21) xor sin(21);
+    tmp1(2) <= c(2) xor cin(21) xor sin(21);
     c(3) <= g1 or (p1 and c(0));
-    key(3) <= c(3) xor cin(22) xor sin(22);
+    tmp1(3) <= c(3) xor cin(22) xor sin(22);
     c(4) <= not ((c(3) nand cin(22)) and (c(3) nand sin(22)) and (cin(22) nand sin(22)));
-    key(4) <= c(4) xor cin(23) xor sin(23);
+    tmp1(4) <= c(4) xor cin(23) xor sin(23);
 
-    tmp <= sin(18 downto 0) + cin(18 downto 0);
-    if tmp = "000"&x"0000" then
+    tmp2 <= sin(18 downto 0) + cin(18 downto 0);
+    if tmp2 = "000"&x"0000" and tmp1 = "00000" then
       zero <= '1';
     else
       zero <= '0';
@@ -167,8 +169,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
-library UNISIM;
-use UNISIM.VComponents.all;
+--library UNISIM;
+--use UNISIM.VComponents.all;
 
 entity float_div is
   Port (
@@ -267,18 +269,18 @@ architecture fdiv of float_div is
   signal exp : std_logic_vector(7 downto 0); --step8
   signal fr : std_logic_vector(22 downto 0); --step8
 begin
-  dll1 : CLKDLL port map (
-    CLKIN => clk,
-    CLKFB => clk0o,
-    RST   => '0',
-    CLK0  => clk0,
-    CLK2X => clk2);
-  bg1: BUFG port map (
-    i=>clk0,
-    o=>clk0o);
-  bg2: BUFG port map (
-    i=>clk2,
-    o=>clk2o);
+  --dll1 : CLKDLL port map (
+  --  CLKIN => clk,
+  --  CLKFB => clk0o,
+  --  RST   => '0',
+  --  CLK0  => clk0,
+  --  CLK2X => clk2);
+  --bg1: BUFG port map (
+  --  i=>clk0,
+  --  o=>clk0o);
+  --bg2: BUFG port map (
+  --  i=>clk2,
+  --  o=>clk2o);
   
   f1_1 <= f1;
   f1_2 <= f2;
