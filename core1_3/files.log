@@ -18,7 +18,12 @@ sram_model.vhd : SRAMシミュレーションモデル(アドレス幅20bit,容�
 alu.vhd : ALU
 shifter.vhd : シフタ
 
-fpu.vhd : FPU(今はただの箱)
+fpu.vhd : FPU
+float_add.vhd : 4clk
+float_mul.vhd : 4clk
+float_div.vhd : 8clk(fdiv,sqrt)
+float_div_.vhd : 丸めに関して修正されているが、これを使うとコアが動かない
+float_cmp.vhd : 1clk(cmp,EQ)
 
 ○レジスタ
 int_register.vhd : 整数レジスタ(アドレス幅5bit,容量32ワード)
@@ -26,11 +31,11 @@ fp_register.vhd : 浮動小数点数レジスタ(アドレス幅5bit,容量32ワ
 
 ○命令メモリ
 inst_mem.vhd : 命令メモリ(アドレス幅15bit(形式的に16bitで与える),容量32Kワード)
-inst_mem_fixed.vhd : プログラムで初期化した命令メモリ
 
 ○制御
 decoder.vhd : ステートマシンのデコーダ(次のPCを決める)
+decoder_sim.vhd : シミュレーション用デコーダ
 
 ○コア
-core.vhd : ver1.2
-core_sim.vhd : ver1.2
+core.vhd : ver1.3
+core_sim.vhd : ver1.3

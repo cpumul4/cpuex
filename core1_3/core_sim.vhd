@@ -1,5 +1,5 @@
--- ver1.2
--- 1stアーキテクチャの逐次実行整数演算コアのシミュレーション
+-- ver1.3
+-- 1stアーキテクチャのコアのシミュレーション
 -- 命令ローダ搭載
 -- CPI固定
 
@@ -33,8 +33,8 @@ entity core_sim is
     RS_TX  : out   std_logic);
 end core_sim;
 
-architecture ver1_2 of core_sim is
-  component inst_mem
+architecture ver1_3 of core_sim is
+  component inst_mem_fixed
     port (
       clk  : in  std_logic;
       addr : in  std_logic_vector(15 downto 0);
@@ -44,7 +44,7 @@ architecture ver1_2 of core_sim is
       WE   : in  std_logic);
   end component;
 
-  component decoder
+  component decoder_sim
     port (
       clk     : in  std_logic;
       inst    : in  std_logic_vector(31 downto 0);
@@ -63,6 +63,8 @@ architecture ver1_2 of core_sim is
       IN1     : out std_logic;
       IN2     : out std_logic;
       OP      : out std_logic_vector(3 downto 0);
+      DIV     : out std_logic;
+      SQR     : out std_logic;
       SRAMIN  : out std_logic_vector(1 downto 0);
       IOIN    : out std_logic;
       SRAMWE  : out std_logic;
@@ -117,10 +119,13 @@ architecture ver1_2 of core_sim is
 
   component fpu is
     port (
+      clk  : in  std_logic;
       din1 : in  std_logic_vector(31 downto 0);
       din2 : in  std_logic_vector(31 downto 0);
       dout : out std_logic_vector(31 downto 0);
       OP   : in  std_logic_vector(3 downto 0);
+      DIV  : in  std_logic;
+      SQR  : in  std_logic;
       EQ   : out std_logic);
   end component;
 
@@ -162,7 +167,7 @@ architecture ver1_2 of core_sim is
   signal SRAMIN : std_logic_vector(1 downto 0);
   signal OP, OP_1 : std_logic_vector(3 downto 0);
   signal BYTE, BYTE_1 : std_logic_vector(1 downto 0);
-  signal INSTOUT, INSTWE, INSTWE_1, INSTWE_2, INSTWE_3, SRAMWE, SRAMWE_1, IOWE, IOWE_1, IORE, IORE_1 : std_logic;
+  signal INSTOUT, INSTWE, INSTWE_1, INSTWE_2, INSTWE_3, SRAMWE, SRAMWE_1, IOWE, IOWE_1, IORE, IORE_1, DIV, SQR : std_logic;
   signal REGIN, REGIN_1, REGIN_2, REGIN_3, REGADDR, REGADDR_1, REGADDR_2 : std_logic_vector(1 downto 0);
   signal RREGWE, RREGWE_1, RREGWE_2, RREGWE_3, FREGWE, FREGWE_1, FREGWE_2, FREGWE_3 : std_logic;
 
@@ -177,7 +182,7 @@ begin
 --      i => iclk,
 --      o => clk);
 
-  instr : inst_mem
+  instr : inst_mem_fixed
     port map (
       clk => clk,
       addr => pc_0,
@@ -186,7 +191,7 @@ begin
       EN => '1',
       WE => INSTWE_3);
 
-  decode : decoder
+  decode : decoder_sim
     port map (
       clk => clk,
       inst => inst,
@@ -205,6 +210,8 @@ begin
       IN1 => IN1,
       IN2 => IN2,
       OP => OP,
+      DIV => DIV,
+      SQR => SQR,
       SRAMIN => SRAMIN,
       IOIN => IOIN,
       SRAMWE => SRAMWE,
@@ -253,12 +260,15 @@ begin
       OP => OP_1,
       EQ => ALUEQ);
 
-  asyn_fpu : fpu
+  syn_fpu : fpu
     port map (
-      din1 => fpuin1,
+      clk => clk,
+      din1 => fas,--fpuin1,
       din2 => fpuin2,
       dout => fpuout,
       OP => OP_1,
+      DIV => DIV,
+      SQR => SQR,
       EQ => FPUEQ);
 
   sram : sram_model
@@ -297,6 +307,15 @@ begin
     end case;
   end process;
 
+  asyn_fpuin2 : process(fat, imm, IN2)
+  begin
+    if IN2 = '1' then
+      fpuin2 <= fat;
+    else
+      fpuin2 <= imm;
+    end if;
+  end process;
+  
   syn : process(clk)
   begin
     if rising_edge(clk) then
@@ -322,10 +341,10 @@ begin
       end if;
       if IN2 = '1' then
         aluin2 <= rat;
-        fpuin2 <= fat;
+--        fpuin2 <= fat;
       else
         aluin2 <= imm;
-        fpuin2 <= imm;
+--        fpuin2 <= imm;
       end if;
       fpuin1 <= fas;
 
@@ -346,7 +365,7 @@ begin
       end case;
 
       if INSTOUT = '1' then
-        iodin <= inst;
+        iodin <= x"000000aa";--inst;
       else
         if IOIN = '1' then
           iodin <= ras;
@@ -397,4 +416,4 @@ begin
       FREGWE_3 <= FREGWE_2;
     end if;
   end process;
-end ver1_2;
+end ver1_3;

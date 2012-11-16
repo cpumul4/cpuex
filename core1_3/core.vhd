@@ -1,5 +1,5 @@
--- ver1.2
--- 1stアーキテクチャの逐次実行整数演算コア
+-- ver1.3
+-- 1stアーキテクチャのコア
 -- 命令ローダ搭載
 -- CPI固定
 
@@ -33,7 +33,7 @@ entity core is
     RS_TX  : out   std_logic);
 end core;
 
-architecture ver1_2 of core is
+architecture ver1_3 of core is
   component inst_mem
     port (
       clk  : in  std_logic;
@@ -63,6 +63,8 @@ architecture ver1_2 of core is
       IN1     : out std_logic;
       IN2     : out std_logic;
       OP      : out std_logic_vector(3 downto 0);
+      DIV     : out std_logic;
+      SQR     : out std_logic;
       SRAMIN  : out std_logic_vector(1 downto 0);
       IOIN    : out std_logic;
       SRAMWE  : out std_logic;
@@ -117,10 +119,13 @@ architecture ver1_2 of core is
 
   component fpu is
     port (
+      clk  : in  std_logic;
       din1 : in  std_logic_vector(31 downto 0);
       din2 : in  std_logic_vector(31 downto 0);
       dout : out std_logic_vector(31 downto 0);
       OP   : in  std_logic_vector(3 downto 0);
+      DIV  : in  std_logic;
+      SQR  : in  std_logic;
       EQ   : out std_logic);
   end component;
 
@@ -177,7 +182,7 @@ architecture ver1_2 of core is
   signal SRAMIN : std_logic_vector(1 downto 0);
   signal OP, OP_1 : std_logic_vector(3 downto 0);
   signal BYTE, BYTE_1 : std_logic_vector(1 downto 0);
-  signal INSTOUT, INSTWE, INSTWE_1, INSTWE_2, INSTWE_3, SRAMWE, SRAMWE_1, IOWE, IOWE_1, IORE, IORE_1 : std_logic;
+  signal INSTOUT, INSTWE, INSTWE_1, INSTWE_2, INSTWE_3, SRAMWE, SRAMWE_1, IOWE, IOWE_1, IORE, IORE_1, DIV, SQR : std_logic;
   signal REGIN, REGIN_1, REGIN_2, REGIN_3, REGADDR, REGADDR_1, REGADDR_2 : std_logic_vector(1 downto 0);
   signal RREGWE, RREGWE_1, RREGWE_2, RREGWE_3, FREGWE, FREGWE_1, FREGWE_2, FREGWE_3 : std_logic;
 
@@ -220,6 +225,8 @@ begin
       IN1 => IN1,
       IN2 => IN2,
       OP => OP,
+      DIV => DIV,
+      SQR => SQR,
       SRAMIN => SRAMIN,
       IOIN => IOIN,
       SRAMWE => SRAMWE,
@@ -243,7 +250,7 @@ begin
       dt => rat,
       dd => rad,
       EN => '1',
-      WE => RREGWE_3);
+      WE => RREGWE);--_3);
 
   freg : fp_register
     port map (
@@ -257,7 +264,7 @@ begin
       dt => fat,
       dd => fad,
       EN => '1',
-      WE => FREGWE_3);
+      WE => FREGWE);--_3);
 
   asyn_alu : alu
     port map (
@@ -265,15 +272,18 @@ begin
       din2 => aluin2,
       dout => aluout,
       amt => amt_2,
-      OP => OP_1,
+      OP => OP,--_1,
       EQ => ALUEQ);
 
-  asyn_fpu : fpu
+  syn_fpu : fpu
     port map (
-      din1 => fpuin1,
+      clk => clk,
+      din1 => fas,--fpuin1,
       din2 => fpuin2,
       dout => fpuout,
-      OP => OP_1,
+      OP => OP,--_1,
+      DIV => DIV,
+      SQR => SQR,
       EQ => FPUEQ);
 
   sram : sram_controller
@@ -298,7 +308,7 @@ begin
       din => sramdin,
       dout => sramdout,
       GO => '1',
-      WE => SRAMWE_1);
+      WE => SRAMWE);--_1);
 
   io : io_controller
     port map (
@@ -307,15 +317,15 @@ begin
       dout => iodout,
       tx => RS_TX,
       rx => RS_RX,
-      BYTE => BYTE_1,
-      WE => IOWE_1,
-      RE => IORE_1,
+      BYTE => BYTE,--_1,
+      WE => IOWE,--_1,
+      RE => IORE,--_1,
       STOREEN => STOREEN,
       LOADEN => LOADEN);
 
-  asyn_regdin : process(sramdout, aluout_2, fpuout_2, iodout_1, REGIN_3)
+  asyn_regdin : process(sramdout, aluout_2, fpuout_2, iodout_1, REGIN)--_3)
   begin
-    case REGIN_3 is
+    case REGIN is--_3 is
       when "11" =>
         regdin <= aluout_2;
       when "10" =>
@@ -327,6 +337,15 @@ begin
     end case;
   end process;
 
+  asyn_fpuin2 : process(fat, imm, IN2)
+  begin
+    if IN2 = '1' then
+      fpuin2 <= fat;
+    else
+      fpuin2 <= imm;
+    end if;
+  end process;
+  
   syn : process(clk)
   begin
     if rising_edge(clk) then
@@ -352,10 +371,10 @@ begin
       end if;
       if IN2 = '1' then
         aluin2 <= rat;
-        fpuin2 <= fat;
+--        fpuin2 <= fat;
       else
         aluin2 <= imm;
-        fpuin2 <= imm;
+--        fpuin2 <= imm;
       end if;
       fpuin1 <= fas;
 
@@ -376,7 +395,7 @@ begin
       end case;
 
       if INSTOUT = '1' then
-        iodin <= inst;
+        iodin <= x"000000aa";--inst;
       else
         if IOIN = '1' then
           iodin <= ras;
@@ -397,7 +416,7 @@ begin
       ad_2 <= ad_1;
       ad_3 <= ad_2;
 
-      case REGADDR_2 is
+      case REGADDR is--_2 is
         when "10" =>
           regwaddr <= at_3;
         when "11" =>
@@ -427,4 +446,4 @@ begin
       FREGWE_3 <= FREGWE_2;
     end if;
   end process;
-end ver1_2;
+end ver1_3;
