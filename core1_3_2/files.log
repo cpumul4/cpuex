@@ -21,8 +21,8 @@ shifter.vhd : シフタ
 fpu.vhd : FPU
 float_add.vhd : 4clk
 float_mul.vhd : 4clk
-float_div.vhd : 8clk(fdiv,sqrt)
-float_div_.vhd : 丸めに関して修正されているが、これを使うとコアが動かない
+float_div.vhd : 8clk(fdiv,sqrt) 丸めに関して修正された最新版(動いた)
+float_div_prev.vhd : 丸めに関して修正されていない、ver1.3で使用した版
 float_cmp.vhd : 1clk(cmp,EQ)
 
 ○レジスタ

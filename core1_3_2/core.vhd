@@ -1,5 +1,5 @@
--- ver1.3
--- 1stアーキテクチャのコアのシミュレーション
+-- ver1.3.2
+-- 1stアーキテクチャのコア
 -- 命令ローダ搭載
 -- CPI固定
 
@@ -8,33 +8,33 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
---library unisim;
---use unisim.vcomponents.all;
+library unisim;
+use unisim.vcomponents.all;
 
-entity core_sim is
+entity core is
   port (
---    ZCLKMA : out   std_logic_vector(1 downto 0);
---    ZA     : out   std_logic_vector(19 downto 0);
---    XZBE   : out   std_logic_vector(3 downto 0);
---    XWA    : out   std_logic;
---    XE1    : out   std_logic;
---    E2A    : out   std_logic;
---    XE3    : out   std_logic;
---    XGA    : out   std_logic;
---    ADVA   : out   std_logic;
---    XZCKE  : out   std_logic;
---    ZD     : inout std_logic_vector(31 downto 0);
---    ZDP    : inout std_logic_vector(3 downto 0);
---    ZZA    : out   std_logic;
---    XFT    : out   std_logic;
---    XLBO   : out   std_logic;
---    MCLK1  : in    std_logic;
+    ZCLKMA : out   std_logic_vector(1 downto 0);
+    ZA     : out   std_logic_vector(19 downto 0);
+    XZBE   : out   std_logic_vector(3 downto 0);
+    XWA    : out   std_logic;
+    XE1    : out   std_logic;
+    E2A    : out   std_logic;
+    XE3    : out   std_logic;
+    XGA    : out   std_logic;
+    ADVA   : out   std_logic;
+    XZCKE  : out   std_logic;
+    ZD     : inout std_logic_vector(31 downto 0);
+    ZDP    : inout std_logic_vector(3 downto 0);
+    ZZA    : out   std_logic;
+    XFT    : out   std_logic;
+    XLBO   : out   std_logic;
+    MCLK1  : in    std_logic;
     RS_RX  : in    std_logic;
     RS_TX  : out   std_logic);
-end core_sim;
+end core;
 
-architecture ver1_3 of core_sim is
-  component inst_mem_fixed
+architecture ver1_3_2 of core is
+  component inst_mem
     port (
       clk  : in  std_logic;
       addr : in  std_logic_vector(15 downto 0);
@@ -44,7 +44,7 @@ architecture ver1_3 of core_sim is
       WE   : in  std_logic);
   end component;
 
-  component decoder_sim
+  component decoder
     port (
       clk     : in  std_logic;
       inst    : in  std_logic_vector(31 downto 0);
@@ -129,8 +129,23 @@ architecture ver1_3 of core_sim is
       EQ   : out std_logic);
   end component;
 
-  component sram_model is
+  component sram_controller is
     port (
+      CK    : out   std_logic_vector(1 downto 0);
+      A     : out   std_logic_vector(19 downto 0);
+      B     : out   std_logic_vector(3 downto 0);
+      W     : out   std_logic;
+      E1    : out   std_logic;
+      E2    : out   std_logic;
+      E3    : out   std_logic;
+      G     : out   std_logic;
+      ADV   : out   std_logic;
+      CKE   : out   std_logic;
+      DQ    : inout std_logic_vector(31 downto 0);
+      DQP   : inout std_logic_vector(3 downto 0);
+      ZZ    : out   std_logic;
+      FT    : out   std_logic;
+      LBO   : out   std_logic;
       clk   : in    std_logic;
       addr  : in    std_logic_vector(19 downto 0);
       din   : in    std_logic_vector(31 downto 0);
@@ -172,17 +187,17 @@ architecture ver1_3 of core_sim is
   signal RREGWE, RREGWE_1, RREGWE_2, RREGWE_3, FREGWE, FREGWE_1, FREGWE_2, FREGWE_3 : std_logic;
 
 begin
---  ib : ibufg
---    port map (
---      i => MCLK1,
---      o => iclk);
+  ib : ibufg
+    port map (
+      i => MCLK1,
+      o => iclk);
 
---  bg : bufg
---    port map (
---      i => iclk,
---      o => clk);
+  bg : bufg
+    port map (
+      i => iclk,
+      o => clk);
 
-  instr : inst_mem_fixed
+  instr : inst_mem
     port map (
       clk => clk,
       addr => pc_0,
@@ -191,7 +206,7 @@ begin
       EN => '1',
       WE => INSTWE_3);
 
-  decode : decoder_sim
+  decode : decoder
     port map (
       clk => clk,
       inst => inst,
@@ -235,7 +250,7 @@ begin
       dt => rat,
       dd => rad,
       EN => '1',
-      WE => RREGWE_3);
+      WE => RREGWE);--_3);
 
   freg : fp_register
     port map (
@@ -249,7 +264,7 @@ begin
       dt => fat,
       dd => fad,
       EN => '1',
-      WE => FREGWE_3);
+      WE => FREGWE);--_3);
 
   asyn_alu : alu
     port map (
@@ -257,7 +272,7 @@ begin
       din2 => aluin2,
       dout => aluout,
       amt => amt_2,
-      OP => OP_1,
+      OP => OP,--_1,
       EQ => ALUEQ);
 
   syn_fpu : fpu
@@ -266,19 +281,34 @@ begin
       din1 => fas,--fpuin1,
       din2 => fpuin2,
       dout => fpuout,
-      OP => OP_1,
+      OP => OP,--_1,
       DIV => DIV,
       SQR => SQR,
       EQ => FPUEQ);
 
-  sram : sram_model
+  sram : sram_controller
     port map (
+      CK => ZCLKMA,
+      A => ZA,
+      B => XZBE,
+      W => XWA,
+      E1 => XE1,
+      E2 => E2A,
+      E3 => XE3,
+      G => XGA,
+      ADV => ADVA,
+      CKE => XZCKE,
+      DQ => ZD,
+      DQP => ZDP,
+      ZZ => ZZA,
+      FT => XFT,
+      LBO => XLBO,
       clk => clk,
       addr => aluout(19 downto 0),
       din => sramdin,
       dout => sramdout,
       GO => '1',
-      WE => SRAMWE_1);
+      WE => SRAMWE);--_1);
 
   io : io_controller
     port map (
@@ -287,15 +317,15 @@ begin
       dout => iodout,
       tx => RS_TX,
       rx => RS_RX,
-      BYTE => BYTE_1,
-      WE => IOWE_1,
-      RE => IORE_1,
+      BYTE => BYTE,--_1,
+      WE => IOWE,--_1,
+      RE => IORE,--_1,
       STOREEN => STOREEN,
       LOADEN => LOADEN);
 
-  asyn_regdin : process(sramdout, aluout_2, fpuout_2, iodout_1, REGIN_3)
+  asyn_regdin : process(sramdout, aluout_2, fpuout_2, iodout_1, REGIN)--_3)
   begin
-    case REGIN_3 is
+    case REGIN is--_3 is
       when "11" =>
         regdin <= aluout_2;
       when "10" =>
@@ -373,7 +403,7 @@ begin
           iodin <= fas;
         end if;
       end if;
-
+        
       iodout_1 <= iodout;
 
       amt_1 <= inst(10 downto 6);
@@ -386,7 +416,7 @@ begin
       ad_2 <= ad_1;
       ad_3 <= ad_2;
 
-      case REGADDR_2 is
+      case REGADDR is--_2 is
         when "10" =>
           regwaddr <= at_3;
         when "11" =>
@@ -416,4 +446,4 @@ begin
       FREGWE_3 <= FREGWE_2;
     end if;
   end process;
-end ver1_3;
+end ver1_3_2;
