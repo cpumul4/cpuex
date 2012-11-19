@@ -223,7 +223,7 @@ uint32_t jformbin(uint opcode, int addr){
 
 int main(int argc, char *argv[]){
   const int MAX_CHAR  = 100;
- const int MAX_LINE  = 20000;
+ const int MAX_LINE  = 40000;
 
   char delims[] = " \t\r";
   char combegin[] = "#;";

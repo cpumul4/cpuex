@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <iostream>
 using namespace std;
-#define LABEL_TABLE_NUM 5000
+#define LABEL_TABLE_NUM 10000
 
 
 class ltable {
