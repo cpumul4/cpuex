@@ -7,7 +7,10 @@
 
 	luif	$f13 $f13 -18099 ;; 1011 1001 0100 1101
 	llif	$f13 $f13 25782  ;; 0110 0100 1011 0110
-	mulf	$f11 $f11 $f11
+	sqrt	$f12 $f12
+	sqrt	$f12 $f12
+	sqrt	$f12 $f12
+	sqrt	$f12 $f12
 	outd	$r1
 	;; mulf	$f0 $f0 $f13
 	;; addf	$f0 $f12 $f0

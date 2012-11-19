@@ -180,10 +180,10 @@ void instr::exec_asm(){
     c(JR  , pc = D.i;);		// D reg が distになってない
     c(JLR  ,LR = pc;pc = D.i;);		// D reg が distになってない
 
-    c(BEQ , if(D == S)pc = pc + IMM;);
-    c(BNE , if(D != S)pc = pc + IMM;);
-    c(BEQF , if(FD == FS)pc += IMM;);
-    c(BNEF , if(FD != FS)pc += IMM;);
+    c(BEQ , if(D == S)  pc = pc + IMM;);
+    c(BNE , if(D != S)  pc = pc + IMM;);
+    c(BEQF ,if(FD == FS)pc +=     IMM;);
+    c(BNEF ,if(FD != FS)pc +=     IMM;);
 
     // -------------- FR形式 -------------
 
@@ -202,13 +202,13 @@ void instr::exec_asm(){
       });
 
     // ここまでちゃんと動く10\17 15:00
-    c(IN  , exec_input(D.b, IN););
+    c(IN  , exec_input( D.b, IN ););
     c(INF , exec_input(FD.b, INF););
 
-    c(OUTA, exec_output(D,3););
-    c(OUTB, exec_output(D,2););
-    c(OUTC, exec_output(D,1););
-    c(OUTD, exec_output(D,0););
+    c(OUTA, exec_output(  D,3););
+    c(OUTB, exec_output(  D,2););
+    c(OUTC, exec_output(  D,1););
+    c(OUTD, exec_output(  D,0););
     c(OUTAF, exec_output(FD,3););
     c(OUTBF, exec_output(FD,2););
     c(OUTCF, exec_output(FD,1););

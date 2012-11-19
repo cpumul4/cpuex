@@ -1,9 +1,12 @@
+#include <stdlib.h>
 #include "./common.hpp"
 #include "./instruction.hpp"
 #include "./memory.hpp"
 #include <fstream>
 using namespace std;
 
+
+uint arg = 3000, ans = 10000;
 
 float outreg = 3000;
 float inreg1 = 3000;
@@ -12,7 +15,6 @@ float inreg2 = 3000;
 int output = 1000;
 
 bool error_section(){
-  
   return instr_count[OUTD] >= 32529 && instr_count[OUTD] < 32529 + 3;
 }
 
@@ -27,6 +29,7 @@ bool instr::is_fpu(void){
   // case DIVF:
   case SQRT:
     inreg1 = freg[rs].f;
+    arg = freg[rs].b;
     inreg2 = freg[rt].f;
     break;
   // case CMPF:
@@ -48,18 +51,24 @@ bool instr::is_fpu(void){
   return true;
 }
 
+
 void instr::write(void){ //命令はfpu命令のみに仮定する。 
   string op;
   string tab = "     ";
   op = encode(opcode);
-  if(opcode == OUTD)
+  if(opcode == OUTD){
     cout << "***********************out命令*****************************\n";
-  cout << op << " ";
+    cout << op << " ";
+  }
 
-  outreg = freg[rd].f;
-  
-    
   switch(opcode){
+  case SQRT:
+    outreg = freg[rd].f;
+    ans = freg[rd].b;
+    printf("%x\n", arg);
+    printf("%x\n", ans);
+    // cout << endl;
+    break;
   // case BEQF:
   //   cout << eq_f(inreg1, inreg2) << endl; 
   //   break;
@@ -72,17 +81,17 @@ void instr::write(void){ //命令はfpu命令のみに仮定する。
   case OUTD:
     cout << output << endl;
     return;
-  default:
-    print_bit(outreg);    
+  // default:
+  //   print_bit(outreg);    
   }
 
-  cout << tab;
-  print_bit(inreg1);
-  if(opcode != SQRT){
-    cout << tab;
-    print_bit(inreg2);
-  }
-  cout << '\n';
+  // cout << tab;
+  // print_bit(inreg1);
+  // if(opcode != SQRT){
+  //   cout << tab;
+  //   print_bit(inreg2);
+  // }
+  // cout << '\n';
 
 
   return;
