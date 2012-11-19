@@ -70,12 +70,15 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
 
     
     int prevpc = pc - 1;
+    bool fpu = false;
+    // if(error_section())
+      fpu = rom[prevpc].is_fpu();
 
     rom[pc-1].exec_asm();
 
-    if(error_section())
-      if(rom[prevpc].is_fpu())
-	rom[prevpc].write();
+    if(fpu)
+      rom[prevpc].write();
+
 
     exec_count++;
 
@@ -106,7 +109,7 @@ int main(int argc, char *argv[]){
   cerr << "<simulation has started!>\n";
 
   gettimeofday(&t1,NULL);
-  cout << "実行命令数: " << (count = (uint)simulate(argv[1], argv[2], argv[3])) << '\n';
+  cerr << "実行命令数: " << (count = (uint)simulate(argv[1], argv[2], argv[3])) << '\n';
   gettimeofday(&t2,NULL);
 
   printf("実行命令数/sec:%f\n", count/time_diff(t1,t2));

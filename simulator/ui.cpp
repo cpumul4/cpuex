@@ -283,7 +283,7 @@ int ui(void){
  ------------------------------------------------------------------\n";
   }
       
-  cout <<
+  cerr <<
     "\n ----------------------- 命令実行数:" << exec_count << 
     " -----------------------\n";
   // print_change_index(nonzeroram);
@@ -291,12 +291,12 @@ int ui(void){
   show_regs();
   // print_bit(ireg[1]);
   
-  cout << "\n" << "[next instruction:" << pc << "]\t";
+  cerr << "\n" << "[next instruction:" << pc << "]\t";
   rom[pc].show();
 
   init_stop = false;
   while(1){
-    cout << "$ ";
+    cerr << "$ ";
     cin.getline(line, max_line);
     
     if(line == NULL || line[0] == 0){

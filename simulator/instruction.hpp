@@ -141,17 +141,17 @@ inline string encode(uint8_t opcode){
   
 
 inline void instr_stat(long long int all_count){
-  cout << "--- 各命令が何回実行されたか ----\n";
+  cerr << "--- 各命令が何回実行されたか ----\n";
   while(all_count > 1000000){
     all_count /= 10;
     for(int j = 0; j < 64; j++)
       instr_count[j] /= 10;
   }
-  cout << all_count << endl;
+  cerr << all_count << endl;
 
   for(int i = 0;i < 64; i++){ 
     if(instr_count[i] != 0){
-      cout << encode((uint8_t)i) << "\t: " 
+      cerr << encode((uint8_t)i) << "\t: " 
 	   <<(int)((instr_count[i]/(all_count/100.0))) << "%\n";
     }
   }
