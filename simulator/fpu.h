@@ -11,3 +11,5 @@ float fadd(float f1,float f2);
 float fmul(float f1,float f2);
 float fdiv(float f1,float f2);
 float sqrt_m(float f1);
+int eq_f(float f1,float f2);
+int lte_f(float f1,float f2);

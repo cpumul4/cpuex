@@ -197,8 +197,10 @@ float sqrt_m(float f1) {
     }
     j++;
   }
+  
+  //printf("%07x,%x\n",fraction,mod);
 
-  //仮数部の乗算が0.5以上(丸めを行っても1.0未満)
+  //仮数部の乗算が0.5以上
 
   if((fraction&0x1) == 1 && (mod > 0 || (fraction&0x2) > 0)) fraction += 2;
 
@@ -211,4 +213,45 @@ float sqrt_m(float f1) {
   f_b.b.exp = exp;
 
   return f_b.f;
+}
+
+int eq_f(float f1,float f2) {
+  int eq;
+  int s_eq,e_eq,fr_eq;
+  ieee_f f1_b,f2_b;
+
+  f1_b.f = f1;
+  f2_b.f = f2;
+
+  s_eq = f1_b.b.sign == f2_b.b.sign;
+  e_eq = f1_b.b.exp == f2_b.b.exp;
+  fr_eq = f1_b.b.fraction == f2_b.b.fraction;
+
+  eq = (f1_b.b.exp == 0 && f2_b.b.exp == 0) || (s_eq && e_eq && fr_eq);
+
+  return eq;
+}
+
+int lte_f(float f1,float f2) {
+  int eq,lte;
+  int s_eq,e_eq,fr_eq;
+  int s_lt,e_lt,fr_lt;
+  ieee_f f1_b,f2_b;
+
+  f1_b.f = f1;
+  f2_b.f = f2;
+
+  s_eq = f1_b.b.sign == f2_b.b.sign;
+  e_eq = f1_b.b.exp == f2_b.b.exp;
+  fr_eq = f1_b.b.fraction == f2_b.b.fraction;
+
+  eq = (f1_b.b.exp == 0 && f2_b.b.exp == 0) || (s_eq && e_eq && fr_eq);
+
+  s_lt = f1_b.b.sign && !f2_b.b.sign;
+  e_lt = f1_b.b.exp < f2_b.b.exp;
+  fr_lt = f1_b.b.fraction < f2_b.b.fraction;
+
+  lte = s_lt || (s_eq && ((e_lt && !f1_b.b.sign) || (!e_lt && f1_b.b.sign && !e_eq))) || (s_eq && e_eq && ((fr_lt && !f1_b.b.sign) || (!fr_lt && f1_b.b.sign && !fr_eq))) || eq;
+
+  return lte;
 }

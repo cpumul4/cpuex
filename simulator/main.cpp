@@ -6,6 +6,7 @@
 
 extern int ui(void);
 extern int decode(char *);
+extern bool error_section(void);
 
 instr rom[ROM_SIZE];
 ofstream fout;
@@ -48,7 +49,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
   LR  = LR_INIT;
   SPR = SPR_INIT;
 
-  freg[1].b = 0;
+  // freg[0].b = 30;
 
   while(pc != LR_INIT){
     ui();
@@ -67,8 +68,17 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
       pc = LR_INIT;	
     }
 
+    
+    int prevpc = pc - 1;
+
     rom[pc-1].exec_asm();
+
+    if(error_section())
+      if(rom[prevpc].is_fpu())
+	rom[prevpc].write();
+
     exec_count++;
+
   }
   cout << "結果レジスタ($r1, $f0) = " << ireg[1].i << ", " << freg[0].f  << endl;
   instr_stat(exec_count);
@@ -79,8 +89,6 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
 int main(int argc, char *argv[]){
   struct timeval t1, t2;
   uint count;
-  
-  freg[1].f = 0.00000001;
   
   if(argc < 2){
     cerr << "USAGE: ./simulator assemblyfile (infile) (outfile) \n";

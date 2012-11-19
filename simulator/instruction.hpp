@@ -23,6 +23,8 @@ public:
   void set_imm(uint8_t _op, int16_t _imm);
   void show();
   void exec_asm(void);
+  bool is_fpu(void);
+  void write(void);
 };
 
 

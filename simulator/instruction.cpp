@@ -215,7 +215,8 @@ void instr::exec_asm(){
     c(OUTDF, exec_output(FD,0););
     // ここまでちゃんと動く 10/19 22:00
   default:
-    cout << " unknown opcode " << (int)opcode;
+    cerr << " unknown opcode " << (int)opcode;
+    return;
   }
 #undef D 
 #undef S 
