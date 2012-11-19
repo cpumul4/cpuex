@@ -27,7 +27,7 @@ bool instr::is_fpu(void){
   // case SUBF:
   // case MULF:
   // case DIVF:
-  case DIVF:
+  case MULF:
     inreg1 = freg[rs].f;
     arg1 = freg[rs].b;
     inreg2 = freg[rt].f;
@@ -63,7 +63,7 @@ void instr::write(void){ //命令はfpu命令のみに仮定する。
   }
 
   switch(opcode){
-  case DIVF:
+  case MULF:
     outreg = freg[rd].f;
     ans = freg[rd].b;
     printf("%x\n", arg1);

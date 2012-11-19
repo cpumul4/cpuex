@@ -8,10 +8,10 @@ aaa:
 	llif	$f12 $f12 -31130 ;; 1000 0110 0110 0110
 	luif	$f13 $f13 -18099 ;; 1011 1001 0100 1101
 	llif	$f13 $f13 25782  ;; 0110 0100 1011 0110
-	divf	$f12 $f12 $f12
-	divf	$f12 $f12 $f12
-	divf	$f12 $f12 $f12
-	divf	$f12 $f12 $f12
+	mulf	$f12 $f12 $f12
+	mulf	$f12 $f12 $f12
+	mulf	$f12 $f12 $f12
+	mulf	$f12 $f12 $f12
 	j	aaa
 	outd	$r1
 	;; mulf	$f0 $f0 $f13
