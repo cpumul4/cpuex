@@ -1,41 +1,45 @@
-作成したファイルなどのまとめ
+1st Architecture完動コア
 
 ●VHDLファイル
++ : 使用しているファイル
+
 ○I/O
 仕様は、周波数66MHz、ボーレート115200、バッファサイズ256バイト
 
-sender.vhd : RS232C送信
-receiver.vhd : RS232C受信
-input_controller.vhd : 受信処理
-output_controller.vhd : 送信処理
-io_controller.vhd : I/Oコントローラ
++ sender.vhd : RS232C送信
++ receiver.vhd : RS232C受信
++ input_controller.vhd : 受信処理
++ output_controller.vhd : 送信処理
++ io_controller.vhd : I/Oコントローラ
 
 ○データメモリ
-sram_controller.vhd : SRAMコントローラ
-sram_model.vhd : SRAMシミュレーションモデル(アドレス幅20bit,容量1Mワード)
++ sram_controller.vhd : SRAMコントローラ
+  sram_model.vhd : SRAMシミュレーションモデル(アドレス幅20bit,容量1Mワード)
 
 ○演算ユニット
-alu.vhd : ALU
-shifter.vhd : シフタ
++ alu.vhd : ALU
++ shifter.vhd : シフタ
 
-fpu.vhd : FPU
-float_add.vhd : 4clk
-float_mul.vhd : 4clk
-float_div1.vhd : 8clk(fdiv,sqrt)
-float_div2.vhd : 丸めに関して修正されたもの
-float_cmp.vhd : 1clk(cmp,EQ)
++ fpu.vhd : FPU
++ float_add.vhd : 4clk
+  float_mul.vhd : 4clk
++ float_mul2.vhd : 仮数部全て1で丸めにより繰り上がるとき、指数部に1を足すように修正されたもの
+  float_div1.vhd : 8clk(fdiv,sqrt)
++ float_div2.vhd : 丸めに関して修正されたもの
++ float_cmp.vhd : 1clk(cmp,EQ)
 
 ○レジスタ
-int_register.vhd : 整数レジスタ(アドレス幅5bit,容量32ワード)
-fp_register.vhd : 浮動小数点数レジスタ(アドレス幅5bit,容量32ワード)
++ int_register.vhd : 整数レジスタ(アドレス幅5bit,容量32ワード)
++ fp_register.vhd : 浮動小数点数レジスタ(アドレス幅5bit,容量32ワード)
 
 ○命令メモリ
-inst_mem.vhd : 命令メモリ(アドレス幅15bit(形式的に16bitで与える),容量32Kワード)
++ inst_mem.vhd : 命令メモリ(アドレス幅15bit(形式的に16bitで与える),容量32Kワード)
 
 ○制御
-decoder.vhd : ステートマシンのデコーダ(次のPCを決める)
-decoder_sim.vhd : シミュレーション用デコーダ
++ decoder.vhd : ステートマシンのデコーダ(次のPCを決める)
+  decoder_sim.vhd : シミュレーション用デコーダ
 
 ○コア
-core.vhd : ver1.3
-core_sim.vhd : ver1.3
++ core.vhd : ver1.3
+  core_sim.vhd : ver1.3
+
