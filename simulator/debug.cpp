@@ -21,23 +21,23 @@ bool error_section(){
 
 bool instr::is_fpu(void){
   switch(opcode){
-  case ADDF:
-  case SUBF:
-  case MULF:
-  case DIVF:
+  // case ADDF:
+  // case SUBF:
+  // case MULF:
+  // case DIVF:
   case SQRT:
     inreg1 = freg[rs].f;
     inreg2 = freg[rt].f;
     break;
-  case CMPF:
-    inreg1 = freg[rs].f;
-    inreg2 = freg[rt].f;
-    break;
-  case BNEF:
-  case BEQF:
-    inreg1 = freg[rd].f;
-    inreg2 = freg[rt].f;
-    break;
+  // case CMPF:
+  //   inreg1 = freg[rs].f;
+  //   inreg2 = freg[rt].f;
+  //   break;
+  // case BNEF:
+  // case BEQF:
+  //   inreg1 = freg[rd].f;
+  //   inreg2 = freg[rt].f;
+  //   break;
   case OUTD:
     output = ireg[rd].i;
     break;
@@ -60,15 +60,15 @@ void instr::write(void){ //命令はfpu命令のみに仮定する。
   
     
   switch(opcode){
-  case BEQF:
-    cout << eq_f(inreg1, inreg2) << endl; 
-    break;
-  case BNEF:
-    cout << (eq_f(inreg1, inreg2) + 1) % 2 << endl;
-    break;
-  case CMPF:
-    cout << lte_f(inreg1,inreg2) << endl;
-    break;
+  // case BEQF:
+  //   cout << eq_f(inreg1, inreg2) << endl; 
+  //   break;
+  // case BNEF:
+  //   cout << (eq_f(inreg1, inreg2) + 1) % 2 << endl;
+  //   break;
+  // case CMPF:
+  //   cout << lte_f(inreg1,inreg2) << endl;
+  //   break;
   case OUTD:
     cout << output << endl;
     return;
@@ -78,9 +78,12 @@ void instr::write(void){ //命令はfpu命令のみに仮定する。
 
   cout << tab;
   print_bit(inreg1);
-  cout << tab;
-  print_bit(inreg2);
+  if(opcode != SQRT){
+    cout << tab;
+    print_bit(inreg2);
+  }
   cout << '\n';
+
 
   return;
 }

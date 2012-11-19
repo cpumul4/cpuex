@@ -1,6 +1,7 @@
-	;; j	min_caml_sin
-	;; jl	min_caml_cos
-	;; halt
+	;; j	min_caml_sin -3.30503e-21
+
+	jl	min_caml_cos
+	halt
 min_caml_cos:
 	;; PIを$f29にセット
 	luif	$f29 $f29 16457;0 10000000 10010010000111111011011 = +/- 3.14159274

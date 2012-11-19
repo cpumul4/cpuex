@@ -1,1 +1,0 @@
-somay@somay-Latitude-E5410.6983:1352775810
