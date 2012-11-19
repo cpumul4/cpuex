@@ -18,16 +18,19 @@ const float pi = 3.1415927410125732421875;
 extern float reduction_pi4(float);
 extern float reduction_2pi(float);
 
-int is_good_spec_sin(float theta, float lib){
-  long double acr, t, epsilon, diff, mindiff = 100, reerr, minacr;
-  epsilon = (long double)pow(2, -126);
+int is_good_spec_atan(float theta, float lib){
+  long double acr, t, diff, mindiff = 100, reerr, minacr;
+  const long double epsilon = (long double)pow(2, -126);
+
   t = (long double)theta;
   for(reerr = 1 - (long double)pow(2, -23);
       reerr <= 1 + (long double)pow(2, -23); reerr += DBL_EPSILON*pow(2,19)){
     /* printf("%.30Le\n",reerr); */
-    acr = sin(t*reerr);
+    acr = atan(t*reerr);
     diff = abs(acr - (long double)lib);
-    long double max = acr*(long double)pow(2,-18) > epsilon ? acr*(long double)pow(2,-18) : epsilon;
+    long double permit = acr*(long double)pow(2,-20);
+    long double max = permit > epsilon ? permit : epsilon;
+
     if(max > diff)
       return 0;
     if(mindiff > diff){
@@ -129,15 +132,50 @@ float mysin(float theta){
   }
   return f == 0 ? sintheta : -sintheta;
 }
+
+float kernel_atan(float t){
+  float c3 = -0.3333333,
+    c5  = 0.2,
+    c7  = -0.142857142,
+    c9  = 0.111111104,
+    c11 = -0.08976446,
+    c13 = 0.060035485;
+  float t2 = t*t;
+  return ((((((c13*t2 + c11)*t2 + c9)*t2 + c7)*t2 + c5)*t2 + c3)*t2 + 1)*t; 
+}
+
+float myatan(float t){
+  float result;
+  int sign;
+  if(t < 0.4375)
+    return kernel_atan(t);
+
+  if(t < 0){
+    sign = 1;
+    t = -t;
+  }
+  else {
+    sign = 0;
+  }
+
+  
+  if(0.4375 <= t && t < 2.4375)
+    result =  pi/4 + kernel_atan((t - 1.0)/(t + 1.0));
+  else if(2.4375 < t)
+    result =  pi/2 - kernel_atan(1/t);
+
+  return sign == 1 ? -result : result;
+}
+
   
 int main(void){
   conv in, lib, ac;
   int diff, admit = 0;
   in.f = 3.0;
   printf("pi is %.30e\n", pi);
-  for(in.f = -26353650.9; in.f <= 0; in.b--){
-    lib.f = mysin(in.f);
-    is_good_spec_sin(in.f, lib.f);
+  for(in.f = -8; in.f <= 0; in.b--){
+    lib.f = myatan(in.f);
+    is_good_spec_atan(in.f, lib.f);
     
     if(in.b % 0x00ffffff == 0){
       char string[100];
@@ -146,8 +184,8 @@ int main(void){
     }
   }
   for(in.f = 0; in.f <= 26353650.9; in.b++){
-    lib.f = mysin(in.f);
-    is_good_spec_sin(in.f, lib.f);
+    lib.f = myatan(in.f);
+    is_good_spec_atan(in.f, lib.f);
     
     if(in.b % 0x00ffffff == 0){
       char string[100];
