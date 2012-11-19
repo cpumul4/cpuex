@@ -6,7 +6,7 @@
 using namespace std;
 
 
-uint arg = 3000, ans = 10000;
+uint arg1 = 3000, arg2 = 3000, ans = 10000;
 
 float outreg = 3000;
 float inreg1 = 3000;
@@ -27,10 +27,11 @@ bool instr::is_fpu(void){
   // case SUBF:
   // case MULF:
   // case DIVF:
-  case SQRT:
+  case DIVF:
     inreg1 = freg[rs].f;
-    arg = freg[rs].b;
+    arg1 = freg[rs].b;
     inreg2 = freg[rt].f;
+    arg2 = freg[rt].b;
     break;
   // case CMPF:
   //   inreg1 = freg[rs].f;
@@ -62,10 +63,11 @@ void instr::write(void){ //命令はfpu命令のみに仮定する。
   }
 
   switch(opcode){
-  case SQRT:
+  case DIVF:
     outreg = freg[rd].f;
     ans = freg[rd].b;
-    printf("%x\n", arg);
+    printf("%x\n", arg1);
+    printf("%x\n", arg2);
     printf("%x\n", ans);
     // cout << endl;
     break;
