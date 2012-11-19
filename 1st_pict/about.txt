@@ -50,7 +50,7 @@ contest1_3_2#1c.ppm
  - 158.140065sec
  - 誤差1bit(非バイナリ出力で場所を確認)
 
-contest1_3_2bag.ppm
+contest1_3_2bug.ppm
  - contest1_3_2#1c.ppmにおいて誤差1bitの該当ピクセルを黒くして場所が分かるようにしたもの
 
 ○fmulを修正したあとの出力
