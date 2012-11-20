@@ -371,6 +371,7 @@ int main(int argc, char *argv[]){
   }
 
 #endif
+
   for(int a = 0; a < inum;a++){
     fout.write(output[a].byte,4);   
   }
@@ -380,6 +381,7 @@ int main(int argc, char *argv[]){
   //   test = i;
   //   fout.put(test);
   //   printf("%d: %c\n",test, test);
+  // 36
   // }
 }
 
