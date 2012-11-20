@@ -187,7 +187,7 @@ void instr::exec_asm(){
 
     // -------------- FR形式 -------------
 
-    c(SQRT , FD = (float)sqrt(FS.f);); // myfloatの実装が外に出てしまっている
+    c(SQRT , FD = (float)sqrt_m(FS.f);); // myfloatの実装が外に出てしまっている
 
     c(NOP, ;);
     c(DBG,  cout << "DEBUG命令に到達しました\n";step = 1;);
