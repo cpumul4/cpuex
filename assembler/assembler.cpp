@@ -7,6 +7,8 @@
 #include <iostream>
 #include <fstream>
 using namespace std;
+
+
 #define DEBUG 0
 #define debug(expr) cerr << #expr << endl
 
@@ -23,9 +25,12 @@ char *skip_chars(char *str, const char *keys){
 }
 
 char *strchrs(char *str, const char *keys){
-  for(int i = 0; keys[i] != 0;i++)
-    if(strchr(str,keys[i]) != NULL)
-      return str + i;
+  char *retptr;
+  for(int i = 0; keys[i] != 0;i++){
+    retptr = strchr(str,keys[i]);
+    if(retptr != NULL)
+      return retptr;
+  }
   return NULL;
 }
 
@@ -164,10 +169,11 @@ uint32_t rformbin(uint opcode, uint funct, int *operand, int amt){
   uint d=0,s=0,t=0;
 
   if(opcode == opc_jr || opcode == opc_jlr){
-    s = operand[0];
-    
-    
+    s = operand[0];    
   }
+
+  
+
   else if(opcode < 4)		// if output命令
     s = operand[0];
   else {
@@ -252,9 +258,9 @@ int main(int argc, char *argv[]){
 
     // コメントの処理
     char *comment;		
-    if((comment = strchrs(input[inum], combegin)) != NULL)
+    if((comment = strchrs(input[inum], combegin)) != NULL){
       *comment = 0;
-
+    }
     if(strchr(delims,input[inum][0]) == NULL){ // 先頭が空白文字じゃなかったらlabel
        char *label = strtok(input[inum], ":");
        table.set_label(inum,label);
@@ -310,6 +316,7 @@ int main(int argc, char *argv[]){
 	int b = table.get_index(token[n+1]);
 	if(b < 0){
 	  cerr << "[ERROR]Not found: "  << token[n+1] << endl;
+	  table.print();
 	  return -1;
 	}
 	oprd[n] = table.get_index(token[n+1]) - itr - 1;
