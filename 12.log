@@ -1,6 +1,8 @@
  o ...予定通りいったこと
  x ...予定通り進まなかったこと
  - ...予定になかったこと
+--------- 11/21(Wed) ---------
+（予定）atanのassembly実装（符号は考えない）
 --------- 11/20(Tue) ---------
  o atanC実装, kernel_atanのassembly実装
  - simulator, assemblerのバグ修正
