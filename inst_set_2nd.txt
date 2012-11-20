@@ -1,0 +1,173 @@
+2ndアーキテクチャ
+ - 暫定版
+ - 計??命令
+
+****************************************************************
+
+●1stアーキテクチャからの主な変更点
+floatの絶対値/符号反転を追加 : fabs,fneg,-s,-n
+浮動小数点0,1,-1レジスタを作る : $f0-$f2
+シフト量のレジスタ指定を追加 : shift(?)
+比較,条件分岐を比較分岐命令に統一 : beq,bne,blte,bgte
+整数の即値比較分岐を追加→36bit長命令 : beqi,bnei,bltei,bgtei
+fdivをfinvとfmulに分割する : finv
+J形式は廃止(PCは16bit即値で扱える)
+
+○命名規則みたいなもの
+float演算
+ - 先頭にfをつける
+ - 結果の絶対値をとる命令は末尾にaをつける
+ - 結果の符号を反転させる命令は末尾にnをつける
+即値命令
+ - 末尾にiをつける
+
+●データ表現
+1word = 32bit
+32bit符号つき整数
+32bit単精度浮動小数点数
+リトルエンディアン
+
+●整数レジスタ
+0     $zero     // 値を0固定(コアが0x00000000で初期化)
+1     $v 	// 返値
+2-25  $r2-$r25	// 汎用
+26    $sw	// swap用
+27    $cl	// closure用
+28    $cp	// cmp用レジスタ
+29    $gp	// グローバルポインタ(静的データへのアクセス用)
+30    $sp	// スタックポインタ(コアが0x000FFFFFで初期化)
+31    $ra	// 戻り番地(link register)
+
+●浮動小数点数レジスタ
+$f0      // 0.0固定
+$f1      // 1.0固定
+$f2      // -1.0固定
+$f3-$f31 // 汎用
+
+●命令形式
+命令長 : 36bit
+
+R-family : opcode(35-30),s(29-25),t(24-16),d(15-11),amt(10-6),func(5-0)（amtはunsigned）
+           レジスタ*3(tだけ9bit幅だが上位4bitは無視)、シフト幅、機能コード
+	    - R   : opcode,rs,rt,rd,amt,func
+	    - FR  : opcode,fs,ft,fd,amt,func
+	    - FR1 : opcode,rs,rt,fd,amt,func
+	    - FR2 : opcode,fs,ft,rd,amt,func
+I-family : opcode(35-30),s(29-25),t/immt(24-16),imm(15-0)（immt,immはsignedとして32bitに符号拡張して使われる）
+           レジスタ*2(tだけ9bit幅だがレジスタアドレスとしては上位4bitは無視)、16bit即値
+	    - I   : opcode,rs,rt,imm
+	    - FI  : opcode,fs,ft,imm
+	    - FI1 : opcode,rs,ft,imm
+	    - IT  : opcode,rs,immt,imm
+
+●算術演算命令
+R   add    R[rd] = R[rs] + R[rt]
+R   sub    R[rd] = R[rs] - R[rt]
+
+I   addi   R[rt] = R[rs] + imm 
+I   subi   R[rt] = R[rs] - imm 
+
+FR  fadd   F[fd] = F[fs] +. F[ft]
+FR  fadda    // faddの絶対値
+FR  faddn    // faddの符号反転
+FR  fsub   F[fd] = F[fs] -. F[ft]
+FR  fsuba
+FR  fsubn
+FR  fmul   F[fd] = F[fs] *. F[ft]
+FR  fmula
+FR  fmuln
+FR  finv   F[fd] = 1.0 /. F[ft]
+FR  finva
+FR  finvn
+
+FR  fabs   F[fd] = |F[fs]|    // 絶対値
+FR  fneg   F[fd] = -(F[fs])    // 符号反転
+
+FR  sqrt   F[fd] = sqrt(F[fs])    // 平方根
+FR  sqrta
+FR  sqrtn
+
+●論理演算命令
+R   and    R[rd] = R[rs] and R[rt]
+R   or     R[rd] = R[rs] or  R[rt]
+R   nor    R[rd] = R[rs] nor R[rt]
+R   xor    R[rd] = R[rs] xor R[rt]
+
+I   andi   R[rt] = R[rs] and imm
+I   ori    R[rt] = R[rs] or  imm
+
+●シフト命令
+R   sll    R[rd] = R[rs] <<  amt    // shift left logical
+R   srl    R[rd] = R[rs] >>  amt    // shift right logical
+R   sra    R[rd] = R[rs] >>> amt    // shift right arith.
+
+R   shift  R[rd] = R[rs] (<< or >>) R[rt]    // shift logical
+    	   	   	     	    	     // R[rt]は符号付き9bit整数
+					     // シフト量正なら左、負なら右シフト(暫定)
+
+●移動命令
+R   mvr    R[rd] = R[rs]    // move R-reg -> R-reg
+FR  mvf    F[fd] = F[fs]    // move F-reg -> F-reg
+FR1 mvrf   F[fd] = R[rs]    // move R-reg -> F-reg
+FR2 mvfr   R[rd] = F[fs]    // move F-reg -> R-reg
+
+●16bit即値代入命令    // @は連接
+I   lui    R[rt] = imm @ R[rs]の下位16ビット    // load upper immidiate
+I   lli    R[rt] = R[rs]の上位16ビット @ imm    // load lower immidiate
+FI  luif   F[ft] = imm @ F[fs]の下位16ビット
+FI  llif   F[ft] = F[fs]の上位16ビット @ imm
+
+●ロード/ストア命令    // メモリはワードアクセス
+R   lw     R[rd] = M[R[rs] + R[rt]]    // load word
+R   sw     M[R[rs] + R[rt]] = R[rd]    // store word
+I   lwi    R[rt] = M[R[rs] + imm]      // 即値は符号付き
+I   swi    M[R[rs] + imm] = R[rt]
+
+FR1 lwf    F[fd] = M[R[rs] + R[rt]]
+FR1 swf    M[R[rs] + R[rt]] = F[fd]
+FI1 lwif   F[ft] = M[R[rs] + imm]
+FI1 swif   M[R[rs] + imm] = F[ft]
+
+●I/O命令    // データ受信はワード単位、データ送信はバイト単位(メモリマップ方式は断念)
+R   in     R[rd] = 受信データ
+FR  inf    F[rd] = 受信データ
+
+R   outa   送信データ = R[rs]の31-24    // 上位1バイト
+R   outb   送信データ = R[rs]の23-16
+R   outc   送信データ = R[rs]の15-8
+R   outd   送信データ = R[rs]の7-0      // 下位1バイト(実際にレイトレが使うのはこれ)
+FR  outaf  送信データ = F[rs]の31-24    // 上位1バイト
+FR  outbf  送信データ = F[rs]の23-16
+FR  outcf  送信データ = F[rs]の15-8
+FR  outdf  送信データ = F[rs]の7-0      // 下位1バイト
+
+●無条件分岐命令    // 参照されるPCは次の命令のアドレス
+I   j      PC = imm                          // jump
+I   jl     $ra = PC; PC = imm                // jump and link
+R   jr     PC = R[rs]の下位16bit              // jump register
+R   jlr    $ra = PC; PC = R[rs]の下位16bit    // jump and link register
+
+●条件分岐(比較分岐)命令    // 参照されるPCは次の命令のアドレス
+I   beq    if (R[rs] == R[rt]) PC = PC + imm    // branch on equal
+FI  fbeq   if (F[fs] == F[ft]) PC = PC + imm
+IT  beqi   if (R[rs] == immt)  PC = PC + imm
+
+I   bne    if (R[rs] != R[rt]) PC = PC + imm    // branch on not equal
+FI  fbne   if (F[fs] != F[ft]) PC = PC + imm
+IT  bnei   if (R[rs] != immt)  PC = PC + imm
+
+I   blte    if (R[rs] <= R[rt]) PC = PC + imm    // branch on less than equal
+FI  fblte   if (F[fs] <= F[ft]) PC = PC + imm
+IT  bltei   if (R[rs] <= immt)  PC = PC + imm
+
+I   bgte    if (R[rs] >= R[rt]) PC = PC + imm    // branch on greater than equal
+FI  fbgte   if (F[fs] >= F[ft]) PC = PC + imm
+IT  bgtei   if (R[rs] >= immt)  PC = PC + imm
+
+●疑似命令
+-   setl   レジスタにラベルアドレスを代入    // setl $r** label  ->  addi $r** $r0 addr
+
+●その他
+-   nop
+-   halt   停止命令(実行終了)
+-   dbg    シミュレータ用デバッグ命令(コアではレジスタ内容を送信する実装を検討中)
