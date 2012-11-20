@@ -315,8 +315,8 @@ int main(int argc, char *argv[]){
       else if(n == 2 && f == branch){
 	int b = table.get_index(token[n+1]);
 	if(b < 0){
-	  cerr << "[ERROR]Not found: "  << token[n+1] << endl;
 	  table.print();
+	  cerr << "[ERROR]Not found: (label) "  << token[n+1] << endl;
 	  return -1;
 	}
 	oprd[n] = table.get_index(token[n+1]) - itr - 1;
