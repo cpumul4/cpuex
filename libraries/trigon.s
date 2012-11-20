@@ -24,7 +24,7 @@ min_caml_cos:
 	cmpf	$r28 $f0 $f30 
 	bne	$r28 $r0  cos.calc ;既に2pi未満ならcos.calcに飛ぶ
 	mvf	$f5 $f30
-cos.suber<=theta<=2suber:		;f0 = theta, f4 = 2, f5 = 2pi, f6 = 2*f5
+cos.suber<=theta<=2suber:	;f0 = theta, f4 = 2, f5 = 2pi, f6 = 2*f5
 	mulf	$f6 $f5	$f4
 	cmpf	$r28 $f0 $f6
 	bne	$r28 $r0 cos.division ;if(f0 <= f6)goto division
@@ -104,29 +104,6 @@ cos.putsignbit:
 	or	$r1 $r3 $r1
 	mvrf	$f0 $r1
 	jr	$r31
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	;; ;; $f0に引数が与えられるとする
 	;; jl	sin.start

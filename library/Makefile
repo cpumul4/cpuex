@@ -9,12 +9,19 @@ OBJS = $(SRCS:.c=.o)
 RM = rm -f
 
 a.out: sin.c
+	gcc -c print_bit.c
 	gcc -O3 -std=c99 print_bit.o sin.c -lm 
+
+stop:  sin.c
+	gcc -c print_bit.c
+	sed -e 's/#define STOP 0/#define STOP 1/' -i include.h
+	gcc -O3 -std=c99 print_bit.o sin.c -lm 
+	sed -e 's/#define STOP 1/#define STOP 0/' -i include.h
 
 clean:
 	$(RM) $(TARGET) $(OBJS) *~
 
 check-syntax:
-	$(CC) $(WARNOPTS) $(VER) -S -fsyntax-only $(CHK_SOURCES)
+	$(CC) $(WARNOPTS) $(VER) -fsyntax-only $(CHK_SOURCES)
 
 .PHONY: clean check-syntax

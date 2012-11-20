@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <float.h>
-#include "./fpu.c"
+#include "./fpu.h"
+#include "./include.h"
 
 typedef union {
   float f;
@@ -18,17 +19,17 @@ const float pi = 3.1415927410125732421875;
 extern float reduction_pi4(float);
 extern float reduction_2pi(float);
 
-int is_good_spec_atan(float theta, float lib){
+int is_good_spec_sin(float theta, float lib){
   long double acr, t, diff, mindiff = 100, reerr, minacr;
   const long double epsilon = (long double)pow(2, -126);
 
   t = (long double)theta;
-  for(reerr = 1 - (long double)pow(2, -23);
-      reerr <= 1 + (long double)pow(2, -23); reerr += DBL_EPSILON*pow(2,19)){
+  for(reerr = 1 - powl(2, -23);
+      reerr <= 1 + powl(2, -23); reerr += DBL_EPSILON*pow(2,15)){
     /* printf("%.30Le\n",reerr); */
-    acr = atan(t*reerr);
-    diff = abs(acr - (long double)lib);
-    long double permit = acr*(long double)pow(2,-20);
+    acr = sin(t*reerr);
+    diff = fabsl(acr - (long double)lib);
+    long double permit = acr*powl(2,-18);
     long double max = permit > epsilon ? permit : epsilon;
 
     if(max > diff)
@@ -42,9 +43,9 @@ int is_good_spec_atan(float theta, float lib){
   printf("arg is %e/",theta);
   print_bit(theta);
 
-  float the = reduction_pi4(reduction_2pi(theta));
-  printf("red'd arg is %.10e/", the);
-  print_bit(the);
+  /* float the = reduction_pi4(reduction_2pi(theta)); */
+  /* printf("red'd arg is %.10e/", the); */
+  /* print_bit(the); */
   
   printf("diff is %Le\n", mindiff);
  /* printf(",\tdiff is %d\n", diff); */
@@ -53,9 +54,53 @@ int is_good_spec_atan(float theta, float lib){
   printf("x86 sin is %Le\t", minacr);
   print_bit(acr);
 
+#if STOP
+  char input[10];
+  scanf("%s", input);
+#endif
+
   return 1;
 }
 
+/* -------------- wrong -------------- */
+/* arg is -2.437500e+00/1 10000000 00111000000000000000000 */
+/* diff is nan */
+/* lib sin is -nan	1 11111111 10000000000000000000000 */
+/* x86 sin is -1.181480e+00	1 01111111 00101110011101010111001 */
+/* 1 */
+
+
+int is_good_spec_atan(float theta, float lib){
+  long double acr, t, diff;
+  const long double epsilon = (long double)pow(2, -126);
+
+  t = (long double)theta;
+  acr = atanl(t);
+  diff = fabsl(acr - (long double)lib);
+
+  long double permit = fabsl(acr*powl(2,-20));
+  long double max = permit > epsilon ? permit : epsilon;
+
+  if(diff < max)
+    return 0;
+
+  printf("-------------- wrong --------------\n");
+  printf("arg is %e/",theta);
+  print_bit(theta);
+
+  printf("diff is %Le\n", diff);
+  printf("lib sin is %e\t", lib);
+  print_bit(lib);
+  printf("x86 sin is %Le\t", acr);
+  print_bit(acr);
+
+#if STOP
+  char input[10];
+  scanf("%s", input);
+#endif
+
+  return 1;
+}
 
 
 int flag(float theta){
@@ -147,7 +192,7 @@ float kernel_atan(float t){
 float myatan(float t){
   float result;
   int sign;
-  if(t < 0.4375)
+  if(fabsf(t) < 0.4375)
     return kernel_atan(t);
 
   if(t < 0){
@@ -159,7 +204,7 @@ float myatan(float t){
   }
 
   
-  if(0.4375 <= t && t < 2.4375)
+  if(0.4375 <= t && t <= 2.4375)
     result =  pi/4 + kernel_atan((t - 1.0)/(t + 1.0));
   else if(2.4375 < t)
     result =  pi/2 - kernel_atan(1/t);
@@ -173,7 +218,7 @@ int main(void){
   int diff, admit = 0;
   in.f = 3.0;
   printf("pi is %.30e\n", pi);
-  for(in.f = -8; in.f <= 0; in.b--){
+  for(in.f = -26353650.9; in.f <= 0; in.b--){
     lib.f = myatan(in.f);
     is_good_spec_atan(in.f, lib.f);
     

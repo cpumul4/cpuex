@@ -2,7 +2,8 @@
  x ...予定通り進まなかったこと
  - ...予定になかったこと
 --------- 11/20(Tue) ---------
-（予定）atanC実装
+ o atanC実装, kernel_atanのassembly実装
+ - simulator, assemblerのバグ修正
 --------- 11/19(Mon) ---------
  - FPUデバッグ用のシミュレータ
  × atan途中
