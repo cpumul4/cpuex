@@ -17,20 +17,25 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *)
   | Div of Id.t * id_or_imm
   | SLL of Id.t * id_or_imm
   | SRA of Id.t * id_or_imm
+  | XOr of Id.t * Id.t
   | Ld of Id.t * id_or_imm
   | St of Id.t * Id.t * id_or_imm
+  | In
+  | Out of Id.t
   | FMov of Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
   | FDiv of Id.t * Id.t
+  | SqRt of Id.t
   | LdF of Id.t * id_or_imm
   | StF of Id.t * Id.t * id_or_imm
+  | InF
   | Comment of string
   (* virtual instructions *)
-  | IfEq of Id.t * Id.t * t * t
-  | IfLE of Id.t * Id.t * t * t
+  | IfEq of Id.t * id_or_imm * t * t
+  | IfLE of id_or_imm * id_or_imm * t * t
   | IfFEq of Id.t * Id.t * t * t
   | IfFLE of Id.t * Id.t * t * t
   (* closure address, integer arguments, and float arguments *)
@@ -49,7 +54,7 @@ let regs = [| "$r1"; "$r2"; "$r3"; "$r4"; "$r5"; "$r6"; "$r7";
               "$r8"; "$r9"; "$r10"; "$r11"; "$r12"; "$r13"; "$r14";
               "$r15"; "$r16"; "$r17"; "$r18"; "$r19"; "$r20"; "$r21";
               "$r22"; "$r23"; "$r24"; "$r25"; "$r26"; "$r27" |]
-let fregs = Array.init 31 (fun i -> Printf.sprintf "$f%d" i)
+let fregs = Array.init 28 (fun i -> Printf.sprintf "$f%d" i)
 let allregs = Array.to_list regs
 let allfregs = Array.to_list fregs
 let reg_fsw = "$f31" (* temporary for swap *)
@@ -72,12 +77,13 @@ let rec remove_and_uniq xs = function
 (* free variables in the order of use (for spilling) (caml2html: sparcasm_fv) *)
 let fv_id_or_imm = function V(x) -> [x] | _ -> []
 let rec fv_exp = function
-  | Nop | Set(_) | SetF(_) | SetL(_) | Comment(_) | Restore(_) -> []
-  | Mov(x) | Neg(x) | FMov(x) | FNeg(x) | Save(x, _) -> [x]
+  | Nop | Set(_) | SetF(_) | SetL(_) | In | InF | Comment(_) | Restore(_) -> []
+  | Mov(x) | Out(x) | Neg(x) | FMov(x) | FNeg(x) | SqRt(x) | Save(x, _) -> [x]
   | Add(x, y') | Sub(x, y') | Mul(x, y') | Div(x, y') | SLL(x, y') | SRA(x, y') | Ld(x, y') | LdF(x, y') -> x :: fv_id_or_imm y'
   | St(x, y, z') | StF(x, y, z') -> x :: y :: fv_id_or_imm z'
-  | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]
-  | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) -> x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
+  | XOr(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]
+  | IfEq(x, y', e1, e2) -> x :: fv_id_or_imm y' @ remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
+  | IfLE(x', y', e1, e2) -> fv_id_or_imm x' @ fv_id_or_imm y' @ remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
   | IfFEq(x, y, e1, e2) | IfFLE(x, y, e1, e2) -> x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
   | CallCls(x, ys, zs) -> x :: ys @ zs
   | CallDir(_, ys, zs) -> ys @ zs
@@ -168,6 +174,9 @@ and print_sub2 n = function
   | SRA (id, C imm) ->
       (indent n;
       Printf.printf "%s >> %d\n" id imm)
+  | XOr (id1, id2) ->
+      (indent n;
+      Printf.printf "%s ^ %s\n" id1 id2)
   | Ld (id1, V id2) ->
       (indent n;
       Printf.printf "Load %s(%s)\n" id1 id2)
@@ -180,6 +189,12 @@ and print_sub2 n = function
   | St (id1, id2, C imm) ->
       (indent n;
       Printf.printf "Store %s %s(%d)\n" id1 id2 imm)
+  | In ->
+      (indent n;
+      Printf.printf "In\n")
+  | Out id ->
+      (indent n;
+      Printf.printf "Out(%s)\n" id)
   | FMov id ->
       (indent n;
       Printf.printf "FMov(%s)\n" id)
@@ -198,6 +213,9 @@ and print_sub2 n = function
   | FDiv (id1, id2) ->
       (indent n;
       Printf.printf "%s /. %s\n" id1 id2)
+  | SqRt id ->
+      (indent n;
+      Printf.printf "SqRt(%s)\n" id)
   | LdF (id1, V id2) ->
       (indent n;
       Printf.printf "LoadF %s(%s)\n" id1 id2)
@@ -210,20 +228,44 @@ and print_sub2 n = function
   | StF (id1, id2, C imm) ->
       (indent n;
       Printf.printf "StoreF %s %s(%d)\n" id1 id2 imm)
+  | InF ->
+      (indent n;
+      Printf.printf "InF\n")
   | Comment s ->
       (indent n;
       Printf.printf "Comment (%s)\n" s)
   (* virtual instructions *)
-  | IfEq (id1, id2, e1, e2) ->
+  | IfEq (id1, V id2, e1, e2) ->
       (indent n;
       Printf.printf "If %s = %s Then\n" id1 id2;
       print_sub1 (n + 1) e1;
       indent n;
       Printf.printf "Else\n";
       print_sub1 (n + 1) e2)
-  | IfLE (id1, id2, e1, e2) ->
+  | IfEq (id, C imm, e1, e2) ->
+      (indent n;
+      Printf.printf "If %s = %d Then\n" id imm;
+      print_sub1 (n + 1) e1;
+      indent n;
+      Printf.printf "Else\n";
+      print_sub1 (n + 1) e2)
+  | IfLE (V id1, V id2, e1, e2) ->
       (indent n;
       Printf.printf "If %s <= %s Then\n" id1 id2;
+      print_sub1 (n + 1) e1;
+      indent n;
+      Printf.printf "Else\n";
+      print_sub1 (n + 1) e2)
+  | IfLE (V id, C imm, e1, e2) ->
+      (indent n;
+      Printf.printf "If %s <= %d Then\n" id imm;
+      print_sub1 (n + 1) e1;
+      indent n;
+      Printf.printf "Else\n";
+      print_sub1 (n + 1) e2)
+  | IfLE (C imm, V id, e1, e2) ->
+      (indent n;
+      Printf.printf "If %d <= %s Then\n" imm id;
       print_sub1 (n + 1) e1;
       indent n;
       Printf.printf "Else\n";
@@ -261,6 +303,7 @@ and print_sub2 n = function
   | Restore id ->
       (indent n;
       Printf.printf "Restore %s\n" id)
+  | _ -> assert false
 
 let print_sub3 n f =
   indent n;

@@ -1,16 +1,18 @@
 1st Architecture 画像まとめ
 
-●シミュレータが出力した画像
-base.ppm
-mandelbrot.ppm
-contest.ppm
-contest-char.ppm : 非バイナリ出力
-
 ●実機テストで使用したプログラム
 mandelbrot1.s
 min-rt1.s
-min-rt1char.s : 非バイナリ出力
-min-rt2.s
+min-rt1char.s : min-rt1.sの非バイナリ出力
+min-rt2.s : min-rt1.sを高速化
+min-rt3.s : min-rt2.sにsin,cosアセンブリ実装を組み込み
+
+●シミュレータが出力した画像
+base.ppm : min-rt1.s, min-rt2.s
+mandelbrot.ppm : mandelbrot1.s
+contest.ppm : min-rt1.s, min-rt2.s
+contest-char.ppm : min-rt1char.s
+contest2.ppm : min-rt3.s
 
 ●コアが出力した画像
 ○FPU組み込み当初の出力
@@ -50,7 +52,7 @@ contest1_3_2#1c.ppm
  - 158.140065sec
  - 誤差1bit(非バイナリ出力で場所を確認)
 
-contest1_3_2bug.ppm
+contest1_3_2bag.ppm
  - contest1_3_2#1c.ppmにおいて誤差1bitの該当ピクセルを黒くして場所が分かるようにしたもの
 
 ○fmulを修正したあとの出力
@@ -71,5 +73,11 @@ contest1_3_3#1.ppm
 
 contest1_3_3#2.ppm
  - min-rt2.s
- - 153.470197sec(高速化)
+ - 153.470197sec
  - 誤差なし
+
+contest1_3_3#3.ppm
+ - min-rt3.s
+ - 152.830155sec
+ - 誤差なし
+

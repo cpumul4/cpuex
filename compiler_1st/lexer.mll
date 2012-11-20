@@ -31,6 +31,8 @@ rule token = parse
     { BOOL(false) }
 | "not"
     { NOT }
+| "xor"
+    { XOR }
 | digit+ (* 整数を字句解析するルール (caml2html: lexer_int) *)
     { INT(int_of_string (Lexing.lexeme lexbuf)) }
 | digit+ ('.' digit*)? (['e' 'E'] ['+' '-']? digit+)?
@@ -55,6 +57,10 @@ rule token = parse
     { AST_DOT }
 | "/."
     { SLASH_DOT }
+| "fabs"
+    { FABS }
+| "sqrt"
+    { SQRT }
 | '='
     { EQUAL }
 | "<>"

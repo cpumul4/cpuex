@@ -4,7 +4,8 @@ open Syntax
 let addtyp x = (x, Type.gentyp ())
 
 let rec is_power_of_two i =
-  if i = 1 then true
+  if i = 0 then false
+  else if i = 1 then true
   else if i mod 2 = 0 then is_power_of_two (i / 2)
   else false
 

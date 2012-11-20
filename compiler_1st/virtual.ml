@@ -46,12 +46,12 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
   | Closure.FDiv(x, y) -> Ans(FDiv(x, y))
   | Closure.IfEq(x, y, e1, e2) ->
       (match M.find x env with
-      | Type.Bool | Type.Int -> Ans(IfEq(x, y, g env e1, g env e2))
+      | Type.Bool | Type.Int -> Ans(IfEq(x, V y, g env e1, g env e2))
       | Type.Float -> Ans(IfFEq(x, y, g env e1, g env e2))
       | _ -> failwith "equality supported only for bool, int, and float")
   | Closure.IfLE(x, y, e1, e2) ->
       (match M.find x env with
-      | Type.Bool | Type.Int -> Ans(IfLE(x, y, g env e1, g env e2))
+      | Type.Bool | Type.Int -> Ans(IfLE(V x, V y, g env e1, g env e2))
       | Type.Float -> Ans(IfFLE(x, y, g env e1, g env e2))
       | _ -> failwith "inequality supported only for bool, int, and float")
   | Closure.Let((x, t1), e1, e2) ->
@@ -82,8 +82,15 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
       let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
       Ans(CallCls(x, int, float))
   | Closure.AppDir(Id.L(x), ys) ->
-      let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
-      Ans(CallDir(Id.L(x), int, float))
+      (match x with
+      | "min_caml_print_char" -> Ans(Out(List.hd ys))
+      | "min_caml_read_int" -> Ans(In)
+      | "min_caml_read_float" -> Ans(InF)
+      | "min_caml_sqrt" -> Ans(SqRt(List.hd ys))
+      | "min_caml_xor" -> Ans(XOr(List.hd ys, List.hd (List.tl ys)))
+      | _ ->
+        let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
+        Ans(CallDir(Id.L(x), int, float)))
   | Closure.Tuple(xs) -> (* 組の生成 (caml2html: virtual_tuple) *)
       let y = Id.genid "t" in
       let (offset, store) =

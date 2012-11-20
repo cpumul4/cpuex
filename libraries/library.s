@@ -183,14 +183,7 @@ floor_neg_minus_one:
 
 
 
-
-
-
-
-
-
-
-	;; j	min_caml_sin
+	;; ;; j	min_caml_sin
 	;; jl	min_caml_cos
 	;; halt
 min_caml_cos:
@@ -259,10 +252,8 @@ cos.theta>=pi/4:			;sin(theta)
 	llif	$f11 $f11 -21844 ;; 1010 1010 1010 1100
 	luif	$f12 $f12 15368  ;; 0011 1100 0000 1000
 	llif	$f12 $f12 -31130 ;; 1000 0110 0110 0110
-
 	luif	$f13 $f13 -18099 ;; 1011 1001 0100 1101
 	llif	$f13 $f13 25782  ;; 0110 0100 1011 0110
-	
 	mulf	$f14 $f0 $f0
 	mulf	$f15 $f14 $f13
 	addf	$f16 $f12 $f15
@@ -277,13 +268,10 @@ cos.theta<=pi/4:			;cos(theta)
 	llif	$f10 $f10 0	;1.0
 	luif	$f11 $f11 48896
 	llif	$f11 $f11 0	;-0.5
-
 	luif	$f12 $f12 15658 ;; 0011110100101010 
 	llif	$f12 $f12 42889 ;; 1010011110001001
-
 	luif	$f13 $f13 47795 ;; 1011101010110011
 	llif	$f13 $f13 33030 ;; 1000000100000110
-
 	mulf	$f14 $f0 $f0
 	mulf	$f15 $f14 $f13
 	addf	$f16 $f12 $f15
@@ -296,27 +284,6 @@ cos.putsignbit:
 	or	$r1 $r3 $r1
 	mvrf	$f0 $r1
 	jr	$r31
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -379,13 +346,10 @@ sin.theta>=pi/4:			;cos(theta)
 	llif	$f10 $f10 0	;1.0
 	luif	$f11 $f11 48896
 	llif	$f11 $f11 0	;-0.5
-
 	luif	$f12 $f12 15658 ;; 0011110100101010 
 	llif	$f12 $f12 42889 ;; 1010011110001001
-
 	luif	$f13 $f13 47795 ;; 1011101010110011
 	llif	$f13 $f13 33030 ;; 1000000100000110
-
 	mulf	$f14 $f0 $f0
 	mulf	$f15 $f14 $f13
 	addf	$f16 $f12 $f15
@@ -401,10 +365,8 @@ sin.theta<=pi/4:			;sin(theta)
 	llif	$f11 $f11 -21844 ;; 1010 1010 1010 1100
 	luif	$f12 $f12 15368  ;; 0011 1100 0000 1000
 	llif	$f12 $f12 -31130 ;; 1000 0110 0110 0110
-
 	luif	$f13 $f13 -18099 ;; 1011 1001 0100 1101
 	llif	$f13 $f13 25782  ;; 0110 0100 1011 0110
-	
 	mulf	$f14 $f0 $f0
 	mulf	$f15 $f14 $f13
 	addf	$f16 $f12 $f15
@@ -418,4 +380,3 @@ sin.putsignbit:
 	or	$r1 $r3 $r1
 	mvrf	$f0 $r1
 	jr	$r31
-

@@ -93,7 +93,7 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
       toplevel := { name = (Id.L(x), t); args = yts; formal_fv = zts; body = e1' } :: !toplevel; (* トップレベル関数を追加 *)
       let e2' = g env' known' e2 in
       if S.mem x (fv e2') then (* xが変数としてe2'に出現するか *)
-	MakeCls((x, t), { entry = Id.L(x); actual_fv = zs }, e2') (* 出現していたら削除しない *)
+	MakeCls((x, t), { entry = Id.L(x); actual_fv = zs }, e2' (* 出現していたら削除しない *))
       else
 	(Format.eprintf "eliminating closure(s) %s@." x;
 	 e2') (* 出現しなければMakeClsを削除 *)
@@ -110,7 +110,7 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
 
 let f e =
   toplevel := [];
-  let e' = g M.empty S.empty e in
+  let e' = g M.empty (S.of_list ["create_array"; "create_float_array"; "floor"; "float_of_int"; "int_of_float"; "print_char"; "print_newline"; "read_int"; "read_float"; "sqrt"; "xor"]) e in
   Prog(List.rev !toplevel, e')
 
 let rec indent n =
@@ -231,8 +231,7 @@ let rec print_sub1 n = function
       (indent n;
       Printf.printf "%s\n" id)
 
-let print_sub2 n f =
-  indent n;
+let print_sub2 f =
   Printf.printf "let %s : %s (" ((fun (Id.L id) -> id) (fst f.name)) (Type.string_of_type (snd f.name));
   let count = ref (List.length f.args) in
   List.iter
@@ -250,9 +249,9 @@ let print_sub2 n f =
       if !count > 0 then Printf.printf ", "))
     f.formal_fv;
   Printf.printf ") =\n";
-  print_sub1 (n + 1) f.body
+  print_sub1 1 f.body
 
 let print_closure n (Prog(fs, e)) =
-  List.iter (print_sub2 n) fs;
+  List.iter print_sub2 fs;
   print_sub1 n e
 
