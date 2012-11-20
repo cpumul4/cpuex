@@ -68,17 +68,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
       pc = LR_INIT;	
     }
 
-    
-    // int prevpc = pc - 1;
-    // bool fpu = false;
-    // if(error_section())
-    //   fpu = rom[prevpc].is_fpu();
-
     rom[pc-1].exec_asm();
-
-    // if(fpu)
-    //   rom[prevpc].write();
-
 
     exec_count++;
 
