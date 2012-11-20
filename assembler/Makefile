@@ -19,6 +19,11 @@ $(PROGRAM): $(OBJS)
 	@echo generating $@
 	@$(SHELL) -ec '$(CC) -MM $(CPPFLAGS) $< | sed "s/\($*\)\.o[ :]*/\1.o $@ : /g" > $@; [ -s $@ ] || rm -f $@'
 
+debug: $(SOURCES)
+	sed -e 's/#define ASSEMBLER_DEBUG 0/#define ASSEMBLER_DEBUG 1/' -i assembler.hpp
+	make 
+	sed -e 's/#define ASSEMBLER_DEBUG 1/#define ASSEMBLER_DEBUG 0/' -i assembler.hpp
+
 ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEPENDS)
 endif

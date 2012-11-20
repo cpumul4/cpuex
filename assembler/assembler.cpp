@@ -360,19 +360,17 @@ int main(int argc, char *argv[]){
     exit(1);
   }
   
+#if ASSEMBLER_DEBUG
   for(int __i =0; __i < inum; __i++)
     print_bit(output[__i].word);
 
-
-  
-#if DEBUG
   cout <<  "----------------------上と下は同じ命令です-------------------------\n";
   for(int __i =0; __i < inum; __i++){
     printf("%s\t", input[__i]);
     print_bit_instr(output[__i].word);
   }
-#endif
 
+#endif
   for(int a = 0; a < inum;a++){
     fout.write(output[a].byte,4);   
   }

@@ -44,4 +44,4 @@ public:
   void decode(char *line);
 };
 
-
+#define ASSEMBLER_DEBUG 0
