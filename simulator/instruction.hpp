@@ -141,18 +141,18 @@ inline string encode(uint8_t opcode){
   
 
 inline void instr_stat(long long int all_count){
-  cerr << "--- 各命令が何回実行されたか ----\n";
-  while(all_count > 1000000){
-    all_count /= 10;
-    for(int j = 0; j < 64; j++)
-      instr_count[j] /= 10;
+  double ratio[64];
+  double count = all_count/100;
+  for(int j = 0;j < 64; j++){
+    ratio[j] = instr_count[j]/count;
   }
-  cerr << all_count << endl;
 
+  cerr << "--- 各命令が何回実行されたか ----\n";
   for(int i = 0;i < 64; i++){ 
     if(instr_count[i] != 0){
-      cerr << encode((uint8_t)i) << "\t: " 
-	   <<(int)((instr_count[i]/(all_count/100.0))) << "%\n";
+      char str[10];
+      sprintf(str,"%.1f", ratio[i]);
+      cerr << encode((uint8_t)i) << "\t: " << str << "%\n";
     }
   }
   cout << "------------------------------\n";
@@ -165,7 +165,6 @@ inline void instr::show(){
        << (int)rs << ' ' 
        << (int)rt << '\n';
 }
-
 
 
 #endif // _INSTRUCTION
