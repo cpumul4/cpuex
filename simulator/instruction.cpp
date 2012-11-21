@@ -130,9 +130,9 @@ void instr::exec_asm(){
     c(ADD , D = S + T;);
     c(SUB , D = S - T;);
 
-    c(ADDF , FD = FS + FT;);
-    c(SUBF , FD = FS - FT;);
-    c(MULF , FD = FS * FT;);
+    c(FADD , FD = FS + FT;);
+    c(FSUB , FD = FS - FT;);
+    c(FMUL , FD = FS * FT;);
     c(DIVF , FD = FS / FT;);
     c(ADDI, D = S + IMM;);
     c(SUBI, D = S - IMM;);
@@ -152,15 +152,15 @@ void instr::exec_asm(){
     c(CMP , D = S <= T;);	// myint
     c(CMPF, D = FS <= FT;);	
 
-    c(MVR , D = S;);
-    c(MVF , FD = FS;);
-    c(MVRF, FD.b = S.b;);		// myint,myfloat
-    c(MVFR, D.b  = FS.b;);		// myint,myfloat
+    c(R2R , D = S;);
+    c(F2F , FD = FS;);
+    c(R2F, FD.b = S.b;);		// myint,myfloat
+    c(F2R, D.b  = FS.b;);		// myint,myfloat
 
     c(LUI , D = (IMM << 16) | lowbits(S, 16);); 
     c(LLI , D = ((S >> 16) << 16) | lowbits((uint32_t)IMM,16););
-    c(LUIF, FD = (int16_to_uint32(IMM) << 16) | lowbits(FS.b, 16);); // FT.b
-    c(LLIF, FD = ((FS.b >> 16) << 16) | int16_to_uint32(IMM););
+    c(FLUI, FD = (int16_to_uint32(IMM) << 16) | lowbits(FS.b, 16);); // FT.b
+    c(FLLI, FD = ((FS.b >> 16) << 16) | int16_to_uint32(IMM););
 
     c(LW  , D = ram[S+T];);
     c(SW  , ram[S+T] = D.b;);	// D regが distになってない
@@ -168,10 +168,10 @@ void instr::exec_asm(){
     c(SWI , ram[S + IMM] = D.b;); // **********D,Sの順番に注意********
 
 
-    c(LWF, FD = ram[S + T];);
-    c(SWF, ram[S + T] = FD.b;);
-    c(LWIF, FD = ram[S + IMM];);
-    c(SWIF, ram[S + IMM] = FD.b;); // myfloatの実装が外に出てしまっている
+    c(FLW, FD = ram[S + T];);
+    c(FSW, ram[S + T] = FD.b;);
+    c(FLWI, FD = ram[S + IMM];);
+    c(FSWI, ram[S + IMM] = FD.b;); // myfloatの実装が外に出てしまっている
 
     // -------------- J形式 --------------
     c(J , pc = get_pc(IMM);); 
@@ -182,8 +182,8 @@ void instr::exec_asm(){
 
     c(BEQ , if(D == S)  pc = pc + IMM;);
     c(BNE , if(D != S)  pc = pc + IMM;);
-    c(BEQF ,if(FD == FS)pc +=     IMM;);
-    c(BNEF ,if(FD != FS)pc +=     IMM;);
+    c(FBEQ ,if(FD == FS)pc +=     IMM;);
+    c(FBNE ,if(FD != FS)pc +=     IMM;);
 
     // -------------- FR形式 -------------
 
@@ -203,16 +203,16 @@ void instr::exec_asm(){
 
     // ここまでちゃんと動く10\17 15:00
     c(IN  , exec_input( D.b, IN ););
-    c(INF , exec_input(FD.b, INF););
+    c(FIN , exec_input(FD.b, FIN););
 
     c(OUTA, exec_output(  D,3););
     c(OUTB, exec_output(  D,2););
     c(OUTC, exec_output(  D,1););
     c(OUTD, exec_output(  D,0););
-    c(OUTAF, exec_output(FD,3););
-    c(OUTBF, exec_output(FD,2););
-    c(OUTCF, exec_output(FD,1););
-    c(OUTDF, exec_output(FD,0););
+    c(FOUTA, exec_output(FD,3););
+    c(FOUTB, exec_output(FD,2););
+    c(FOUTC, exec_output(FD,1););
+    c(FOUTD, exec_output(FD,0););
     // ここまでちゃんと動く 10/19 22:00
   default:
     cerr << " unknown opcode " << (int)opcode;

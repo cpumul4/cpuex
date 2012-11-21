@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <map>
-#include "./common.hpp"
+#include "./opcode.hpp"
 #include "./memory.hpp"
 #include "./instruction.hpp"
 #include "./ui.hpp"

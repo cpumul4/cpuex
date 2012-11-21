@@ -1,4 +1,4 @@
-#include "./common.hpp"
+#include "./opcode.hpp"
 #include "./memory.hpp"
 #include <stdio.h>
 #include <iostream>

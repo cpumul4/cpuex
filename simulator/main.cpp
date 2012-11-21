@@ -84,7 +84,7 @@ int main(int argc, char *argv[]){
   uint count;
   
   if(argc < 2){
-    cerr << "USAGE: ./simulator assemblyfile (infile) (outfile) \n";
+    cerr << "USAGE: ./simulator assemblyfile (finile) (outfile) \n";
     return 1;
   }
   switch(argc) {

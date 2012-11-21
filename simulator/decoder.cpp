@@ -1,5 +1,5 @@
 #include "./instruction.hpp"
-#include "./common.hpp"
+#include "./opcode.hpp"
 #include "./memory.hpp"
 #include "./ltable.hpp"
 #include <fstream>
@@ -50,9 +50,9 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
 
   op(add , ADD, r)
     op(sub , SUB, r)
-    op(addf, ADDF, r)
-    op(subf, SUBF, r)
-    op(mulf, MULF, r)
+    op(fadd, FADD, r)
+    op(fsub, FSUB, r)
+    op(fmul, FMUL, r)
     op(divf, DIVF, r)
 
     op(sqrt, SQRT, r)
@@ -75,24 +75,24 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(cmp , CMP , r)
     op(cmpf, CMPF, r)
 
-    op(mvr , MVR , r)
-    op(mvf , MVF , r)
-    op(mvrf, MVRF, r)
-    op(mvfr, MVFR, r)
+    op(r2r , R2R , r)
+    op(f2f , F2F , r)
+    op(r2f, R2F, r)
+    op(f2r, F2R, r)
 
     op(lui , LUI , i)
     op(lli , LLI , i)
-    op(luif, LUIF, i)
-    op(llif, LLIF, i)
+    op(flui, FLUI, i)
+    op(flli, FLLI, i)
 
     op(lw  , LW  , r)
     op(lwi , LWI , r)
     op(sw  , SW  , r)
     op(swi , SWI , i)
-    op(lwf , LWF , r)
-    op(lwif, LWIF, i)
-    op(swf , SWF , r)
-    op(swif, SWIF, i)
+    op(flw , FLW , r)
+    op(flwi, FLWI, i)
+    op(fsw , FSW , r)
+    op(fswi, FSWI, i)
 
     op(j   , J   , j)
     op(jl  , JL  , j)
@@ -102,8 +102,8 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
 
     op(beq , BEQ , branch)
     op(bne , BNE , branch)
-    op(beqf, BEQF, branch)
-    op(bnef, BNEF, branch)
+    op(fbeq, FBEQ, branch)
+    op(fbne, FBNE, branch)
 
 
     op(nop , NOP , none)
@@ -112,15 +112,15 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(halt, HALT, none)
 
     op(in , IN  , r)
-    op(inf, INF , r)
+    op(fin, FIN , r)
     op(outa,OUTA, r)
     op(outb,OUTB, r)
     op(outc,OUTC, r)
     op(outd,OUTD, r)
-    op(outaf,OUTAF, r)
-    op(outbf,OUTBF, r)
-    op(outcf,OUTCF, r)
-    op(outdf,OUTDF, r)
+    op(fouta,FOUTA, r)
+    op(foutb,FOUTB, r)
+    op(foutc,FOUTC, r)
+    op(foutd,FOUTD, r)
 
 
   else {

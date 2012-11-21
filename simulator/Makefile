@@ -24,9 +24,9 @@ ifneq "$(MAKECMDGOALS)" "clean"
 endif
 
 opt:
-	sed -e 's/#define OPTIMIZATION 0/#define OPTIMIZATION 1/' -i common.hpp
+	sed -e 's/#define OPTIMIZATION 0/#define OPTIMIZATION 1/' -i opcode.hpp
 	make 
-	sed -e 's/#define OPTIMIZATION 1/#define OPTIMIZATION 0/' -i common.hpp
+	sed -e 's/#define OPTIMIZATION 1/#define OPTIMIZATION 0/' -i opcode.hpp
 
 
 .PHONY : clean check-syntax
