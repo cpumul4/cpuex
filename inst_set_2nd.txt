@@ -141,7 +141,7 @@ FI1 fswi   M[R[rs] + imm] = F[ft]
 
 ●I/O命令    // データ受信はワード単位、データ送信はバイト単位(メモリマップ方式は断念)
 R   in     R[rd] = 受信データ
-FR  fin    F[rd] = 受信データ
+FR  fin    F[fd] = 受信データ
 
 R   outa   送信データ = R[rs]の31-24    // 上位1バイト
 R   outb   送信データ = R[rs]の23-16
