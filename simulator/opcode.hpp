@@ -1,5 +1,7 @@
 #pragma	once
 
+#define OPTIMIZATION 0
+
 #define HALT	0
 #define ADD	1
 #define SUB	2
