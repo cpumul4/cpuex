@@ -12,6 +12,7 @@ floatの絶対値/符号反転を追加 : fabs,fneg,-s,-n
 整数の即値比較分岐を追加→36bit長命令 : beqi,bnei,bltei,bgtei
 fdivをfinvとfmulに分割する : finv
 J形式は廃止(PCは16bit即値で扱える)
+find first oneを追加
 
 ○命名規則みたいなもの
 float演算
@@ -48,7 +49,7 @@ $f3-$f31 // 汎用
 命令長 : 36bit
 
 R-family : opcode(35-30),s(29-25),t(24-16),d(15-11),amt(10-6),func(5-0)（amtはunsigned）
-           レジスタ*3(tだけ9bit幅だが上位4bitは無視)、シフト幅、機能コード
+           レジスタ*3(tだけ9bit幅だがレジスタアドレスとしては上位4bitは無視)、シフト幅、機能コード
 	    - R   : opcode,rs,rt,rd,amt,func
 	    - FR  : opcode,fs,ft,fd,amt,func
 	    - FR1 : opcode,rs,rt,fd,amt,func
@@ -96,6 +97,9 @@ R   xor    R[rd] = R[rs] xor R[rt]
 I   andi   R[rt] = R[rs] and imm
 I   ori    R[rt] = R[rs] or  imm
 
+R   findf1 R[rd] = (R[rs]の最上位の1の位置)    // find first one
+     // R[rs]に1が現れなければ0,最上位ビットが1なら1,...,最下位ビットだけが1なら32を返す
+
 ●シフト命令
 R   sll    R[rd] = R[rs] <<  amt    // shift left logical
 R   srl    R[rd] = R[rs] >>  amt    // shift right logical
@@ -103,19 +107,19 @@ R   sra    R[rd] = R[rs] >>> amt    // shift right arith.
 
 R   shift  R[rd] = R[rs] (<< or >>) R[rt]    // shift logical
     	   	   	     	    	     // R[rt]は符号付き9bit整数
-					     // シフト量正なら左、負なら右シフト(暫定)
+					     // シフト量正なら左、負なら右シフト
 
 ●移動命令
-R   mvr    R[rd] = R[rs]    // move R-reg -> R-reg
-FR  mvf    F[fd] = F[fs]    // move F-reg -> F-reg
-FR1 mvrf   F[fd] = R[rs]    // move R-reg -> F-reg
-FR2 mvfr   R[rd] = F[fs]    // move F-reg -> R-reg
+R   r2r    R[rd] = R[rs]    // move R-reg -> R-reg
+FR  f2f    F[fd] = F[fs]    // move F-reg -> F-reg
+FR1 r2f    F[fd] = R[rs]    // move R-reg -> F-reg
+FR2 f2r    R[rd] = F[fs]    // move F-reg -> R-reg
 
 ●16bit即値代入命令    // @は連接
 I   lui    R[rt] = imm @ R[rs]の下位16ビット    // load upper immidiate
 I   lli    R[rt] = R[rs]の上位16ビット @ imm    // load lower immidiate
-FI  luif   F[ft] = imm @ F[fs]の下位16ビット
-FI  llif   F[ft] = F[fs]の上位16ビット @ imm
+FI  flui   F[ft] = imm @ F[fs]の下位16ビット
+FI  flli   F[ft] = F[fs]の上位16ビット @ imm
 
 ●ロード/ストア命令    // メモリはワードアクセス
 R   lw     R[rd] = M[R[rs] + R[rt]]    // load word
@@ -123,23 +127,27 @@ R   sw     M[R[rs] + R[rt]] = R[rd]    // store word
 I   lwi    R[rt] = M[R[rs] + imm]      // 即値は符号付き
 I   swi    M[R[rs] + imm] = R[rt]
 
-FR1 lwf    F[fd] = M[R[rs] + R[rt]]
-FR1 swf    M[R[rs] + R[rt]] = F[fd]
-FI1 lwif   F[ft] = M[R[rs] + imm]
-FI1 swif   M[R[rs] + imm] = F[ft]
+FR1 flw    F[fd] = M[R[rs] + R[rt]]
+FR1 flwa    // ロードした値の絶対値をとる
+FR1 flwn    // ロードした値の符号を反転する
+FR1 fsw    M[R[rs] + R[rt]] = F[fd]
+FI1 flwi   F[ft] = M[R[rs] + imm]
+FI1 flwia
+FI1 flwin
+FI1 fswi   M[R[rs] + imm] = F[ft]
 
 ●I/O命令    // データ受信はワード単位、データ送信はバイト単位(メモリマップ方式は断念)
 R   in     R[rd] = 受信データ
-FR  inf    F[rd] = 受信データ
+FR  fin    F[rd] = 受信データ
 
 R   outa   送信データ = R[rs]の31-24    // 上位1バイト
 R   outb   送信データ = R[rs]の23-16
 R   outc   送信データ = R[rs]の15-8
 R   outd   送信データ = R[rs]の7-0      // 下位1バイト(実際にレイトレが使うのはこれ)
-FR  outaf  送信データ = F[rs]の31-24    // 上位1バイト
-FR  outbf  送信データ = F[rs]の23-16
-FR  outcf  送信データ = F[rs]の15-8
-FR  outdf  送信データ = F[rs]の7-0      // 下位1バイト
+FR  fouta  送信データ = F[rs]の31-24    // 上位1バイト
+FR  foutb  送信データ = F[rs]の23-16
+FR  foutc  送信データ = F[rs]の15-8
+FR  foutd  送信データ = F[rs]の7-0      // 下位1バイト
 
 ●無条件分岐命令    // 参照されるPCは次の命令のアドレス
 I   j      PC = imm                          // jump
@@ -156,13 +164,13 @@ I   bne    if (R[rs] != R[rt]) PC = PC + imm    // branch on not equal
 FI  fbne   if (F[fs] != F[ft]) PC = PC + imm
 IT  bnei   if (R[rs] != immt)  PC = PC + imm
 
-I   blte    if (R[rs] <= R[rt]) PC = PC + imm    // branch on less than equal
-FI  fblte   if (F[fs] <= F[ft]) PC = PC + imm
-IT  bltei   if (R[rs] <= immt)  PC = PC + imm
+I   blte   if (R[rs] <= R[rt]) PC = PC + imm    // branch on less than equal
+FI  fblte  if (F[fs] <= F[ft]) PC = PC + imm
+IT  bltei  if (R[rs] <= immt)  PC = PC + imm
 
-I   bgte    if (R[rs] >= R[rt]) PC = PC + imm    // branch on greater than equal
-FI  fbgte   if (F[fs] >= F[ft]) PC = PC + imm
-IT  bgtei   if (R[rs] >= immt)  PC = PC + imm
+I   bgte   if (R[rs] >= R[rt]) PC = PC + imm    // branch on greater than equal
+FI  fbgte  if (F[fs] >= F[ft]) PC = PC + imm
+IT  bgtei  if (R[rs] >= immt)  PC = PC + imm
 
 ●疑似命令
 -   setl   レジスタにラベルアドレスを代入    // setl $r** label  ->  addi $r** $r0 addr
@@ -170,4 +178,4 @@ IT  bgtei   if (R[rs] >= immt)  PC = PC + imm
 ●その他
 -   nop
 -   halt   停止命令(実行終了)
--   dbg    シミュレータ用デバッグ命令(コアではレジスタ内容を送信する実装を検討中)
+-   dbg    シミュレータ用デバッグ命令
