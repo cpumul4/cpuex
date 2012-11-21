@@ -11,7 +11,6 @@
 	or   $r4 $r1 $r2
 	nor  $r4 $r1 $r2
 	xor  $r4 $r1 $r2
-
 	sll  $r4 $r1  15
 	srl  $r4 $r1  15
 	sra  $r4 $r1  15

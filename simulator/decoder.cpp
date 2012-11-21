@@ -1,46 +1,21 @@
 #include "./instruction.hpp"
 #include "./common.hpp"
 #include "./memory.hpp"
+#include "./ltable.hpp"
 #include <fstream>
 #include <cstring>
 #include <stdlib.h>
 
 #define MAX_CHAR  100
-#define LABEL_TABLE_NUM 10000
-
 extern instr rom[];
 
-
-class ltable {
-  uint index[LABEL_TABLE_NUM];
-  char *label[LABEL_TABLE_NUM];
-public:
-  ltable(){
-    for(int _i = 0; _i < LABEL_TABLE_NUM;_i++)
-      label[_i] = NULL;
+inline void label_error(const int addr, const char *label){
+  if(addr < 0){
+    cerr << "[ERROR] Not Found Label: " << label << endl;
+    exit(1);
   }
-  void set_label(uint ,const char *);
-  uint get_index(const char *);
-};
-
-void ltable::set_label(uint i, const char *l){
-  uint itr = 0;
-  while(label[itr] != NULL)itr++;
-  label[itr] = new char[strlen(l) + 1];
-  strcpy(label[itr],l);
-  index[itr] = i;
+  return;
 }
-
-uint ltable::get_index(const char *_label){
-  uint i = 0;
-  while(label[i] != NULL && strcmp(_label,label[i]) != 0)i++;
-  if(label[i] != NULL)
-    return index[i];		// FIND
-
-  return 0;  			// ERROR
-}
-    
-
 
 inline int get_regnum(char *reg){
   if(reg[0] == '$'){
@@ -68,6 +43,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   // 擬似命令setl
   if(strcmp(assm,"setl") == 0){	
     int16_t reg = get_regnum(asmtok[1]), addr = table.get_index(asmtok[2]);
+    label_error(addr,asmtok[2]);
     inst.set(ADDI, reg, 0, addr);
     return;
   }
@@ -160,6 +136,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   else if(format == j){
     int16_t imm;
     imm = table.get_index(asmtok[1]);
+    label_error(imm, asmtok[1]);
     inst.set_imm(opcode, imm);
   }
   else if(format == branch){
@@ -170,6 +147,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
 
     int16_t imm;
     imm = table.get_index(asmtok[3]) - romindex - 1;
+    label_error(imm + romindex + 1, asmtok[3]);
     if(romindex == 0)imm--;
     inst.set(opcode, args[0], args[1], imm);
 

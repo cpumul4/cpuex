@@ -313,12 +313,6 @@ int main(int argc, char *argv[]){
 	 (funct == fnc_sll || funct == fnc_srl || funct == fnc_sra))
 	amt = interpret_operand(token[n+1], table);
       else if(n == 2 && f == branch){
-	int b = table.get_index(token[n+1]);
-	if(b < 0){
-	  table.print();
-	  cerr << "[ERROR]Not found: (label) "  << token[n+1] << endl;
-	  return -1;
-	}
 	oprd[n] = table.get_index(token[n+1]) - itr - 1;
       }
       else {
