@@ -124,19 +124,19 @@ I   lli    R[rt] = R[rs]の上位16ビット @ imm    // load lower immidiate
 FI  flui   F[ft] = imm @ F[fs]の下位16ビット
 FI  flli   F[ft] = F[fs]の上位16ビット @ imm
 
-●ロード/ストア命令    // メモリはワードアクセス
+●ロード/ストア命令    // メモリはワードアクセス、即値は符号付き
 R   lw     R[rd] = M[R[rs] + R[rt]]    // load word
-R   sw     M[R[rs] + R[rt]] = R[rd]    // store word
-I   lwi    R[rt] = M[R[rs] + imm]      // 即値は符号付き
-I   swi    M[R[rs] + imm] = R[rt]
-
+I   lwi    R[rt] = M[R[rs] + imm]
 FR1 flw    F[fd] = M[R[rs] + R[rt]]
 FR1 flwa    // ロードした値の絶対値をとる
 FR1 flwn    // ロードした値の符号を反転する
-FR1 fsw    M[R[rs] + R[rt]] = F[fd]
 FI1 flwi   F[ft] = M[R[rs] + imm]
 FI1 flwia
 FI1 flwin
+
+R   sw     M[R[rs] + R[rt]] = R[rd]    // store word
+I   swi    M[R[rs] + imm] = R[rt]
+FR1 fsw    M[R[rs] + R[rt]] = F[fd]
 FI1 fswi   M[R[rs] + imm] = F[ft]
 
 ●I/O命令    // データ受信はワード単位、データ送信はバイト単位(メモリマップ方式は断念)
