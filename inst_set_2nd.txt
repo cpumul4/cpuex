@@ -160,20 +160,20 @@ R   jlr    $ra = PC; PC = R[rs]の下位16bit    // jump and link register
 
 ●条件分岐(比較分岐)命令    // 参照されるPCは次の命令のアドレス
 I   beq    if (R[rs] == R[rt]) PC = PC + imm    // branch on equal
-FI  fbeq   if (F[fs] == F[ft]) PC = PC + imm
 IT  beqi   if (R[rs] == immt)  PC = PC + imm
+FI  fbeq   if (F[fs] == F[ft]) PC = PC + imm
 
 I   bne    if (R[rs] != R[rt]) PC = PC + imm    // branch on not equal
-FI  fbne   if (F[fs] != F[ft]) PC = PC + imm
 IT  bnei   if (R[rs] != immt)  PC = PC + imm
+FI  fbne   if (F[fs] != F[ft]) PC = PC + imm
 
 I   blte   if (R[rs] <= R[rt]) PC = PC + imm    // branch on less than equal
-FI  fblte  if (F[fs] <= F[ft]) PC = PC + imm
 IT  bltei  if (R[rs] <= immt)  PC = PC + imm
+FI  fblte  if (F[fs] <= F[ft]) PC = PC + imm
 
 I   bgte   if (R[rs] >= R[rt]) PC = PC + imm    // branch on greater than equal
-FI  fbgte  if (F[fs] >= F[ft]) PC = PC + imm
 IT  bgtei  if (R[rs] >= immt)  PC = PC + imm
+FI  fbgte  if (F[fs] >= F[ft]) PC = PC + imm
 
 ●疑似命令
 -   setl   レジスタにラベルアドレスを代入    // setl $r** label  ->  addi $r** $r0 addr
