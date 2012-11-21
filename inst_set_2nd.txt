@@ -1,6 +1,6 @@
 2ndアーキテクチャ
  - 暫定版
- - 計??命令
+ - 計81+2命令
 
 ****************************************************************
 
@@ -105,9 +105,12 @@ R   sll    R[rd] = R[rs] <<  amt    // shift left logical
 R   srl    R[rd] = R[rs] >>  amt    // shift right logical
 R   sra    R[rd] = R[rs] >>> amt    // shift right arith.
 
-R   shift  R[rd] = R[rs] (<< or >>) R[rt]    // shift logical
-    	   	   	     	    	     // R[rt]は符号付き9bit整数
-					     // シフト量正なら左、負なら右シフト
+R   sllr   R[rd] = R[rs] << R[rt]    // shift left logical register
+   	   	     	    	     // R[rt]は符号付き9bit整数
+				     // シフト量が負なら右シフト
+R   srlr   R[rd] = R[rs] >> R[rt]    // shift right logical register
+    	   	   	     	     // R[rt]は符号付き9bit整数
+				     // シフト量が負なら左シフト
 
 ●移動命令
 R   r2r    R[rd] = R[rs]    // move R-reg -> R-reg
