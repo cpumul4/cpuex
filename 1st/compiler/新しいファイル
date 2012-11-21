@@ -1,0 +1,7 @@
+constfold
+ゼロレジスタで分岐
+外部関数を一部Asm.tへ
+inline展開改良
+constFold改良
+constFold改良2
+parserのバグフィックス(islog2)
