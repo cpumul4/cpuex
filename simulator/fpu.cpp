@@ -1,6 +1,6 @@
 #include <stdio.h> 
 #include <stdlib.h>
-#include "fpu.h"
+#include "fpu.hpp"
 
 float fadd(float f1,float f2){
   unsigned fraction = 0;

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <limits.h>
-#include "./fpu.h"
+#include "./fpu.hpp"
 
 
 #define INTREG_NUM   32
