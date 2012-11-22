@@ -84,3 +84,7 @@
 #define FBGTE	79
 #define NOP	80
 #define DBG	81
+#define CMP	82
+#define CMPF	83
+#define DIVF    84
+

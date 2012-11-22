@@ -65,7 +65,7 @@ inline string encode(uint8_t opcode){
     op(fadd, FADD, r)
     op(fsub, FSUB, r)
     op(fmul, FMUL, r)
-    op(divf, DIVF, r)
+    op(finv, FINV, r)
 
     op(addi, ADDI, i)
     op(subi, SUBI, i)
@@ -99,9 +99,6 @@ inline string encode(uint8_t opcode){
     op(fsw , FSW , r)
     op(fswi, FSWI, i)
 
-    op(cmp , CMP , r)
-    op(cmpf, CMPF, r)
-
     op(j   , J   , j)
     op(jl  , JL  , j)
     op(jr  , JR  , r)
@@ -119,7 +116,6 @@ inline string encode(uint8_t opcode){
 
     op(nop , NOP , none)
     op(dgb , DBG , none)
-    op(rst , RST , none) 
     op(halt, HALT, none)
 
     op(in  , IN  , r)
@@ -133,6 +129,11 @@ inline string encode(uint8_t opcode){
     op(foutc, FOUTC, r)
     op(foutd, FOUTD, r)
 
+    op(divf, DIVF, r)
+    op(cmp, CMP, r)
+    op(cmpf, CMPF, r)
+
+
     else return "unknown";
 
 #undef op
@@ -142,7 +143,7 @@ inline string encode(uint8_t opcode){
 
 inline void instr_stat(long long int all_count){
   double ratio[64];
-  double count = all_count/100;
+  double count = all_count/100.0;
   for(int j = 0;j < 64; j++){
     ratio[j] = instr_count[j]/count;
   }

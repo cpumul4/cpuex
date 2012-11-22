@@ -133,7 +133,7 @@ void instr::exec_asm(){
     c(FADD , FD = FS + FT;);
     c(FSUB , FD = FS - FT;);
     c(FMUL , FD = FS * FT;);
-    c(DIVF , FD = FS / FT;);
+    c(FINV , FD = FS / FT;);
     c(ADDI, D = S + IMM;);
     c(SUBI, D = S - IMM;);
 
@@ -147,10 +147,7 @@ void instr::exec_asm(){
 
     c(SLL , D = S << IMM;);
     c(SRL , D = S >> IMM;);	
-    c(SRA , D = sra(S,IMM););	
-
-    c(CMP , D = S <= T;);	// myint
-    c(CMPF, D = FS <= FT;);	
+    c(SRA , D = sra(S,IMM););
 
     c(R2R , D = S;);
     c(F2F , FD = FS;);
@@ -191,15 +188,7 @@ void instr::exec_asm(){
 
     c(NOP, ;);
     c(DBG,  cout << "DEBUG命令に到達しました\n";step = 1;);
-  case(0):
     c(HALT, pc = LR_INIT;);
-    c(RST,  
-      cout << "reset命令に到達しました. GPR, SPR, LR以外の全レジスタを0にします.\n";
-      for(int i=0;i<INTREG_NUM;i++){
-	if(i < 29)
-	  ireg[i] = 0;
-	freg[i].b = 0;
-      });
 
     // ここまでちゃんと動く10\17 15:00
     c(IN  , exec_input( D.b, IN ););
@@ -214,8 +203,12 @@ void instr::exec_asm(){
     c(FOUTC, exec_output(FD,1););
     c(FOUTD, exec_output(FD,0););
     // ここまでちゃんと動く 10/19 22:00
+
+    c(DIVF , FD = FS / FT;);
+    c(CMP , D = S <= T;);	// myint
+    c(CMPF, D = FS <= FT;);	
   default:
-    cerr << " unknown opcode " << (int)opcode;
+    cerr << " unknown opcode (maybe simulator's bug)" << (int)opcode << endl;
     return;
   }
 #undef D 

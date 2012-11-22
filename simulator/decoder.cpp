@@ -53,7 +53,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(fadd, FADD, r)
     op(fsub, FSUB, r)
     op(fmul, FMUL, r)
-    op(divf, DIVF, r)
+    op(finv, FINV, r)
 
     op(sqrt, SQRT, r)
 
@@ -71,9 +71,6 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(sll , SLL , r)
     op(srl , SRL , r)
     op(sra , SRA , r)
-
-    op(cmp , CMP , r)
-    op(cmpf, CMPF, r)
 
     op(r2r , R2R , r)
     op(f2f , F2F , r)
@@ -108,7 +105,6 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
 
     op(nop , NOP , none)
     op(dbg , DBG , none)
-    op(rst , RST , none) 
     op(halt, HALT, none)
 
     op(in , IN  , r)
@@ -123,6 +119,23 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(foutd,FOUTD, r)
 
 
+  else if (strcmp(asmtok[0],"cmp") == 0){
+      cerr << "[WARNING] CMP IS OLD" << endl;
+      opcode = CMP;
+      format = r;
+    }
+  else if (strcmp(asmtok[0],"cmpf") == 0){
+      cerr << "[WARNING] CMPF IS OLD" << endl;
+      opcode = CMPF;
+      format = r;
+    }
+  else if (strcmp(asmtok[0],"divf") == 0){
+      cerr << "[WARNING] DIVF IS OLD" << endl;
+      opcode = DIVF;
+      format = r;
+    }
+
+    
   else {
     cerr << "unknown opcode: " << asmtok[0] << '\n';
     exit(1);

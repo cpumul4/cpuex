@@ -9,7 +9,7 @@
 #define INTREG_NUM   32
 #define FLOATREG_NUM 32		// rst命令でireg = fregを仮定している
 #define RAM_SIZE  1024*1024
-#define ROM_SIZE  32768
+#define ROM_SIZE 32768
 
 /* register */
 #define ZR ireg[0]
