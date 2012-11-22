@@ -125,23 +125,18 @@ format str_to_opcode(char *str, int &opcode){
     op(jr  , JR  , r)
     op(jlr , JLR , r)
 
-
     op(beq , BEQ , branch)
     op(beqi , BEQI , it)
     op(fbeq, FBEQ, branch)
-
     op(bne , BNE , branch)
     op(bnei , BNEI , it)
     op(fbne, FBNE, branch)
-
     op(blte , BLTE , branch)
     op(bltei , BLTEI, it)
     op(fblte, FBLTE, branch)
-
     op(bgte , BGTE , branch)
     op(bgtei , BGTEI, it)
     op(fbgte, FBGTE, branch)
-
 
     op(nop , NOP , none)
     op(dbg , DBG , none)
