@@ -29,6 +29,6 @@ bne_else.33:
 	jl	ack.14
 	addi	$r30 $r30 2
 	lwi	$r31 $r30 -1
-	mvr	$r2 $r1
+	r2r	$r2 $r1
 	lwi	$r1 $r30 0
 	j	ack.14

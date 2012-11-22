@@ -14,7 +14,7 @@ fib.9:
 bne_else.22:
 	subi	$r2 $r1 1
 	swi	$r1 $r30 0
-	mvr	$r1 $r2
+	r2r	$r1 $r2
 	swi	$r31 $r30 -1
 	subi	$r30 $r30 2
 	jl	fib.9
@@ -23,7 +23,7 @@ bne_else.22:
 	lwi	$r2 $r30 0
 	subi	$r2 $r2 2
 	swi	$r1 $r30 -1
-	mvr	$r1 $r2
+	r2r	$r1 $r2
 	swi	$r31 $r30 -2
 	subi	$r30 $r30 3
 	jl	fib.9
