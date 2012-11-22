@@ -5,10 +5,14 @@
 #include <fstream>
 #include <cstring>
 #include <stdlib.h>
-
+#define DEBUG_DECODER 1
 #define MAX_CHAR  100
 extern instr rom[];
 
+const char combegin[3] = "#;";
+enum format {r,i,j, branch, none, it};
+
+///////////////////////////////////////////////////////////
 inline void label_error(const int addr, const char *label){
   if(addr < 0){
     cerr << "[ERROR] Not Found Label: " << label << endl;
@@ -16,38 +20,42 @@ inline void label_error(const int addr, const char *label){
   }
   return;
 }
-
+////////////////////////////////////////////////////////////
 inline int get_regnum(char *reg){
-  if(reg[0] == '$'){
-    if(reg[1] == 'r' || reg[1] == 'f')
-      return (int)atoi(reg + 2);
+  int regnum;
+  if(reg[0] != '$'){
+    return -1;
   }
-  else 
-    return (int)atoi(reg);
+  else if(reg[1] == 'r' || reg[1] == 'f'){
+    regnum = (int)atoi(reg + 2);
+    if(regnum >= INTREG_NUM && regnum >= FLOATREG_NUM){
+      cerr << "[ERROR]存在しないレジスタです: " << reg << endl;
+      exit(1);
+    }
+    else return regnum;
+  }
+}
+//////////////////////////////////////////////////////////
+inline int get_imm(char *immstr, ltable &table){
+  int imm;
+  if(immstr[0] == '-' || (immstr[0] >= '0' && immstr[0] <= '9'))
+    return atoi(immstr);
+  else {
+    cerr << "in get_imm " << immstr << " is ";
+    imm = table.get_index(immstr);
+    cerr << imm << endl;
+    label_error(imm, immstr);
+    return imm;
+  }
 }
 
-void put_rom(char assm[], ltable table, instr &inst, uint romindex){
-  char *asmtok[10];
-  char delims[] = " \t\r\n";
+////////////////////////////////////////////////////
+format str_to_opcode(char *str, int &opcode){
+  format f;
+#define op(_str,code,form) \
+  else if (strcmp(str,#_str) == 0){opcode = code;f = form;}
 
-  while(*assm == ' ' || *assm == '\t')
-    assm++;
-  asmtok[0] = strtok(assm, delims);
-  for(int itr=1; (asmtok[itr] = strtok(NULL, delims)) != NULL;itr++);  
-
-  enum {r,i,j, branch, none} format;
-#define op(str,code,form) \
-  else if (strcmp(asmtok[0],#str) == 0){opcode = code;format = form;}
-
-  uint8_t opcode;
-  // 擬似命令setl
-  if(strcmp(assm,"setl") == 0){	
-    int16_t reg = get_regnum(asmtok[1]), addr = table.get_index(asmtok[2]);
-    label_error(addr,asmtok[2]);
-    inst.set(ADDI, reg, 0, addr);
-    return;
-  }
-
+  if(false);
   op(add , ADD, r)
     op(sub , SUB, r)
     op(fadd, FADD, r)
@@ -63,8 +71,12 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(finv, FINV, r)
     op(finva, FINVA, r)
     op(finvn, FINVN, r)
-
+    
+    op(fabs, FABS, r)
+    op(fneg, FNEG, r)
     op(sqrt, SQRT, r)
+    op(sqrta, SQRTA, r)
+    op(sqrtn, SQRTN, r)
 
     op(addi, ADDI, i)
     op(subi, SUBI, i)
@@ -77,9 +89,13 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(andi, ANDI, i)
     op(ori , ORI , i)
 
-    op(sll , SLL , r)
-    op(srl , SRL , r)
-    op(sra , SRA , r)
+    op(findf1, FINDF1, r)
+
+    op(sll , SLL , i)		// シミュレータ的にはi形式
+    op(srl , SRL , i)
+    op(sra , SRA , i)
+    op(sllr, SLLR, r)
+    op(srlr, SRLR, r)
 
     op(r2r , R2R , r)
     op(f2f , F2F , r)
@@ -92,11 +108,15 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(flli, FLLI, i)
 
     op(lw  , LW  , r)
-    op(lwi , LWI , r)
+    op(lwi , LWI , i)
     op(sw  , SW  , r)
     op(swi , SWI , i)
     op(flw , FLW , r)
+    op(flwa, FLWA, r)
+    op(flwn, FLWN, r)
     op(flwi, FLWI, i)
+    op(flwia, FLWIA, i)
+    op(flwin, FLWIN, i)
     op(fsw , FSW , r)
     op(fswi, FSWI, i)
 
@@ -107,9 +127,20 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
 
 
     op(beq , BEQ , branch)
-    op(bne , BNE , branch)
+    op(beqi , BEQI , it)
     op(fbeq, FBEQ, branch)
+
+    op(bne , BNE , branch)
+    op(bnei , BNEI , it)
     op(fbne, FBNE, branch)
+
+    op(blte , BLTE , branch)
+    op(bltei , BLTEI, it)
+    op(fblte, FBLTE, branch)
+
+    op(bgte , BGTE , branch)
+    op(bgtei , BGTEI, it)
+    op(fbgte, FBGTE, branch)
 
 
     op(nop , NOP , none)
@@ -126,108 +157,172 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     op(foutb,FOUTB, r)
     op(foutc,FOUTC, r)
     op(foutd,FOUTD, r)
-
-
-  else if (strcmp(asmtok[0],"cmp") == 0){
+#undef op
+  else if (strcmp(str,"cmp") == 0){
       cerr << "[WARNING] CMP IS OLD" << endl;
       opcode = CMP;
-      format = r;
+      f = r;
     }
-  else if (strcmp(asmtok[0],"cmpf") == 0){
+  else if (strcmp(str,"cmpf") == 0){
       cerr << "[WARNING] CMPF IS OLD" << endl;
       opcode = CMPF;
-      format = r;
+      f = r;
     }
-  else if (strcmp(asmtok[0],"divf") == 0){
+  else if (strcmp(str,"divf") == 0){
       cerr << "[WARNING] DIVF IS OLD" << endl;
       opcode = DIVF;
-      format = r;
+      f = r;
     }
-
     
   else {
-    cerr << "unknown opcode: " << asmtok[0] << '\n';
+    cerr << "[ERROR]unknown instruction: " << str << '\n';
     exit(1);
   }
     ;
-#undef op
 
-  if(format == none){
-    inst.set(opcode);
+  return f;
+}
+////////////////////////////////////////////////////////
+inline void pseudo_instr(char *tokens[]){
+  if(strcmp(tokens[0], "setl") == 0){
+    strcpy(tokens[0], "addi");
+    tokens[3] = (char *)malloc(sizeof(tokens[2]) + 1);
+    strcpy(tokens[3], tokens[2]);
+    tokens[2] = (char *)malloc(sizeof("$r0") + 1);
+    strcpy(tokens[2], "$r0");
   }
-  else if(format == j){
-    int16_t imm;
-    imm = table.get_index(asmtok[1]);
-    label_error(imm, asmtok[1]);
-    inst.set_imm(opcode, imm);
-  }
-  else if(format == branch){
-    uint8_t args[2] = {0, 0};
-    for(int itr=0; itr < 2;itr++){
-      args[itr] = (uint8_t)get_regnum(asmtok[itr+1]);
-    }
+  return;
+}
 
-    int16_t imm;
-    imm = table.get_index(asmtok[3]) - romindex - 1;
-    label_error(imm + romindex + 1, asmtok[3]);
-    if(romindex == 0)imm--;
-    inst.set(opcode, args[0], args[1], imm);
 
-  }
-  else {  
-    int args[3] = {0, 0, 0};
+/////////////////////////////////////////////////////////////////////
+void put_rom(char assm[], ltable table, instr &inst, uint romindex){
+  char *asmtok[5];
+  const char delims[] = " \t\r\n";
+  format format;
+  int opcode;
+  int args[3] = {0,0,0};
+
+  // tokenに分解
+  asmtok[0] = strtok(assm, delims);    
+  for(int itr=1; (asmtok[itr] = strtok(NULL, delims)) != NULL;itr++);
+  
+  pseudo_instr(asmtok);
+
+  format = str_to_opcode(asmtok[0], opcode);
+  
+  
+  switch(format) {
+  case r:
     for(int itr=0; asmtok[itr+1] != NULL;itr++){
       args[itr] = get_regnum(asmtok[itr+1]);
+      if(args[itr] < 0){
+	cerr << "[ERROR]R(FR)形式の命令のオペランドがレジスタじゃありません" << endl;
+	for(int i = 0;asmtok[i] != NULL;i++)
+	  cerr << asmtok[i] << ' ';
+	cerr << endl;
+	exit(1);
+      }
     }
-
-    inst.set(opcode, (uint8_t)args[0], (uint8_t)args[1], (int16_t)args[2]);
+    break;    
+  case i:
+    for(int itr=0; asmtok[itr+1] != NULL; itr++){
+      args[itr] = get_regnum(asmtok[itr+1]);
+      if(args[itr] < 0){
+	args[itr] = get_imm(asmtok[itr+1], table); 
+      }
+    }
+    break;
+  case j:
+    args[2] = table.get_index(asmtok[1]);
+    label_error(args[2], asmtok[1]);
+    break;
+  case branch:
+    args[0] = get_regnum(asmtok[1]);
+    args[1] = get_regnum(asmtok[2]);
+    if(args[0] < 0 || args[1] < 0){
+      cerr << "[ERROR]brahch命令のオペランドがおかしい" << endl;
+      for(int i = 0;asmtok[i] != NULL;i++)
+	cerr << asmtok[i] << ' ';
+      cerr << endl;
+      exit(1);
+    }
+    args[2] = table.get_index(asmtok[3]) - romindex - 1;
+    label_error(args[2] + romindex + 1, asmtok[3]);
+    if(romindex == 0)args[2]--;
+    break;
+  case it:
+    args[0] = get_regnum(asmtok[1]);
+    args[1] = get_imm(asmtok[2], table);
+    if(args[0] < 0){
+      cerr << "[ERROR]brahch命令のオペランドがおかしい" << endl;
+      for(int i = 0;asmtok[i] != NULL;i++)
+	cerr << asmtok[i] << ' ';
+      cerr << endl;
+      exit(1);
+    }
+    args[2] = table.get_index(asmtok[3]) - romindex - 1;
+    label_error(args[2] + romindex + 1, asmtok[3]);
+    if(romindex == 0)args[2]--;
+    break;
+  case none:
+    break;
+  }
+  
+  inst.set(opcode, (uint8_t)args[0], (uint8_t)args[1], (int16_t)args[2]);
+  return;
+}
+////////////////////////////////////////////////////////////////
+void make_table(char *input, ltable &table, int &romindex){
+  if(input == NULL || input[0] == 0){
+    return;
+  }
+  strtok(input, combegin);    // コメントの処理
+  
+  if(input[0] == '\t'){
+    bool cond = input[1] != 0 && input[1] != '\r' 
+      && 'a' <= input[1] && input[1] <= 'z';
+    if(cond){
+      romindex++;		// 命令
+      return;
+    }
+    else {			// エラー
+      cerr << "[WARNING]WRONG TOKEN:\t" << input;
+      return;
+    }
+  }
+  else {			// ラベル
+    char *label = strtok(input, ":"); 
+    table.set_label(romindex,label);
+    return;
   }
 }
 
-void rm_comment(char *line, const char *keys){
-  for(int i=0; line[i] != 0;i++)
-    for(int j=0; keys[j] != 0;j++)
-      if(line[i] == keys[j])
-	line[i] = 0;
-}
 
-
+/////////////////////////////////////////////////////////////
 int decode(char *srcpath){
   char input[ROM_SIZE][MAX_CHAR];
   ltable table;
-  uint romindex = 0;
+  int romindex = 0;
 
   ifstream fasm(srcpath);
 
   // 必要な行だけを抜き取り、labelをtableに入れる
   while( fasm.getline(input[romindex],MAX_CHAR) ){
-    if(input[romindex] == NULL || input[romindex][0] == 0){
-      continue;
-    }
-    rm_comment(input[romindex], "#;");
-    if(input[romindex] == NULL || input[romindex][0] == 0){
-      continue;
-    }
-
-    if(input[romindex][0] == '\t' && input[romindex][1] != 0){
-      if('a' <= input[romindex][1] && input[romindex][1] <= 'z')
-	romindex++;		// 今読んだ入力を保持して、次の入力を読みに行く
-      else continue;
-    }
-    else {
-      char *label = strtok(input[romindex], ":");
-      table.set_label(romindex,label);
-    }
+    make_table(input[romindex], table, romindex);
   }
-
-  for(uint i=0;i < romindex;i++){
+  
+  for(int i=0;i < romindex;i++){
     put_rom(input[i], table, rom[i], i);    
   }
 
-  // for(uint i=0;i < romindex; i++){
-  //   cout << '[' << (int)i << ']';
-  //   rom[i].show();
-  // }
+#if DEBUG_DECODER
+  for(int i=0;i < romindex; i++){
+    cout << '[' << (int)i << ']';
+    rom[i].show();
+  }
+#endif
+
   char string[50];
   sprintf(string, "<デコード終了> 発行命令数:%d\n\n",romindex);
   

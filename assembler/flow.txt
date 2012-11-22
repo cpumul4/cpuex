@@ -1,0 +1,10 @@
+ラベル表の作成
+	コメント処理
+	
+命令の解釈
+	トークン毎に切り出し
+	opcode ,funct,formatに変換
+	interpret_operand(branchの場合には、get_index)
+bit列に変換
+	format毎に関数を用意
+ファイルに出力

@@ -8,6 +8,10 @@
 #include <fstream>
 using namespace std;
 
+const int MAX_CHAR  = 100;
+const int MAX_LINE  = 50000;
+const char delims[] = " \t\r";
+const char combegin[] = "#;";
 
 #define DEBUG 0
 #define debug(expr) cerr << #expr << endl
@@ -46,15 +50,12 @@ inline int get_regnum(char *reg){
 
 int interpret_operand(char *operand, ltable table){
   int regnum = get_regnum(operand);
-  if(regnum >= 0)
-    return regnum;
+  if(regnum >= 0)return regnum;
 
   regnum = table.get_index(operand);
+  if(regnum >= 0)return regnum;
 
-  if(regnum >= 0)
-    return regnum;
-
-  if(operand[0] == '+' || operand[0] == '-' || operand[0] >= '0' || operand[0] <= '9')
+  if(operand[0] == '-' || (operand[0] >= '0' && operand[0] <= '9'))
     return atoi(operand);
   return -1;
 }
@@ -64,6 +65,7 @@ int interpret_operand(char *operand, ltable table){
 enum format { r, i, j, branch};
 
 format dec_operator(char *op, uint &opcode, uint &funct){
+
 #define subst(opstr,opc,fnc) opcode = opc ## opstr; funct = fnc ## opstr;
 #define op(_op) else if(strcmp(op,#_op) == 0){ subst(_op, opc_, fnc_) }
 #define subst_nofunct(opstr,_opc) opcode = _opc ## opstr;
@@ -227,12 +229,8 @@ uint32_t jformbin(uint opcode, int addr){
 
 
 
-int main(int argc, char *argv[]){
-  const int MAX_CHAR  = 100;
-  const int MAX_LINE  = 50000;
 
-  char delims[] = " \t\r";
-  char combegin[] = "#;";
+int main(int argc, char *argv[]){
   int inum = 0;
   char input[MAX_LINE][MAX_CHAR];
   union {
@@ -257,10 +255,8 @@ int main(int argc, char *argv[]){
     }
 
     // コメントの処理
-    char *comment;		
-    if((comment = strchrs(input[inum], combegin)) != NULL){
-      *comment = 0;
-    }
+    strtok(input[inum], combegin);
+
     if(strchr(delims,input[inum][0]) == NULL){ // 先頭が空白文字じゃなかったらlabel
        char *label = strtok(input[inum], ":");
        table.set_label(inum,label);
@@ -290,7 +286,6 @@ int main(int argc, char *argv[]){
   // 命令コード文字列を取り出す
     char *opertstr, *token[4] = { NULL, NULL, NULL, NULL };
 
-
     opertstr = input[itr];//skip_chars(input[itr], delims);
 #if DEBUG
     cerr << input[itr] << endl;
@@ -307,6 +302,7 @@ int main(int argc, char *argv[]){
     cerr << "opcode= " << opcode << ", funct = " << funct << endl;
 #endif
 
+    // オペランド解釈
     int oprd[3] = {0,0,0}, amt = 0;
     for(int n=0; n < 3 && token[n+1] != NULL;n++){
       if(n == 2 && opcode == opc_sll && 

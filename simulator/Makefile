@@ -25,14 +25,18 @@ endif
 
 opt:
 	sed -e 's/#define OPTIMIZATION 0/#define OPTIMIZATION 1/' -i opcode.hpp
-	make 
+	make
 	sed -e 's/#define OPTIMIZATION 1/#define OPTIMIZATION 0/' -i opcode.hpp
 
 win:
 	sed -e 's/#define ROM_SIZE 32768/#define ROM_SIZE 15000/' -i memory.hpp
-	make 
+	make
 	sed -e 's/#define ROM_SIZE 15000/#define ROM_SIZE 32768/' -i memory.hpp
 
+winopt:
+	sed -e 's/#define ROM_SIZE 32768/#define ROM_SIZE 15000/' -i memory.hpp
+	make opt
+	sed -e 's/#define ROM_SIZE 15000/#define ROM_SIZE 32768/' -i memory.hpp
 
 
 .PHONY : clean check-syntax

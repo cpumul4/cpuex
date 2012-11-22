@@ -1,11 +1,8 @@
-
 	jl	atan_kernel
 	halt
 	;; PIを$f29にセット
 	flui	$f29 $f29 16457
 	flli	$f29 $f29 4059	;f29 = pi
-
-
 atan_kernel:
 	;; 上が上位16bit
 	fmul	$f10 $f0 $f0	;$f10 = theta * theta	

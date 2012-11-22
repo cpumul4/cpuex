@@ -60,17 +60,29 @@ inline string encode(uint8_t opcode){
   if(opcode == ADD){
     return "add";
   }
-  op(sub , SUB, r)
-
+    op(sub , SUB, r)
     op(fadd, FADD, r)
+    op(fadda, FADDA, r)
+    op(faddn, FADDN, r)
+
     op(fsub, FSUB, r)
+    op(fsuba, FSUBA, r)
+    op(fsubn, FSUBN, r)
     op(fmul, FMUL, r)
+    op(fmula, FMULA, r)
+    op(fmuln, FMULN, r)
     op(finv, FINV, r)
+    op(finva, FINVA, r)
+    op(finvn, FINVN, r)
+    
+    op(fabs, FABS, r)
+    op(fneg, FNEG, r)
+    op(sqrt, SQRT, r)
+    op(sqrta, SQRTA, r)
+    op(sqrtn, SQRTN, r)
 
     op(addi, ADDI, i)
     op(subi, SUBI, i)
-
-    op(sqrt, SQRT, r)
 
     op(and ,  AND, r)
     op(or  ,  OR , r)
@@ -80,22 +92,34 @@ inline string encode(uint8_t opcode){
     op(andi, ANDI, i)
     op(ori , ORI , i)
 
-    op(sll , SLL , r)
-    op(srl , SRL , r)
-    op(sra , SRA , r)
+    op(findf1, FINDF1, r)
 
-    op(lw  , LW  , r)
-    op(lwi , LWI , r)
-    op(sw  , SW  , r)
-    op(swi , SWI , i)
+    op(sll , SLL , i)		// シミュレータ的にはi形式
+    op(srl , SRL , i)
+    op(sra , SRA , i)
+    op(sllr, SLLR, r)
+    op(srlr, SRLR, r)
+
+    op(r2r , R2R , r)
+    op(f2f , F2F , r)
+    op(r2f, R2F, r)
+    op(f2r, F2R, r)
 
     op(lui , LUI , i)
     op(lli , LLI , i)
     op(flui, FLUI, i)
     op(flli, FLLI, i)
 
+    op(lw  , LW  , r)
+    op(lwi , LWI , i)
+    op(sw  , SW  , r)
+    op(swi , SWI , i)
     op(flw , FLW , r)
+    op(flwa, FLWA, r)
+    op(flwn, FLWN, r)
     op(flwi, FLWI, i)
+    op(flwia, FLWIA, i)
+    op(flwin, FLWIN, i)
     op(fsw , FSW , r)
     op(fswi, FSWI, i)
 
@@ -104,35 +128,42 @@ inline string encode(uint8_t opcode){
     op(jr  , JR  , r)
     op(jlr , JLR , r)
 
+
     op(beq , BEQ , branch)
-    op(bne , BNE , branch)
+    op(beqi , BEQI , it)
     op(fbeq, FBEQ, branch)
+
+    op(bne , BNE , branch)
+    op(bnei , BNEI , it)
     op(fbne, FBNE, branch)
 
-    op(r2r , R2R , r)
-    op(f2f , F2F , r)
-    op(r2f, R2F, r)
-    op(f2r, F2R, r)
+    op(blte , BLTE , branch)
+    op(bltei , BLTEI, it)
+    op(fblte, FBLTE, branch)
+
+    op(bgte , BGTE , branch)
+    op(bgtei , BGTEI, it)
+    op(fbgte, FBGTE, branch)
+
 
     op(nop , NOP , none)
-    op(dgb , DBG , none)
+    op(dbg , DBG , none)
     op(halt, HALT, none)
 
-    op(in  , IN  , r)
-    op(fin , FIN , r)
-    op(outa, OUTA, r)
-    op(outb, OUTB, r)
-    op(outc, OUTC, r)
-    op(outd, OUTD, r)
-    op(fouta, FOUTA, r)
-    op(foutb, FOUTB, r)
-    op(foutc, FOUTC, r)
-    op(foutd, FOUTD, r)
+    op(in , IN  , r)
+    op(fin, FIN , r)
+    op(outa,OUTA, r)
+    op(outb,OUTB, r)
+    op(outc,OUTC, r)
+    op(outd,OUTD, r)
+    op(fouta,FOUTA, r)
+    op(foutb,FOUTB, r)
+    op(foutc,FOUTC, r)
+    op(foutd,FOUTD, r)
 
-    op(divf, DIVF, r)
-    op(cmp, CMP, r)
-    op(cmpf, CMPF, r)
-
+      op(cmp, CMP, r)
+      op(cmpf, CMPF, r)
+      op(divf, DIVF, r)
 
     else return "unknown";
 
