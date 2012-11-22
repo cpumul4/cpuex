@@ -51,9 +51,18 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   op(add , ADD, r)
     op(sub , SUB, r)
     op(fadd, FADD, r)
+    op(fadda, FADDA, r)
+    op(faddn, FADDN, r)
+
     op(fsub, FSUB, r)
+    op(fsuba, FSUBA, r)
+    op(fsubn, FSUBN, r)
     op(fmul, FMUL, r)
+    op(fmula, FMULA, r)
+    op(fmuln, FMULN, r)
     op(finv, FINV, r)
+    op(finva, FINVA, r)
+    op(finvn, FINVN, r)
 
     op(sqrt, SQRT, r)
 
