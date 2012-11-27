@@ -46,6 +46,9 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
   
   pc = 0;
   ZR = 0;
+  // F1.f = 1.0;
+  // FM1.f = -1.0;
+  // FZR.f = 0;
   LR  = LR_INIT;
   SPR = SPR_INIT;
 

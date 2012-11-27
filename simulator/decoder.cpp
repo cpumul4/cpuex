@@ -13,6 +13,24 @@ const char combegin[3] = "#;";
 enum format {r,i,j, branch, none, it};
 
 ///////////////////////////////////////////////////////////
+void varid_immt(int immt){
+  if(immt >= 0 && immt <=  511)return;
+  else {
+    cerr << "[ERROR]数字" << immt << "は9bitに収まりません" << endl;
+    exit(1);
+  }
+}
+
+///////////////////////////////////////////////////////////
+void varid_imm(int imm){
+  if(-32768 <= imm && imm <= 32767)return;
+  else {
+    cerr << "[ERROR]数字" << imm << "は16bitに収まりません" << endl;
+    exit(1);
+  }
+}
+
+///////////////////////////////////////////////////////////
 inline void label_error(const int addr, const char *label){
   if(addr < 0){
     cerr << "[ERROR] Not Found Label: " << label << endl;
@@ -50,10 +68,10 @@ inline int get_imm(char *immstr, ltable &table){
 }
 
 ////////////////////////////////////////////////////
-format str_to_opcode(char *str, int &opcode){
+format str_to_opcode(char *str, opcode &opc){
   format f;
 #define op(_str,code,form) \
-  else if (strcmp(str,#_str) == 0){opcode = code;f = form;}
+  else if (strcmp(str,#_str) == 0){opc = code;f = form;}
 
   if(false);
   op(add , ADD, r)
@@ -153,22 +171,23 @@ format str_to_opcode(char *str, int &opcode){
     op(foutc,FOUTC, r)
     op(foutd,FOUTD, r)
 #undef op
+#if OLD
   else if (strcmp(str,"cmp") == 0){
       cerr << "[WARNING] CMP IS OLD" << endl;
-      opcode = CMP;
+      opc = CMP;
       f = r;
     }
   else if (strcmp(str,"cmpf") == 0){
       cerr << "[WARNING] CMPF IS OLD" << endl;
-      opcode = CMPF;
+      opc = CMPF;
       f = r;
     }
   else if (strcmp(str,"divf") == 0){
       cerr << "[WARNING] DIVF IS OLD" << endl;
-      opcode = DIVF;
+      opc = DIVF;
       f = r;
     }
-    
+#endif    
   else {
     cerr << "[ERROR]unknown instruction: " << str << '\n';
     exit(1);
@@ -195,7 +214,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   char *asmtok[5];
   const char delims[] = " \t\r\n";
   format format;
-  int opcode;
+  opcode opc;
   int args[3] = {0,0,0};
 
   // tokenに分解
@@ -204,8 +223,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   
   pseudo_instr(asmtok);
 
-  format = str_to_opcode(asmtok[0], opcode);
-  
+  format = str_to_opcode(asmtok[0], opc);
   
   switch(format) {
   case r:
@@ -249,6 +267,8 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   case it:
     args[0] = get_regnum(asmtok[1]);
     args[1] = get_imm(asmtok[2], table);
+    if(args[1] == -1)args[1] = 0;
+    varid_immt(args[1]);
     if(args[0] < 0){
       cerr << "[ERROR]brahch命令のオペランドがおかしい" << endl;
       for(int i = 0;asmtok[i] != NULL;i++)
@@ -264,7 +284,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     break;
   }
   
-  inst.set(opcode, (uint8_t)args[0], (uint8_t)args[1], (int16_t)args[2]);
+  inst.set(opc, (regnum)args[0], (regnum)args[1], (immidiate)args[2]);
   return;
 }
 ////////////////////////////////////////////////////////////////
@@ -275,14 +295,14 @@ void make_table(char *input, ltable &table, int &romindex){
   strtok(input, combegin);    // コメントの処理
   
   if(input[0] == '\t'){
-    bool cond = input[1] != 0 && input[1] != '\r' 
-      && 'a' <= input[1] && input[1] <= 'z';
+    bool cond = 'a' <= input[1] && input[1] <= 'z';
     if(cond){
       romindex++;		// 命令
       return;
     }
-    else {			// エラー
-      cerr << "[WARNING]WRONG TOKEN:\t" << input;
+    else {			// ごみ
+      if(input[1] != 0)
+	cerr << "[WARNING]wrong token:" << input + 1 << endl;
       return;
     }
   }

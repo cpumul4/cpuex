@@ -262,7 +262,7 @@ int ui(void){
   if(1)return 0;
 #endif
 
-  cerr << "exec_count is " << exec_count << " and step is " << step;
+  // cerr << "exec_count is " << exec_count << " and step is " << step;
 
   if(init_stop){
     // for(int i=0; i< bpsize; i++)

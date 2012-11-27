@@ -6,6 +6,8 @@
 using namespace std;
 #include <stdint.h>
 
+typedef uint8_t regnum;
+typedef int16_t immidiate;
 
 extern uint32_t int16_to_uint32(int16_t); // memory.cpp
 extern long int instr_count[64];
@@ -13,14 +15,14 @@ extern ofstream fout;
 extern ifstream fin;
 
 class instr {
-  uint8_t opcode;
-  uint8_t rd;
-  uint8_t rs;
-  int16_t rt;			// immediate, addr, register index
+  opcode opc;
+  regnum rd;
+  immidiate rs;
+  immidiate rt;			// immediate, addr, register index
 public:
-  instr(uint8_t _op = 0, uint8_t _rd = 0, uint8_t _rs = 0, int16_t _rt = 0);
-  void set(uint8_t _op, uint8_t _rd = 0, uint8_t _rs = 0, int16_t _rt = 0);
-  void set_imm(uint8_t _op, int16_t _imm);
+  instr(opcode _op = UNKNOWN, regnum _rd = 0, immidiate _rs = 0, immidiate _rt = 0);
+  void set(opcode _op, regnum _rd = 0, regnum _rs = 0, immidiate _rt = 0);
+  void set_imm(opcode _op, immidiate _imm);
   void show();
   void exec_asm(void);
   bool is_fpu(void);
@@ -34,30 +36,42 @@ public:
 // 他は前から順番に入れれば良い
 
 
-inline instr::instr(uint8_t _op, uint8_t _rd, uint8_t _rs, int16_t _rt){
-  opcode = _op;
+inline instr::instr(opcode _op, regnum _rd, immidiate _rs, immidiate _rt){
+  opc = _op;
   rd = _rd;
   rs = _rs;
   rt = _rt;
 }
 
-inline void instr::set(uint8_t _op, uint8_t _rd, uint8_t _rs, int16_t _rt){
-  opcode = _op;
+inline void instr::set(opcode _op, regnum _rd, regnum _rs, immidiate _rt){
+  opc = _op;
   rd = _rd;
-  rs = _rs;
+  switch(opc) {
+  case  BEQI:
+  case  BNEI:
+  case  BLTEI:
+  case  BGTEI:
+    if(_rs == 0)
+      rs = -1;
+    else
+      rs = _rs;
+    break;
+  default:
+    rs = _rs;
+  }
   rt = _rt;
 }
 
-inline void instr::set_imm(uint8_t _op, int16_t _imm){
-  opcode = _op;
+inline void instr::set_imm(opcode _op, immidiate _imm){
+  opc = _op;
   rt = _imm;
 }
 
-inline string encode(uint8_t opcode){
+inline string encode(regnum opc){
 #define op(str,code,form) \
-    else if (opcode == code){return #str; }
+    else if (opc == code){return #str; }
 
-  if(opcode == ADD){
+  if(opc == ADD){
     return "add";
   }
     op(sub , SUB, r)
@@ -160,11 +174,11 @@ inline string encode(uint8_t opcode){
     op(foutb,FOUTB, r)
     op(foutc,FOUTC, r)
     op(foutd,FOUTD, r)
-
+#if OLD
       op(cmp, CMP, r)
       op(cmpf, CMPF, r)
       op(divf, DIVF, r)
-
+#endif
     else return "unknown";
 
 #undef op
@@ -184,7 +198,7 @@ inline void instr_stat(long long int all_count){
     if(instr_count[i] != 0){
       char str[10];
       sprintf(str,"%.1f", ratio[i]);
-      cerr << encode((uint8_t)i) << "\t: " << str << "%\n";
+      cerr << encode((regnum)i) << "\t: " << str << "%\n";
     }
   }
   cout << "------------------------------\n";
@@ -192,7 +206,7 @@ inline void instr_stat(long long int all_count){
 
 
 inline void instr::show(){
-  cout << encode(opcode) << ' ' 
+  cout << encode(opc) << ' ' 
        << (int)rd << ' ' 
        << (int)rs << ' ' 
        << (int)rt << '\n';

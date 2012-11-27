@@ -5,7 +5,6 @@
 #include <limits.h>
 #include "./fpu.hpp"
 
-
 #define INTREG_NUM   32
 #define FLOATREG_NUM 32		// rst命令でireg = fregを仮定している
 #define RAM_SIZE  1024*1024
@@ -13,11 +12,9 @@
 
 /* register */
 #define ZR ireg[0]
-#define RR ireg[1]
-#define AR1 ireg[2]
-#define AR2 ireg[3]
-#define AR3 ireg[4]
-#define AR4 ireg[5]
+#define FZR freg[0]
+#define F1 freg[1]
+#define FM1 freg[2]
 const int GENR_MAX = 25;
 #define SWR ireg[26]
 #define CLR ireg[27]
@@ -51,7 +48,6 @@ union myint {
   uint32_t b;
   int32_t  i;
 public:
-
   void operator = (uint32_t sub){ b = sub; };
   defarith(+)
   defarith(-)
@@ -60,13 +56,14 @@ public:
   defarith(==)
   defarith(!=)
   uint32_t operator<=(myint t){   return i <= t.i ? 1 : 0;  };
-
+  uint32_t operator>=(myint t){   return i >= t.i ? 1 : 0;  };
+  uint32_t operator<=(int t){   return i <= t ? 1 : 0;  };
+  uint32_t operator>=(int t){   return i >= t ? 1 : 0;  };
   defbit(&)
   defbit(|)
   defbit(^)
   defbit(<<)
   defbit(>>)
-  
 };
 #undef defarith
 #undef defbit
@@ -120,8 +117,6 @@ public:
       fdiv(f, t.f);  }
   uint32_t operator<=(myfloat t){
     float a, c;
-
-
     if(this->is_zero())
       a = this->rm_frac();
     else a = this->f;
@@ -136,6 +131,8 @@ public:
     return a <= c ? 1 : 0;  
     // return f <= t.f ? 1 : 0;
   }
+  uint32_t operator>=(myfloat t){ return t <= *this; }
+
   uint32_t operator==(myfloat t){   
     float a, c;
     if(this->is_zero())
