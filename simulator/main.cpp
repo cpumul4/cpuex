@@ -46,9 +46,9 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
   
   pc = 0;
   ZR = 0;
-  // F1.f = 1.0;
-  // FM1.f = -1.0;
-  // FZR.f = 0;
+  F1.f = 1.0;
+  FM1.f = -1.0;
+  FZR.f = 0;
   LR  = LR_INIT;
   SPR = SPR_INIT;
 
@@ -76,7 +76,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     exec_count++;
 
   }
-  cout << "結果レジスタ($r1, $f0) = " << ireg[1].i << ", " << freg[0].f  << endl;
+  cout << "結果レジスタ($r1, $f3) = " << ireg[1].i << ", " << freg[3].f  << endl;
   instr_stat(exec_count);
 
   return exec_count;
