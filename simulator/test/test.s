@@ -1,12 +1,12 @@
 	;; ;; j	min_caml_sin
 	;; jl	min_caml_cos
 	;; halt
-	     
-min_caml_cos:
+min_caml_conta:
 	;; PIを$f29にセット
 	flui	$f0 $f0 16457
 	flli	$f0 $f0 4059	;f29 = pi
 	addi	$r1 $r0 1
+	setl	$r1 min_caml_conta
 beqi:	
 	beqi	$r1 1	bnei
 	halt

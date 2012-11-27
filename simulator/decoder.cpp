@@ -59,9 +59,9 @@ inline int get_imm(char *immstr, ltable &table){
   if(immstr[0] == '-' || (immstr[0] >= '0' && immstr[0] <= '9'))
     return atoi(immstr);
   else {
-    cerr << "in get_imm " << immstr << " is ";
+    // cerr << "in get_imm " << immstr << " is ";
     imm = table.get_index(immstr);
-    cerr << imm << endl;
+    // cerr << imm << endl;
     label_error(imm, immstr);
     return imm;
   }
@@ -200,9 +200,10 @@ format str_to_opcode(char *str, opcode &opc){
 inline void pseudo_instr(char *tokens[]){
   if(strcmp(tokens[0], "setl") == 0){
     strcpy(tokens[0], "addi");
-    tokens[3] = (char *)malloc(sizeof(tokens[2]) + 1);
+    tokens[3] = (char *)malloc(strlen(tokens[2]) + 1);
+
     strcpy(tokens[3], tokens[2]);
-    tokens[2] = (char *)malloc(sizeof("$r0") + 1);
+    tokens[2] = (char *)malloc(strlen("$r0") + 1);
     strcpy(tokens[2], "$r0");
   }
   return;
