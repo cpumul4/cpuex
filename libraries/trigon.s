@@ -97,8 +97,8 @@ cos.putsignbit:
 	jr	$r31
 
 	;; $f3に引数が与えられるとする
-	jl	min_caml_sin
-	halt
+	;; jl	min_caml_sin
+	;; halt
 min_caml_sin:
 	;; PIを$f29にセット
 	flui	$f29 $f29 16457;0 10000000 10010010000111111011011=3.14159274
