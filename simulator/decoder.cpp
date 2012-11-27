@@ -13,7 +13,7 @@ const char combegin[3] = "#;";
 enum format {r,i,j, branch, none, it};
 
 ///////////////////////////////////////////////////////////
-void varid_immt(int immt){
+void valid_immt(int immt){
   if(immt >= 0 && immt <=  511)return;
   else {
     cerr << "[ERROR]数字" << immt << "は9bitに収まりません" << endl;
@@ -22,7 +22,7 @@ void varid_immt(int immt){
 }
 
 ///////////////////////////////////////////////////////////
-void varid_imm(int imm){
+void valid_imm(int imm){
   if(-32768 <= imm && imm <= 32767)return;
   else {
     cerr << "[ERROR]数字" << imm << "は16bitに収まりません" << endl;
@@ -243,6 +243,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
       args[itr] = get_regnum(asmtok[itr+1]);
       if(args[itr] < 0){
 	args[itr] = get_imm(asmtok[itr+1], table); 
+	// valid_imm(args[itr]);
       }
     }
     break;
@@ -268,7 +269,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     args[0] = get_regnum(asmtok[1]);
     args[1] = get_imm(asmtok[2], table);
     if(args[1] == -1)args[1] = 0;
-    varid_immt(args[1]);
+    valid_immt(args[1]);
     if(args[0] < 0){
       cerr << "[ERROR]brahch命令のオペランドがおかしい" << endl;
       for(int i = 0;asmtok[i] != NULL;i++)
