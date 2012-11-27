@@ -2,6 +2,7 @@
 **11/27Tue
 itof,ftoi,floorのハードウェア実装
 2nd ISAの変更
+ALU,FPU(暫定)の2nd ISAへの対応完了
 **11/26Mon
 (スライド作っただけ)
 **11/25Sun
