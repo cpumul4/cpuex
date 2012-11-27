@@ -1,18 +1,18 @@
 2ndアーキテクチャ
  - 暫定版
  - 計81+2命令
+ - 11/27Tue 追加、変更
 
 ****************************************************************
 
 ●1stアーキテクチャからの主な変更点
 floatの絶対値/符号反転を追加 : fabs,fneg,-s,-n
 浮動小数点0,1,-1レジスタを作る : $f0-$f2
-シフト量のレジスタ指定を追加 : shift(?)
 比較,条件分岐を比較分岐命令に統一 : beq,bne,blte,bgte
 整数の即値比較分岐を追加→36bit長命令 : beqi,bnei,bltei,bgtei
 fdivをfinvとfmulに分割する : finv
 J形式は廃止(PCは16bit即値で扱える)
-find first oneを追加
+int to float,float to int,floorを追加
 
 ○命名規則みたいなもの
 float演算
@@ -88,6 +88,10 @@ FR  sqrt   F[fd] = sqrt(F[fs])    // 平方根
 FR  sqrta
 FR  sqrtn
 
+FR1 itof   F[fd] = itof(R[rs])    // int to float
+FR2 ftoi   R[rd] = ftoi(F[fs])    // float to int
+FR  floor  F[fd] = floor(F[fs])   // floor
+
 ●論理演算命令
 R   and    R[rd] = R[rs] and R[rt]
 R   or     R[rd] = R[rs] or  R[rt]
@@ -97,20 +101,10 @@ R   xor    R[rd] = R[rs] xor R[rt]
 I   andi   R[rt] = R[rs] and imm
 I   ori    R[rt] = R[rs] or  imm
 
-R   findf1 R[rd] = (R[rs]の最上位の1の位置)    // find first one
-     // R[rs]に1が現れなければ0,最上位ビットが1なら1,...,最下位ビットだけが1なら32を返す
-
 ●シフト命令
 R   sll    R[rd] = R[rs] <<  amt    // shift left logical
 R   srl    R[rd] = R[rs] >>  amt    // shift right logical
 R   sra    R[rd] = R[rs] >>> amt    // shift right arith.
-
-R   sllr   R[rd] = R[rs] << R[rt]    // shift left logical register
-   	   	     	    	     // R[rt]は符号付き9bit整数
-				     // シフト量が負なら右シフト
-R   srlr   R[rd] = R[rs] >> R[rt]    // shift right logical register
-    	   	   	     	     // R[rt]は符号付き9bit整数
-				     // シフト量が負なら左シフト
 
 ●移動命令
 R   r2r    R[rd] = R[rs]    // move R-reg -> R-reg
