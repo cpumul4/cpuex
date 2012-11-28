@@ -10,7 +10,7 @@ typedef uint8_t regnum;
 typedef int16_t immidiate;
 
 extern uint32_t int16_to_uint32(int16_t); // memory.cpp
-extern long int instr_count[100];
+extern long int instr_count[OPCNUM];
 extern ofstream fout;
 extern ifstream fin;
 
@@ -187,7 +187,7 @@ inline string encode(regnum opc){
   
 
 inline void instr_stat(long long int all_count){
-  double ratio[64];
+  double ratio[OPCNUM];
   double count = all_count/100.0;
   for(int j = 0;j < 64; j++){
     ratio[j] = instr_count[j]/count;

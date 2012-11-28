@@ -21,7 +21,7 @@ typedef enum {
   BEQ, BEQI, FBEQ, BNE, BNEI, FBNE, 
   BLTE, BLTEI, FBLTE, BGTE, BGTEI, FBGTE, 
   NOP, DBG, UNKNOWN
-#if
+#if OLD
   
 #endif
 #if FIRST_ISA
@@ -29,3 +29,4 @@ typedef enum {
 #endif
 } opcode;
 
+const int OPCNUM = 100;

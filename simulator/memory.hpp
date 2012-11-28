@@ -1,5 +1,4 @@
-#ifndef _MEMORY
-#define _MEMORY
+#pragma once
 
 #include <stdint.h>
 #include <limits.h>
@@ -157,7 +156,6 @@ public:
   }
 };
 
-   
 extern uint32_t ram[RAM_SIZE];
 extern myint    ireg[INTREG_NUM];
 extern myfloat  freg[FLOATREG_NUM];
@@ -168,4 +166,13 @@ extern void show_ram(int, int);
 extern void print_bit(float);
 extern void print_bit(myint);
 extern void ram_string(int, char *);
-#endif //_MEMORY
+
+
+inline void put_ram(int index, uint32_t value){
+  if(0 <= index && index < RAM_SIZE)
+    ram[index] = value;
+  else {
+    //    cerr << "メモリの" << index << "番にアクセスしようとしています" << endl;
+    return;
+  }
+}

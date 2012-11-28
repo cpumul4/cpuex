@@ -3,13 +3,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-long int instr_count[100];
+long int instr_count[OPCNUM];
 extern int step;
-
-
-
-
-
 
 inline float absmf(uint32_t x){
   myfloat ret;
@@ -221,7 +216,7 @@ void instr::exec_asm(){
       else { cerr << "メモリの" << addr << "にアクセスしようとしています" << endl; \
     pc = LR_INIT;return;
     
-    c(LW  , ram(D, S+T););
+    c(LW  , D = ram[S+T];);
     c(SW  , ram[S+T] = D.b;);	// D regが distになってない
     c(LWI , D = ram[S + IMM];);
     c(SWI , ram[S + IMM] = D.b;); // **********D,Sの順番に注意********
