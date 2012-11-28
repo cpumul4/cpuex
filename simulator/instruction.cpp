@@ -169,23 +169,23 @@ void instr::exec_asm(){
 
     c(FADD  , FD = FS + FT;);
     c(FADDA , FD =  fabsf(FS + FT););
-    c(FADDN , FD = -fabsf(FS + FT););
+    c(FADDN , FD = -(FS + FT););
     c(FSUB  , FD = FS - FT;);
     c(FSUBA , FD =  fabsf(FS - FT););
-    c(FSUBN , FD = -fabsf(FS - FT););
+    c(FSUBN , FD = -(FS - FT););
     c(FMUL  , FD = FS * FT;);
     c(FMULA , FD =  fabsf(FS * FT););
-    c(FMULN , FD = -fabsf(FS * FT););
+    c(FMULN , FD = -(FS * FT););
     c(FINV  , FD = 1 / FS.f;);
     c(FINVA , FD =  fabsf(1 / FS.f););
-    c(FINVN , FD = -fabsf(1 / FS.f););
+    c(FINVN , FD = -(1 / FS.f););
     
     c(FABS , FD =  fabsf(FS.f););
-    c(FNEG , FD = -fabsf(FS.f););
+    c(FNEG , FD = -(FS.f););
 
     c(SQRT  , FD = sqrt_m(FS.f);); // myfloatの実装が外に出てしまっている
     c(SQRTA , FD =  fabsf(sqrt_m(FS.f));); // myfloatの実装が外に出てしまっている
-    c(SQRTN , FD = -fabsf(sqrt_m(FS.f));); // myfloatの実装が外に出てしまっている
+    c(SQRTN , FD = -(sqrt_m(FS.f));); // myfloatの実装が外に出てしまっている
 
     c(AND , D = S & T;);       
     c(OR  , D = S | T;);
