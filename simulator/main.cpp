@@ -5,6 +5,7 @@
 #include <fstream>
 
 extern int ui(void);
+extern int ui_error(void);
 extern int decode(char *);
 extern bool error_section(void);
 
@@ -67,7 +68,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
       pc = LR_INIT;
     }
     if(LR.i < 0){
-      cerr << "!!!!!!!!!!!リンクレジスタが負です\n";
+      cerr << "************リンクレジスタが負です***********\n";
       pc = LR_INIT;	
     }
 
@@ -75,9 +76,15 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     F1.f = 1.0;
     FM1.f = -1.0;
     FZR.f = 0;
-
+    try {
     rom[pc-1].exec_asm();
-
+    }
+    catch(int){
+      cerr << "実行しようとした命令:[" << pc -1 << ']';
+      rom[pc-1].show();
+      ui_error();
+      pc = LR_INIT;
+    }
     exec_count++;
 
   }

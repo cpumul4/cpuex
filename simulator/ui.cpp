@@ -240,7 +240,7 @@ bool does_break(int bps[]){
   return false;
 }
 
-int ui(void){
+int ui(){
   static equalarray eqarray;
   static lessthanarray ltarray;
   static noteqarray nearray;
@@ -250,7 +250,7 @@ int ui(void){
   const int max_line = 30;
   char line[max_line] = {0};
   char *tokens[5];
-
+  
   if(init_stop);
   else if (step == 0){ // 停止しない条件
     return 0;
@@ -262,7 +262,7 @@ int ui(void){
   if(1)return 0;
 #endif
 
-  // cerr << "exec_count is " << exec_count << " and step is " << step;
+  // cerr << step << endl;
 
   if(init_stop){
     // for(int i=0; i< bpsize; i++)
@@ -362,8 +362,16 @@ int ui(void){
 
   return 0;
 }
-  
-  
+
+int ui_error(){
+  step = 1;
+  cerr <<
+    "*******************************************************\n\
+エラーで停止しました。レジスタやメモリの中を見れます。\nEnterを押すとシミュレータが終了します。\n\
+*******************************************************\n";
+
+  return ui();
+}
   
 // break 3
 // == if lr 3

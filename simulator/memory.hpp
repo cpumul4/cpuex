@@ -3,7 +3,8 @@
 #include <stdint.h>
 #include <limits.h>
 #include "./fpu.hpp"
-
+#include <iostream>
+using namespace std;
 #define INTREG_NUM   32
 #define FLOATREG_NUM 32		// rst命令でireg = fregを仮定している
 #define RAM_SIZE  1024*1024
@@ -167,12 +168,12 @@ extern void print_bit(float);
 extern void print_bit(myint);
 extern void ram_string(int, char *);
 
-
-inline void put_ram(int index, uint32_t value){
+inline int valid_addr(int index){
   if(0 <= index && index < RAM_SIZE)
-    ram[index] = value;
+    return index;
   else {
-    //    cerr << "メモリの" << index << "番にアクセスしようとしています" << endl;
-    return;
+    cerr << "############################################################\n\
+[ERROR]メモリの" << index << "番にアクセスしました" << endl;
+    throw index;
   }
 }

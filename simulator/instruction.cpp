@@ -216,21 +216,21 @@ void instr::exec_asm(){
       else { cerr << "メモリの" << addr << "にアクセスしようとしています" << endl; \
     pc = LR_INIT;return;
     
-    c(LW  , D = ram[S+T];);
-    c(SW  , ram[S+T] = D.b;);	// D regが distになってない
-    c(LWI , D = ram[S + IMM];);
-    c(SWI , ram[S + IMM] = D.b;); // **********D,Sの順番に注意********
+    c(LW  , D = ram[valid_addr(S+T)];);
+    c(SW  , ram[valid_addr(S+T)] = D.b;);	// D regが distになってない
+    c(LWI , D = ram[valid_addr(S + IMM)];);
+    c(SWI , ram[valid_addr(S + IMM)] = D.b;); // **********D,Sの順番に注意********
 
-    c(FSW, ram[S + T] = FD.b;);
-    c(FSWI, ram[S + IMM] = FD.b;); // myfloatの実装が外に出てしまっている
+    c(FSW, ram[valid_addr(S + T)] = FD.b;);
+    c(FSWI, ram[valid_addr(S + IMM)] = FD.b;); // myfloatの実装が外に出てしまっている
 
-    c(FLW , FD = ram[S + T];);
-    c(FLWA, FD =  absmf(ram[S + T]););
-    c(FLWN, FD = -absmf(ram[S + T]););
+    c(FLW , FD = ram[valid_addr(S + T)];);
+    c(FLWA, FD =  absmf(ram[valid_addr(S + T)]););
+    c(FLWN, FD = -absmf(ram[valid_addr(S + T)]););
 
-    c(FLWI , FD = ram[S + IMM];);
-    c(FLWIA, FD =  absmf(ram[S + IMM]););
-    c(FLWIN, FD = -absmf(ram[S + IMM]););
+    c(FLWI , FD = ram[valid_addr(S + IMM)];);
+    c(FLWIA, FD =  absmf(ram[valid_addr(S + IMM)]););
+    c(FLWIN, FD = -absmf(ram[valid_addr(S + IMM)]););
 
 
     // -------------- J形式 --------------
@@ -293,4 +293,5 @@ void instr::exec_asm(){
 #undef FT
 #undef IMM
 #undef c
+
 }
