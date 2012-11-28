@@ -3,8 +3,10 @@
 #include <stdlib.h>
 #include <math.h>
 
-long int instr_count[64];
+long int instr_count[100];
 extern int step;
+
+
 
 
 
@@ -214,8 +216,12 @@ void instr::exec_asm(){
     c(LLI , D = ((S >> 16) << 16) | lowbits((uint32_t)IMM,16););
     c(FLUI, FD = (int16_to_uint32(IMM) << 16) | lowbits(FS.b, 16);); // FT.b
     c(FLLI, FD = ((FS.b >> 16) << 16) | int16_to_uint32(IMM););
-
-    c(LW  , D = ram[S+T];);
+#define ram(dst, addr)							\
+    if(addr <= 0x000fffff)dst = ram[addr];					\
+      else { cerr << "メモリの" << addr << "にアクセスしようとしています" << endl; \
+    pc = LR_INIT;return;
+    
+    c(LW  , ram(D, S+T););
     c(SW  , ram[S+T] = D.b;);	// D regが distになってない
     c(LWI , D = ram[S + IMM];);
     c(SWI , ram[S + IMM] = D.b;); // **********D,Sの順番に注意********

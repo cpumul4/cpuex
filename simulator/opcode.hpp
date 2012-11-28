@@ -2,7 +2,7 @@
 
 #define OPTIMIZATION 0
 #define FIRST_ISA 0
-
+#define OLD 0
 typedef enum {
   HALT, 
   ADD, SUB, SUBI, ADDI, 
@@ -21,7 +21,9 @@ typedef enum {
   BEQ, BEQI, FBEQ, BNE, BNEI, FBNE, 
   BLTE, BLTEI, FBLTE, BGTE, BGTEI, FBGTE, 
   NOP, DBG, UNKNOWN
-
+#if
+  
+#endif
 #if FIRST_ISA
   ,CMP, CMPF, DIVF
 #endif

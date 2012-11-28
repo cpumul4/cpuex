@@ -10,7 +10,7 @@ typedef uint8_t regnum;
 typedef int16_t immidiate;
 
 extern uint32_t int16_to_uint32(int16_t); // memory.cpp
-extern long int instr_count[64];
+extern long int instr_count[100];
 extern ofstream fout;
 extern ifstream fin;
 
