@@ -174,7 +174,7 @@ inline string encode(regnum opc){
     op(foutb,FOUTB, r)
     op(foutc,FOUTC, r)
     op(foutd,FOUTD, r)
-#if OLD
+#if FIRST_ISA
       op(cmp, CMP, r)
       op(cmpf, CMPF, r)
       op(divf, DIVF, r)

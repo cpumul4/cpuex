@@ -1,7 +1,7 @@
 #pragma	once
 
 #define OPTIMIZATION 0
-#define OLD 0
+#define FIRST_ISA 0
 
 typedef enum {
   HALT, 
@@ -22,7 +22,7 @@ typedef enum {
   BLTE, BLTEI, FBLTE, BGTE, BGTEI, FBGTE, 
   NOP, DBG, UNKNOWN
 
-#if OLD
+#if FIRST_ISA
   ,CMP, CMPF, DIVF
 #endif
 } opcode;

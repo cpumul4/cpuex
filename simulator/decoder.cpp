@@ -171,19 +171,19 @@ format str_to_opcode(char *str, opcode &opc){
     op(foutc,FOUTC, r)
     op(foutd,FOUTD, r)
 #undef op
-#if OLD
+#if FIRST_ISA
   else if (strcmp(str,"cmp") == 0){
-      cerr << "[WARNING] CMP IS OLD" << endl;
+      cerr << "[WARNING] CMP IS FIRST_ISA" << endl;
       opc = CMP;
       f = r;
     }
   else if (strcmp(str,"cmpf") == 0){
-      cerr << "[WARNING] CMPF IS OLD" << endl;
+      cerr << "[WARNING] CMPF IS FIRST_ISA" << endl;
       opc = CMPF;
       f = r;
     }
   else if (strcmp(str,"divf") == 0){
-      cerr << "[WARNING] DIVF IS OLD" << endl;
+      cerr << "[WARNING] DIVF IS FIRST_ISA" << endl;
       opc = DIVF;
       f = r;
     }

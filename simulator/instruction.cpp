@@ -274,7 +274,7 @@ void instr::exec_asm(){
     c(FOUTC, exec_output(FD,1););
     c(FOUTD, exec_output(FD,0););
     // ここまでちゃんと動く 10/19 22:00
-#if OLD
+#if FIRST_ISA
     c(DIVF , FD = FS / FT;);
     c(CMP , D = S <= T;);	// myint
     c(CMPF, D = FS <= FT;);	
