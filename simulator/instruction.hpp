@@ -21,7 +21,7 @@ class instr {
   immidiate rt;			// immediate, addr, register index
 public:
   instr(opcode _op = UNKNOWN, regnum _rd = 0, immidiate _rs = 0, immidiate _rt = 0);
-  void set(opcode _op, regnum _rd = 0, regnum _rs = 0, immidiate _rt = 0);
+  void set(opcode _op, regnum _rd = 0, immidiate _rs = 0, immidiate _rt = 0);
   void set_imm(opcode _op, immidiate _imm);
   void show();
   void exec_asm(void);
@@ -43,9 +43,10 @@ inline instr::instr(opcode _op, regnum _rd, immidiate _rs, immidiate _rt){
   rt = _rt;
 }
 
-inline void instr::set(opcode _op, regnum _rd, regnum _rs, immidiate _rt){
+inline void instr::set(opcode _op, regnum _rd, immidiate _rs, immidiate _rt){
   opc = _op;
   rd = _rd;
+#if OLD
   switch(opc) {
   case  BEQI:
   case  BNEI:
@@ -59,6 +60,9 @@ inline void instr::set(opcode _op, regnum _rd, regnum _rs, immidiate _rt){
   default:
     rs = _rs;
   }
+#else
+  rs = _rs;
+#endif
   rt = _rt;
 }
 
@@ -67,13 +71,18 @@ inline void instr::set_imm(opcode _op, immidiate _imm){
   rt = _imm;
 }
 
-inline string encode(regnum opc){
+inline string encode(opcode opc){
 #define op(str,code,form) \
     else if (opc == code){return #str; }
-
-  if(opc == ADD){
-    return "add";
-  }
+#undef op
+#define op(str,code,form) \
+  case code: \
+    return #str;
+  switch(opc){
+  // if(opc == ADD){
+  //   return "add";
+  // }
+    op(add,  ADD, r)
     op(sub , SUB, r)
     op(fadd, FADD, r)
     op(fadda, FADDA, r)
@@ -106,18 +115,19 @@ inline string encode(regnum opc){
     op(andi, ANDI, i)
     op(ori , ORI , i)
 
-    op(findf1, FINDF1, r)
 
     op(sll , SLL , i)		// シミュレータ的にはi形式
     op(srl , SRL , i)
     op(sra , SRA , i)
-    op(sllr, SLLR, r)
-    op(srlr, SRLR, r)
 
     op(r2r , R2R , r)
     op(f2f , F2F , r)
     op(r2f, R2F, r)
     op(f2r, F2R, r)
+
+      op(itof, ITOF, r)
+      op(ftoi, FTOI, r)
+      op(floor, FLOOR, r)
 
     op(lui , LUI , i)
     op(lli , LLI , i)
@@ -174,13 +184,20 @@ inline string encode(regnum opc){
     op(foutb,FOUTB, r)
     op(foutc,FOUTC, r)
     op(foutd,FOUTD, r)
+#if OLD
+    op(findf1, FINDF1, r)
+    op(sllr, SLLR, r)
+    op(srlr, SRLR, r)
+#endif
 #if FIRST_ISA
       op(cmp, CMP, r)
       op(cmpf, CMPF, r)
       op(divf, DIVF, r)
 #endif
-    else return "unknown";
-
+  case UNKNOWN:
+  default:
+    return "unknown";
+  }
 #undef op
 }
 
@@ -196,9 +213,13 @@ inline void instr_stat(long long int all_count){
   cerr << "--- 各命令が何回実行されたか ----\n";
   for(int i = 0;i < 64; i++){ 
     if(instr_count[i] != 0){
-      char str[10];
-      sprintf(str,"%.1f", ratio[i]);
-      cerr << encode((regnum)i) << "\t: " << str << "%\n";
+      if(ratio[i] >= 0.1){
+	char str[10];
+	sprintf(str,"%.1f", ratio[i]);
+	cerr << encode((opcode)i) << "\t: " << str << "%" << endl;
+      } else {
+	cerr << encode((opcode)i) << "\t: 0.0%\t(" << instr_count[i] << "回)" << endl;
+      }
     }
   }
   cout << "------------------------------\n";
@@ -206,11 +227,59 @@ inline void instr_stat(long long int all_count){
 
 
 inline void instr::show(){
-  cout << encode(opc) << ' ' 
-       << (int)rd << ' ' 
+  cout << ' ' << encode(opc) << ' ';
+  switch(opc){
+  case HALT:
+  case NOP:
+  case DBG:
+    cout << endl;
+    return;
+  case J:
+  case JL:
+    cout << (int)rt << endl;
+    return;
+  case IN:
+  case OUTA:
+  case OUTB:
+  case OUTC:
+  case OUTD:
+  case FIN:
+  case FOUTA:
+  case FOUTB:
+  case FOUTC:
+  case FOUTD:
+  case JR:
+  case JLR:
+    cout << (int)rd << endl;
+    return;
+  case FINV:
+  case FINVA:
+  case FINVN:
+  case FABS:
+  case FNEG:
+  case SQRT:
+  case SQRTA:
+  case SQRTN:
+  case R2R:
+  case F2F:
+  case R2F:
+  case F2R:
+  case ITOF:
+  case FTOI:
+  case FLOOR:
+    cout << (int)rd << ' ' << (int)rs << endl;
+    return;
+  default:
+  cout << (int)rd << ' ' 
        << (int)rs << ' ' 
        << (int)rt << '\n';
+  }
 }
+//   cout << ' ' << encode(opc) << ' ' 
+//        << (int)rd << ' ' 
+//        << (int)rs << ' ' 
+//        << (int)rt << '\n';
+// }
 
 
 #endif // _INSTRUCTION

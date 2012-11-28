@@ -191,6 +191,10 @@ char *checkarray::find_regnum(uint32_t *ptr, regtype t){
       sprintf(str, "%f", fl.f);
       return str;
     }
+  case mem:
+    regnum = ((int)(ptr - ram))/sizeof(uint32_t);
+    sprintf(str, "mem[%d]", regnum);
+    return str;
   }
   return NULL;
 }
@@ -246,18 +250,25 @@ int ui(){
   static noteqarray nearray;
   // static int breakpoints[bpsize];
   static bool init_stop = true;
+  static bool need_check = false;
   // static cells nonzeroram;
   const int max_line = 30;
   char line[max_line] = {0};
   char *tokens[5];
   
   if(init_stop);
-  else if (step == 0){ // 停止しない条件
-    return 0;
+  else if(!need_check){
+    if(step == 0 || exec_count % step != 0)
+      return 0;
   }
-  else if(!(exec_count % step == 0
-	    || eqarray.check() || ltarray.check() || nearray.check()))
-    return 0;
+  else if(!(eqarray.check() || ltarray.check() || nearray.check())){
+    if(step == 0 || exec_count % step != 0)
+      return 0;
+  }
+  // else if (step == 0){ // 停止しない条件
+  //   return 0;
+  // }
+
 #if OPTIMIZATION
   if(1)return 0;
 #endif
@@ -352,6 +363,7 @@ int ui(){
       eqarray.show("=");
       ltarray.show("<");
       nearray.show("!=");
+      need_check = true;
     }
     else if(strcmp(tokens[0], "step") == 0)
       step = atoi(tokens[1]);

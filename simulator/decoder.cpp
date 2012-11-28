@@ -5,16 +5,21 @@
 #include <fstream>
 #include <cstring>
 #include <stdlib.h>
-#define DEBUG_DECODER 1
+#define DEBUG_DECODER 0
 #define MAX_CHAR  100
 extern instr rom[];
 
 const char combegin[3] = "#;";
+const char delims[] = " \t\r\n";
 enum format {r,i,j, branch, none, it};
 
 ///////////////////////////////////////////////////////////
 void valid_immt(int immt){
+#if OLD
+  if(-256 <= immt && immt <=  255)return;
+#else
   if(immt >= 0 && immt <=  511)return;
+#endif
   else {
     cerr << "[ERROR]数字" << immt << "は9bitに収まりません" << endl;
     exit(1);
@@ -41,17 +46,17 @@ inline void label_error(const int addr, const char *label){
 }
 ////////////////////////////////////////////////////////////
 inline int get_regnum(char *reg){
-  int regnum;
+  int rnum;
   if(reg[0] != '$'){
     return -1;
   }
   else if(reg[1] == 'r' || reg[1] == 'f'){
-    regnum = (int)atoi(reg + 2);
-    if(regnum >= INTREG_NUM && regnum >= FLOATREG_NUM){
+    rnum = (int)atoi(reg + 2);
+    if(rnum >= INTREG_NUM && rnum >= FLOATREG_NUM){
       cerr << "[ERROR]存在しないレジスタです: " << reg << endl;
       exit(1);
     }
-    else return regnum;
+    else return rnum;
   }
 }
 //////////////////////////////////////////////////////////
@@ -89,8 +94,7 @@ format str_to_opcode(char *str, opcode &opc){
     op(fmuln, FMULN, r)
     op(finv, FINV, r)
     op(finva, FINVA, r)
-    op(finvn, FINVN, r)
-    
+    op(finvn, FINVN, r)    
     op(fabs, FABS, r)
     op(fneg, FNEG, r)
     op(sqrt, SQRT, r)
@@ -108,19 +112,18 @@ format str_to_opcode(char *str, opcode &opc){
     op(andi, ANDI, i)
     op(ori , ORI , i)
 
-    op(findf1, FINDF1, r)
 
     op(sll , SLL , i)		// シミュレータ的にはi形式
     op(srl , SRL , i)
     op(sra , SRA , i)
-    op(sllr, SLLR, r)
-    op(srlr, SRLR, r)
 
     op(r2r , R2R , r)
     op(f2f , F2F , r)
     op(r2f, R2F, r)
     op(f2r, F2R, r)
-
+    op(itof, ITOF, r)
+    op(ftoi, FTOI, r)
+    op(floor, FLOOR, r)
     op(lui , LUI , i)
     op(lli , LLI , i)
     op(flui, FLUI, i)
@@ -172,22 +175,19 @@ format str_to_opcode(char *str, opcode &opc){
     op(foutc,FOUTC, r)
     op(foutd,FOUTD, r)
 #undef op
+#define oldop(_str,code,form) \
+    else if (strcmp(str,#_str) == 0){				\
+      cerr << "[WARNING]" << str << " は古い命令です" << endl;	\
+      opc = code;f = form; }
+#if OLD
+    oldop(findf1, FINDF1, r)
+      oldop(sllr, SLLR, r)
+      oldop(srlr, SRLR, r)
+#endif
 #if FIRST_ISA
-  else if (strcmp(str,"cmp") == 0){
-      cerr << "[WARNING] CMP IS FIRST_ISA" << endl;
-      opc = CMP;
-      f = r;
-    }
-  else if (strcmp(str,"cmpf") == 0){
-      cerr << "[WARNING] CMPF IS FIRST_ISA" << endl;
-      opc = CMPF;
-      f = r;
-    }
-  else if (strcmp(str,"divf") == 0){
-      cerr << "[WARNING] DIVF IS FIRST_ISA" << endl;
-      opc = DIVF;
-      f = r;
-    }
+      oldop(cmp, CMP, r)
+      oldop(cmpf, CMPF, r)
+      oldop(divf, DIVF, r)
 #endif    
   else {
     cerr << "[ERROR]unknown instruction: " << str << '\n';
@@ -214,7 +214,6 @@ inline void pseudo_instr(char *tokens[]){
 /////////////////////////////////////////////////////////////////////
 void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   char *asmtok[5];
-  const char delims[] = " \t\r\n";
   format format;
   opcode opc;
   int args[3] = {0,0,0};
@@ -270,7 +269,9 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   case it:
     args[0] = get_regnum(asmtok[1]);
     args[1] = get_imm(asmtok[2], table);
+#if OLD
     if(args[1] == -1)args[1] = 0;
+#endif
     valid_immt(args[1]);
     if(args[0] < 0){
       cerr << "[ERROR]brahch命令のオペランドがおかしい" << endl;
@@ -287,7 +288,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
     break;
   }
   
-  inst.set(opc, (regnum)args[0], (regnum)args[1], (immidiate)args[2]);
+  inst.set(opc, (regnum)args[0], (immidiate)args[1], (immidiate)args[2]);
   return;
 }
 ////////////////////////////////////////////////////////////////
@@ -297,14 +298,16 @@ void make_table(char *input, ltable &table, int &romindex){
   }
   strtok(input, combegin);    // コメントの処理
   
-  if(input[0] == '\t'){
-    bool cond = 'a' <= input[1] && input[1] <= 'z';
+  if(input[0] == '\t' || input[0] == ' '){
+    int itr = 0;
+    while(strchr(delims, input[itr]) != NULL)itr++;
+    bool cond = 'a' <= input[itr] && input[itr] <= 'z';
     if(cond){
       romindex++;		// 命令
       return;
     }
     else {			// ごみ
-      if(input[1] != 0)
+      if(input[itr] != 0)
 	cerr << "[WARNING]wrong token:" << input + 1 << endl;
       return;
     }

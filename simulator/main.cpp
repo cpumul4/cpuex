@@ -80,7 +80,6 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     rom[pc-1].exec_asm();
     }
     catch(int){
-      cerr << "実行命令数:" << exec_count << endl;
       cerr << "実行しようとした命令:[" << pc -1 << ']';
       rom[pc-1].show();
       ui_error();

@@ -192,20 +192,20 @@ void instr::exec_asm(){
     c(ANDI, D = S & IMM;);
     c(ORI , D = S | IMM;);
 
-    c(FINDF1, D = findf1(S););
 
     c(SLL , D = S << IMM;);
     c(SRL , D = S >> IMM;);	
     c(SRA , D = sra(S,IMM););
-
-    c(SLLR , D = T.i >= 0 ? S << T : S >> -T.i;);	// registerが31以上のときの動作を訊く
-    c(SRLR , D = T.i >= 0 ? S >> T : S << -T.i;);	
 
 
     c(R2R , D = S;);
     c(F2F , FD = FS;);
     c(R2F, FD.b = S.b;);		// myint,myfloat
     c(F2R, D.b  = FS.b;);		// myint,myfloat
+
+    c(ITOF, FD = (float)S.i;);
+    c(FTOI, D  = (int)FS.f;);
+    c(FLOOR,FD = FS.is_zero() ? -0 : floorf(FS.f););
 
     c(LUI , D = (IMM << 16) | lowbits(S, 16);); 
     c(LLI , D = ((S >> 16) << 16) | lowbits((uint32_t)IMM,16););
@@ -275,6 +275,11 @@ void instr::exec_asm(){
     c(FOUTC, exec_output(FD,1););
     c(FOUTD, exec_output(FD,0););
     // ここまでちゃんと動く 10/19 22:00
+#if OLD
+    c(FINDF1, D = findf1(S););
+    c(SLLR , D = T.i >= 0 ? S << T : S >> -T.i;);	// registerが31以上のときの動作を訊く
+    c(SRLR , D = T.i >= 0 ? S >> T : S << -T.i;);	
+#endif
 #if FIRST_ISA
     c(DIVF , FD = FS / FT;);
     c(CMP , D = S <= T;);	// myint
