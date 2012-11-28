@@ -71,6 +71,11 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
       pc = LR_INIT;	
     }
 
+    ZR = 0;
+    F1.f = 1.0;
+    FM1.f = -1.0;
+    FZR.f = 0;
+
     rom[pc-1].exec_asm();
 
     exec_count++;

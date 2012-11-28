@@ -2,7 +2,7 @@
 sed -e 's/;.*//
         s/[ \t]*$//
          /^[ \t]*$/d' test.s > tmp.s
-awk 'BEGIN { print "sed -e \"" }
+awk 'BEGIN { print "sed -e \"";}
      $1 ~ /:[ \t]*$/ { printf "\ts/\\(...*\\)%s$/\\1%d/\n", $1, NR-- } 
      END { print "\" -i $*" }' tmp.s > label.sh
 awk '$1 !~ /:[ \t]*$/ { print $0 }' tmp.s > instruction.s
