@@ -341,6 +341,8 @@ int decode(char *srcpath){
     cout << '[' << (int)i << ']';
     rom[i].show();
   }
+#else
+  cerr << "デコードした命令列を吐くのをやめました。\n代わりとして同じフォルダにあるscript.shというファイルを使ってください\n";
 #endif
 
   char string[50];

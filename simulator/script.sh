@@ -1,14 +1,11 @@
 #!/bin/sh
+#アセンブリコードを引数にして実行すると、instr.asm, label.tmpという２つのファイルができる
+#instr.asmでは、"#1043"などと検索するとROMの1043番に格納されている命令に飛べる。
+#label.tmpはラベル名とROM上の番地の対応表である。
 sed -e 's/;.*//
         s/[ \t]*$//
-         /^[ \t]*$/d' test.s > tmp.s
-awk 'BEGIN { print "sed -e \"";}
-     $1 ~ /:[ \t]*$/ { printf "\ts/\\(...*\\)%s$/\\1%d/\n", $1, NR-- } 
-     END { print "\" -i $*" }' tmp.s > label.sh
-awk '$1 !~ /:[ \t]*$/ { print $0 }' tmp.s > instruction.s
-sed -e 's/://' -i label.sh
-chmod +x label.sh
-./label.sh instruction.s
-rm tmp.s
- # | sed -n '/[^; \t]/p' test.s > ttt.txt
-#ラベルとその行番号を別のファイルに書き、命令をまた別のファイルに書く
+         /^[ \t]*$/d' $* | \
+awk 'BEGIN { label = "label.tmp"; instr = "instr.asm" }
+$1 ~ /:/ { print $1, NR-- > label; print $0 > instr }
+$1 !~ /:/ { print $0, "\t\t;;#"NR - 1 > instr }
+END { close(label); close(instr) }' 
