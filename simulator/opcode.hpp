@@ -22,7 +22,7 @@ typedef enum {
   BLTE, BLTEI, FBLTE, BGTE, BGTEI, FBGTE, 
   NOP, DBG, UNKNOWN
 #if OLD
-  ,FINDF1, SLLR, SRLR, 
+  ,FINDF1, SLLR, SRLR
 #endif
 #if FIRST_ISA
   ,CMP, CMPF, DIVF
