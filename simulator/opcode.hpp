@@ -1,8 +1,9 @@
 #pragma	once
 
 #define OPTIMIZATION 0
-#define FIRST_ISA 0
-#define OLD 0
+#define FIRST_ISA 1
+#define OLD 1
+#define OLD_STRICT 0
 typedef enum {
   HALT, 
   ADD, SUB, SUBI, ADDI, 
@@ -20,13 +21,14 @@ typedef enum {
   J, JL, JR, JLR, 
   BEQ, BEQI, FBEQ, BNE, BNEI, FBNE, 
   BLTE, BLTEI, FBLTE, BGTE, BGTEI, FBGTE, 
-  NOP, DBG, UNKNOWN
+  NOP, DBG
 #if OLD
   ,FINDF1, SLLR, SRLR
 #endif
 #if FIRST_ISA
   ,CMP, CMPF, DIVF
 #endif
+  , UNKNOWN
 } opcode;
 
-const int OPCNUM = 100;
+const int OPCNUM = UNKNOWN;

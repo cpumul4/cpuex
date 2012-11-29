@@ -18,47 +18,22 @@ float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ�
   return (float)(t2.tv_sec - t1.tv_sec) + (t2.tv_usec - t1.tv_usec)/1000000.0;
 }
 
-int simulate(char *asmpath, char *srcpath, char *tgtpath){
-
-  decode(asmpath);
-
-  if(srcpath != NULL){
-    fin.open(srcpath);
-    if(!fin.is_open()){
-      cerr << "ERROR: " << srcpath << " が開けませんでした\n";
-      exit(1);
-    }
-  }
-  else {
-    cerr << "no input file. input命令が来たらエラーで停止します\n";
-  }
-
-
-  if(tgtpath != NULL){
-    fout.open(tgtpath, ios::binary);
-    if(!fout.is_open()){
-      cerr << "ERROR: " << tgtpath << " が開けませんでした\n";
-      exit(1);
-    }
-  }
-  else {
-    cerr << "no output file. output命令は使えません\n";
-  }
-  
-  pc = 0;
+inline void const_reg(void){
   ZR = 0;
   F1.f = 1.0;
   FM1.f = -1.0;
   FZR.f = 0;
+}
+
+inline void init(void){
+  pc = 0;
   LR  = LR_INIT;
   SPR = SPR_INIT;
+  const_reg();
+  return;
+}
 
-  // freg[0].b = 30;
-
-  while(pc != LR_INIT){
-    ui();
-    pc++;
-
+inline void valid_reg(void){
     if(SPR.i < 0){
       cerr << "!!!!!!!!!!!スタックポインタが負です\n";
       pc = LR_INIT;
@@ -71,13 +46,40 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
       cerr << "************リンクレジスタが負です***********\n";
       pc = LR_INIT;	
     }
+    return;
+}
 
-    ZR = 0;
-    F1.f = 1.0;
-    FM1.f = -1.0;
-    FZR.f = 0;
+int simulate(char *asmpath, char *srcpath, char *tgtpath){
+  decode(asmpath);
+
+  if(srcpath == NULL)cerr << "no input file.\n";
+  else {
+    fin.open(srcpath);
+    if(!fin.is_open()){
+      cerr << "ERROR: " << srcpath << " が開けませんでした\n";
+      exit(1);
+    }
+  }
+
+  if(tgtpath == NULL)cerr << "no output file. output命令は使えません\n";
+  else {
+    fout.open(tgtpath, ios::binary);
+    if(!fout.is_open()){
+      cerr << "ERROR: " << tgtpath << " が開けませんでした\n";
+      exit(1);
+    }
+  }
+  
+  init();
+
+  while(pc != LR_INIT){
+    ui();
+    pc++;
+    valid_reg();
+    const_reg();
     try {
-    rom[pc-1].exec_asm();
+      rom[pc-1].exec_asm();
+      exec_count++;
     }
     catch(int){
       cerr << "実行しようとした命令:[" << pc -1 << ']';
@@ -85,9 +87,8 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
       ui_error();
       pc = LR_INIT;
     }
-    exec_count++;
-
   }
+
   cout << "結果レジスタ($r1, $f3) = " << ireg[1].i << ", " << freg[3].f  << endl;
   instr_stat(exec_count);
 
@@ -96,7 +97,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
 
 int main(int argc, char *argv[]){
   struct timeval t1, t2;
-  uint count;
+  long long int count;
   
   if(argc < 2){
     cerr << "USAGE: ./simulator assemblyfile (finile) (outfile) \n";
@@ -114,10 +115,10 @@ int main(int argc, char *argv[]){
   cerr << "<simulation has started!>\n";
 
   gettimeofday(&t1,NULL);
-  cerr << "実行命令数: " << (count = (uint)simulate(argv[1], argv[2], argv[3])) << '\n';
+  cerr << "実行命令数: " << (count = simulate(argv[1], argv[2], argv[3])) << '\n';
   gettimeofday(&t2,NULL);
 
-  printf("実行命令数/sec:%f\n", count/time_diff(t1,t2));
+  printf("実行命令数/sec:%.4e\n", count/time_diff(t1,t2));
 
   return 0;
 }

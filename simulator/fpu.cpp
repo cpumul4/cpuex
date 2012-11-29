@@ -251,7 +251,12 @@ int lte_f(float f1,float f2) {
   e_lt = f1_b.b.exp < f2_b.b.exp;
   fr_lt = f1_b.b.fraction < f2_b.b.fraction;
 
-  lte = s_lt || (s_eq && ((e_lt && !f1_b.b.sign) || (!e_lt && f1_b.b.sign && !e_eq))) || (s_eq && e_eq && ((fr_lt && !f1_b.b.sign) || (!fr_lt && f1_b.b.sign && !fr_eq))) || eq;
+  lte = s_lt || 
+    (s_eq && ((e_lt && !f1_b.b.sign) || 
+	      (!e_lt && f1_b.b.sign && !e_eq))) || 
+    (s_eq && e_eq && ((fr_lt && !f1_b.b.sign) || 
+		      (!fr_lt && f1_b.b.sign && !fr_eq))) || 
+    eq;
 
   return lte;
 }

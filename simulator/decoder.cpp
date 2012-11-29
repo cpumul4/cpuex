@@ -15,7 +15,7 @@ enum format {r,i,j, branch, none, it};
 
 ///////////////////////////////////////////////////////////
 void valid_immt(int immt){
-#if OLD
+#if OLD_STRICT
   if(-256 <= immt && immt <=  255)return;
 #else
   if(immt >= 0 && immt <=  511)return;
@@ -269,7 +269,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   case it:
     args[0] = get_regnum(asmtok[1]);
     args[1] = get_imm(asmtok[2], table);
-#if OLD
+#if OLD_STRICT
     if(args[1] == -1)args[1] = 0;
 #endif
     valid_immt(args[1]);

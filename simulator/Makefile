@@ -50,6 +50,12 @@ winopt:
 	make opt
 	sed -e 's/#define ROM_SIZE 15000/#define ROM_SIZE 32768/' -i memory.hpp
 
+2nd:
+	sed -e 's/#define FIRST_ISA 1/#define FIRST_ISA 0/' -i opcode.hpp
+	sed -e 's/#define OLD 1/#define OLD 0/' -i opcode.hpp
+	make
+	sed -e 's/#define OLD 1/#define OLD 0/' -i opcode.hpp
+	sed -e 's/#define FIRST_ISA 1/#define FIRST_ISA 0/' -i opcode.hpp
 
 .PHONY : clean check-syntax
 clean:

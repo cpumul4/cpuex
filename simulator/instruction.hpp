@@ -46,7 +46,7 @@ inline instr::instr(opcode _op, regnum _rd, immidiate _rs, immidiate _rt){
 inline void instr::set(opcode _op, regnum _rd, immidiate _rs, immidiate _rt){
   opc = _op;
   rd = _rd;
-#if OLD
+#if OLD_STRICT
   switch(opc) {
   case  BEQI:
   case  BNEI:
@@ -206,15 +206,15 @@ inline string encode(opcode opc){
 inline void instr_stat(long long int all_count){
   double ratio[OPCNUM];
   double count = all_count/100.0;
-  for(int j = 0;j < 64; j++){
+  for(int j = 0;j < OPCNUM; j++){
     ratio[j] = instr_count[j]/count;
   }
 
   cerr << "--- 各命令が何回実行されたか ----\n";
-  for(int i = 0;i < 64; i++){ 
+  for(int i = 0;i < OPCNUM; i++){ 
     if(instr_count[i] != 0){
       if(ratio[i] >= 0.1){
-	char str[10];
+	char str[20];
 	sprintf(str,"%.1f", ratio[i]);
 	cerr << encode((opcode)i) << "\t: " << str << "%" << endl;
       } else {
@@ -227,6 +227,10 @@ inline void instr_stat(long long int all_count){
 
 
 inline void instr::show(){
+  // struct {
+  //   enum { f, i } type;
+  //   enum { none, dst, ds, d, t } operand;
+  // } regtype[OPCNUM];
   cout << ' ' << encode(opc) << ' ';
   switch(opc){
   case HALT:

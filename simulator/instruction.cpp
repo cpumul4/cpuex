@@ -6,20 +6,51 @@
 long int instr_count[OPCNUM];
 extern int step;
 
-inline float absmf(uint32_t x){
-  myfloat ret;
-  const uint32_t sign = (uint32_t)1073741824 + (uint32_t)1073741824;
-  printf("%ud\n",sign);
-  ret.b = x;
-  if(x >= sign){
-    printf("%u\n",x - sign);
-    return -ret.f;
-
-  }
-  else
-    return ret.f;
+template<class T> inline T abs32(const T &x){
+  if(sizeof(x) != 4)throw "4byteではないデータに遭遇\n";
+  union {
+    T val;
+    struct {
+      unsigned int other:31;
+      unsigned int sign:1;
+    } bits;
+  } tmp;
+  tmp.val = x;
+  tmp.bits.sign = 0;
+  return tmp.val;
 }
 
+inline float myfloor(myfloat t){
+  union {
+    myfloat val;
+    struct {
+      unsigned int other:31;
+      unsigned int sign:1;
+    } bits;
+  } ret;
+  ret.val = t;
+
+  if(ret.bits.other >= 0x4b000000)return t.f;
+  else if(t.f < 0 && t == 0)return 0;
+  else return floorf(t.f);
+}
+  
+    
+
+
+
+template<class T> inline T neg(const T &x){
+  union {
+    T val;
+    struct {
+      unsigned int other:31;
+      unsigned int sign:1;
+    } bits;
+  } tmp;
+  tmp.val = x;
+  tmp.bits.sign ^= 1;
+  return tmp.val;
+}
 inline uint32_t get_pc(uint16_t imm){
   return ((pc >> 26) << 26) | imm;
 }
@@ -87,10 +118,6 @@ inline void exec_output(myfloat reg, int which_byte){
   return;
 }
 
-// inline uint32_t highbits(uint32_t, int need){
-  
-// }
-
 inline uint32_t lowbits(uint32_t b, int need){ // 下位need bitを取り出す
   int unwanted = 32 - need;
   return (b << unwanted) >> unwanted;
@@ -103,8 +130,7 @@ inline uint32_t lowbits(myint b, int need){ // 下位need bitを取り出す
 }
 
 inline void exec_input(uint32_t &regbitseq, opcode opc){
-  const int strlength = 10;
-  
+  const int strlength = 10;  
   union {
     int32_t i;
     float f;
@@ -112,22 +138,20 @@ inline void exec_input(uint32_t &regbitseq, opcode opc){
   } conv;
 
   char *string = new char[strlength];
-
   
   do {
     fin.get(string[0]); 
-  }
-  while(string[0] == ' ' || string[0] == '\t' || string[0] == '\n' || string[0] == '\r');
+  }while(string[0] == ' '  || string[0] == '\t' || 
+	 string[0] == '\n' || string[0] == '\r');
 
   for(int i=1; i < strlength; i++){
     fin.get(string[i]);
-    if(string[i] == ' ' || string[i] == '\t' ||string[i] == '\n' || string[i] == '\r'){
+    if(string[i] == ' '  || string[i] == '\t' || 
+       string[i] == '\n' || string[i] == '\r'){
       string[i] = 0;
       break;
     }
   }
-
-
 
   if( fin.bad() ) {
     cout << "fatal Error:データ読み込みエラー" << endl;
@@ -138,7 +162,7 @@ inline void exec_input(uint32_t &regbitseq, opcode opc){
   }
 
   if(opc == IN)conv.i = atoi(string);
-  else            conv.f = atof(string);
+  else conv.f = atof(string);
 
   regbitseq = conv.b;
 
@@ -165,24 +189,24 @@ void instr::exec_asm(){
     c(SUBI, D = S - IMM;);
 
     c(FADD  , FD = FS + FT;);
-    c(FADDA , FD =  fabsf(FS + FT););
-    c(FADDN , FD = -(FS + FT););
+    c(FADDA , FD =  abs32(FS + FT););
+    c(FADDN , FD = neg(FS + FT););
     c(FSUB  , FD = FS - FT;);
-    c(FSUBA , FD =  fabsf(FS - FT););
-    c(FSUBN , FD = -(FS - FT););
+    c(FSUBA , FD =  abs32(FS - FT););
+    c(FSUBN , FD = neg(FS - FT););
     c(FMUL  , FD = FS * FT;);
-    c(FMULA , FD =  fabsf(FS * FT););
-    c(FMULN , FD = -(FS * FT););
+    c(FMULA , FD =  abs32(FS * FT););
+    c(FMULN , FD = neg(FS * FT););
     c(FINV  , FD = 1 / FS.f;);
-    c(FINVA , FD =  fabsf(1 / FS.f););
-    c(FINVN , FD = -(1 / FS.f););
+    c(FINVA , FD =  abs32(1 / FS.f););
+    c(FINVN , FD = neg(1 / FS.f););
     
-    c(FABS , FD =  fabsf(FS.f););
-    c(FNEG , FD = -(FS.f););
+    c(FABS , FD =  abs32(FS.f););
+    c(FNEG , FD = neg(FS.f););
 
     c(SQRT  , FD = sqrt_m(FS.f);); // myfloatの実装が外に出てしまっている
-    c(SQRTA , FD =  fabsf(sqrt_m(FS.f));); // myfloatの実装が外に出てしまっている
-    c(SQRTN , FD = -(sqrt_m(FS.f));); // myfloatの実装が外に出てしまっている
+    c(SQRTA , FD =  abs32(sqrt_m(FS.f));); // myfloatの実装が外に出てしまっている
+    c(SQRTN , FD = neg(sqrt_m(FS.f));); // myfloatの実装が外に出てしまっている
 
     c(AND , D = S & T;);       
     c(OR  , D = S | T;);
@@ -205,7 +229,7 @@ void instr::exec_asm(){
 
     c(ITOF, FD = (float)S.i;);
     c(FTOI, D  = (int)FS.f;);
-    c(FLOOR,FD = FS.is_zero() ? -0 : floorf(FS.f););
+    c(FLOOR,FD = myfloor(FS););
 
     c(LUI , D = (IMM << 16) | lowbits(S, 16);); 
     c(LLI , D = ((S >> 16) << 16) | lowbits((uint32_t)IMM,16););
@@ -215,7 +239,6 @@ void instr::exec_asm(){
     if(addr <= 0x000fffff)dst = ram[addr];					\
       else { cerr << "メモリの" << addr << "にアクセスしようとしています" << endl; \
     pc = LR_INIT;return;
-    
     c(LW  , D = ram[valid_addr(S+T)];);
     c(SW  , ram[valid_addr(S+T)] = D.b;);	// D regが distになってない
     c(LWI , D = ram[valid_addr(S + IMM)];);
@@ -225,12 +248,12 @@ void instr::exec_asm(){
     c(FSWI, ram[valid_addr(S + IMM)] = FD.b;); // myfloatの実装が外に出てしまっている
 
     c(FLW , FD = ram[valid_addr(S + T)];);
-    c(FLWA, FD =  absmf(ram[valid_addr(S + T)]););
-    c(FLWN, FD = -absmf(ram[valid_addr(S + T)]););
+    c(FLWA, FD =  abs32(ram[valid_addr(S + T)]););
+    c(FLWN, FD = neg(ram[valid_addr(S + T)]););
 
     c(FLWI , FD = ram[valid_addr(S + IMM)];);
-    c(FLWIA, FD =  absmf(ram[valid_addr(S + IMM)]););
-    c(FLWIN, FD = -absmf(ram[valid_addr(S + IMM)]););
+    c(FLWIA, FD =  abs32(ram[valid_addr(S + IMM)]););
+    c(FLWIN, FD = neg(ram[valid_addr(S + IMM)]););
 
 
     // -------------- J形式 --------------
@@ -274,7 +297,7 @@ void instr::exec_asm(){
     c(FOUTB, exec_output(FD,2););
     c(FOUTC, exec_output(FD,1););
     c(FOUTD, exec_output(FD,0););
-    // ここまでちゃんと動く 10/19 22:00
+    c(UNKNOWN, cerr << "[ERROR] pcが命令の入ってない番地を指しています" << endl;pc = LR_INIT;);
 #if OLD
     c(FINDF1, D = findf1(S););
     c(SLLR , D = T.i >= 0 ? S << T : S >> -T.i;);	// registerが31以上のときの動作を訊く

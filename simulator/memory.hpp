@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <limits.h>
 #include "./fpu.hpp"
+#include "./print_bit.hpp"
 #include <iostream>
 using namespace std;
 #define INTREG_NUM   32
@@ -25,8 +26,6 @@ const int GENR_MAX = 25;
 
 const int SPR_INIT = 0x000fffff;
 const int LR_INIT = INT_MAX;
-
-extern void print_bit(float);
 
 // myintに関する演算を定義するためのマクロ
 #define defarith(_op)				     \
@@ -71,101 +70,26 @@ public:
 union myfloat {
   uint32_t b;
   float f;
-  bool is_zero(){
-    union {
-      float fl;
-      struct {
-	int fruc:23;
-	int exp:8;
-	int sign:1;
-      } bit;
-    } tmp;
-    
-    tmp.fl = f;
-    
-    if(tmp.bit.exp == 0)
-      return true;
-    else
-      return false;
-  }
-  float rm_frac(){
-    union {
-      float fl;
-      struct {
-	int frac:23;
-	int exp:8;
-	int sign:1;
-      } bit;
-    } tmp;
-    tmp.fl = f;
-    tmp.bit.frac = 0;
-    return tmp.fl;
-  }
 public:
-#define arith(op1,op2,operand) \
-  if(is_zero(op1))0 operand op2;\
-  else if(is_zero
   void operator=(uint32_t sub){ b = sub; }
   void operator=(float    sub){ f = sub; }
-  float operator+(myfloat t){   return 
-      fadd(f,t.f);  }
-  float operator-(myfloat t){   return 
-      fadd(f, -t.f);  }
-  float operator*(myfloat t){   return 
-      fmul(f, t.f);  }
-  float operator/(myfloat t){   return 
-      fdiv(f, t.f);  }
-  uint32_t operator<=(myfloat t){
-    float a, c;
-    if(this->is_zero())
-      a = this->rm_frac();
-    else a = this->f;
-    if(t.is_zero())
-      c = t.rm_frac();
-    else c = t.f;
-    // print_bit(f);    
-    // print_bit(t.f);
-    // print_bit(a);
-    // print_bit(c);
-    
-    return a <= c ? 1 : 0;  
-    // return f <= t.f ? 1 : 0;
-  }
+  float operator+(myfloat t){   return fadd(f,t.f);  }
+  float operator-(myfloat t){   return fadd(f, -t.f);  }
+  float operator*(myfloat t){   return fmul(f, t.f);  }
+  float operator/(myfloat t){   return fdiv(f, t.f);  }
+  uint32_t operator<=(myfloat t){ return lte_f(this->f, t.f);}
   uint32_t operator>=(myfloat t){ return t <= *this; }
-
-  uint32_t operator==(myfloat t){   
-    float a, c;
-    if(this->is_zero())
-      a = this->rm_frac();
-    else a = this->f;
-    if(t.is_zero())
-      c = t.rm_frac();
-    else c = t.f;
-    // print_bit(a);
-    // print_bit(c);
-    return a == c;  
-    // return t.b == b;
-  }
-  uint32_t operator!=(myfloat t){   
-    float a = this->is_zero() ? this->rm_frac() : this->f;
-    float c = t.is_zero() ? t.rm_frac() : t.f;
-    // print_bit(a);
-    // print_bit(c);
-
-    return a != c;  
-    // return t.b != b;
-  }
+  uint32_t operator==(myfloat t){ return eq_f(this->f, t.f); } 
+  uint32_t operator==(float t)  { return eq_f(this->f, t  ); }
+  uint32_t operator!=(myfloat t){return !(t == *this);}
 };
 
 extern uint32_t ram[RAM_SIZE];
 extern myint    ireg[INTREG_NUM];
 extern myfloat  freg[FLOATREG_NUM];
-extern uint32_t lreg;
 extern int32_t pc;
 extern void show_regs(void);
 extern void show_ram(int, int);
-extern void print_bit(float);
-extern void print_bit(myint);
 extern void ram_string(int, char *);
 
 inline int valid_addr(int index){

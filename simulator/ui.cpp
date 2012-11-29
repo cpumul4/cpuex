@@ -8,11 +8,11 @@
 #include "./instruction.hpp"
 #include "./ui.hpp"
 #include "./watchmem.hpp"
+#include "./print_bit.hpp"
 using namespace std;
 
 class instr;
 typedef map<int, uint32_t> cells;
-
 
 extern instr rom[];
 extern long long int exec_count;
@@ -101,19 +101,21 @@ regtype see_type(const char *regstr){
 
 
 uint32_t *ptr_to_memreg(const char *str){
-  switch(str[0]) {
+  int i = (str[0] == '$') ? 1 : 0;
+
+  switch(str[i]) {
   case '$':
     str++;
   case 'r':
-    return &ireg[atoi(str + 1)].b;
+    return &ireg[atoi(str + 1 + i)].b;
   case 'f':
-    return &freg[atoi(str + 1)].b;
+    return &freg[atoi(str + 1 + i)].b;
   case 'm':
-    return &ram[atoi(str + 1)];
+    return &ram[atoi(str + 1 + i)];
   default:
     return NULL;
   }
-}	  
+}
 
 uint32_t *atofi(const char *str){
   union _conv{
@@ -369,6 +371,8 @@ int ui(){
       step = atoi(tokens[1]);
     else if('0' <= tokens[0][0] && tokens[0][0] <= '9')
       step = atoi(tokens[0]);
+    else if(strcmp(tokens[0], "bit") == 0)
+      print_bit(*ptr_to_memreg(tokens[1]));
   }
 
 
