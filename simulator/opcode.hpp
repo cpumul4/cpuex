@@ -2,7 +2,7 @@
 
 #define OPTIMIZATION 0
 #define FIRST_ISA 0
-#define OLD 1
+#define OLD 0
 typedef enum {
   HALT, 
   ADD, SUB, SUBI, ADDI, 
