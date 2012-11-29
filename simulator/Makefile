@@ -33,6 +33,13 @@ old:
 	make
 	sed -e 's/#define OLD 1/#define OLD 0/' -i opcode.hpp
 
+winold:
+	sed -e 's/#define OLD 0/#define OLD 1/' -i opcode.hpp
+	sed -e 's/#define ROM_SIZE 32768/#define ROM_SIZE 15000/' -i memory.hpp
+	make
+	sed -e 's/#define ROM_SIZE 15000/#define ROM_SIZE 32768/' -i memory.hpp
+	sed -e 's/#define OLD 1/#define OLD 0/' -i opcode.hpp
+
 win:
 	sed -e 's/#define ROM_SIZE 32768/#define ROM_SIZE 15000/' -i memory.hpp
 	make
