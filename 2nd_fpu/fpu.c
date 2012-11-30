@@ -17,7 +17,7 @@ float fadd(float f1,float f2){
     f1_b.f = f2;
     f2_b.f = f1;
   } 
-  if(f2_b.b.exp == 0) return f1_b.f;
+  if(f2_b.b.exp == 0 && f2_b.b.fraction == 0) return f1_b.f;
   shift = (f1_b.b.exp - f2_b.b.exp);
   if (shift < 2) {
     fraction = ((8388608 + f2_b.b.fraction) << (2-shift));
@@ -77,8 +77,11 @@ float fadd(float f1,float f2){
 	fraction += 4;
       fraction = fraction >> 2;
     }
+    if (exp > 256) { 
+      exp = 0;
+      fraction = 0;
+    }
     f_b.b.sign = f1_b.b.sign;
-    if (exp > 256) exp = 0;
     f_b.b.exp = exp;
     f_b.b.fraction = fraction;
   } 
@@ -95,9 +98,9 @@ float fmul(float f1,float f2){
 
   f_b.b.sign = (f1_b.b.sign && !f2_b.b.sign) || (!f1_b.b.sign && f2_b.b.sign); //xor
   
-  if (f1_b.b.exp == 0 || f2_b.b.exp == 0) {
+  if ((f1_b.b.exp == 0 && f1_b.b.fraction == 0) || (f2_b.b.exp == 0 && f2_b.b.fraction == 0)) {
     f_b.b.exp = 0;
-    f_b.b.fraction = f1_b.b.fraction;
+    f_b.b.fraction = 0;
     return f_b.f;
   }
 
@@ -118,8 +121,10 @@ float fmul(float f1,float f2){
   }
 
   f_b.b.fraction = (unsigned)(fraction - 0x800000);
-  if((exp&0x100) == 0) f_b.b.exp = 0; //アンダーフロー(オーバーフロー)
-  else f_b.b.exp = exp;
+  if((exp&0x100) == 0) {
+    f_b.b.exp = 0; //アンダーフロー(オーバーフロー)
+    f_b.b.fraction = 0;
+  } else f_b.b.exp = exp;
 
   return f_b.f;
 }
@@ -155,8 +160,10 @@ float finv(float f1){
   }
 
   f_b.b.sign = f1_b.b.sign;
-  if (exp > 255) f_b.b.exp = 0;
-  else f_b.b.exp = exp;
+  if (exp > 255) {
+    f_b.b.exp = 0;
+    fraction = 0;
+  } else f_b.b.exp = exp;
 
   f_b.b.fraction = fraction&0x7FFFFF;
 
@@ -225,7 +232,7 @@ int eq_f(float f1,float f2) {
   e_eq = f1_b.b.exp == f2_b.b.exp;
   fr_eq = f1_b.b.fraction == f2_b.b.fraction;
 
-  eq = (f1_b.b.exp == 0 && f2_b.b.exp == 0) || (s_eq && e_eq && fr_eq);
+  eq = (f1_b.b.exp == 0 && f1_b.b.fraction == 0 && f2_b.b.exp == 0 && f2_b.b.fraction == 0) || (s_eq && e_eq && fr_eq);
 
   return eq;
 }
@@ -243,7 +250,7 @@ int lte_f(float f1,float f2) {
   e_eq = f1_b.b.exp == f2_b.b.exp;
   fr_eq = f1_b.b.fraction == f2_b.b.fraction;
 
-  eq = (f1_b.b.exp == 0 && f2_b.b.exp == 0) || (s_eq && e_eq && fr_eq);
+  eq = (f1_b.b.exp == 0 && f1_b.b.fraction == 0 && f2_b.b.exp == 0 && f2_b.b.fraction == 0) || (s_eq && e_eq && fr_eq);
 
   s_lt = f1_b.b.sign && !f2_b.b.sign;
   e_lt = f1_b.b.exp < f2_b.b.exp;
