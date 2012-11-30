@@ -13,7 +13,6 @@ using namespace std;
 
 class instr;
 typedef map<int, uint32_t> cells;
-
 extern instr rom[];
 extern long long int exec_count;
 
@@ -246,6 +245,31 @@ bool does_break(int bps[]){
   return false;
 }
 
+void howtouse(void){
+  cerr << 
+    "\n-----------------------------------------------------------------\n\
+ ; <reg> は $rx(intレジスタx番), $fx（floatレジスタx番）, $mx（メモリのx番）の意味\n\
+ ; \t\"$\"は省略可能\n\
+ ; if (条件式)\t... 条件式を満たすときに停止\n\
+ ;\t（条件式）... <reg> = 4, <reg> < 4.0, <reg> != 0.2など. \n\
+ ; if <reg> change ... <reg>の値が変わったら停止する\n\
+ ;rmif [enl] <reg> ... <reg>に関する条件式を削除\n\
+ ;\t [enl] ... eかnかlのどれか１文字。eなら =の条件を, nなら !=を, lなら <を削除\n\
+ ;\t [enl]を省略した場合、e,n,lの全てから消す。\n\
+ ; ram int1 int2\t... int1~int2のメモリを表示(int1,2は相対値)\n\
+ ; step int\t... int命令毎に実行停止(0で非停止). stepは省略可.\n\
+ ; Enterキー\t... 実行再開\n\
+ ; quit\t...終了\n\
+ ; bit <reg>\t... <reg> のビット列を表示\n\
+ ------------------------------------------------------------------\n";
+  return;
+}
+
+int dummy_fib(int x){
+  if(x <= 1)return x;
+  else return dummy_fib(x-1) + dummy_fib(x-2);
+}
+
 int ui(){
   static equalarray eqarray;
   static lessthanarray ltarray;
@@ -253,68 +277,40 @@ int ui(){
   // static int breakpoints[bpsize];
   static bool init_stop = true;
   static bool need_check = false;
+
   // static cells nonzeroram;
   const int max_line = 30;
   char line[max_line] = {0};
   char *tokens[5];
-  
-  if(init_stop);
-  else if(!need_check){
-    if(step == 0 || exec_count % step != 0)
-      return 0;
-  }
-  else if(!(eqarray.check() || ltarray.check() || nearray.check())){
-    if(step == 0 || exec_count % step != 0)
-      return 0;
-  }
-  // else if (step == 0){ // 停止しない条件
-  //   return 0;
-  // }
+
+  bool stop;
+  stop = init_stop;
+  stop = stop || (step != 0 && exec_count % step == 0);
+  stop = stop || (need_check && (eqarray.check() || ltarray.check() || nearray.check()));
+  if(!stop)return 0;
 
 #if OPTIMIZATION
   if(1)return 0;
 #endif
-
-  // cerr << step << endl;
-
+  
   if(init_stop){
-    // for(int i=0; i< bpsize; i++)
-    //   breakpoints[i] = -1;
-    cerr << 
-      "\n-----------------------------------------------------------------\n\
- ; if (条件式)\t... 条件式を満たすときに停止\n\
- ;\t（条件式）... $r1 = 4, $f4 < 4.0, $f4 != 0.2など. $は省略可\n\
- ; if regname change ... regnameの値が変わったら停止する\n\
- ;rmif [enl] regname ... regnameに関する条件式を削除\n\
- ;\t [enl] ... eかnかlのどれか１文字。eなら =の条件を, nなら !=を, lなら <を削除\n\
- ;\t [enl]を省略した場合、e,n,lの全てから消す。\n\
- ; ram int1 int2\t... int1~int2のメモリを表示(int1,2は相対値)\n\
- ; step int\t... int命令毎に実行停止(0で非停止). stepは省略可.\n\
- ; Enterキー\t... 実行再開\n\
- ; quit\t...終了\n\
- ; トークンの間に半角スペースやタブを必ず入れて下さい\n\
- ------------------------------------------------------------------\n";
+    howtouse();
+    init_stop = false;
   }
-      
-  cerr <<
-    "\n ----------------------- 命令実行数:" << exec_count << 
+
+  cerr << "\n ----------------------- 命令実行数:" << exec_count <<
     " -----------------------\n";
   // print_change_index(nonzeroram);
   // get_writed_index(nonzeroram);
-  show_regs();
-  // print_bit(ireg[1]);
-  
-  cerr << "\n" << "[next instruction:" << pc << "]\t";
+  show_regs();  
+  cerr << "\n" << "[次の命令:" << pc << "]\t";
   rom[pc].show();
 
-  init_stop = false;
   while(1){
     cerr << "$ ";
     cin.getline(line, max_line);
     
-    if(line == NULL || line[0] == 0){
-      return 0;
-    }
+    if(line == NULL || line[0] == 0)return 0;
 
     lex(line, tokens);
 
@@ -374,8 +370,6 @@ int ui(){
     else if(strcmp(tokens[0], "bit") == 0)
       print_bit(*ptr_to_memreg(tokens[1]));
   }
-
-
   return 0;
 }
 
@@ -389,9 +383,3 @@ int ui_error(){
   return ui();
 }
   
-// break 3
-// == if lr 3
-
-// step
-
-// s

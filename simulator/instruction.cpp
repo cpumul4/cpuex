@@ -34,9 +34,6 @@ inline float myfloor(myfloat t){
   else if(t.f < 0 && t == 0)return 0;
   else return floorf(t.f);
 }
-  
-    
-
 
 
 template<class T> inline T neg(const T &x){

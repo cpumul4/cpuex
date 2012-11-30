@@ -51,7 +51,6 @@ inline void valid_reg(void){
 
 int simulate(char *asmpath, char *srcpath, char *tgtpath){
   decode(asmpath);
-
   if(srcpath == NULL)cerr << "no input file.\n";
   else {
     fin.open(srcpath);

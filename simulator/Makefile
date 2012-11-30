@@ -3,6 +3,7 @@ SOURCES := $(wildcard *.cpp)
 OBJS := $(SOURCES:.cpp=.o)
 DEPENDS := $(SOURCES:.cpp=.depend~)
 CXX := g++ 
+VER := -std=c++0x
 CPPFLAGS := -O3 -std=c++0x
 WARNOPTS = -Wall -Wextra -Wformat=2 -Wstrict-aliasing=2 -Wcast-qual -Wcast-align -Wwrite-strings -Wfloat-equal -Wpointer-arith -Wswitch-enum -Wshadow
 
@@ -64,5 +65,5 @@ clean:
 	rm -f *.depend~
 
 check-syntax:
-	$(CXX) $(WARNOPTS) -S -fsyntax-only $(CHK_SOURCES)
+	$(CXX) $(VER) $(WARNOPTS) -S -fsyntax-only $(CHK_SOURCES)
 

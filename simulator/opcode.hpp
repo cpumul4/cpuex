@@ -1,10 +1,12 @@
 #pragma	once
 
+#include <stdint.h>
+
 #define OPTIMIZATION 0
 #define FIRST_ISA 1
-#define OLD 1
+#define OLD 0
 #define OLD_STRICT 0
-typedef enum {
+enum opcode : uint8_t {
   HALT, 
   ADD, SUB, SUBI, ADDI, 
   FADD, FADDA, FADDN, FSUB, FSUBA, FSUBN, 
@@ -28,7 +30,7 @@ typedef enum {
 #if FIRST_ISA
   ,CMP, CMPF, DIVF
 #endif
-  , UNKNOWN
-} opcode;
+  , UNKNOWN// 末尾から動かすな
+};
 
 const int OPCNUM = UNKNOWN;
