@@ -16,9 +16,9 @@ enum format {r,i,j, branch, none, it};
 ///////////////////////////////////////////////////////////
 void valid_immt(int immt){
 #if OLD_STRICT
-  if(-256 <= immt && immt <=  255)return;
-#else
   if(immt >= 0 && immt <=  511)return;
+#else
+  if(-256 <= immt && immt <=  255)return;
 #endif
   else {
     cerr << "[ERROR]数字" << immt << "は9bitに収まりません" << endl;
