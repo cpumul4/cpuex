@@ -141,10 +141,10 @@ R   outa   送信データ = R[rs]の31-24    // 上位1バイト
 R   outb   送信データ = R[rs]の23-16
 R   outc   送信データ = R[rs]の15-8
 R   outd   送信データ = R[rs]の7-0      // 下位1バイト(実際にレイトレが使うのはこれ)
-FR  fouta  送信データ = F[rs]の31-24    // 上位1バイト
-FR  foutb  送信データ = F[rs]の23-16
-FR  foutc  送信データ = F[rs]の15-8
-FR  foutd  送信データ = F[rs]の7-0      // 下位1バイト
+FR  fouta  送信データ = F[fs]の31-24    // 上位1バイト
+FR  foutb  送信データ = F[fs]の23-16
+FR  foutc  送信データ = F[fs]の15-8
+FR  foutd  送信データ = F[fs]の7-0      // 下位1バイト
 
 ●無条件分岐命令    // 参照されるPCは次の命令のアドレス
 I   j      PC = imm                          // jump
