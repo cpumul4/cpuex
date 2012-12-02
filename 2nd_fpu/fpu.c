@@ -146,7 +146,7 @@ float finv(float f1){
   } else {
     fraction = 0x1000000;
   }
-  fraction = fraction;
+  
   comp = (tb_finv_tan[key] * (f1_b.b.fraction&0x1FFF));
   fraction -= comp >> 11;
   if ((comp&0x3FF) != 0) fraction -= 1;
@@ -172,50 +172,38 @@ float finv(float f1){
 
 float sqrt_m(float f1) {
   unsigned fraction = 0;
-  unsigned mod = 0;
+  unsigned key = 0;
+  unsigned comp = 0;
   unsigned exp = 0;
   ieee_f f1_b,f_b;
-  int j = 0;
-  int zero = 0;
 
   f_b.f = 0;
   f1_b.f = f1;
 
-  if (f1_b.b.exp == 0) zero = 1;
+  if (f1_b.b.exp == 0 && f1_b.b.fraction == 0) return 0.0f;
 
   f_b.b.sign = 0;  
 
-  mod = 0x800000+f1_b.b.fraction;
+  key = (0x800000+f1_b.b.fraction) >> 14;
   if (f1_b.b.exp%2 == 0) {
-    mod = mod << 1;
+    comp = (f1_b.b.fraction&0x3FFF) << 1;
     exp = (f1_b.b.exp - 126)/2 + 127;
   } else {
+    key = key >> 1;
+    comp = f1_b.b.fraction&0x7FFF;
     exp = (f1_b.b.exp - 125)/2 + 127;
   }
 
-  while (j < 25) {
-    if((mod << 1) > (fraction << 1) + (1 << (24 - j))) {
-      mod = (mod << 1) - (fraction << 1) - (1 << (24 - j));
-      fraction = fraction + (1 << (24 - j));
-    } else {
-      mod = (mod << 1);
-    }
-    j++;
-  }
-  
-  //printf("%07x,%x\n",fraction,mod);
+  key -= 256;
 
-  //仮数部の乗算が0.5以上
+  fraction = tb_sqrt_val[key] << 2;
+  comp = comp * (tb_sqrt_tan[key]);
+  fraction += comp >> 12;
 
-  if((fraction&0x1) == 1 && (mod > 0 || (fraction&0x2) > 0)) fraction += 2;
+  if (fraction%4 == 3 || fraction%8 == 6 || (fraction%4 == 2 && (comp&0xFFF) != 0)) fraction += 4;
 
-  fraction = fraction >> 1;
-  exp = exp - 1;
-
-  if(zero == 1) exp = 0;
-
-  f_b.b.fraction = (unsigned)(fraction - 0x800000);
-  f_b.b.exp = exp;
+  f_b.b.fraction = fraction >> 2;
+  f_b.b.exp = exp - 1;
 
   return f_b.f;
 }
