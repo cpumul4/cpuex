@@ -248,19 +248,19 @@ bool does_break(int bps[]){
 void howtouse(void){
   cerr << 
     "\n-----------------------------------------------------------------\n\
- ; <reg> は $rx(intレジスタx番), $fx（floatレジスタx番）, $mx（メモリのx番）の意味\n \
- ; \t\"$\"は省略可能\n							\
- ; if (条件式)\t... 条件式を満たすときに停止\n				\
- ;\t（条件式）... <reg> = 4, <reg> < 4.0, <reg> != 0.2など. \n		\
- ; if <reg> change ... <reg>の値が変わったら停止する\n			\
- ;rmif [enl] <reg> ... <reg>に関する条件式を削除\n			\
- ;\t [enl] ... eかnかlのどれか１文字。eなら =の条件を, nなら !=を, lなら <を削除\n \
- ;\t [enl]を省略した場合、e,n,lの全てから消す。\n			\
- ; ram int1 int2\t... int1~int2のメモリを表示(int1,2は相対値)\n		\
- ; step int\t... int命令毎に実行停止(0で非停止). stepは省略可.\n	\
- ; Enterキー\t... 実行再開\n						\
- ; quit\t...終了\n							\
- ; bit <reg>\t... <reg> のビット列を表示\n				\
+ ; <reg> は $rx(intレジスタx番), $fx（floatレジスタx番）, $mx（メモリのx番）の意味\n\
+ ; \t\"$\"は省略可能\n\
+ ; if (条件式)\t... 条件式を満たすときに停止\n\
+ ;\t（条件式）... <reg> = 4, <reg> < 4.0, <reg> != 0.2など. \n\
+ ; if <reg> change ... <reg>の値が変わったら停止する\n\
+ ;rmif [enl] <reg> ... <reg>に関する条件式を削除\n\
+ ;\t [enl] ... eかnかlのどれか１文字。eなら =の条件を, nなら !=を, lなら <を削除\n\
+ ;\t [enl]を省略した場合、e,n,lの全てから消す。\n\
+ ; ram int1 int2\t... int1~int2のメモリを表示(int1,2は相対値)\n\
+ ; step int\t... int命令毎に実行停止(0で非停止). stepは省略可.\n\
+ ; Enterキー\t... 実行再開\n\
+ ; quit\t...終了\n\
+ ; bit <reg>\t... <reg> のビット列を表示\n\
  ------------------------------------------------------------------\n";
   return;
 }
@@ -282,7 +282,6 @@ int ui(){
 
   bool stop;
 #if OPTIMISATION
-#else
   init_stop = false;
 #endif
 
