@@ -1,4 +1,5 @@
 #include "./memory.hpp"
+#include "./opcode.hpp"
 #include "./instruction.hpp"
 #include <stdlib.h>
 #include <sys/time.h>

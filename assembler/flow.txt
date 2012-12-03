@@ -8,3 +8,7 @@
 bit列に変換
 	format毎に関数を用意
 ファイルに出力
+
+enum opcode -> opcode & funct
+
+enum opcode を見ながら、rd, rs, rtを適切なbitに配置。

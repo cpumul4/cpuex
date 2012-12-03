@@ -8,53 +8,39 @@
 #define DEBUG_DECODER 0
 #define MAX_CHAR  100
 extern instr rom[];
-
 const char combegin[3] = "#;";
 const char delims[] = " \t\r\n";
 enum format {r,i,j, branch, none, it};
 
 ///////////////////////////////////////////////////////////
 void valid_immt(int immt){
+  string err = "-256 <= immt <= 255";
 #if OLD_STRICT
   if(immt >= 0 && immt <=  511)return;
 #else
   if(-256 <= immt && immt <=  255)return;
 #endif
-  else {
-    cerr << "[ERROR]数字" << immt << "は9bitに収まりません" << endl;
-    exit(1);
-  }
+  else throw err;
 }
 
 ///////////////////////////////////////////////////////////
 void valid_imm(int imm){
+  string err = "-32768 <= imm <= 32767";
   if(-32768 <= imm && imm <= 32767)return;
-  else {
-    cerr << "[ERROR]数字" << imm << "は16bitに収まりません" << endl;
-    exit(1);
-  }
+  else throw err;
 }
 
-
-///////////////////////////////////////////////////////////
-inline void label_error(const int addr, const char *label){
-  if(addr < 0){
-    cerr << "[ERROR] Not Found Label: " << label << endl;
-    exit(1);
-  }
-  return;
-}
 ////////////////////////////////////////////////////////////
 inline int get_regnum(char *reg){
+  string err = "Register";
   int rnum;
   if(reg[0] != '$'){
-    return -1;
+    throw err;
   }
   else if(reg[1] == 'r' || reg[1] == 'f'){
     rnum = (int)atoi(reg + 2);
     if(rnum >= INTREG_NUM && rnum >= FLOATREG_NUM){
-      cerr << "[ERROR]存在しないレジスタです: " << reg << endl;
-      exit(1);
+      throw err;
     }
     else return rnum;
   }
@@ -65,16 +51,14 @@ inline int get_imm(char *immstr, ltable &table){
   if(immstr[0] == '-' || (immstr[0] >= '0' && immstr[0] <= '9'))
     return atoi(immstr);
   else {
-    // cerr << "in get_imm " << immstr << " is ";
     imm = table.get_index(immstr);
-    // cerr << imm << endl;
-    label_error(imm, immstr);
     return imm;
   }
 }
 
 ////////////////////////////////////////////////////
 format str_to_opcode(char *str, opcode &opc){
+  string err = "Unknown Instruction";
   format f;
 #define op(_str,code,form) \
   else if (strcmp(str,#_str) == 0){opc = code;f = form;}
@@ -189,12 +173,8 @@ format str_to_opcode(char *str, opcode &opc){
       oldop(cmpf, CMPF, r)
       oldop(divf, DIVF, r)
 #endif    
-  else {
-    cerr << "[ERROR]unknown instruction: " << str << '\n';
-    exit(1);
-  }
-    ;
-
+  else throw err;
+  ;
   return f;
 }
 ////////////////////////////////////////////////////////
@@ -210,6 +190,12 @@ inline void pseudo_instr(char *tokens[]){
   return;
 }
 
+/////////////////////////////////////////////////////////////////////
+void print_asmtok(char *asmtok[]){
+  for(int i = 0;asmtok[i] != NULL;i++)
+    cerr << asmtok[i] << ' ';
+  cerr << endl;
+}
 
 /////////////////////////////////////////////////////////////////////
 void put_rom(char assm[], ltable table, instr &inst, uint romindex){
@@ -221,76 +207,61 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
   // tokenに分解
   asmtok[0] = strtok(assm, delims);    
   for(int itr=1; (asmtok[itr] = strtok(NULL, delims)) != NULL;itr++);
-  
-  pseudo_instr(asmtok);
 
-  format = str_to_opcode(asmtok[0], opc);
-  
-  switch(format) {
-  case r:
-    for(int itr=0; asmtok[itr+1] != NULL;itr++){
-      args[itr] = get_regnum(asmtok[itr+1]);
-      if(args[itr] < 0){
-	cerr << "[ERROR]R(FR)形式の命令のオペランドがレジスタじゃありません" << endl;
-	for(int i = 0;asmtok[i] != NULL;i++)
-	  cerr << asmtok[i] << ' ';
-	cerr << endl;
-	exit(1);
+  try {  
+    pseudo_instr(asmtok);
+    format = str_to_opcode(asmtok[0], opc);
+
+    switch(format) {
+    case r:
+      for(int itr=0; asmtok[itr+1] != NULL;itr++){
+	args[itr] = get_regnum(asmtok[itr+1]);
       }
-    }
-    break;    
-  case i:
-    for(int itr=0; asmtok[itr+1] != NULL; itr++){
-      args[itr] = get_regnum(asmtok[itr+1]);
-      if(args[itr] < 0){
-	args[itr] = get_imm(asmtok[itr+1], table); 
-	// valid_imm(args[itr]);
+      break;    
+    case i:
+      for(int itr=0; asmtok[itr+1] != NULL; itr++){
+	try {
+	  args[itr] = get_regnum(asmtok[itr+1]);
+	}
+	catch(string) {
+	  args[itr] = get_imm(asmtok[itr+1], table); 
+	}
       }
-    }
-    break;
-  case j:
-    args[2] = table.get_index(asmtok[1]);
-    label_error(args[2], asmtok[1]);
-    break;
-  case branch:
-    args[0] = get_regnum(asmtok[1]);
-    args[1] = get_regnum(asmtok[2]);
-    if(args[0] < 0 || args[1] < 0){
-      cerr << "[ERROR]brahch命令のオペランドがおかしい" << endl;
-      for(int i = 0;asmtok[i] != NULL;i++)
-	cerr << asmtok[i] << ' ';
-      cerr << endl;
-      exit(1);
-    }
-    args[2] = table.get_index(asmtok[3]) - romindex - 1;
-    label_error(args[2] + romindex + 1, asmtok[3]);
-    if(romindex == 0)args[2]--;
-    break;
-  case it:
-    args[0] = get_regnum(asmtok[1]);
-    args[1] = get_imm(asmtok[2], table);
+      break;
+    case j:
+      args[2] = table.get_index(asmtok[1]);
+      break;
+    case branch:
+      args[0] = get_regnum(asmtok[1]);
+      args[1] = get_regnum(asmtok[2]);
+      args[2] = table.get_index(asmtok[3]) - romindex - 1;
+      if(romindex == 0)args[2]--;
+      break;
+    case it:
+      args[0] = get_regnum(asmtok[1]);
+      args[1] = get_imm(asmtok[2], table);
 #if OLD_STRICT
-    if(args[1] == -1)args[1] = 0;
+      if(args[1] == -1)args[1] = 0;
 #endif
-    valid_immt(args[1]);
-    if(args[0] < 0){
-      cerr << "[ERROR]brahch命令のオペランドがおかしい" << endl;
-      for(int i = 0;asmtok[i] != NULL;i++)
-	cerr << asmtok[i] << ' ';
-      cerr << endl;
-      exit(1);
+      valid_immt(args[1]);
+      args[2] = table.get_index(asmtok[3]) - romindex - 1;
+      if(romindex == 0)args[2]--;
+      break;
+    case none:
+      break;
     }
-    args[2] = table.get_index(asmtok[3]) - romindex - 1;
-    label_error(args[2] + romindex + 1, asmtok[3]);
-    if(romindex == 0)args[2]--;
-    break;
-  case none:
-    break;
   }
-  
+  catch(string str){
+    cerr << "[ERROR]" << str << endl;
+    cerr << "[問題の命令]" << romindex << "番目の命令: ";
+    print_asmtok(asmtok);
+    exit(1);
+  }
+
   inst.set(opc, (regnum)args[0], (immidiate)args[1], (immidiate)args[2]);
   return;
 }
+
 ////////////////////////////////////////////////////////////////
 void make_table(char *input, ltable &table, int &romindex){
   if(input == NULL || input[0] == 0){
@@ -342,11 +313,12 @@ int decode(char *srcpath){
     rom[i].show();
   }
 #else
-  cerr << "------------------------------------------------------------\n\
+  /*    cerr << "------------------------------------------------------------\n \
 デコードした命令列を吐くのをやめました。\n\
 代わりとして同じフォルダにあるscript.shというファイルを使ってください\n\
 使い方はそのファイルの中に書いてあります\n\
 ------------------------------------------------------------\n";
+  */
 #endif
 
   char string[50];

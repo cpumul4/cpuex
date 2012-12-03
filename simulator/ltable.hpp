@@ -36,12 +36,12 @@ void ltable::set_label(uint i, const char *l){
 }
 
 int ltable::get_index(const char *_label){
+  string err = "Not Found Label";
   uint i = 0;
   while(label[i] != NULL && strcmp(_label,label[i]) != 0)i++;
   if(label[i] != NULL)
     return index[i];		// FIND
-
-  return -1;  			// ERROR
+  throw err;			// ERROR
 }
 
 #endif
