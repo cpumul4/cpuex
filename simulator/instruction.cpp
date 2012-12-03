@@ -48,9 +48,6 @@ template<class T> inline T neg(const T &x){
   tmp.bits.sign ^= 1;
   return tmp.val;
 }
-inline uint32_t get_pc(uint16_t imm){
-  return ((pc >> 26) << 26) | imm;
-}
 
 inline int findf1(myint mi){
   int cnt = 1;
@@ -94,7 +91,7 @@ inline void exec_output(myint reg, int which_byte){
   fout.write(tmp.byte + which_byte, 1);
   if( fout.bad() ) {
     cout << "fatal Error:データ読み込みエラー" << endl;
-    LR = LR_INIT;
+    halt();
   }
   return;
 }
@@ -109,7 +106,7 @@ inline void exec_output(myfloat reg, int which_byte){
   fout.write(tmp.byte + which_byte, 1);
   if( fout.bad() ) {
     cout << "fatal Error:データ書き込みエラー" << endl;
-    LR = LR_INIT;
+    halt();
   }
 
   return;
@@ -152,7 +149,7 @@ inline void exec_input(uint32_t &regbitseq, opcode opc){
 
   if( fin.bad() ) {
     cout << "fatal Error:データ読み込みエラー" << endl;
-    LR = LR_INIT;
+    halt();
   }
   if( fin.eof() ){
     cout << "ファイルの内容を全て読みました" << endl;
@@ -194,9 +191,9 @@ void instr::exec_asm(){
     c(FMUL  , FD = FS * FT;);
     c(FMULA , FD =  abs32(FS * FT););
     c(FMULN , FD = neg(FS * FT););
-    c(FINV  , FD = 1 / FS.f;);
-    c(FINVA , FD =  abs32(1 / FS.f););
-    c(FINVN , FD = neg(1 / FS.f););
+    c(FINV  , FD = FS.inv(););
+    c(FINVA , FD =  abs32(FS.inv()););
+    c(FINVN , FD = neg(FS.inv()););
     
     c(FABS , FD =  abs32(FS.f););
     c(FNEG , FD = neg(FS.f););
@@ -235,7 +232,7 @@ void instr::exec_asm(){
 #define ram(dst, addr)							\
     if(addr <= 0x000fffff)dst = ram[addr];					\
       else { cerr << "メモリの" << addr << "にアクセスしようとしています" << endl; \
-    pc = LR_INIT;return;
+    halt();;return;
     c(LW  , D = ram[valid_addr(S+T)];);
     c(SW  , ram[valid_addr(S+T)] = D.b;);	// D regが distになってない
     c(LWI , D = ram[valid_addr(S + IMM)];);
@@ -254,8 +251,8 @@ void instr::exec_asm(){
 
 
     // -------------- J形式 --------------
-    c(J , pc = get_pc(IMM);); 
-    c(JL, LR = pc;pc = get_pc(IMM););
+    c(J , pc = IMM;); 
+    c(JL, LR = pc;pc = IMM;);
 
     c(JR  , pc = D.i;);		// D reg が distになってない
     c(JLR  ,LR = pc;pc = D.i;);		// D reg が distになってない
@@ -280,7 +277,7 @@ void instr::exec_asm(){
 
     c(NOP, ;);
     c(DBG,  cout << "DEBUG命令に到達しました\n";step = 1;);
-    c(HALT, pc = LR_INIT;);
+    c(HALT, halt(););
 
     // ここまでちゃんと動く10\17 15:00
     c(IN  , exec_input( D.b, IN ););
@@ -294,7 +291,7 @@ void instr::exec_asm(){
     c(FOUTB, exec_output(FD,2););
     c(FOUTC, exec_output(FD,1););
     c(FOUTD, exec_output(FD,0););
-    c(UNKNOWN, cerr << "[ERROR] pcが命令の入ってない番地を指しています" << endl;pc = LR_INIT;);
+    c(UNKNOWN, cerr << "[ERROR] pcが命令の入ってない番地を指しています" << endl;halt(););
 #if OLD
     c(FINDF1, D = findf1(S););
     c(SLLR , D = T.i >= 0 ? S << T : S >> -T.i;);	// registerが31以上のときの動作を訊く

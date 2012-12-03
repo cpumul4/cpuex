@@ -3,6 +3,7 @@ test:
 	addi	$r1 $r0 10000
 first:	
 	fadd	$f3 $f3 $f1
+	subi	$r1 $r1 1
 	beq	$r0 $r1 next
 	j	first
 next:	
