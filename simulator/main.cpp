@@ -72,7 +72,10 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
   init();
 
   while(pc != LR_INIT){
+#if OPTIMIZATION
+#else
     ui();
+#endif
     pc++;
     valid_reg();
     const_reg();

@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 #include <limits.h>
-#include "./fpu.hpp"
 #include "./print_bit.hpp"
 #include <iostream>
 using namespace std;
@@ -26,6 +25,15 @@ const int GENR_MAX = 25;
 
 const int SPR_INIT = 0x000fffff;
 const int LR_INIT = INT_MAX;
+extern float fadd(float,float);
+extern float fmul(float,float);
+extern float finv(float);
+extern float sqrt_m(float);
+extern int eq_f(float,float);
+extern int lte_f(float,float);
+extern float fdiv(float, float);
+
+typedef uint32_t data;
 
 // myintに関する演算を定義するためのマクロ
 #define defarith(_op)				     \
@@ -76,7 +84,9 @@ public:
   float operator+(myfloat t){   return fadd(f,t.f);  }
   float operator-(myfloat t){   return fadd(f, -t.f);  }
   float operator*(myfloat t){   return fmul(f, t.f);  }
-  float operator/(myfloat t){   return fdiv(f, t.f);  }
+  float inv(void) { return finv(this->f); }
+  
+  float operator/(myfloat t){   return fmul(this->f, finv(t.f));  }
   uint32_t operator<=(myfloat t){ return lte_f(this->f, t.f);}
   uint32_t operator>=(myfloat t){ return t <= *this; }
   uint32_t operator==(myfloat t){ return eq_f(this->f, t.f); } 
@@ -101,3 +111,5 @@ inline int valid_addr(int index){
     throw index;
   }
 }
+
+inline void halt(void){ pc = LR_INIT; }

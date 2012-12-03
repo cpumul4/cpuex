@@ -248,27 +248,24 @@ bool does_break(int bps[]){
 void howtouse(void){
   cerr << 
     "\n-----------------------------------------------------------------\n\
- ; <reg> は $rx(intレジスタx番), $fx（floatレジスタx番）, $mx（メモリのx番）の意味\n\
- ; \t\"$\"は省略可能\n\
- ; if (条件式)\t... 条件式を満たすときに停止\n\
- ;\t（条件式）... <reg> = 4, <reg> < 4.0, <reg> != 0.2など. \n\
- ; if <reg> change ... <reg>の値が変わったら停止する\n\
- ;rmif [enl] <reg> ... <reg>に関する条件式を削除\n\
- ;\t [enl] ... eかnかlのどれか１文字。eなら =の条件を, nなら !=を, lなら <を削除\n\
- ;\t [enl]を省略した場合、e,n,lの全てから消す。\n\
- ; ram int1 int2\t... int1~int2のメモリを表示(int1,2は相対値)\n\
- ; step int\t... int命令毎に実行停止(0で非停止). stepは省略可.\n\
- ; Enterキー\t... 実行再開\n\
- ; quit\t...終了\n\
- ; bit <reg>\t... <reg> のビット列を表示\n\
+ ; <reg> は $rx(intレジスタx番), $fx（floatレジスタx番）, $mx（メモリのx番）の意味\n \
+ ; \t\"$\"は省略可能\n							\
+ ; if (条件式)\t... 条件式を満たすときに停止\n				\
+ ;\t（条件式）... <reg> = 4, <reg> < 4.0, <reg> != 0.2など. \n		\
+ ; if <reg> change ... <reg>の値が変わったら停止する\n			\
+ ;rmif [enl] <reg> ... <reg>に関する条件式を削除\n			\
+ ;\t [enl] ... eかnかlのどれか１文字。eなら =の条件を, nなら !=を, lなら <を削除\n \
+ ;\t [enl]を省略した場合、e,n,lの全てから消す。\n			\
+ ; ram int1 int2\t... int1~int2のメモリを表示(int1,2は相対値)\n		\
+ ; step int\t... int命令毎に実行停止(0で非停止). stepは省略可.\n	\
+ ; Enterキー\t... 実行再開\n						\
+ ; quit\t...終了\n							\
+ ; bit <reg>\t... <reg> のビット列を表示\n				\
  ------------------------------------------------------------------\n";
   return;
 }
 
-int dummy_fib(int x){
-  if(x <= 1)return x;
-  else return dummy_fib(x-1) + dummy_fib(x-2);
-}
+
 
 int ui(){
   static equalarray eqarray;
@@ -284,15 +281,17 @@ int ui(){
   char *tokens[5];
 
   bool stop;
+#if OPTIMISATION
+#else
+  init_stop = false;
+#endif
+
+
   stop = init_stop;
   stop = stop || (step != 0 && exec_count % step == 0);
   stop = stop || (need_check && (eqarray.check() || ltarray.check() || nearray.check()));
   if(!stop)return 0;
 
-#if OPTIMIZATION
-  if(1)return 0;
-#endif
-  
   if(init_stop){
     howtouse();
     init_stop = false;
