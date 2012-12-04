@@ -1,4 +1,7 @@
 2012/12/04
+faddを3クロックにした。133MHzで動作確認。TimingReportによると139MHz
+
+2012/12/04
 finv.vhd、sqrt.vhd、table.vhdを追加
 
 2012/12/02
