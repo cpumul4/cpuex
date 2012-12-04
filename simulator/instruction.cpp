@@ -272,20 +272,20 @@ void instr::exec_asm(){
     c(BLTEI , if(D <= IMMT)  pc = pc + IMM;);
     c(BGTEI , if(D >= IMMT)  pc = pc + IMM;);
 
-    c(BEQR , if(D == S)  pc = pc + T;);
-    c(BNER , if(D != S)  pc = pc + T;);
-    c(FBEQR ,if(FD == FS)pc = pc + T;);
-    c(FBNER ,if(FD != FS)pc = pc + T;);
+    c(BEQR , if(D == S)  pc = T.i;);
+    c(BNER , if(D != S)  pc = T.i;);
+    c(FBEQR ,if(FD == FS)pc = T.i;);
+    c(FBNER ,if(FD != FS)pc = T.i;);
 
-    c(BLTER  ,if(D <= S)  pc = pc + T;);
-    c(BGTER  ,if(D >= S)  pc = pc + T;);
-    c(FBLTER ,if(FD <= FS)pc = pc + T;);
-    c(FBGTER ,if(FD >= FS)pc = pc + T;);
+    c(BLTER  ,if(D <= S)  pc = T.i;);
+    c(BGTER  ,if(D >= S)  pc = T.i;);
+    c(FBLTER ,if(FD <= FS)pc = T.i;);
+    c(FBGTER ,if(FD >= FS)pc = T.i;);
 
-    c(BEQIR  , if(D == IMMT)  pc = pc + T;);
-    c(BNEIR  , if(D != IMMT)  pc = pc + T;);
-    c(BLTEIR , if(D <= IMMT)  pc = pc + T;);
-    c(BGTEIR , if(D >= IMMT)  pc = pc + T;);
+    c(BEQIR  , if(D == IMMT)  pc = T.i;);
+    c(BNEIR  , if(D != IMMT)  pc = T.i;);
+    c(BLTEIR , if(D <= IMMT)  pc = T.i;);
+    c(BGTEIR , if(D >= IMMT)  pc = T.i;);
 
     // -------------- FR形式 -------------
 

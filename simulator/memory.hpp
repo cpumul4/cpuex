@@ -55,9 +55,9 @@ union myint {
   uint32_t b;
   int32_t  i;
 public:
-  void operator = (const uint32_t sub){ b = sub; };
+  void operator=(const uint32_t sub){ b = sub; };
   defarith(+)
-  inline friend int32_t operator + (int32_t imm, myint mi);
+  inline friend int32_t operator+(int32_t imm, myint mi);
   defarith(-)
   defarith(/)
   defarith(*)
