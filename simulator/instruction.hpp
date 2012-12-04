@@ -52,6 +52,10 @@ inline void instr::set(opcode _op, regnum _rd, immidiate _rs, immidiate _rt){
   case  BNEI:
   case  BLTEI:
   case  BGTEI:
+  case  BEQIR:
+  case  BNEIR:
+  case  BLTEIR:
+  case  BGTEIR:
     if(_rs == 0)
       rs = -1;
     else
@@ -169,6 +173,21 @@ inline string encode(opcode opc){
     op(bgtei , BGTEI, it)
     op(fbgte, FBGTE, branch)
 
+    op(beqr , BEQR , branch)
+    op(beqir , BEQIR , it)
+    op(fbeqr, FBEQR, branch)
+
+    op(bner , BNER , branch)
+    op(bneir , BNEIR , it)
+    op(fbner, FBNER, branch)
+
+    op(blter , BLTER , branch)
+    op(blteir , BLTEIR, it)
+    op(fblter, FBLTER, branch)
+
+    op(bgter , BGTER , branch)
+    op(bgteir , BGTEIR, it)
+    op(fbgter, FBGTER, branch)
 
     op(nop , NOP , none)
     op(dbg , DBG , none)

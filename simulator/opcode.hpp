@@ -5,7 +5,7 @@
 #define OPTIMIZATION 0
 #define FIRST_ISA 1
 #define OLD 0
-#define OLD_STRICT 0
+#define OLD_STRICT 1
 enum opcode : uint8_t {
   HALT, 
   ADD, SUB, SUBI, ADDI, 
@@ -23,6 +23,8 @@ enum opcode : uint8_t {
   J, JL, JR, JLR, 
   BEQ, BEQI, FBEQ, BNE, BNEI, FBNE, 
   BLTE, BLTEI, FBLTE, BGTE, BGTEI, FBGTE, 
+  BEQR, BEQIR, FBEQR, BNER, BNEIR, FBNER, 
+  BLTER, BLTEIR, FBLTER, BGTER, BGTEIR, FBGTER, 
   NOP, DBG
 #if OLD
   ,FINDF1, SLLR, SRLR
