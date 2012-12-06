@@ -1,7 +1,6 @@
 #include "./statics.hpp"
 
 extern int instr_count[OPCNUM];
-extern string encode(opcode);
 
 inline void print_percent(int count, long long int all_count){
   char str[10];
