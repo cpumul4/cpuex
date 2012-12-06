@@ -38,7 +38,6 @@ void rom_stat(const int count[ROM_SIZE], const long long int all_count){
       start == last ? 
 	cerr << '[' << start << ']' << '\t' : 
 	cerr << '[' << start << '~' << last << ']' << '\t';
-      
       print_percent(count[start], all_count);
       cerr << '\t' << count[start] << "回" << endl;
       start = last = i;
