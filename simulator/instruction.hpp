@@ -232,13 +232,9 @@ inline void instr_stat(long long int all_count){
   cerr << "--- 各命令が何回実行されたか ----\n";
   for(int i = 0;i < OPCNUM; i++){ 
     if(instr_count[i] != 0){
-      if(ratio[i] >= 0.1){
-	char str[20];
-	sprintf(str,"%.1f", ratio[i]);
-	cerr << encode((opcode)i) << "\t: " << str << "%" << endl;
-      } else {
-	cerr << encode((opcode)i) << "\t: 0.0%\t(" << instr_count[i] << "回)" << endl;
-      }
+      char str[20];
+      sprintf(str,"%.1f", ratio[i]);
+      cerr << encode((opcode)i) << "\t: " << str << "%\t(" << instr_count[i] << "回)" << endl;
     }
   }
   cout << "------------------------------\n";
