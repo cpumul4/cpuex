@@ -238,7 +238,7 @@ begin
   z(1) <= ((not z(4)) and (((not z3(2)) and (((not z2(5)) and z1(11)) or (z2(5) and z1(9)))) or (z3(2) and (((not z2(3)) and z1(7)) or (z2(3) and z1(5)))))) or (z(4) and ((not z3(0)) and (((not z2(1)) and z1(3)) or (z2(1) and z1(1)))));
   z(0) <= ((not z(4)) and (((not z3(2)) and (((not z2(5)) and (((not z1(11)) and (not fr4(23))) or (z1(11) and (not fr4(21))))) or (z2(5) and (((not z1(9)) and (not fr4(19))) or (z1(9) and (not fr4(17))))))) or (z3(2) and (((not z2(3)) and (((not z1(7)) and (not fr4(15))) or (z1(7) and (not fr4(13))))) or (z2(3) and (((not z1(5)) and (not fr4(11))) or (z1(5) and (not fr4(9))))))))) or (z(4) and ((not z3(0)) and (((not z2(1)) and (((not z1(3)) and (not fr4(7))) or (z1(3) and (not fr4(5))))) or (z2(1) and (((not z1(1)) and (not fr4(3))) or (z1(1) and (not fr4(1))))))));
   
-  step3 : process(CLK,br2,s3,s4,e2,fr3,fr4,g_1,r_1,st_1,tmp3_1,s,z,ex3,t3_1,t3_2,t3_3,t3_4,t3_5) --add or normalize
+  step3_1 : process(br2,s3,s4,e2,fr3,fr4,g_1,r_1,st_1,tmp3_1,s,z,ex3,t3_1,t3_2,t3_3,t3_4,t3_5) --add or normalize
   begin
     --add
     s <= s3 xor s4;
@@ -279,52 +279,48 @@ begin
     
     if (br2 = '1') then
       --add
-      if rising_edge(CLK) then
-        s5 <= s3;
-        s6 <= s;
-        if (tmp3_1(26) = '1') then
-          e3 <= e2 + 1;
-          fr5 <= tmp3_1(25 downto 3);
-          g_2 <= tmp3_1(2);
-          r_2 <= tmp3_1(1);
-          st_2 <= st_1 or tmp3_1(0);
+      s5 <= s3;
+      s6 <= s;
+      if (tmp3_1(26) = '1') then
+        e3 <= e2 + 1;
+        fr5 <= tmp3_1(25 downto 3);
+        g_2 <= tmp3_1(2);
+        r_2 <= tmp3_1(1);
+        st_2 <= st_1 or tmp3_1(0);
+      else
+        st_2 <= st_1;
+        if (tmp3_1(25) = '1') then
+          e3 <= e2;
+          fr5 <= tmp3_1(24 downto 2);
+          g_2 <= tmp3_1(1);
+          r_2 <= tmp3_1(0);
         else
-          st_2 <= st_1;
-          if (tmp3_1(25) = '1') then
-            e3 <= e2;
-            fr5 <= tmp3_1(24 downto 2);
-            g_2 <= tmp3_1(1);
-            r_2 <= tmp3_1(0);
-          else
-            e3 <= e2 - 1;
-            fr5 <= tmp3_1(23 downto 1);
-            g_2 <= tmp3_1(0);
-            r_2 <= '0';
-          end if;
+          e3 <= e2 - 1;
+          fr5 <= tmp3_1(23 downto 1);
+          g_2 <= tmp3_1(0);
+          r_2 <= '0';
         end if;
-        zero <= '0';
       end if;
+      zero <= '0';
     else
       --normalize
-      if rising_edge(CLK) then
-        s5 <= s3;
-        s6 <= s3 xor s4;
-        if ((ex3(8) or (z(4) and z(3) and (not g_1))) = '1') then
-          e3 <= x"00";
-          zero <= '1';
-        else
-          e3 <= ex3(7 downto 0);
-          zero <= '0';
-        end if;
-        fr5 <= t3_5(23 downto 1);
-        g_2 <= t3_5(0);
-        r_2 <= r_1;
-        st_2 <= st_1;
+      s5 <= s3;
+      s6 <= s3 xor s4;
+      if ((ex3(8) or (z(4) and z(3) and (not g_1))) = '1') then
+        e3 <= x"00";
+        zero <= '1';
+      else
+        e3 <= ex3(7 downto 0);
+        zero <= '0';
       end if;
+      fr5 <= t3_5(23 downto 1);
+      g_2 <= t3_5(0);
+      r_2 <= r_1;
+      st_2 <= st_1;
     end if;
   end process;
   
-  step4 : process(CLK,s6,e3,fr5,g_2,r_2,st_2,tmp4,zero)
+  step3_2 : process(CLK,s6,e3,fr5,g_2,r_2,st_2,tmp4,zero)
   begin
     if (zero = '1') then
       tmp4 <= x"000000";
