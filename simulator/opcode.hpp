@@ -7,7 +7,7 @@
 #define FIRST_ISA 1
 #define OLD 0
 #define OLD_STRICT 1
-enum opcode : uint8_t {
+enum opcode : uint8_t {		// 順番変えるとencode()がムチャクチャになる
   HALT, 
   ADD, SUB, SUBI, ADDI, 
   FADD, FADDA, FADDN, FSUB, FSUBA, FSUBN, 
@@ -39,6 +39,17 @@ enum opcode : uint8_t {
 const int OPCNUM = UNKNOWN;
 
 inline std::string encode(opcode opc){
+  static std::string opname[OPCNUM + 1] = {"halt", "add", "sub", "subi", "addi", "fadd", "fadda", "faddn", "fsub", "fsuba", "fsubn", "fmul", "fmula", "fmuln", "finv", "finva", "finvn", "fabs", "fneg", "sqrt", "sqrta", "sqrtn", "and", "or", "nor", "xor", "andi", "ori", "sll", "srl", "sra", "r2r", "f2f", "r2f", "f2r", "itof", "ftoi", "floor" , "lui", "lli", "flui", "flli", "lw", "lwi", "flw", "flwa", "flwn", "flwi", "flwia", "flwin", "sw", "swi", "fsw", "fswi", "in", "fin", "outa", "outb", "outc", "outd", "fouta", "foutb", "foutc", "foutd", "j", "jl", "jr", "jlr", "beq", "beqi", "fbeq", "bne", "bnei", "fbne", "blte", "bltei", "fblte", "bgte", "bgtei", "fbgte", "beqr", "beqir", "fbeqr", "bner", "bneir", "fbner", "blter", "blteir", "fblter", "bgter", "bgteir", "fbgter","nop", "dbg"
+#if OLD
+  ,"findf1", "sllr", "srlr"
+#endif
+#if FIRST_ISA
+  ,"cmp", "cmpf", "divf"
+#endif
+  , "unknown"// 末尾から動かすな
+};
+  return opname[opc];
+  
 #define op(str,code,form) \
     else if (opc == code){return #str; }
 #undef op
