@@ -1,6 +1,7 @@
 #include "./memory.hpp"
 #include "./opcode.hpp"
 #include "./instruction.hpp"
+#include "./statics.hpp"
 #include <stdlib.h>
 #include <sys/time.h>
 #include <fstream>
@@ -9,7 +10,6 @@ extern int ui(void);
 extern int ui_error(void);
 extern int decode(char *);
 extern bool error_section(void);
-
 instr rom[ROM_SIZE];
 ofstream fout;
 ifstream fin;
@@ -51,6 +51,7 @@ inline void valid_reg(void){
 }
 
 int simulate(char *asmpath, char *srcpath, char *tgtpath){
+  int rom_count[ROM_SIZE] = {0};
   decode(asmpath);
   if(srcpath == NULL)cerr << "no input file.\n";
   else {
@@ -72,6 +73,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
   
   init();
 
+  // 実行ループ
   while(pc != LR_INIT){
 #if OPTIMIZATION
 #else
@@ -80,7 +82,9 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     pc++;
     valid_reg();
     const_reg();
+
     try {
+      rom_count[pc-1]++;
       rom[pc-1].exec_asm();
       exec_count++;
     }
@@ -100,6 +104,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
 
   cout << "結果レジスタ($r1, $f3) = " << ireg[1].i << ", " << freg[3].f  << endl;
   instr_stat(exec_count);
+  rom_stat(rom_count, exec_count);
 
   return exec_count;
 }

@@ -6,6 +6,7 @@
 long int instr_count[OPCNUM];
 extern int step;
 
+
 template<class T> inline T abs32(const T &x){
   if(sizeof(x) != 4)throw "4byteではないデータに遭遇\n";
   union {
@@ -186,7 +187,7 @@ void instr::exec_asm(){
 #define FT freg[rt]
 #define IMMT rs
 #define IMM rt
-#define c(_op,_expr) case _op: _expr ++instr_count[_op]; break
+#define c(_op,_expr) case _op: _expr ++instr_count[_op] ; break
   switch(opc) {
     //  ----------- R 形式の命令 ---------------
     c(ADD , D = S + T;);
@@ -344,3 +345,4 @@ void instr::exec_asm(){
 #undef c
 
 }
+
