@@ -90,6 +90,12 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
       ui_error();
       pc = LR_INIT;
     }
+    catch(string){
+      cerr << "実行しようとした命令:[" << pc -1 << ']';
+      rom[pc-1].show();
+      ui_error();
+      pc = LR_INIT;
+    }      
   }
 
   cout << "結果レジスタ($r1, $f3) = " << ireg[1].i << ", " << freg[3].f  << endl;

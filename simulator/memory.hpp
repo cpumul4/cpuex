@@ -89,7 +89,8 @@ public:
   float operator+(myfloat t){   return fadd(f,t.f);  }
   float operator-(myfloat t){   return fadd(f, -t.f);  }
   float operator*(myfloat t){   return fmul(f, t.f);  }
-  float inv(void) { return finv(this->f); }
+  float inv(void) { return fdiv(1,this->f);}
+      //finv(this->f); }
   
   float operator/(myfloat t){   return fmul(this->f, finv(t.f));  }
   uint32_t operator<=(myfloat t){ return lte_f(this->f, t.f);}

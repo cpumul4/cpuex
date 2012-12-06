@@ -245,6 +245,12 @@ bool does_break(int bps[]){
   return false;
 }
 
+
+void stop_at_instr(char *opname){
+  
+  return;
+}
+
 void howtouse(void){
   cerr << 
     "\n-----------------------------------------------------------------\n\
@@ -260,6 +266,7 @@ void howtouse(void){
  ; step int\t... int命令毎に実行停止(0で非停止). stepは省略可.\n\
  ; Enterキー\t... 実行再開\n\
  ; quit\t...終了\n\
+ ; instr opname \t... <opname>の命令が来たら停止する\n\
  ; bit <reg>\t... <reg> のビット列を表示\n\
  ------------------------------------------------------------------\n";
   return;
@@ -367,6 +374,8 @@ int ui(){
       step = atoi(tokens[0]);
     else if(strcmp(tokens[0], "bit") == 0)
       print_bit(*ptr_to_memreg(tokens[1]));
+    else if(strcmp(tokens[0], "instr") == 0)
+      stop_at_instr(tokens[0]);
   }
   return 0;
 }
