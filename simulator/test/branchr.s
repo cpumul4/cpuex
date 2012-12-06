@@ -7,7 +7,7 @@
 	fbeqr	$f3 $r2 $r3
 	j	error
 	bner	$r1 $r3 $r3
-	bneir	$r1 -1 $r3
+	bneir	$r1 0 $r3
 	fbner	$r1 $r2 $r3
 	blter	$r1 $r2 $r3
 	blteir	$r1 -1 $r3

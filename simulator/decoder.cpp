@@ -5,7 +5,7 @@
 #include <fstream>
 #include <cstring>
 #include <stdlib.h>
-#define DEBUG_DECODER 0
+#define DEBUG_DECODER 1
 #define MAX_CHAR  100
 extern instr rom[];
 const char combegin[3] = "#;";
@@ -62,6 +62,7 @@ inline int get_imm(char *immstr, ltable &table){
     return imm;
   }
 }
+
 
 ////////////////////////////////////////////////////
 format str_to_opcode(char *str, opcode &opc){
@@ -264,6 +265,9 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
       args[0] = get_regnum(asmtok[1]);
       args[1] = get_imm(asmtok[2], table);
 #if OLD_STRICT
+      if(args[1] == 0){
+	throw (string)"即値比較分岐命令の即値が0です";
+      }
       if(args[1] == -1)args[1] = 0;
 #endif
       valid_immt(args[1]);
