@@ -97,11 +97,6 @@ inline void exec_output(myint reg, int which_byte){
   return;
 }
 
-inline uint32_t get_pc(uint16_t imm){
-  return ((pc >> 26) << 26) | imm;
-}
-
- 
 
 inline void exec_output(myfloat reg, int which_byte){
   union {
@@ -131,8 +126,8 @@ inline uint32_t lowbits(myint b, int need){ // 下位need bitを取り出す
 }
 
 inline void exec_input(uint32_t &regbitseq, opcode opc){
-  string err = "ファイルサイズを超えて読もうとしています";   
-  const int strlength = 10;  
+  string err = "ファイルサイズを超えて読もうとしています";
+  const int strlength = 10;
   static bool read_eof = false;
   union {
     int32_t i;
@@ -264,8 +259,8 @@ void instr::exec_asm(){
 
 
     // -------------- J形式 --------------
-    c(J , pc =get_pc(IMM);); 
-    c(JL, LR = pc;pc = get_pc(IMM););
+    c(J , pc = IMM;); 
+    c(JL, LR = pc;pc = IMM;);
 
     c(JR  , pc = D.i;);		// D reg が distになってない
     c(JLR  ,LR = pc;pc = D.i;);		// D reg が distになってない
