@@ -163,7 +163,7 @@ format str_to_opcode(char *str, opcode &opc){
     op(blter , BLTER , r)
     op(blteir, BLTEIR, branchitr)
     op(fblter, FBLTER, r)
-    op(bgtr  , BGTER , r)
+    op(bgter , BGTER , r)
     op(bgteir, BGTEIR, branchitr)
     op(fbgter , FBGTER, r)
 

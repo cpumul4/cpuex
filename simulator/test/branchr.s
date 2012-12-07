@@ -1,4 +1,5 @@
 	addi	$r3 $r3 1
+	bgter	$r3 $r3 $r3
 	beqr	$r1 $r2 $r3
 	swi	$r1 $r0 -100
 	beqir	$r3 1 $r3
@@ -12,7 +13,7 @@
 	blter	$r1 $r2 $r3
 	blteir	$r1 -1 $r3
 	fblter	$r1 $r2 $r3
-	bgtr	$r1 $r2 $r3
+	bgter	$r1 $r2 $r3
 	bgteir	$r1 -1 $r3
 	fbgter	$r1 $r2 $r3
 	halt
