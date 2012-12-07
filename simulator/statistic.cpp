@@ -1,4 +1,4 @@
-#include "./statics.hpp"
+#include "./statistic.hpp"
 
 extern int instr_count[OPCNUM];
 
