@@ -56,10 +56,8 @@ inline void instr::set(opcode _op, regnum _rd, immidiate _rs, immidiate _rt){
   case  BNEIR:
   case  BLTEIR:
   case  BGTEIR:
-    if(_rs == 0)
-      rs = -1;
-    else
-      rs = _rs;
+    if(_rs == 0)rs = -1;
+    else        rs = _rs;
     break;
   default:
     rs = _rs;

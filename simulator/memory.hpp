@@ -46,9 +46,8 @@ typedef uint32_t data;
   };  
 
 #define defbit(_op)						\
-  uint32_t operator _op (const myint     t){ return b _op t.b; };	\
-  uint32_t operator _op (const int16_t _b){				\
-    return (b _op _b);  };  
+  uint32_t operator _op (const myint    t){ return (b _op t.b); };	\
+  uint32_t operator _op (const int16_t _b){ return (b _op _b) ; };  
 
 union myint {
   uint32_t b;
