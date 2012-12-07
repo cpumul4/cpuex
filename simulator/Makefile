@@ -43,12 +43,18 @@ winold:
 
 win:
 	sed -e 's/#define ROM_SIZE 32768/#define ROM_SIZE 15000/' -i memory.hpp
+	sed -e 's/\.\/fpu\.h/\.\.\/2nd_fpu\/fpu\.h/' -i fdiv.cpp
+	g++ -O3 -std=c++0x  -c -o fpu.o ../2nd_fpu/fpu.c
 	make
+	sed -e 's/\.\.\/2nd_fpu\/fpu\.h/\.\/fpu\.h/' -i fdiv.cpp
 	sed -e 's/#define ROM_SIZE 15000/#define ROM_SIZE 32768/' -i memory.hpp
 
 winopt:
 	sed -e 's/#define ROM_SIZE 32768/#define ROM_SIZE 15000/' -i memory.hpp
+	sed -e 's/\.\/fpu\.h/\.\.\/2nd_fpu\/fpu\.h/' -i fdiv.cpp
+	g++ -O3 -std=c++0x  -c -o fpu.o ../2nd_fpu/fpu.c
 	make opt
+	sed -e 's/\.\.\/2nd_fpu\/fpu\.h/\.\/fpu\.h/' -i fdiv.cpp
 	sed -e 's/#define ROM_SIZE 15000/#define ROM_SIZE 32768/' -i memory.hpp
 
 2nd:

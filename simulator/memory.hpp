@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 #include <limits.h>
+#include <math.h>
+
 #include <iostream>
 using namespace std;
 #define INTREG_NUM   32

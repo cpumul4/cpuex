@@ -1,8 +1,9 @@
 #include "./statistic.hpp"
+#include <stdio.h>
 
 extern int instr_count[OPCNUM];
 
-inline void print_percent(int count, long long int all_count){
+inline void print_percent(const int count, const long long all_count){
   char str[10];
  
   sprintf(str, "%.1f%%", count/(all_count/100.0));
@@ -10,7 +11,7 @@ inline void print_percent(int count, long long int all_count){
   return;
 }
 
-void instr_stat(const long long int all_count){
+void instr_stat(const long long all_count){
   double ratio[OPCNUM];
   double count = all_count/100.0;
   for(int j = 0;j < OPCNUM; j++){
@@ -28,7 +29,7 @@ void instr_stat(const long long int all_count){
   cout << "------------------------------\n";
 }
 
-void rom_stat(const int count[ROM_SIZE], const long long int all_count){
+void rom_stat(const int count[ROM_SIZE], const long long all_count){
   int start = 0, last = 0;
   for(int i = 1; i < ROM_SIZE;i++){ // i == start + 1
     if(count[i] == count[start])
