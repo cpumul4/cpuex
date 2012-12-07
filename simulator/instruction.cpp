@@ -206,9 +206,9 @@ void instr::exec_asm(){
     c(FABS , FD =  abs32(FS.f););
     c(FNEG , FD = neg(FS.f););
 
-    c(SQRT  , FD = sqrt_m(FS.f);); // myfloatの実装が外に出てしまっている
-    c(SQRTA , FD =  abs32(sqrt_m(FS.f));); // myfloatの実装が外に出てしまっている
-    c(SQRTN , FD = neg(sqrt_m(FS.f));); // myfloatの実装が外に出てしまっている
+    c(SQRT  , FD = FS.sqrt(););
+    c(SQRTA , FD = abs32(FS.sqrt()););
+    c(SQRTN , FD = neg(FS.sqrt()););
 
     c(AND , D = S & T;);       
     c(OR  , D = S | T;);
