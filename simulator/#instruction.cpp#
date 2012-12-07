@@ -39,18 +39,9 @@ inline int findf1(myint mi){
   int cnt = 1;
   int32_t tmp = mi.i;
   while(true){
-    if(tmp == 0){
-      // cout << tmp << endl;
-      return 0;
-    }
-    else if(tmp < 0){
-      // cout << tmp << endl;
-      return cnt;
-    } else {
-      cnt++;
-      tmp <<= 1;
-      // cout << tmp << endl;
-     }
+    if(tmp == 0){      return 0;    }
+    else if(tmp < 0){      return cnt;  } 
+    else {      cnt++;      tmp <<= 1;     }
   }
 }
 
@@ -122,15 +113,13 @@ inline void exec_input(uint32_t &regbitseq, opcode opc){
 
   char *string = new char[strlength];
   
-  do {
-    fin.get(string[0]); 
-  }while(string[0] == ' '  || string[0] == '\t' || 
-	 string[0] == '\n' || string[0] == '\r');
+  do {fin.get(string[0]); }
+  while(string[0] == ' '  || string[0] == '\t' || 
+	string[0] == '\n' || string[0] == '\r');
 
   for(int i=1; i < strlength; i++){
     fin.get(string[i]);
-    if(string[i] == ' '  || string[i] == '\t' || 
-       string[i] == '\n' || string[i] == '\r'){
+    if(string[i] == ' '  || string[i] == '\t' || string[i] == '\n' || string[i] == '\r'){
       string[i] = 0;
       break;
     }
@@ -147,12 +136,9 @@ inline void exec_input(uint32_t &regbitseq, opcode opc){
       read_eof = true;
     }
   }
-
   if(opc == IN)conv.i = atoi(string);
   else conv.f = atof(string);
-
   regbitseq = conv.b;
-
   delete string;
   return;
 }

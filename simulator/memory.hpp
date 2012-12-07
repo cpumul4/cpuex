@@ -75,9 +75,7 @@ public:
 #undef defarith
 #undef defbit
 
-inline int32_t operator +(int32_t imm, myint mi){
-    return imm + mi.i;
-}
+inline int32_t operator +(int32_t imm, myint mi){ return imm + mi.i; }
 
 union myfloat {
   uint32_t b;
@@ -96,6 +94,20 @@ public:
   uint32_t operator==(myfloat t){ return eq_f(this->f, t.f); } 
   uint32_t operator==(float t)  { return eq_f(this->f, t  ); }
   uint32_t operator!=(myfloat t){return !(t == *this);}
+  float floor(void) { 
+    union {
+      myfloat val;
+      struct {
+	unsigned int other:31;
+	unsigned int sign:1;
+      } bits;
+    } ret;
+    ret.val = *this;
+    
+    if(ret.bits.other >= 0x4b000000)return this->f;
+    else if(this->f < 0 && *this == 0)return 0;
+    else return floorf(this->f);
+  }
 };
 
 extern uint32_t ram[RAM_SIZE];
