@@ -33,6 +33,7 @@ architecture finv of float_inv is
   signal val : std_logic_vector(22 downto 0);
   signal comp,comp1 : std_logic_vector(13 downto 0);
   signal comp2 : std_logic_vector(12 downto 0);
+  signal comp_low : std_logic_vector(9 downto 0);
   signal flag2,flag3 : std_logic;
   signal comp_t : std_logic_vector(24 downto 0); --step2
   signal comp_l : std_logic_vector(13 downto 0); --step3
@@ -73,19 +74,20 @@ begin
       e2 <= 253 - ('0'&e1);
       val <= tb(34 downto 12);
       comp <= comp_t(24 downto 11);
-      comp1 <= comp_t(24 downto 11) + 1;
-      comp2 <= comp_t(24 downto 12) + 1;
       flag2 <= flag1;
-      if (comp_t(9 downto 0) = "00"&x"00") then
-        flag3 <= '0';
-      else
-        flag3 <= '1';
-      end if;
+      comp_low <= comp_t(9 downto 0);
     end if;
   end process;
 
-  step3 : process(e2,val,comp,comp1,comp2,flag2,flag3,comp_l)
+  step3 : process(e2,val,comp,comp1,comp2,comp_low,flag2,flag3,comp_l)
   begin
+    comp1 <= comp + 1;
+    comp2 <= comp(13 downto 1) + 1;
+    if (comp_low = "00"&x"00") then
+      flag3 <= '0';
+    else
+      flag3 <= '1';
+    end if;
     if ((flag2 or flag3) = '1') then
       if ((flag2 and flag3) = '1') then
         comp_l <= comp2&comp(0);

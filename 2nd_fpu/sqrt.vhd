@@ -19,9 +19,9 @@ architecture sqrt of float_sqr is
   signal fr : std_logic_vector(22 downto 0);
   signal key : std_logic_vector(9 downto 0);
   signal tb : std_logic_vector(35 downto 0);
-  signal e1 : std_logic_vector(7 downto 0);
+  signal e1,e2 : std_logic_vector(7 downto 0);
   signal low : std_logic_vector(14 downto 0);
-  signal z1 : std_logic;
+  signal z1,z2 : std_logic;
   signal val : std_logic_vector(22 downto 0);
   signal comp,comp1 : std_logic_vector(13 downto 0);
   signal flag : std_logic;
@@ -62,34 +62,34 @@ begin
 
   step2 : process(clk,z1,e1,low,tb,comp_t)
   begin
-    comp_t <= low * tb(12 downto 0);
     if rising_edge(clk) then
-      if z1 = '1' then
-        exp <= x"00";
-        val <= "000"&x"00000";
-        comp <= "00"&x"000";
-        comp1 <= "00"&x"000";
-      else
-        exp <= e1;
-        val <= tb(35 downto 13);
-        comp <= comp_t(27 downto 14);
-        comp1 <= comp_t(27 downto 14) + 1;
-      end if;
-      if (comp_t(13 downto 12) = "11" or (comp_t(13 downto 12) = "10" and ((comp_t(14) xor tb(13)) = '1' or (not (comp_t(11 downto 0) = x"000"))))) then
-        flag <= '1';
-      else
-        flag <= '0';
-      end if;
+      comp_t <= low * tb(12 downto 0);
+      val <= tb(35 downto 13);
+      z2 <= z1;
+      e2 <= e1;
     end if;
   end process;
 
-  step3 : process(val,comp,comp1,flag,comp_l)
+  step3 : process(e2,z2,val,comp,comp1,flag,comp_t,comp_l)
   begin
+    comp <= comp_t(27 downto 14);
+    comp1 <= comp_t(27 downto 14) + 1;
+    if (comp_t(13 downto 12) = "11" or (comp_t(13 downto 12) = "10" and ((comp_t(14) xor val(0)) = '1' or (not (comp_t(11 downto 0) = x"000"))))) then
+      flag <= '1';
+    else
+      flag <= '0';
+    end if;
     if (flag = '1') then
       comp_l <= comp1;
     else
       comp_l <= comp;
     end if;
-    fr <= val + comp_l;
+    if z2 = '1' then
+      exp <= x"00";
+      fr <= "000"&x"00000";
+    else
+      exp <= e2;
+      fr <= val + comp_l;
+    end if;
   end process;
 end sqrt;
