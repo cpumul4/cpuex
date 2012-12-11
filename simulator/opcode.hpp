@@ -40,9 +40,6 @@ const int OPCNUM = UNKNOWN;
 
 inline std::string encode(opcode opc){
 #define op(str,code,form) \
-    else if (opc == code){return #str; }
-#undef op
-#define op(str,code,form) \
   case code: \
     return #str;
   switch(opc){

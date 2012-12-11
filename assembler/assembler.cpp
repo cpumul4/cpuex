@@ -19,48 +19,6 @@ const char combegin[] = "#;";
 extern void print_bit(uint32_t);
 extern void print_bit_instr(uint32_t);
 
-// 文字列を処理する関数
-char *skip_chars(char *str, const char *keys){
-  int i = 0;
-  for(;str[i] != 0;i++)
-    if(strchr(keys,str[i]) == NULL)
-      return str + i;
-  return str + i;
-}
-
-char *strchrs(char *str, const char *keys){
-  char *retptr;
-  for(int i = 0; keys[i] != 0;i++){
-    retptr = strchr(str,keys[i]);
-    if(retptr != NULL)
-      return retptr;
-  }
-  return NULL;
-}
-
-
-inline int get_regnum(char *reg){
-  if(reg[0] == '$'){
-    if(reg[1] == 'r' || reg[1] == 'f')
-      return (int)atoi(reg + 2);
-  }
-  else 
-    return -1;
-}
-
-int interpret_operand(char *operand, ltable table){
-  int regnum = get_regnum(operand);
-  if(regnum >= 0)return regnum;
-
-  regnum = table.get_index(operand);
-  if(regnum >= 0)return regnum;
-
-  if(operand[0] == '-' || (operand[0] >= '0' && operand[0] <= '9'))
-    return atoi(operand);
-  return -1;
-}
-
-
 
 enum format { r, i, j, branch};
 
