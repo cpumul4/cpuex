@@ -7,7 +7,7 @@
 
 extern int ui(void);
 extern int ui_error(void);
-extern int decode(char *);
+extern int decode(char *, instr[ROM_SIZE]);
 extern bool error_section(void);
 
 instr rom[ROM_SIZE];
@@ -51,7 +51,7 @@ inline void valid_reg(void){
 }
 
 int simulate(char *asmpath, char *srcpath, char *tgtpath){
-  decode(asmpath);
+  decode(asmpath, rom);
   if(srcpath == NULL)cerr << "no input file.\n";
   else {
     fin.open(srcpath);

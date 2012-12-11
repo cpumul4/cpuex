@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #define DEBUG_DECODER 0
 #define MAX_CHAR  100
-extern instr rom[];
+//extern instr rom[];
 const char combegin[3] = "#;";
 const char delims[] = " \t\r\n";
 enum format {r,i,j, branch, none, it};
@@ -292,7 +292,7 @@ void make_table(char *input, ltable &table, int &romindex){
 
 
 /////////////////////////////////////////////////////////////
-int decode(char *srcpath){
+int decode(char *srcpath, instr rom[ROM_SIZE]){
   char input[ROM_SIZE][MAX_CHAR];
   ltable table;
   int romindex = 0;
@@ -323,7 +323,6 @@ int decode(char *srcpath){
 
   char string[50];
   sprintf(string, "<デコード終了> 発行命令数:%d\n\n",romindex);
-  
   cerr << string;
   return 0;
 }
