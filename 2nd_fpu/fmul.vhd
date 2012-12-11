@@ -78,30 +78,38 @@ entity booth_encoder is
 end booth_encoder;
 
 architecture be4 of booth_encoder is
-  signal tmp : std_logic_vector(27 downto 0);
+  signal tmp,tmpt1,tmpt2 : std_logic_vector(27 downto 0);
+  signal coden : std_logic_vector(3 downto 0);
+  signal cd,cd_p,cd_n : std_logic_vector(2 downto 0);
 begin
-  encode : process(clk,code,m_1,m_3,m_5,m_7,tmp)
+  coden <= not code(3 downto 0);
+  cd_p <= (code(3) xor (code(2) and code(1) and code(0)))&(code(2) xor (code(1) and code(0)))&(code(1) xor code(0));
+  cd_n <= (coden(3) xor (coden(2) and coden(1) and coden(0)))&(coden(2) xor (coden(1) and coden(0)))&(coden(1) xor coden(0));
+  encode : process(clk,code,m_1,m_3,m_5,m_7,tmp,tmpt1,tmpt2,cd,cd_n,cd_p)
   begin
-    case code is
-      when "00000"|"11111" => tmp <= x"0000000";
-      when "00001"|"00010" => tmp <= "00001"&m_1;
-      when "00011"|"00100" => tmp <= "0001"&m_1&'0';
-      when "00101"|"00110" => tmp <= "00"&m_3&m_1(0);
-      when "00111"|"01000" => tmp <= "001"&m_1&"00";
-      when "01001"|"01010" => tmp <= '0'&m_5&m_1(1 downto 0);
-      when "01011"|"01100" => tmp <= '0'&m_3&m_1(0)&'0';
-      when "01101"|"01110" => tmp <= '0'&m_7&m_3(0)&m_1(0);
-      when "01111" => tmp <= "01"&m_1&"000";
-      when "10000" => tmp <= "10"&(not m_1)&"111";
-      when "10001"|"10010" => tmp <= '1'&(not (m_7&m_3(0)&m_1(0)));
-      when "10011"|"10100" => tmp <= '1'&(not (m_3&m_1(0)))&'1';
-      when "10101"|"10110" => tmp <= '1'&(not (m_5&m_1(1 downto 0))); 
-      when "10111"|"11000" => tmp <= "110"&(not m_1)&"11";
-      when "11001"|"11010" => tmp <= "11"&(not (m_3&m_1(0)));
-      when "11011"|"11100" => tmp <= "1110"&(not m_1)&'1';
-      when "11101"|"11110" => tmp <= "11110"&(not m_1);
+    if code(4) = '0' or code = "11111" then
+      tmp <= tmpt2;
+      cd <= cd_p;
+    else
+      tmp <= not tmpt2;
+      cd <= cd_n;
+    end if;
+    case cd is
+      when "000" => tmpt1 <= x"0000000";
+      when "001" => tmpt1 <= "00001"&m_1;
+      when "010" => tmpt1 <= "0001"&m_1&'0';
+      when "011" => tmpt1 <= "00"&m_3&m_1(0);
+      when "100" => tmpt1 <= "001"&m_1&"00";
+      when "101" => tmpt1 <= '0'&m_5&m_1(1 downto 0);
+      when "110" => tmpt1 <= '0'&m_3&m_1(0)&'0';
+      when "111" => tmpt1 <= '0'&m_7&m_3(0)&m_1(0);
       when others => null;
     end case;
+    if code = "01111" or code = "10000" then
+      tmpt2 <= "01"&m_1&"000";
+    else
+      tmpt2 <= tmpt1;
+    end if;
     if rising_edge(clk) then      
       ppro <= tmp(26 downto 0);
       sign <= tmp(27);
