@@ -1,8 +1,6 @@
 #include "./statistic.hpp"
 #include <stdio.h>
 
-extern long int instr_count[OPCNUM];
-
 inline void print_percent(const int count, const long long all_count){
   char str[10];
  
@@ -11,19 +9,19 @@ inline void print_percent(const int count, const long long all_count){
   return;
 }
 
-void instr_stat(const long long all_count){
+void instr_stat(const long int count[OPCNUM], const long long all_count){
   double ratio[OPCNUM];
-  double count = all_count/100.0;
+  double sum = all_count/100.0;
   for(int j = 0;j < OPCNUM; j++){
-    ratio[j] = instr_count[j]/count;
+    ratio[j] = count[j]/sum;
   }
 
   cout << "--- 各命令が何回実行されたか ----\n";
   for(int i = 0;i < OPCNUM; i++){ 
-    if(instr_count[i] != 0){
+    if(count[i] != 0){
       char str[20];
       sprintf(str,"%.1f", ratio[i]);
-      cout << encode((opcode)i) << "\t: " << str << "%\t(" << instr_count[i] << "回)" << endl;
+      cout << encode((opcode)i) << "\t: " << str << "%\t(" << count[i] << "回)" << endl;
     }
   }
   cout << "------------------------------\n";

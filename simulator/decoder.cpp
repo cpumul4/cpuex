@@ -5,7 +5,7 @@
 #include <fstream>
 #include <cstring>
 #include <stdlib.h>
-#define DEBUG_DECODER 1
+#define DEBUG_DECODER 0
 #define MAX_CHAR  100
 extern instr rom[];
 const char combegin[3] = "#;";
