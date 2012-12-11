@@ -1,7 +1,7 @@
 #include "./statistic.hpp"
 #include <stdio.h>
 
-extern int instr_count[OPCNUM];
+extern long int instr_count[OPCNUM];
 
 inline void print_percent(const int count, const long long all_count){
   char str[10];
