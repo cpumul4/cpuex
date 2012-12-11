@@ -129,10 +129,13 @@ int main(int argc, char *argv[]){
   cerr << "<simulation has started!>\n";
 
   gettimeofday(&t1,NULL);
-  cerr << "実行命令数: " << (count = simulate(argv[1], argv[2], argv[3])) << '\n';
+  cout << "実行命令数: " << (count = simulate(argv[1], argv[2], argv[3])) << '\n';
   gettimeofday(&t2,NULL);
 
-  printf("実行命令数/sec:%.4e\n", count/time_diff(t1,t2));
-
+  char *speed = new char[100];
+  sprintf(speed, "実行命令数/sec:%.4e\n", count/time_diff(t1,t2));
+  cerr << speed;
+  delete [] speed;
+  
   return 0;
 }
