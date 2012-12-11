@@ -15,6 +15,7 @@ class instr;
 typedef map<int, uint32_t> cells;
 extern instr rom[];
 extern long long int exec_count;
+extern int str_to_opcode(char*, opcode&);
 
 const int bpsize = 100;
 int step = 0;
@@ -246,14 +247,14 @@ bool does_break(int bps[]){
 }
 
 
-void stop_at_instr(char *opname){
-  
+void stop_at_instr(char *opname, opcode& opc){
+  str_to_opcode(opname, opc);
   return;
 }
 
 void howtouse(void){
   cerr << 
-    "\n-----------------------------------------------------------------\n\
+    "\n-----------------------------------------------------------------\n	\
  ; <reg> は $rx(intレジスタx番), $fx（floatレジスタx番）, $mx（メモリのx番）の意味\n\
  ; \t\"$\"は省略可能\n\
  ; if (条件式)\t... 条件式を満たすときに停止\n\
@@ -274,7 +275,9 @@ void howtouse(void){
 
 
 
+
 int ui(){
+  static opcode watchinstr = UNKNOWN;
   static equalarray eqarray;
   static lessthanarray ltarray;
   static noteqarray nearray;
@@ -293,9 +296,11 @@ int ui(){
 #endif
 
 
+
   stop = init_stop;
   stop = stop || (step != 0 && exec_count % step == 0);
   stop = stop || (need_check && (eqarray.check() || ltarray.check() || nearray.check()));
+  stop = stop || rom[pc].equal_opcode(watchinstr);
   if(!stop)return 0;
 
   if(init_stop){
@@ -374,8 +379,11 @@ int ui(){
       step = atoi(tokens[0]);
     else if(strcmp(tokens[0], "bit") == 0)
       print_bit(*ptr_to_memreg(tokens[1]));
-    else if(strcmp(tokens[0], "instr") == 0)
-      stop_at_instr(tokens[0]);
+    else if(strcmp(tokens[0], "instr") == 0){
+      stop_at_instr(tokens[1], watchinstr);
+      cerr << tokens[1] << "を実行する直前に停止します" << endl;
+    }
+    else cerr << "不明なコマンドです" << endl;
   }
   return 0;
 }

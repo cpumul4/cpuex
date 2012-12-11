@@ -29,7 +29,8 @@ void instr_stat(const long long all_count){
   cout << "------------------------------\n";
 }
 
-void rom_stat(const int count[ROM_SIZE], const long long all_count){
+void rom_stat(const int count[ROM_SIZE], const long long all_count){ 
+  cout << "--- 各番地の命令が何回実行されたか ----\n";
   int start = 0, last = 0;
   for(int i = 1; i < ROM_SIZE;i++){ // i == start + 1
     if(count[i] == count[start])
@@ -43,4 +44,5 @@ void rom_stat(const int count[ROM_SIZE], const long long all_count){
       start = last = i;
     }
   }
+  cout << "------------------------------\n";
 }
