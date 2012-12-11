@@ -25,9 +25,9 @@ ifneq "$(MAKECMDGOALS)" "clean"
 endif
 
 opt:
-	sed -e 's/#define OPTIMIZATION 0/#define OPTIMIZATION 1/' -i opcode.hpp
+	sed -e 's/#define OPTIMIZATION 0/#define OPTIMIZATION 1/' -i main.cpp
 	make PROGRAM=sim_fastnostop
-	sed -e 's/#define OPTIMIZATION 1/#define OPTIMIZATION 0/' -i opcode.hpp
+	sed -e 's/#define OPTIMIZATION 1/#define OPTIMIZATION 0/' -i main.cpp
 
 old:
 	sed -e 's/#define OLD 0/#define OLD 1/' -i opcode.hpp

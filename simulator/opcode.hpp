@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <string>
 
-#define OPTIMIZATION 0
 #define FIRST_ISA 1
 #define OLD 0
 #define OLD_STRICT 1

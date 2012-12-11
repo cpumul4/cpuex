@@ -6,6 +6,8 @@
 #include <sys/time.h>
 #include <fstream>
 
+#define OPTIMIZATION 0
+
 extern int ui(void);
 extern int ui_error(void);
 extern int decode(char *);
