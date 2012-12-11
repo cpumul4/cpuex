@@ -1,0 +1,87 @@
+Sheet1
+ページ 1
+命令 形式 35343332313029 … 2524232221 20 … 16 15 … 11 10 09 08 07 06 05 04 03 02 01 00
+opcode (funct) funct(R)
+add R 101000 rs 0000 rt rd
+sub R 101000 rs 0010 rt rd
+addi I 101001 rs 0000 rt imm
+subi I 101001 rs 0010 rt imm
+fadd FR 111110 fs 0000 ft fd 00
+fadda FR 111110 fs 0000 ft fd 01
+faddn FR 111110 fs 0000 ft fd 10
+fsub FR 111110 fs 0010 ft fd 00
+fsuba FR 111110 fs 0010 ft fd 01
+fsubn FR 111110 fs 0010 ft fd 10
+fmul FR 111110 fs 0001 ft fd 00
+fmula FR 111110 fs 0001 ft fd 01
+fmuln FR 111110 fs 0001 ft fd 10
+finv FR 111110 fs 0011 fd 00
+finva FR 111110 fs 0011 fd 01
+finvn FR 111110 fs 0011 fd 10
+fabs FR 101110 fs 1111 fd 01
+fneg FR 101110 fs 1111 fd 10
+sqrt FR 111110 fs 0100 fd 00
+sqrta FR 111110 fs 0100 fd 01
+sqrtn FR 111110 fs 0100 fd 10
+itof FR1101010 rs 1101 fd
+ftoi FR2101100 fs 1101 rd
+floor FR 101110 fs 0110 fd
+and R 101000 rs 0100 rt rd
+or R 101000 rs 0110 rt rd
+nor R 101000 rs 0111 rt rd
+xor R 101000 rs 0101 rt rd
+andi I 101001 rs 0100 rt imm
+ori I 101001 rs 0110 rt imm
+sll R 101000 rs 1000 rd amt
+srl R 101000 rs 1010 rd amt
+sra R 101000 rs 1011 rd amt
+r2r R 101000 rs 1111 rd
+f2f FR 101110 fs 1111 fd
+r2f FR1101010 rs 1111 fd
+f2r FR2101100 fs 1111 rd
+lui I 101001 rs 1110 rt imm
+lli I 101001 rs 1100 rt imm
+flui FI 101111 fs 1110 ft imm
+flli FI 101111 fs 1100 ft imm
+lw R 001100 rs rt rd
+lwi I 001101 rs rt imm
+flw FR1001110 rs 00 rt fd
+flwa FR1001110 rs 01 rt fd
+flwn FR1001110 rs 10 rt fd
+flwi FI1001111 rs 00 ft imm
+flwia FI1001111 rs 01 ft imm
+flwin FI1001111 rs 10 ft imm
+sw R 001000 rs rt rd
+swi I 001001 rs rt imm
+fsw FR1001010 rs rt fd
+fswi FI1001011 rs ft imm
+in R 000010 rd
+fin FR 000011 fd
+outa R 000000 rs 11
+outb R 000000 rs 10
+outc R 000000 rs 01
+outd R 000000 rs 00
+fouta FR 000001 fs 11
+foutb FR 000001 fs 10
+foutc FR 000001 fs 01
+foutd FR 000001 fs 00
+j I 000101 imm
+jl I 000111 imm
+jr R 000100 rs
+jlr R 000110 rs
+beq I 010000 rs rt imm
+beqi IT 011100 rs immt imm
+fbeq FI 011000 fs ft imm
+bne I 010011 rs rt imm
+bnei IT 011111 rs immt imm
+fbne FI 011011 fs ft imm
+blte I 010001 rs rt imm
+bltei IT 011101 rs immt imm
+fblte FI 011001 fs ft imm
+bgte I 010010 rs rt imm
+bgtei IT 011110 rs immt imm
+fbgte FI 011010 fs ft imm
+nop - 100000
+halt - 100111
+空きには0を詰めてください
+
