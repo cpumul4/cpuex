@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 #include <limits.h>
-#include "./print_bit.hpp"
 #include <iostream>
 using namespace std;
 #define INTREG_NUM   32
@@ -25,6 +24,7 @@ const int GENR_MAX = 25;
 
 const int SPR_INIT = 0x000fffff;
 const int LR_INIT = INT_MAX;
+
 extern float fadd(float,float);
 extern float fmul(float,float);
 extern float finv(float);
