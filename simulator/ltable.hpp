@@ -23,7 +23,7 @@ public:
 
 void ltable::print(){
   for(int i = 0; label[i] != NULL; i++)
-    cout << label[i] << " -> " << index[i] << endl;
+    cerr << label[i] << " -> " << index[i] << endl;
 }
 
 void ltable::set_label(uint i, const char *l){

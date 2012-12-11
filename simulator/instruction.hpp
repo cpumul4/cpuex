@@ -79,16 +79,16 @@ inline void instr::show(){
   //   enum { f, i } type;
   //   enum { none, dst, ds, d, t } operand;
   // } regtype[OPCNUM];
-  cout << ' ' << encode(opc) << ' ';
+  cerr << ' ' << encode(opc) << ' ';
   switch(opc){
   case HALT:
   case NOP:
   case DBG:
-    cout << endl;
+    cerr << endl;
     return;
   case J:
   case JL:
-    cout << (int)rt << endl;
+    cerr << (int)rt << endl;
     return;
   case IN:
   case OUTA:
@@ -102,7 +102,7 @@ inline void instr::show(){
   case FOUTD:
   case JR:
   case JLR:
-    cout << (int)rd << endl;
+    cerr << (int)rd << endl;
     return;
   case FINV:
   case FINVA:
@@ -119,10 +119,10 @@ inline void instr::show(){
   case ITOF:
   case FTOI:
   case FLOOR:
-    cout << (int)rd << ' ' << (int)rs << endl;
+    cerr << (int)rd << ' ' << (int)rs << endl;
     return;
   default:
-  cout << (int)rd << ' ' 
+  cerr << (int)rd << ' ' 
        << (int)rs << ' ' 
        << (int)rt << '\n';
   }

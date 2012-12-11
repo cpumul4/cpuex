@@ -208,7 +208,7 @@ void noteqarray::add_change(const char *str){
   t = see_type(str);
   reg = ptr_to_memreg(str);
   *regval = *reg;
-  cout << reg;
+  cerr << reg;
   add(reg, regval, t);
   return ;
 }
@@ -216,25 +216,25 @@ void noteqarray::add_change(const char *str){
 
 void checkarray::show(const char *op){
   char *strkey, *strval;
-  cout << " - : ";
+  cerr << " - : ";
   for(int i=0; i< last; i++){
-    cout << "(";
+    cerr << "(";
     strkey = find_regnum(array[i].key, array[i].t);
     if(strkey != NULL)
-      cout << strkey;
+      cerr << strkey;
     else 
-      cout << *array[i].key;
-    cout << ' ' << op << ' ';
+      cerr << *array[i].key;
+    cerr << ' ' << op << ' ';
 
     strval = find_regnum(array[i].val, array[i].t);
     if(strval != NULL)
-      cout << strval;
+      cerr << strval;
     else 
-      cout << *array[i].val;
+      cerr << *array[i].val;
     
-    cout << "), ";
+    cerr << "), ";
   }
-  cout << endl;
+  cerr << endl;
 
 };
   

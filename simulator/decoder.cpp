@@ -345,7 +345,7 @@ int decode(char *srcpath){
 
 #if DEBUG_DECODER
   for(int i=0;i < romindex; i++){
-    cout << '[' << (int)i << ']';
+    cerr << '[' << (int)i << ']';
     rom[i].show();
   }
 #else

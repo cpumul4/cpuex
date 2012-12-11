@@ -67,7 +67,7 @@ inline void exec_output(myint reg, int which_byte){
   tmp.word = reg.i;
   fout.write(tmp.byte + which_byte, 1);
   if( fout.bad() ) {
-    cout << "fatal Error:データ読み込みエラー" << endl;
+    cerr << "fatal Error:データ読み込みエラー" << endl;
     halt();
   }
   return;
@@ -83,7 +83,7 @@ inline void exec_output(myfloat reg, int which_byte){
   tmp.word = reg.f;
   fout.write(tmp.byte + which_byte, 1);
   if( fout.bad() ) {
-    cout << "fatal Error:データ書き込みエラー" << endl;
+    cerr << "fatal Error:データ書き込みエラー" << endl;
     halt();
   }
 
@@ -126,13 +126,13 @@ inline void exec_input(uint32_t &regbitseq, opcode opc){
   }
 
   if( fin.bad() ) {
-    cout << "fatal Error:データ読み込みエラー" << endl;
+    cerr << "fatal Error:データ読み込みエラー" << endl;
     halt();
   }
   if( fin.eof() ){
     if(read_eof)throw err;
     else {
-      cout << "ファイルの内容を全て読みました" << endl;
+      cerr << "ファイルの内容を全て読みました" << endl;
       read_eof = true;
     }
   }
@@ -266,7 +266,7 @@ void instr::exec_asm(){
 
 
     c(NOP, ;);
-    c(DBG,  cout << "DEBUG命令に到達しました\n";step = 1;);
+    c(DBG,  cerr << "DEBUG命令に到達しました\n";step = 1;);
     c(HALT, halt(););
 
     // ここまでちゃんと動く10\17 15:00

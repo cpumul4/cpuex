@@ -7,7 +7,7 @@ inline void print_percent(const int count, const long long all_count){
   char str[10];
  
   sprintf(str, "%.1f%%", count/(all_count/100.0));
-  cerr << str;
+  cout << str;
   return;
 }
 
@@ -18,12 +18,12 @@ void instr_stat(const long long all_count){
     ratio[j] = instr_count[j]/count;
   }
 
-  cerr << "--- 各命令が何回実行されたか ----\n";
+  cout << "--- 各命令が何回実行されたか ----\n";
   for(int i = 0;i < OPCNUM; i++){ 
     if(instr_count[i] != 0){
       char str[20];
       sprintf(str,"%.1f", ratio[i]);
-      cerr << encode((opcode)i) << "\t: " << str << "%\t(" << instr_count[i] << "回)" << endl;
+      cout << encode((opcode)i) << "\t: " << str << "%\t(" << instr_count[i] << "回)" << endl;
     }
   }
   cout << "------------------------------\n";
@@ -36,10 +36,10 @@ void rom_stat(const int count[ROM_SIZE], const long long all_count){
       last = i;
     else {
       start == last ? 
-	cerr << '[' << start << ']' << '\t' : 
-	cerr << '[' << start << '~' << last << ']' << '\t';
+	cout << '[' << start << ']' << '\t' : 
+	cout << '[' << start << '~' << last << ']' << '\t';
       print_percent(count[start], all_count);
-      cerr << '\t' << count[start] << "回" << endl;
+      cout << '\t' << count[start] << "回" << endl;
       start = last = i;
     }
   }

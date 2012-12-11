@@ -43,40 +43,40 @@ void show_ram(int first, int last){
   last += SPR_INIT;
   for(int i=last;i >= first;i--)
     if(ram[i] != 0)
-      cout << "ram[" << (i - SPR_INIT) << "]=" << (int)ram[i] << ", ";
+      cerr << "ram[" << (i - SPR_INIT) << "]=" << (int)ram[i] << ", ";
 }
 
 void show_regs(void){
-  cout << "非0のレジスタ:";
+  cerr << "非0のレジスタ:";
   if(ireg[1] != 0){
-    cout << "$v(r1)=" << ireg[1].i << ",";
+    cerr << "$v(r1)=" << ireg[1].i << ",";
   }
   for(int i = 2; i <= GENR_MAX; i++){
     if(ireg[i] != 0){
-      cout << "$r" << i << "=" << ireg[i].i << ", ";
+      cerr << "$r" << i << "=" << ireg[i].i << ", ";
 #if DEBUG
       print_bit(ireg[i]);
 #endif
     }
   }
-  cout << endl << "\t";
-#define print(reg,regname) cout << #regname << "=" << reg.i << ", ";
+  cerr << endl << "\t";
+#define print(reg,regname) cerr << #regname << "=" << reg.i << ", ";
   print(SWR, $swp(r26))
     print(CLR, $clos)
     print(CPR, $cmp)
     print(GPR, $glbp)
-    cout << "$stkp(relative)" << "=" << (SPR.i - SPR_INIT) << ", ";
+    cerr << "$stkp(relative)" << "=" << (SPR.i - SPR_INIT) << ", ";
     print(LR , $lnkr)
 #undef print
 
-  cout << endl;
+  cerr << endl;
   for(int i=0; i < FLOATREG_NUM; i++)
 
     if(freg[i].b != 0){		// 非正規化数などに対応してない
 #if DEBUG
       print_bit(freg[i].f);
 #endif
-      cout << "$f" << i << "=" << freg[i].f << ", ";
+      cerr << "$f" << i << "=" << freg[i].f << ", ";
     }
 }
 
