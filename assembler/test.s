@@ -1,12 +1,14 @@
 	add  $r4 $r1 $r2
 	sub  $r4 $r1 $r2
-	addf  $r4 $r1 $r2
-	subf  $r4 $r1 $r2
-	mulf  $r4 $r1 $r2
-	divf  $r4 $r1 $r2
-	sqrt  $r4 $r1
 	addi  $r4 $r1  31
 	subi  $r4 $r1  31
+
+	fadd  $r4 $r1 $r2
+	fsub  $r4 $r1 $r2
+	fmul  $r4 $r1 $r2
+	
+	fdiv  $r4 $r1 $r2
+	sqrt  $r4 $r1
 	and  $r4 $r1 $r2
 	or   $r4 $r1 $r2
 	nor  $r4 $r1 $r2
