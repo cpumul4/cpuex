@@ -5,8 +5,7 @@
 using namespace std;
 
 inline void print_percent(const long int count, const long long all_count){
-  char str[10];
- 
+  char str[10]; 
   sprintf(str, "%5.1f%%", count/(all_count/100.0));
   cout << str;
   return;
@@ -62,4 +61,18 @@ void rom_stat(const int count[ROM_SIZE], const long long all_count){
     }
   }
   cout << "------------------------------\n";
+}
+
+long long sum(const long int count[ROM_SIZE]){
+  long long ans = 0;
+  for(int i = 0; i < ROM_SIZE; i++)
+    ans += count[i];
+  return ans;
+}
+
+void jump_stat(const long int count[ROM_SIZE]){
+  cout << "---- 各番地の命令に何回分岐したか ----\n";
+  long long all = sum(count);
+  
+  
 }
