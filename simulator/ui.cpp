@@ -15,6 +15,7 @@ class instr;
 typedef map<int, uint32_t> cells;
 extern instr rom[];
 extern long long int exec_count;
+extern int str_to_opcode(char*, opcode&);
 
 const int bpsize = 100;
 int step = 0;
@@ -208,7 +209,7 @@ void noteqarray::add_change(const char *str){
   t = see_type(str);
   reg = ptr_to_memreg(str);
   *regval = *reg;
-  cout << reg;
+  cerr << reg;
   add(reg, regval, t);
   return ;
 }
@@ -216,25 +217,25 @@ void noteqarray::add_change(const char *str){
 
 void checkarray::show(const char *op){
   char *strkey, *strval;
-  cout << " - : ";
+  cerr << " - : ";
   for(int i=0; i< last; i++){
-    cout << "(";
+    cerr << "(";
     strkey = find_regnum(array[i].key, array[i].t);
     if(strkey != NULL)
-      cout << strkey;
+      cerr << strkey;
     else 
-      cout << *array[i].key;
-    cout << ' ' << op << ' ';
+      cerr << *array[i].key;
+    cerr << ' ' << op << ' ';
 
     strval = find_regnum(array[i].val, array[i].t);
     if(strval != NULL)
-      cout << strval;
+      cerr << strval;
     else 
-      cout << *array[i].val;
+      cerr << *array[i].val;
     
-    cout << "), ";
+    cerr << "), ";
   }
-  cout << endl;
+  cerr << endl;
 
 };
   
@@ -245,9 +246,15 @@ bool does_break(int bps[]){
   return false;
 }
 
+
+void stop_at_instr(char *opname, opcode& opc){
+  str_to_opcode(opname, opc);
+  return;
+}
+
 void howtouse(void){
   cerr << 
-    "\n-----------------------------------------------------------------\n\
+    "\n-----------------------------------------------------------------\n	\
  ; <reg> は $rx(intレジスタx番), $fx（floatレジスタx番）, $mx（メモリのx番）の意味\n\
  ; \t\"$\"は省略可能\n\
  ; if (条件式)\t... 条件式を満たすときに停止\n\
@@ -260,6 +267,7 @@ void howtouse(void){
  ; step int\t... int命令毎に実行停止(0で非停止). stepは省略可.\n\
  ; Enterキー\t... 実行再開\n\
  ; quit\t...終了\n\
+ ; instr opname \t... <opname>の命令が来たら停止する\n\
  ; bit <reg>\t... <reg> のビット列を表示\n\
  ------------------------------------------------------------------\n";
   return;
@@ -267,7 +275,9 @@ void howtouse(void){
 
 
 
+
 int ui(){
+  static opcode watchinstr = UNKNOWN;
   static equalarray eqarray;
   static lessthanarray ltarray;
   static noteqarray nearray;
@@ -286,9 +296,11 @@ int ui(){
 #endif
 
 
+
   stop = init_stop;
   stop = stop || (step != 0 && exec_count % step == 0);
   stop = stop || (need_check && (eqarray.check() || ltarray.check() || nearray.check()));
+  stop = stop || rom[pc].equal_opcode(watchinstr);
   if(!stop)return 0;
 
   if(init_stop){
@@ -367,6 +379,11 @@ int ui(){
       step = atoi(tokens[0]);
     else if(strcmp(tokens[0], "bit") == 0)
       print_bit(*ptr_to_memreg(tokens[1]));
+    else if(strcmp(tokens[0], "instr") == 0){
+      stop_at_instr(tokens[1], watchinstr);
+      cerr << tokens[1] << "を実行する直前に停止します" << endl;
+    }
+    else cerr << "不明なコマンドです" << endl;
   }
   return 0;
 }

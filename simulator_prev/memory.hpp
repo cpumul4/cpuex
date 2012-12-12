@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <limits.h>
+#include "./print_bit.hpp"
 #include <iostream>
 using namespace std;
 #define INTREG_NUM   32
@@ -24,7 +25,6 @@ const int GENR_MAX = 25;
 
 const int SPR_INIT = 0x000fffff;
 const int LR_INIT = INT_MAX;
-
 extern float fadd(float,float);
 extern float fmul(float,float);
 extern float finv(float);
@@ -37,35 +37,36 @@ typedef uint32_t data;
 
 // myintに関する演算を定義するためのマクロ
 #define defarith(_op)				     \
-  uint32_t operator _op (myint t){		     \
+  uint32_t operator _op (const myint t){	     \
     myint rt;					     \
     rt.i = i _op t.i;				     \
     return rt.b; }				     \
 						     \
-  uint32_t operator _op (int ub){		     \
+  uint32_t operator _op (const int ub){		     \
     return i _op ub;				     \
   };  
 
 #define defbit(_op)						\
-  uint32_t operator _op (myint     t){ return b _op t.b; };	\
-  uint32_t operator _op (int16_t _b){				\
+  uint32_t operator _op (const myint     t){ return b _op t.b; };	\
+  uint32_t operator _op (const int16_t _b){				\
     return (b _op _b);  };  
 
 union myint {
   uint32_t b;
   int32_t  i;
 public:
-  void operator = (uint32_t sub){ b = sub; };
+  void operator=(const uint32_t sub){ b = sub; };
   defarith(+)
+  inline friend int32_t operator+(int32_t imm, myint mi);
   defarith(-)
   defarith(/)
   defarith(*)
   defarith(==)
   defarith(!=)
-  uint32_t operator<=(myint t){   return i <= t.i ? 1 : 0;  };
-  uint32_t operator>=(myint t){   return i >= t.i ? 1 : 0;  };
-  uint32_t operator<=(int t){   return i <= t ? 1 : 0;  };
-  uint32_t operator>=(int t){   return i >= t ? 1 : 0;  };
+  uint32_t operator<=(const myint t){   return i <= t.i ? 1 : 0;  };
+  uint32_t operator>=(const myint t){   return i >= t.i ? 1 : 0;  };
+  uint32_t operator<=(const int t){   return i <= t ? 1 : 0;  };
+  uint32_t operator>=(const int t){   return i >= t ? 1 : 0;  };
   defbit(&)
   defbit(|)
   defbit(^)
@@ -74,6 +75,10 @@ public:
 };
 #undef defarith
 #undef defbit
+
+inline int32_t operator +(int32_t imm, myint mi){
+    return imm + mi.i;
+}
 
 union myfloat {
   uint32_t b;
@@ -84,7 +89,8 @@ public:
   float operator+(myfloat t){   return fadd(f,t.f);  }
   float operator-(myfloat t){   return fadd(f, -t.f);  }
   float operator*(myfloat t){   return fmul(f, t.f);  }
-  float inv(void) { return finv(this->f); }
+  float inv(void) { return fdiv(1,this->f);}
+      //finv(this->f); }
   
   float operator/(myfloat t){   return fmul(this->f, finv(t.f));  }
   uint32_t operator<=(myfloat t){ return lte_f(this->f, t.f);}

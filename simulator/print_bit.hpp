@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 template<class T> void print_bit(T x){
+  char printstr[50];
   union {
     T val;
     struct{
@@ -19,7 +20,7 @@ template<class T> void print_bit(T x){
 } tmp;
 
   tmp.val = x;
-  printf("%d %d%d%d%d %d%d%d%d %d%d%d %d%d%d%d %d%d%d%d %d%d%d%d %d%d%d%d %d%d%d%d\n", 
+  sprintf(printstr, "%d %d%d%d%d %d%d%d%d %d%d%d %d%d%d%d %d%d%d%d %d%d%d%d %d%d%d%d %d%d%d%d\n", 
 	 tmp.bit.b31, 
 	 /*expotmpetmpt部の最上bit */
 	 tmp.bit.b30, tmp.bit.b29, tmp.bit.b28, tmp.bit.b27, 
@@ -32,6 +33,7 @@ template<class T> void print_bit(T x){
 	 tmp.bit.b07, tmp.bit.b06, tmp.bit.b05, tmp.bit.b04, 
 	 tmp.bit.b03, tmp.bit.b02, tmp.bit.b01, tmp.bit.b00
 	 );
+  perror(printstr);
   return;
 }  
 

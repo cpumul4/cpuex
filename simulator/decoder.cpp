@@ -10,14 +10,21 @@
 //extern instr rom[];
 const char combegin[3] = "#;";
 const char delims[] = " \t\r\n";
-enum format {r,i,j, branch, none, it};
+enum format {r,i,j, branch, none, it, branchitr};
+
+int immtoimmt(int imm){
+  if(imm == -1)return 0;
+
+  return imm;
+}
 
 ///////////////////////////////////////////////////////////
 void valid_immt(int immt){
-  string err = "-256 <= immt <= 255";
 #if OLD_STRICT
+  string err = "0 <= immt <= 511";
   if(immt >= 0 && immt <=  511)return;
 #else
+  string err = "-256 <= immt <= 255";
   if(-256 <= immt && immt <=  255)return;
 #endif
   else throw err;
@@ -55,6 +62,7 @@ inline int get_imm(char *immstr, ltable &table){
     return imm;
   }
 }
+
 
 ////////////////////////////////////////////////////
 format str_to_opcode(char *str, opcode &opc){
@@ -101,48 +109,64 @@ format str_to_opcode(char *str, opcode &opc){
     op(srl , SRL , i)
     op(sra , SRA , i)
 
-    op(r2r , R2R , r)
-    op(f2f , F2F , r)
-    op(r2f, R2F, r)
-    op(f2r, F2R, r)
-    op(itof, ITOF, r)
-    op(ftoi, FTOI, r)
+    op(r2r  , R2R  , r)
+    op(f2f  , F2F  , r)
+    op(r2f  , R2F  , r)
+    op(f2r  , F2R  , r)
+    op(itof , ITOF , r)
+    op(ftoi , FTOI , r)
     op(floor, FLOOR, r)
-    op(lui , LUI , i)
-    op(lli , LLI , i)
-    op(flui, FLUI, i)
-    op(flli, FLLI, i)
+    op(lui  , LUI  , i)
+    op(lli  , LLI  , i)
+    op(flui , FLUI , i)
+    op(flli , FLLI , i)
 
-    op(lw  , LW  , r)
-    op(lwi , LWI , i)
-    op(sw  , SW  , r)
-    op(swi , SWI , i)
-    op(flw , FLW , r)
-    op(flwa, FLWA, r)
-    op(flwn, FLWN, r)
-    op(flwi, FLWI, i)
+    op(lw   , LW   , r)
+    op(lwi  , LWI  , i)
+    op(sw   , SW   , r)
+    op(swi  , SWI  , i)
+    op(flw  , FLW  , r)
+    op(flwa , FLWA , r)
+    op(flwn , FLWN , r)
+    op(flwi , FLWI , i)
     op(flwia, FLWIA, i)
     op(flwin, FLWIN, i)
-    op(fsw , FSW , r)
-    op(fswi, FSWI, i)
+    op(fsw  , FSW  , r)
+    op(fswi , FSWI , i)
 
     op(j   , J   , j)
     op(jl  , JL  , j)
     op(jr  , JR  , r)
     op(jlr , JLR , r)
 
-    op(beq , BEQ , branch)
     op(beqi , BEQI , it)
-    op(fbeq, FBEQ, branch)
-    op(bne , BNE , branch)
     op(bnei , BNEI , it)
-    op(fbne, FBNE, branch)
+    op(bltei, BLTEI, it)
+    op(bgtei, BGTEI, it)
+
+    op(beq  , BEQ  , branch)
+    op(bne  , BNE  , branch)
     op(blte , BLTE , branch)
-    op(bltei , BLTEI, it)
-    op(fblte, FBLTE, branch)
     op(bgte , BGTE , branch)
-    op(bgtei , BGTEI, it)
+
+    op(fbeq , FBEQ , branch)
+    op(fbne , FBNE , branch)
+    op(fblte, FBLTE, branch)
     op(fbgte, FBGTE, branch)
+
+    op(beqr  , BEQR  , r)
+    op(beqir , BEQIR , branchitr)
+    op(fbeqr , FBEQR , r)
+    op(bner  , BNER  , r)
+    op(bneir , BNEIR , branchitr)
+    op(fbner , FBNER , r)
+    op(blter , BLTER , r)
+    op(blteir, BLTEIR, branchitr)
+    op(fblter, FBLTER, r)
+    op(bgter , BGTER , r)
+    op(bgteir, BGTEIR, branchitr)
+    op(fbgter , FBGTER, r)
+
 
     op(nop , NOP , none)
     op(dbg , DBG , none)
@@ -241,11 +265,23 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
       args[0] = get_regnum(asmtok[1]);
       args[1] = get_imm(asmtok[2], table);
 #if OLD_STRICT
+      if(args[1] == 0){
+	throw (string)"即値比較分岐命令の即値が0です";
+      }
       if(args[1] == -1)args[1] = 0;
 #endif
       valid_immt(args[1]);
       args[2] = table.get_index(asmtok[3]) - romindex - 1;
       if(romindex == 0)args[2]--;
+      break;
+    case branchitr:
+      args[0] = get_regnum(asmtok[1]);
+      args[1] = get_imm(asmtok[2], table);
+#if OLD_STRICT
+      if(args[1] == -1)args[1] = 0;
+#endif
+      valid_immt(args[1]);
+      args[2] = get_regnum(asmtok[3]);
       break;
     case none:
       break;
@@ -298,7 +334,7 @@ int decode(char *srcpath, instr rom[ROM_SIZE]){
   int romindex = 0;
 
   ifstream fasm(srcpath);
-
+  
   // 必要な行だけを抜き取り、labelをtableに入れる
   while( fasm.getline(input[romindex],MAX_CHAR) ){
     make_table(input[romindex], table, romindex);
@@ -309,7 +345,7 @@ int decode(char *srcpath, instr rom[ROM_SIZE]){
 
 #if DEBUG_DECODER
   for(int i=0;i < romindex; i++){
-    cout << '[' << (int)i << ']';
+    cerr << '[' << (int)i << ']';
     rom[i].show();
   }
 #else

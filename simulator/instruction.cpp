@@ -6,6 +6,7 @@
 long int instr_count[OPCNUM];
 extern int step;
 
+
 template<class T> inline T abs32(const T &x){
   if(sizeof(x) != 4)throw "4byteではないデータに遭遇\n";
   union {
@@ -18,21 +19,6 @@ template<class T> inline T abs32(const T &x){
   tmp.val = x;
   tmp.bits.sign = 0;
   return tmp.val;
-}
-
-inline float myfloor(myfloat t){
-  union {
-    myfloat val;
-    struct {
-      unsigned int other:31;
-      unsigned int sign:1;
-    } bits;
-  } ret;
-  ret.val = t;
-
-  if(ret.bits.other >= 0x4b000000)return t.f;
-  else if(t.f < 0 && t == 0)return 0;
-  else return floorf(t.f);
 }
 
 
@@ -53,18 +39,9 @@ inline int findf1(myint mi){
   int cnt = 1;
   int32_t tmp = mi.i;
   while(true){
-    if(tmp == 0){
-      // cout << tmp << endl;
-      return 0;
-    }
-    else if(tmp < 0){
-      // cout << tmp << endl;
-      return cnt;
-    } else {
-      cnt++;
-      tmp <<= 1;
-      // cout << tmp << endl;
-     }
+    if(tmp == 0){      return 0;    }
+    else if(tmp < 0){      return cnt;  } 
+    else {      cnt++;      tmp <<= 1;     }
   }
 }
 
@@ -90,11 +67,12 @@ inline void exec_output(myint reg, int which_byte){
   tmp.word = reg.i;
   fout.write(tmp.byte + which_byte, 1);
   if( fout.bad() ) {
-    cout << "fatal Error:データ読み込みエラー" << endl;
+    cerr << "fatal Error:データ読み込みエラー" << endl;
     halt();
   }
   return;
 }
+
 
 inline void exec_output(myfloat reg, int which_byte){
   union {
@@ -105,7 +83,7 @@ inline void exec_output(myfloat reg, int which_byte){
   tmp.word = reg.f;
   fout.write(tmp.byte + which_byte, 1);
   if( fout.bad() ) {
-    cout << "fatal Error:データ書き込みエラー" << endl;
+    cerr << "fatal Error:データ書き込みエラー" << endl;
     halt();
   }
 
@@ -124,7 +102,9 @@ inline uint32_t lowbits(myint b, int need){ // 下位need bitを取り出す
 }
 
 inline void exec_input(uint32_t &regbitseq, opcode opc){
-  const int strlength = 10;  
+  string err = "ファイルサイズを超えて読もうとしています";
+  const int strlength = 10;
+  static bool read_eof = false;
   union {
     int32_t i;
     float f;
@@ -133,33 +113,32 @@ inline void exec_input(uint32_t &regbitseq, opcode opc){
 
   char *string = new char[strlength];
   
-  do {
-    fin.get(string[0]); 
-  }while(string[0] == ' '  || string[0] == '\t' || 
-	 string[0] == '\n' || string[0] == '\r');
+  do {fin.get(string[0]); }
+  while(string[0] == ' '  || string[0] == '\t' || 
+	string[0] == '\n' || string[0] == '\r');
 
   for(int i=1; i < strlength; i++){
     fin.get(string[i]);
-    if(string[i] == ' '  || string[i] == '\t' || 
-       string[i] == '\n' || string[i] == '\r'){
+    if(string[i] == ' '  || string[i] == '\t' || string[i] == '\n' || string[i] == '\r'){
       string[i] = 0;
       break;
     }
   }
 
   if( fin.bad() ) {
-    cout << "fatal Error:データ読み込みエラー" << endl;
+    cerr << "fatal Error:データ読み込みエラー" << endl;
     halt();
   }
   if( fin.eof() ){
-    cout << "ファイルの内容を全て読みました" << endl;
+    if(read_eof)throw err;
+    else {
+      cerr << "ファイルの内容を全て読みました" << endl;
+      read_eof = true;
+    }
   }
-
   if(opc == IN)conv.i = atoi(string);
   else conv.f = atof(string);
-
   regbitseq = conv.b;
-
   delete string;
   return;
 }
@@ -174,7 +153,7 @@ void instr::exec_asm(){
 #define FT freg[rt]
 #define IMMT rs
 #define IMM rt
-#define c(_op,_expr) case _op: _expr ++instr_count[_op]; break
+#define c(_op,_expr) case _op: _expr ++instr_count[_op] ; break
   switch(opc) {
     //  ----------- R 形式の命令 ---------------
     c(ADD , D = S + T;);
@@ -198,9 +177,9 @@ void instr::exec_asm(){
     c(FABS , FD =  abs32(FS.f););
     c(FNEG , FD = neg(FS.f););
 
-    c(SQRT  , FD = sqrt_m(FS.f);); // myfloatの実装が外に出てしまっている
-    c(SQRTA , FD =  abs32(sqrt_m(FS.f));); // myfloatの実装が外に出てしまっている
-    c(SQRTN , FD = neg(sqrt_m(FS.f));); // myfloatの実装が外に出てしまっている
+    c(SQRT  , FD = FS.sqrt(););
+    c(SQRTA , FD = abs32(FS.sqrt()););
+    c(SQRTN , FD = neg(FS.sqrt()););
 
     c(AND , D = S & T;);       
     c(OR  , D = S | T;);
@@ -223,16 +202,12 @@ void instr::exec_asm(){
 
     c(ITOF, FD = (float)S.i;);
     c(FTOI, D  = (int)FS.f;);
-    c(FLOOR,FD = myfloor(FS););
-
+    c(FLOOR,FD = FS.floor(););
     c(LUI , D = (IMM << 16) | lowbits(S, 16);); 
     c(LLI , D = ((S >> 16) << 16) | lowbits((uint32_t)IMM,16););
     c(FLUI, FD = (int16_to_uint32(IMM) << 16) | lowbits(FS.b, 16);); // FT.b
     c(FLLI, FD = ((FS.b >> 16) << 16) | int16_to_uint32(IMM););
-#define ram(dst, addr)							\
-    if(addr <= 0x000fffff)dst = ram[addr];					\
-      else { cerr << "メモリの" << addr << "にアクセスしようとしています" << endl; \
-    halt();;return;
+
     c(LW  , D = ram[valid_addr(S+T)];);
     c(SW  , ram[valid_addr(S+T)] = D.b;);	// D regが distになってない
     c(LWI , D = ram[valid_addr(S + IMM)];);
@@ -272,11 +247,26 @@ void instr::exec_asm(){
     c(BLTEI , if(D <= IMMT)  pc = pc + IMM;);
     c(BGTEI , if(D >= IMMT)  pc = pc + IMM;);
 
+    c(BEQR , if(D == S)  pc = T.i;);
+    c(BNER , if(D != S)  pc = T.i;);
+    c(FBEQR ,if(FD == FS)pc = T.i;);
+    c(FBNER ,if(FD != FS)pc = T.i;);
+
+    c(BLTER  ,if(D <= S)  pc = T.i;);
+    c(BGTER  ,if(D >= S)  pc = T.i;);
+    c(FBLTER ,if(FD <= FS)pc = T.i;);
+    c(FBGTER ,if(FD >= FS)pc = T.i;);
+
+    c(BEQIR  , if(D == IMMT)  pc = T.i;);
+    c(BNEIR  , if(D != IMMT)  pc = T.i;);
+    c(BLTEIR , if(D <= IMMT)  pc = T.i;);
+    c(BGTEIR , if(D >= IMMT)  pc = T.i;);
+
     // -------------- FR形式 -------------
 
 
     c(NOP, ;);
-    c(DBG,  cout << "DEBUG命令に到達しました\n";step = 1;);
+    c(DBG,  cerr << "DEBUG命令に到達しました\n";step = 1;);
     c(HALT, halt(););
 
     // ここまでちゃんと動く10\17 15:00
@@ -317,3 +307,4 @@ void instr::exec_asm(){
 #undef c
 
 }
+

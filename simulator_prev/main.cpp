@@ -7,7 +7,7 @@
 
 extern int ui(void);
 extern int ui_error(void);
-extern int decode(char *, instr[ROM_SIZE]);
+extern int decode(char *);
 extern bool error_section(void);
 
 instr rom[ROM_SIZE];
@@ -51,7 +51,7 @@ inline void valid_reg(void){
 }
 
 int simulate(char *asmpath, char *srcpath, char *tgtpath){
-  decode(asmpath, rom);
+  decode(asmpath);
   if(srcpath == NULL)cerr << "no input file.\n";
   else {
     fin.open(srcpath);
@@ -90,6 +90,12 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
       ui_error();
       pc = LR_INIT;
     }
+    catch(string){
+      cerr << "実行しようとした命令:[" << pc -1 << ']';
+      rom[pc-1].show();
+      ui_error();
+      pc = LR_INIT;
+    }      
   }
 
   cout << "結果レジスタ($r1, $f3) = " << ireg[1].i << ", " << freg[3].f  << endl;

@@ -13,7 +13,7 @@ end float_add;
 architecture fadd of float_add is
   signal s1,s2,s3,s4,s5,s6 : std_logic; --sign bit
   signal e1,e2,e3 : std_logic_vector(7 downto 0); --exponent
-  signal fr1,fr3,fr5 : std_logic_vector(22 downto 0); --fraction
+  signal fr1,fr5 : std_logic_vector(22 downto 0); --fraction
   signal fr2,fr4 : std_logic_vector(23 downto 0); --fraction
   signal shift : std_logic_vector(7 downto 0);
   signal br1,br2 : std_logic; --frag for which path chosen
@@ -24,15 +24,15 @@ architecture fadd of float_add is
   signal tmp1 : std_logic_vector(7 downto 0); --step1
   signal tmp2_1,tmp2_2,tmp2_3 : std_logic_vector(24 downto 0); --step2
   signal ex : std_logic_vector(7 downto 0); --step2
-  signal t1,t2,t3,t4,t5 : std_logic_vector(23 downto 0); --step2
-  signal g1,g2,g3,g4,g5,g2_1 : std_logic; --step2
-  signal r1,r2,r3,r4 : std_logic; --step2
-  signal st1,st2,st3,st4 : std_logic; --step2
+  signal t1,t2,t3,t4,t5_1,t5_0 : std_logic_vector(23 downto 0); --step2
+  signal g1,g2,g3,g4,g5_1,g5_0,g2_1 : std_logic; --step2
+  signal r1,r2,r3,r4_1,r4_0 : std_logic; --step2
+  signal st1,st2,st3,st4_1 : std_logic; --step2
   signal tmp3_1 : std_logic_vector(26 downto 0); --step3
   signal s : std_logic; --step3
-  signal z1 : std_logic_vector(11 downto 0); --step3
-  signal z2 : std_logic_vector(5 downto 0); --step3
-  signal z3 : std_logic_vector(2 downto 0); --step3
+  signal z1_t : std_logic_vector(11 downto 0); --step2-3
+  signal z1,z2_t : std_logic_vector(5 downto 0); --step2-3
+  signal z2,z3,z3_t : std_logic_vector(2 downto 0); --step2-3
   signal z : std_logic_vector(4 downto 0); --step3
   signal ex3 : std_logic_vector(8 downto 0); --step3
   signal t3_1,t3_2,t3_3,t3_4,t3_5 : std_logic_vector(23 downto 0); --step3
@@ -78,7 +78,7 @@ begin
     end if;
   end process;
 
-  step2 : process(CLK,shift,br1,s1,s2,e1,fr1,fr2,tmp2_1,tmp2_2,tmp2_3,ex,t1,t2,t3,t4,t5,g1,g2,g3,g4,g5,g2_1,r1,r2,r3,r4,st1,st2,st3,st4) --shift or add
+  step2 : process(CLK,shift,br1,s1,s2,e1,fr1,fr2,tmp2_1,tmp2_2,tmp2_3,ex,t1,t2,t3,t4,t5_1,t5_0,g1,g2,g3,g4,g5_1,g5_0,g2_1,r1,r2,r3,r4_1,r4_0,st1,st2,st3,st4_1,z1_t,z2_t,z3_t) --shift or add
   begin
     --shift
     if (shift(0) = '1') then
@@ -121,6 +121,24 @@ begin
       r3 <= r2;
       st3 <= st2;
     end if;
+    if (shift(7 downto 5) = "000") then
+      if (shift(4) = '1') then
+        t5_1 <= x"0000"&t4(23 downto 16);
+        g5_1 <= t4(15);
+        r4_1 <= t4(14);
+        st4_1 <= (st3 or r3 or g4 or t4(0) or t4(1)) or (t4(2) or t4(3) or t4(4) or t4(5)) or (t4(6) or t4(7) or t4(8) or t4(9)) or (t4(10) or t4(11) or t4(12) or t4(13));
+      else
+        t5_1 <= t4;
+        g5_1 <= g4;
+        r4_1 <= r3;
+        st4_1 <= st3;
+      end if;
+    else
+      t5_1 <= x"000000";
+      g5_1 <= '0';
+      r4_1 <= '0';
+      st4_1 <= '0';
+    end if;
 
     --add
     if ((s1 xor s2) = '1') then
@@ -152,101 +170,86 @@ begin
     else
       tmp2_3 <= tmp2_1 + tmp2_2;
     end if;
-    
-    if (br1 = '1') then
-      --shift
-      if (shift(7 downto 5) = "000") then
-        if (shift(4) = '1') then
-          t5 <= x"0000"&t4(23 downto 16);
-          g5 <= t4(15);
-          r4 <= t4(14);
-          st4 <= (st3 or r3 or g4 or t4(0) or t4(1)) or (t4(2) or t4(3) or t4(4) or t4(5)) or (t4(6) or t4(7) or t4(8) or t4(9)) or (t4(10) or t4(11) or t4(12) or t4(13));
-        else
-          t5 <= t4;
-          g5 <= g4;
-          r4 <= r3;
-          st4 <= st3;
-        end if;
-      else
-        t5 <= x"000000";
-        g5 <= '0';
-        r4 <= '0';
-        st4 <= '0';
-      end if;
-      if rising_edge(CLK) then
-        e2 <= e1;
-      end if;
+    if ((s1 xor s2) = '1') then
+      t5_0 <= tmp2_3(24 downto 1);
+      g5_0 <= tmp2_3(0);
+      r4_0 <= '0';
     else
-      --add
-      if ((s1 xor s2) = '1') then
-        t5 <= tmp2_3(24 downto 1);
-        g5 <= tmp2_3(0);
-        r4 <= '0';
+      if (tmp2_3(24) = '1') then
+        t5_0 <= tmp2_3(24 downto 1);
+        g5_0 <= tmp2_3(0);
+        r4_0 <= g2_1;
       else
-        if (tmp2_3(24) = '1') then
-          t5 <= tmp2_3(24 downto 1);
-          g5 <= tmp2_3(0);
-          r4 <= g2_1;
-        else
-          t5 <= tmp2_3(23 downto 0);
-          g5 <= g2_1;
-          r4 <= '0';
-        end if;
-      end if;
-      st4 <= '0';
-      if rising_edge(CLK) then
-        e2 <= ex;
+        t5_0 <= tmp2_3(23 downto 0);
+        g5_0 <= g2_1;
+        r4_0 <= '0';
       end if;
     end if;
+    
     if rising_edge(CLK) then
+      if (br1 = '1') then
+        --shift
+        e2 <= e1;
+        fr4 <= t5_1;
+        g_1 <= g5_1;
+        r_1 <= r4_1;
+        st_1 <= st4_1;
+      else
+        --add
+        e2 <= ex;
+        fr4 <= t5_0;
+        g_1 <= g5_0;
+        r_1 <= r4_0;
+        st_1 <= '0';
+      end if;
       br2 <= br1;
       s3 <= s1;
       s4 <= s2;
-      fr3 <= fr1;
-      fr4 <= t5;
-      g_1 <= g5;
-      r_1 <= r4;
-      st_1 <= st4;
+      z1 <= z1_t(11)&z1_t(9)&z1_t(7)&z1_t(5)&z1_t(3)&z1_t(1);
+      z2 <= z2_t(5)&z2_t(3)&z2_t(1);
+      z3 <= z3_t;
+      
+      --add
+      if ((s1 xor s2) = '1') then
+        tmp3_1 <= '0'&(('1'&fr1&"00") - (t5_1&g5_1&r4_1));
+      else
+        tmp3_1 <= (("01"&fr1) + ('0'&t5_1))&g5_1&r4_1;
+      end if;
     end if;
   end process;
 
   --leading zero counter
-  z1(11) <= not (fr4(23) or fr4(22));
-  z1(10) <= not (fr4(21) or fr4(20));
-  z1(9) <= not (fr4(19) or fr4(18));
-  z1(8) <= not (fr4(17) or fr4(16));
-  z1(7) <= not (fr4(15) or fr4(14));
-  z1(6) <= not (fr4(13) or fr4(12));
-  z1(5) <= not (fr4(11) or fr4(10));
-  z1(4) <= not (fr4(9) or fr4(8));
-  z1(3) <= not (fr4(7) or fr4(6));
-  z1(2) <= not (fr4(5) or fr4(4));
-  z1(1) <= not (fr4(3) or fr4(2));
-  z1(0) <= not (fr4(1) or fr4(0));
-  z2(5) <= z1(11) and z1(10);
-  z2(4) <= z1(9) and z1(8);
-  z2(3) <= z1(7) and z1(6);
-  z2(2) <= z1(5) and z1(4);
-  z2(1) <= z1(3) and z1(2);
-  z2(0) <= z1(1) and z1(0);
-  z3(2) <= z2(5) and z2(4);
-  z3(1) <= z2(3) and z2(2);
-  z3(0) <= z2(1) and z2(0);
+  z1_t(11) <= not (t5_0(23) or t5_0(22));
+  z1_t(10) <= not (t5_0(21) or t5_0(20));
+  z1_t(9) <= not (t5_0(19) or t5_0(18));
+  z1_t(8) <= not (t5_0(17) or t5_0(16));
+  z1_t(7) <= not (t5_0(15) or t5_0(14));
+  z1_t(6) <= not (t5_0(13) or t5_0(12));
+  z1_t(5) <= not (t5_0(11) or t5_0(10));
+  z1_t(4) <= not (t5_0(9) or t5_0(8));
+  z1_t(3) <= not (t5_0(7) or t5_0(6));
+  z1_t(2) <= not (t5_0(5) or t5_0(4));
+  z1_t(1) <= not (t5_0(3) or t5_0(2));
+  z1_t(0) <= not (t5_0(1) or t5_0(0));
+  z2_t(5) <= z1_t(11) and z1_t(10);
+  z2_t(4) <= z1_t(9) and z1_t(8);
+  z2_t(3) <= z1_t(7) and z1_t(6);
+  z2_t(2) <= z1_t(5) and z1_t(4);
+  z2_t(1) <= z1_t(3) and z1_t(2);
+  z2_t(0) <= z1_t(1) and z1_t(0);
+  z3_t(2) <= z2_t(5) and z2_t(4);
+  z3_t(1) <= z2_t(3) and z2_t(2);
+  z3_t(0) <= z2_t(1) and z2_t(0);
   z(4) <= z3(2) and z3(1);
   z(3) <= ((not z(4)) and z3(2)) or (z(4) and z3(0));
-  z(2) <= ((not z(4)) and (((not z3(2)) and z2(5)) or (z3(2) and z2(3)))) or (z(4) and ((not z3(0)) and z2(1)));
-  z(1) <= ((not z(4)) and (((not z3(2)) and (((not z2(5)) and z1(11)) or (z2(5) and z1(9)))) or (z3(2) and (((not z2(3)) and z1(7)) or (z2(3) and z1(5)))))) or (z(4) and ((not z3(0)) and (((not z2(1)) and z1(3)) or (z2(1) and z1(1)))));
-  z(0) <= ((not z(4)) and (((not z3(2)) and (((not z2(5)) and (((not z1(11)) and (not fr4(23))) or (z1(11) and (not fr4(21))))) or (z2(5) and (((not z1(9)) and (not fr4(19))) or (z1(9) and (not fr4(17))))))) or (z3(2) and (((not z2(3)) and (((not z1(7)) and (not fr4(15))) or (z1(7) and (not fr4(13))))) or (z2(3) and (((not z1(5)) and (not fr4(11))) or (z1(5) and (not fr4(9))))))))) or (z(4) and ((not z3(0)) and (((not z2(1)) and (((not z1(3)) and (not fr4(7))) or (z1(3) and (not fr4(5))))) or (z2(1) and (((not z1(1)) and (not fr4(3))) or (z1(1) and (not fr4(1))))))));
+  z(2) <= ((not z(4)) and (((not z3(2)) and z2(2)) or (z3(2) and z2(1)))) or (z(4) and ((not z3(0)) and z2(0)));
+  z(1) <= ((not z(4)) and (((not z3(2)) and (((not z2(2)) and z1(5)) or (z2(2) and z1(4)))) or (z3(2) and (((not z2(1)) and z1(3)) or (z2(1) and z1(2)))))) or (z(4) and ((not z3(0)) and (((not z2(0)) and z1(1)) or (z2(0) and z1(0)))));
+  z(0) <= ((not z(4)) and (((not z3(2)) and (((not z2(2)) and (((not z1(5)) and (not fr4(23))) or (z1(5) and (not fr4(21))))) or (z2(2) and (((not z1(4)) and (not fr4(19))) or (z1(4) and (not fr4(17))))))) or (z3(2) and (((not z2(1)) and (((not z1(3)) and (not fr4(15))) or (z1(3) and (not fr4(13))))) or (z2(1) and (((not z1(2)) and (not fr4(11))) or (z1(2) and (not fr4(9))))))))) or (z(4) and ((not z3(0)) and (((not z2(0)) and (((not z1(1)) and (not fr4(7))) or (z1(1) and (not fr4(5))))) or (z2(0) and (((not z1(0)) and (not fr4(3))) or (z1(0) and (not fr4(1))))))));
   
-  step3 : process(CLK,br2,s3,s4,e2,fr3,fr4,g_1,r_1,st_1,tmp3_1,s,z,ex3,t3_1,t3_2,t3_3,t3_4,t3_5) --add or normalize
+  step3_1 : process(br2,s3,s4,e2,fr4,g_1,r_1,st_1,tmp3_1,s,z,ex3,t3_1,t3_2,t3_3,t3_4,t3_5) --add or normalize
   begin
     --add
     s <= s3 xor s4;
-    if (s = '1') then
-      tmp3_1 <= '0'&(('1'&fr3&"00") - (fr4&g_1&r_1));
-    else
-      tmp3_1 <= (("01"&fr3) + ('0'&fr4))&g_1&r_1;
-    end if;
 
     --normalize
     ex3 <= ('0'&e2) - ("0000"&z);
@@ -279,52 +282,48 @@ begin
     
     if (br2 = '1') then
       --add
-      if rising_edge(CLK) then
-        s5 <= s3;
-        s6 <= s;
-        if (tmp3_1(26) = '1') then
-          e3 <= e2 + 1;
-          fr5 <= tmp3_1(25 downto 3);
-          g_2 <= tmp3_1(2);
-          r_2 <= tmp3_1(1);
-          st_2 <= st_1 or tmp3_1(0);
+      s5 <= s3;
+      s6 <= s;
+      if (tmp3_1(26) = '1') then
+        e3 <= e2 + 1;
+        fr5 <= tmp3_1(25 downto 3);
+        g_2 <= tmp3_1(2);
+        r_2 <= tmp3_1(1);
+        st_2 <= st_1 or tmp3_1(0);
+      else
+        st_2 <= st_1;
+        if (tmp3_1(25) = '1') then
+          e3 <= e2;
+          fr5 <= tmp3_1(24 downto 2);
+          g_2 <= tmp3_1(1);
+          r_2 <= tmp3_1(0);
         else
-          st_2 <= st_1;
-          if (tmp3_1(25) = '1') then
-            e3 <= e2;
-            fr5 <= tmp3_1(24 downto 2);
-            g_2 <= tmp3_1(1);
-            r_2 <= tmp3_1(0);
-          else
-            e3 <= e2 - 1;
-            fr5 <= tmp3_1(23 downto 1);
-            g_2 <= tmp3_1(0);
-            r_2 <= '0';
-          end if;
+          e3 <= e2 - 1;
+          fr5 <= tmp3_1(23 downto 1);
+          g_2 <= tmp3_1(0);
+          r_2 <= '0';
         end if;
-        zero <= '0';
       end if;
+      zero <= '0';
     else
       --normalize
-      if rising_edge(CLK) then
-        s5 <= s3;
-        s6 <= s3 xor s4;
-        if ((ex3(8) or (z(4) and z(3) and (not g_1))) = '1') then
-          e3 <= x"00";
-          zero <= '1';
-        else
-          e3 <= ex3(7 downto 0);
-          zero <= '0';
-        end if;
-        fr5 <= t3_5(23 downto 1);
-        g_2 <= t3_5(0);
-        r_2 <= r_1;
-        st_2 <= st_1;
+      s5 <= s3;
+      s6 <= s3 xor s4;
+      if ((ex3(8) or (z(4) and z(3) and (not g_1))) = '1') then
+        e3 <= x"00";
+        zero <= '1';
+      else
+        e3 <= ex3(7 downto 0);
+        zero <= '0';
       end if;
+      fr5 <= t3_5(23 downto 1);
+      g_2 <= t3_5(0);
+      r_2 <= r_1;
+      st_2 <= st_1;
     end if;
   end process;
   
-  step4 : process(CLK,s6,e3,fr5,g_2,r_2,st_2,tmp4,zero)
+  step3_2 : process(CLK,s6,e3,fr5,g_2,r_2,st_2,tmp4,zero)
   begin
     if (zero = '1') then
       tmp4 <= x"000000";
