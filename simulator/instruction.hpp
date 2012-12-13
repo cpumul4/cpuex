@@ -27,6 +27,7 @@ public:
   void exec_asm(void);
   bool is_fpu(void);
   void write(void);
+  opcode get_opc(void){ return opc; }
   bool equal_opcode(opcode key){ return key == opc; };
 };
 

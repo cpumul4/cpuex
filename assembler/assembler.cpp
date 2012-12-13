@@ -104,7 +104,7 @@ format dec_operator(char *op, uint &opcode, uint &funct){
     op(outbf)
     op(outcf)
     op(outdf)
-    ;
+v    ;
 #undef subst
 #undef op
   
