@@ -5,8 +5,7 @@
 
 using namespace std;
 
-enum format { R, FR, FR1, FR2, 
-	      I, FI, FI1, IT, ITR, none };
+enum format { R, I, SHIFT, BRANCH, OUT, IT, BRREG, ITR, none };
 
 class instr_id{
   int opcode;
@@ -19,7 +18,10 @@ public:
 };
 
 class machineword {
-  char byte[5];
+  union {
+    char byte[5];
+    long long binary:40;
+  } a;
 };
 
 extern int decode(char*, instr[ROM_SIZE]);
