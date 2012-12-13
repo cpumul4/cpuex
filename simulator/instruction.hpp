@@ -24,11 +24,17 @@ public:
   void set(opcode _op, regnum _rd = 0, immidiate _rs = 0, immidiate _rt = 0);
   void set_imm(opcode _op, immidiate _imm);
   void show();
+
   void exec_asm(void);
   bool is_fpu(void);
   void write(void);
   opcode get_opc(void){ return opc; }
-  bool equal_opcode(opcode key){ return key == opc; };
+  int get_machine_rd(void);
+  int get_machine_rs(void);
+  int get_machine_rt(void);
+  int get_machine_imm(void);
+  int get_machine_immt(void);
+  int get_machine_amt(void);
 };
 
 
