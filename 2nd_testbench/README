@@ -1,0 +1,14 @@
+		返り値
+ack		8189
+adder		10
+cls-bug		789
+cls-bug2	9,8,7,6,5,4,3,2,1,0を順にprint_int
+sld-rec		1230
+even-odd	456
+fib		832040
+float		-44604263
+funcomp		247
+inprod		32000001
+inprod-loop	16826401
+inprod-rec	16826401
+
