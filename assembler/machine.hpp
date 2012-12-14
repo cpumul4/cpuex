@@ -13,7 +13,7 @@ class binary {
   void set_functR(int i){ imm |= i; }
   void set_amt(int i){ imm |= i << 6; }
   void set_rd(int i) { imm |= i << 11; }
-  void set_immt(int i){immtfunct |= i; }
+  void set_immt(int i){immtfunct |= i == -1 ? 0 : i; }
   void set_funct(int i){immtfunct |= i << 5;}
   void set_rt(int i){ immtfunct |= i; }
   void set_rs(int i){ rs |= i;}

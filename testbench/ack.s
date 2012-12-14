@@ -8,15 +8,13 @@ min_caml_start:
 	lwi	$r31 $r30 0
 	halt
 ack.14:
-	addi	$r3 $r0 0
-	cmp	$r28 $r1 $r3
-	beq	$r28 $r0 bne_else.32
+	addi	$r3 $r0 1
+	bgte	$r1 $r3 bne_else.32
 	addi	$r1 $r2 1
 	jr	$r31
 bne_else.32:
-	addi	$r3 $r0 0
-	cmp	$r28 $r2 $r3
-	beq	$r28 $r0 bne_else.33
+	addi	$r3 $r0 1
+	bgte	$r2 $r3 bne_else.33
 	subi	$r1 $r1 1
 	addi	$r2 $r0 1
 	j	ack.14
