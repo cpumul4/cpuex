@@ -133,23 +133,23 @@ void binary::set_operand(instr inst, format frm){
     case R:
       set_r(inst.get_rs(), inst.get_rt(), inst.get_rd());
       break;
+    case SHIFT:
+      set_r(inst.get_rs(),             0, inst.get_rd(), inst.get_amt());
     case I:
       set_i(inst.get_rs(), inst.get_rd(), inst.get_imm());
       break;
-    case SHIFT:
-      set_r(inst.get_rs(), 0, inst.get_rd(), inst.get_amt());
-      break;
-    case BRANCH:
-      set_i(inst.get_rd(), inst.get_rs(), inst.get_imm());
       break;
     case OUT:
       set_r(inst.get_rd(), 0, 0);
+      break;
+    case BRANCH:
+      set_i(inst.get_rd(), inst.get_rs(), inst.get_imm());
       break;
     case IT:
       set_it(inst.get_rd(), inst.get_immt(), inst.get_imm());
       break;
     case BRREG:
-      set_r(inst.get_rs(), inst.get_rd(), inst.get_rt());
+      set_r(inst.get_rd(), inst.get_rs(), inst.get_rt());
       break;
     case ITR:
       set_itr(inst.get_rd(), inst.get_immt(), inst.get_rt());
