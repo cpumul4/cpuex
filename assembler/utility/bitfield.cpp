@@ -64,7 +64,8 @@ class binary {
     return;
   }
 public:
-  set(
+
+  
 
 
 };
