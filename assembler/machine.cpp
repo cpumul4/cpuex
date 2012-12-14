@@ -3,10 +3,8 @@
 #include "./opcfnc.hpp"
 #include "./opcode.hpp"
 
-enum format { R, I, SHIFT, BRANCH, OUT, IT, BRREG, ITR,none };
 
 format binary::decode_sim_opcode(instr inst){
-
 #define _op(OPC,opc,suf1,suf2,suf3,suf4)		\
   case OPC:						\
     set_id(opc ## suf1, opc ## suf2, opc ##suf3);	\
@@ -130,8 +128,6 @@ format binary::decode_sim_opcode(instr inst){
 #undef op
 }
 
-
-
 void binary::set_operand(instr inst, format frm){
   switch(frm){
     case R:
@@ -164,8 +160,4 @@ void binary::set_operand(instr inst, format frm){
   }
 
 
-typedef union m{ 
-  char byte[5];
-  binary bin;
-} machine;
 

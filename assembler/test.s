@@ -1,7 +1,6 @@
 	add	 $r4 $r2 $r1
 	sub	 $r4 $r2 $r1
 	addi	 $r2 $r1 127
-label:	
 	subi	 $r2 $r1 127
 	fadd	 $f4 $f2 $f1
 	fadda	 $f4 $f2 $f1
@@ -78,17 +77,19 @@ label:
 	bgte	 $r2 $r1 label
 	bgtei	 $r2 15 label
 	fbgte	 $f2 $f1 label
-	beqr	 $r4 $r2 $r1
-	beqir	 $r4 15 label
-	fbeqr	 $r4 $f2 $f1
-	bner	 $r4 $r2 $r1
-	bneir	 $r4 15 label
-	fbner	 $r4 $f2 $f1
-	blter	 $r4 $r2 $r1
-	blteir	 $r4 15 label
-	fblter	 $r4 $f2 $f1
-	bgter	 $r4 $r2 $r1
-	bgteir	 $r2 15 label
-	fbgter	 $r4 $f2 $f1
+
+	beqr	 $r1 $r2 $r4
+	beqir	 $r2 15 $r4
+	fbeqr	 $f1 $f2 $r4
+	bner	 $r1 $r2 $r4
+	bneir	 $r2 15 $r4
+	fbner	 $f1 $f2 $r4
+	blter	 $r1 $r2 $r4
+	blteir	 $r2 15 $r4
+	fblter	 $f1 $f2 $r4
+	bgter	 $r1 $r2 $r4
+	bgteir	 $r2 15 $r4
+	fbgter	 $f1 $f2 $r4
 	nop	
 	halt	
+label:
