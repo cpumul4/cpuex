@@ -32,6 +32,9 @@ public:
   regnum get_rd(void){ return rd; }
   immidiate get_rs(void){ return rs; }
   immidiate get_rt(void){ return rt; }
+  immidiate get_imm(void){ return rt; }
+  immidiate get_immt(void){ return rs; }
+  immidiate get_amt(void) { return rt; }
   bool equal_opcode(opcode key){ return key == opc; };
 };
 
