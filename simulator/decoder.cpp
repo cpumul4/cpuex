@@ -349,16 +349,10 @@ int decode(char *srcpath, instr rom[ROM_SIZE]){
     rom[i].show();
   }
 #else
-  /*    cerr << "------------------------------------------------------------\n \
-デコードした命令列を吐くのをやめました。\n\
-代わりとして同じフォルダにあるscript.shというファイルを使ってください\n\
-使い方はそのファイルの中に書いてあります\n\
-------------------------------------------------------------\n";
-  */
 #endif
 
   char string[50];
   sprintf(string, "<デコード終了> 発行命令数:%d\n\n",romindex);
   cerr << string;
-  return 0;
+  return romindex;
 }
