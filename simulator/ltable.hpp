@@ -27,12 +27,12 @@ void ltable::print(){
 }
 
 void ltable::set_label(uint i, const char *l){
-  uint itr = 0;
-  while(label[itr] != NULL)itr++;
-  label[itr] = (char *)malloc(sizeof(char) * (strlen(l) + 1));
-  strcpy(label[itr],l);
-  index[itr] = i;
-  // cerr << l << " set. " << itr << " and " <<  i << endl;
+  static int last = 0;
+  label[last] = (char *)malloc(sizeof(char) * (strlen(l) + 1));
+  strcpy(label[last],l);
+  index[last] = i;
+  last++;
+  // cerr << l << " set. " << last << " and " <<  i << endl;
 }
 
 int ltable::get_index(const char *_label){
