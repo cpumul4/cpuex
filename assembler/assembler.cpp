@@ -26,17 +26,11 @@ void output_machinecode(char *file, machine src[ROM_SIZE], int size){
   }
   
 #if ASSEMBLER_DEBUG
-  // for(int __i =0; __i < size; __i++)
-  //   print_bit(src[__i]);
-
-  // cout <<  "----------------------上と下は同じ命令です-------------------------\n"
-    ;
   for(int __i =0; __i < size; __i++){
     printf("[L%2.d]\t", __i + 1);
     print_bit(src[__i]);
   }
 #endif
-
   for(int a = 0; a < size;a++){
     fout.write(src[a].byte,5);   
   }
@@ -49,7 +43,6 @@ int main(int argc, char *argv[]){
   int instrnum;
   instr rom[ROM_SIZE];
   machine minstr[ROM_SIZE];
-
 
   if(argc != 3){
     cerr << "USAGE: ./assembler outfile infile\n";
