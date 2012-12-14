@@ -32,7 +32,7 @@ void output_machinecode(char *file, machine src[ROM_SIZE], int size){
   // cout <<  "----------------------上と下は同じ命令です-------------------------\n"
     ;
   for(int __i =0; __i < size; __i++){
-    printf("[%2.d行目]\t", __i + 1);
+    printf("[L%2.d]\t", __i + 1);
     print_bit(src[__i]);
   }
 #endif

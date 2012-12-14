@@ -1,5 +1,5 @@
-	add	 $r4 $r2 $r1
-	sub	 $r4 $r2 $r1
+	add	 $r4 $r1 $r2
+	sub	 $r4 $r1 $r2
 	addi	 $r2 $r1 127
 	subi	 $r2 $r1 127
 	fadd	 $f4 $f2 $f1
@@ -22,10 +22,10 @@
 	itof	 $f4 $r2
 	ftoi	 $r4 $f2
 	floor	 $f4 $f2
-	and	 $r4 $r2 $r1
-	or	 $r4 $r2 $r1
-	nor	 $r4 $r2 $r1
-	xor	 $r4 $r2 $r1
+	and	 $r4 $r1 $r2
+	or	 $r4 $r1 $r2
+	nor	 $r4 $r1 $r2
+	xor	 $r4 $r1 $r2
 	andi	 $r2 $r1 127
 	ori	 $r2 $r1 127
 	sll	 $r4 $r2 7
@@ -39,7 +39,7 @@
 	lli	 $r2 $r1 127
 	flui	 $f2 $f1 127
 	flli	 $f2 $f1 127
-	lw	 $r4 $r2 $r1
+	lw	 $r4 $r1 $r2
 	lwi	 $r2 $r1 127
 	flw	 $f4 $r2 $r1
 	flwa	 $f4 $r2 $r1
