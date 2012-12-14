@@ -7,7 +7,7 @@ min_caml_start:
 	lwi	$r31 $r30 0
 	halt
 fib.9:
-	addi	$r2 $r0 1
+	addi	$r2 $r0 2
 	bgte	$r1 $r2 bne_else.22
 	jr	$r31
 bne_else.22:
