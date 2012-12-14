@@ -64,17 +64,16 @@ class binary {
     return;
   }
 public:
-
-  
-
-
+  void set_id(int opc, int fnc = 0, int fncr = 0){
+    opcode = opc; mid.other.funct = fnc; low.other.functR = fncr; return;
+  }
 };
 
 
 
 typedef union m{ 
   char byte[5];
-
+  binary bin;
 } machine;
 
 class instr_id{

@@ -29,6 +29,9 @@ public:
   bool is_fpu(void);
   void write(void);
   opcode get_opc(void){ return opc; }
+  regnum get_rd(void){ return rd; }
+  immidiate get_rs(void){ return rs; }
+  immidiate get_rt(void){ return rt; }
   bool equal_opcode(opcode key){ return key == opc; };
 };
 
