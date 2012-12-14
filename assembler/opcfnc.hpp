@@ -277,43 +277,43 @@
 
 #define	outa_format	OUT
 #define	outa_opcode	0b000000
-#define	outa_funct	0b11
-#define	outa_functR	dummy
+#define	outa_functR	0b11
+#define	outa_funct	dummy
 
 #define	outb_format	OUT
 #define	outb_opcode	0b000000
-#define	outb_funct	0b10
-#define	outb_functR	dummy
+#define	outb_functR	0b10
+#define	outb_funct	dummy
 
 #define	outc_format	OUT
 #define	outc_opcode	0b000000
-#define	outc_funct	0b01
-#define	outc_functR	dummy
+#define	outc_functR	0b01
+#define	outc_funct	dummy
 
 #define	outd_format	OUT
 #define	outd_opcode	0b000000
-#define	outd_funct	0b00
-#define	outd_functR	dummy
+#define	outd_functR	0b00
+#define	outd_funct	dummy
 
 #define	fouta_format	OUT
 #define	fouta_opcode	0b000001
-#define	fouta_funct	0b11
-#define	fouta_functR	dummy
+#define	fouta_functR	0b11
+#define	fouta_funct	dummy
 
 #define	foutb_format	OUT
 #define	foutb_opcode	0b000001
-#define	foutb_funct	0b10
-#define	foutb_functR	dummy
+#define	foutb_functR	0b10
+#define	foutb_funct	dummy
 
 #define	foutc_format	OUT
 #define	foutc_opcode	0b000001
-#define	foutc_funct	0b01
-#define	foutc_functR	dummy
+#define	foutc_functR	0b01
+#define	foutc_funct	dummy
 
 #define	foutd_format	OUT
 #define	foutd_opcode	0b000001
-#define	foutd_funct	0b00
-#define	foutd_functR	dummy
+#define	foutd_functR	0b00
+#define	foutd_funct	dummy
 
 #define	j_format	I
 #define	j_opcode	0b000101

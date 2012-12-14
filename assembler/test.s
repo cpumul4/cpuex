@@ -77,7 +77,6 @@
 	bgte	 $r1 $r2 label
 	bgtei	 $r1 15 label
 	fbgte	 $f1 $f2 label
-
 	beqr	 $r2 $r1 $r4
 	beqir	 $r1 15 $r4
 	fbeqr	 $f2 $f1 $r4
