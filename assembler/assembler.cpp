@@ -26,15 +26,14 @@ void output_machinecode(char *file, machine src[ROM_SIZE], int size){
   }
   
 #if ASSEMBLER_DEBUG
-  for(int __i =0; __i < size; __i++){
-    printf("[L%2.d]\t", __i + 1);
-    print_bit(src[__i]);
+  for(int i =0; i < size; i++){
+    printf("[L%2.d]\t", i + 1);
+    print_bit(src[i]);
   }
 #endif
   for(int a = 0; a < size;a++){
     fout.write(src[a].byte,5);   
   }
-
 }
 
 // 目的 : ファイルからアセンブリを読み込み、ファイルに機械語列を吐く
