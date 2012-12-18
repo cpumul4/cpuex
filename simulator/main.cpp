@@ -37,19 +37,12 @@ inline void init(void){
 }
 
 inline void valid_reg(void){
-    if(SPR.i < 0){
-      cerr << "!!!!!!!!!!!スタックポインタが負です\n";
-      pc = LR_INIT;
-    }
-    if(GPR.i < 0){
-      cerr << "!!!!!!!!!!!グローバルポインタが負です\n";
-      pc = LR_INIT;
-    }
-    if(LR.i < 0){
-      cerr << "************リンクレジスタが負です***********\n";
-      pc = LR_INIT;	
-    }
-    return;
+  // if(!(ZR == 0 && F1.f == 1.0 && FM1.f == -1.0 && FZR.f == 0))throw (string)"定数レジスタ";
+  if(SPR.i < 0 || SPR.i > RAM_SIZE)throw (string)"スタックポインタレジスタ";
+  if(GPR.i < 0 || GPR.i > RAM_SIZE)throw (string)"グローバルポインタレジスタ";
+  if(LR.i  < 0 || LR.i  > ROM_SIZE)
+    if(LR.i != LR_INIT)throw (string)"リンクレジスタ";
+  return;
 }
 
 int simulate(char *asmpath, char *srcpath, char *tgtpath){
@@ -83,26 +76,24 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     ui();
 #endif
     pc++;
-    valid_reg();
     const_reg();
 
     try {
+      valid_reg();
       rom_count[pc-1]++;
       rom[pc-1].exec_asm();
       exec_count++;
     }
-    catch(int){
-      cerr << "実行しようとした命令:[" << pc -1 << ']';
-      rom[pc-1].show();
-      ui_error();
-      pc = LR_INIT;
-    }
     catch(string str){
       cerr << "[ERROR]" << str << endl;
-      cerr << "実行しようとした命令:[" << pc -1 << ']';
+      if(pc > 1){
+	cerr << "直前に実行した命令:\t[" << pc -2 << ']';
+	rom[pc-2].show();
+      }
+      cerr << "実行しようとした命令:\t[" << pc -1 << ']';
       rom[pc-1].show();
       ui_error();
-      pc = LR_INIT;
+      halt();
     }      
   }
 

@@ -1,5 +1,4 @@
-#ifndef UI_H
-#define UI_H
+#pragma once
 #include <stdint.h>
 
 enum regtype { ir, fr, mem };
@@ -42,4 +41,4 @@ public:
 extern int step;
 extern int ui(void);
 extern int ui_error(void);
-#endif
+
