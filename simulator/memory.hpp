@@ -83,13 +83,21 @@ union myfloat {
 public:
   void operator=(uint32_t sub){ b = sub; }
   void operator=(float    sub){ f = sub; }
-  float operator+(myfloat t){   return fadd(f,t.f);  }
-  float operator-(myfloat t){   return fadd(f, -t.f);  }
-  float operator*(myfloat t){   return fmul(f, t.f);  }
+  float operator+(myfloat t){   
+    if(isnormal(f) && isnormal(t.f))return f + t.f;
+    else return fadd(f,t.f);  }
+  float operator-(myfloat t){
+    if(isnormal(f) && isnormal(t.f))return f - t.f;
+    else return fadd(f, -t.f);  }
+  float operator*(myfloat t){   
+    if(isnormal(f) && isnormal(t.f))return f * t.f;
+    else return fmul(f, t.f);  }
   float  inv(void) { return finv(this->f); }
   float sqrt(void) { return sqrt_m(this->f);}
-  float operator/(myfloat t){   return fmul(this->f, finv(t.f));  }
-  uint32_t operator<=(myfloat t){ return lte_f(this->f, t.f);}
+  float operator/(myfloat t){ return fmul(this->f, finv(t.f));  }
+  uint32_t operator<=(myfloat t){ 
+    if(isnormal(f) && isnormal(t.f))return f <= t.f;
+    else return lte_f(this->f, t.f);}
   uint32_t operator>=(myfloat t){ return t <= *this; }
   uint32_t operator==(myfloat t){ return eq_f(this->f, t.f); } 
   uint32_t operator==(float t)  { return eq_f(this->f, t  ); }
