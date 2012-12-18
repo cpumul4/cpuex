@@ -97,7 +97,8 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
       ui_error();
       pc = LR_INIT;
     }
-    catch(string){
+    catch(string str){
+      cerr << "[ERROR]" << str << endl;
       cerr << "実行しようとした命令:[" << pc -1 << ']';
       rom[pc-1].show();
       ui_error();

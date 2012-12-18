@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <math.h>
 #include <iostream>
+#include <string>
 #define INTREG_NUM   32
 #define FLOATREG_NUM 32		// rst命令でireg = fregを仮定している
 #define RAM_SIZE  1024*1024
@@ -130,9 +131,9 @@ inline int valid_addr(int index){
   if(0 <= index && index < RAM_SIZE)
     return index;
   else {
-    std::cerr << "############################################################\n\
-[ERROR]メモリの" << index << "番にアクセスしました" << std::endl;
-    throw index;
+    char err[100];
+    sprintf(err, "メモリの%d番にアクセスしました", index);
+    throw (std::string)err;
   }
 }
 
