@@ -1,7 +1,7 @@
 		返り値
 ack		8189
 adder		10
-cls-bug		789
+cls-bug		912
 cls-bug2	9,8,7,6,5,4,3,2,1,0を順にprint_int
 sld-rec		1230
 even-odd	456
