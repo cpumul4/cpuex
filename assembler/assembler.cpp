@@ -27,7 +27,7 @@ void output_machinecode(char *file, machine src[ROM_SIZE], int size){
   
 #if ASSEMBLER_DEBUG
   for(int i =0; i < size; i++){
-    printf("[L%2.d]\t", i + 1);
+    // printf("[L%2.d]\t", i + 1);
     print_bit(src[i]);
   }
 #endif

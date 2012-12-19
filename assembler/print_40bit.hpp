@@ -1,3 +1,5 @@
+#define DELIM 0
+
 #include <stdio.h>
 template<class T> void print_bit(T x){
   char printstr[50];
@@ -18,7 +20,11 @@ template<class T> void print_bit(T x){
 } tmp;
 
   tmp.val = x;
+#if DELIM
   sprintf(printstr, "%d%d%d%d %d%d%d%d%d%d %d%d%d%d%d %d%d%d%d%d%d%d%d%d %d%d%d%d%d %d%d%d%d%d %d%d%d%d%d%d\n", 
+#else
+  sprintf(printstr, "%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d\n", 
+#endif
 	 tmp.bit.b39, tmp.bit.b38, tmp.bit.b37, tmp.bit.b36, 
 	 tmp.bit.b35, tmp.bit.b34, tmp.bit.b33, tmp.bit.b32, 
 	 tmp.bit.b31, 
