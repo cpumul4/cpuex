@@ -23,6 +23,7 @@ min_caml_start:
 	jlr	$r27	# 21
 	addi	$r30 $r30 1	# 22
 	lwi	$r31 $r30 0	# 23
+	outa	$r1
 	outb	$r1
 	outc	$r1
 	outd	$r1
