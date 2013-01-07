@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <math.h>
 #include <iostream>
+#include <stdio.h>		// Cygwinでコンパイルするときに要る
 #include <string>
 #define INTREG_NUM   32
 #define FLOATREG_NUM 32		// rst命令でireg = fregを仮定している
