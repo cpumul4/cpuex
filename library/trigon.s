@@ -1,5 +1,4 @@
 	;; j	min_caml_sin -3.30503e-21
-
 	jl	min_caml_cos
 	halt
 min_caml_cos:
@@ -13,14 +12,9 @@ min_caml_cos:
 	fmul	$f30 $f29 $f26	; $f30 = 2pi
 	fmul	$f28 $f29 $f25	; $f29 = pi, $f28 = pi/2
 	fmul	$f27 $f28 $f25	; $f27 = pi/4
-	;; 与えられた引数の絶対値を取り出す
-	addi	$r1 $r0 1
-	sll	$r1 $r1 31
-	f2r	$r2 $f3
-	and	$r3 $r1 $r2	;sign = $r3
-	xor	$r4 $r3 $r2	;abs(theta) = $f3
-	r2r	$r3 $r0		;sign = '+'
-	r2f	$f3 $r4
+	lui	$r1 $r0 -32768  ; マイナスの符号
+	r2r	$r3 $r0		; sign = '+'
+	fabs	$f3 $f3
 	;; abs(theta)の値を0~2PI以下にする。	
 	fblte	$f3 $f30 cos.calc ;既に2pi未満ならcos.calcに飛ぶ #error?
 	f2f	$f5 $f30
@@ -51,8 +45,7 @@ cos.theta<=pi/2:
 	fblte	$f3 $f27 cos.theta<=pi/4
 cos.theta>=pi/4:			;sin(theta)
 	fsub	$f3 $f28 $f3
-	flui	$f10 $f10 16256
-	flli	$f10 $f10 0	;1.0
+	flui	$f10 $f0 16256	;1.0
 	flui	$f11 $f11 -16854 ;; 1011 1110 0010 1010
 	flli	$f11 $f11 -21844 ;; 1010 1010 1010 1100
 	flui	$f12 $f12 15368  ;; 0011 1100 0000 1000
@@ -71,10 +64,8 @@ cos.theta>=pi/4:			;sin(theta)
 	fmul	$f3  $f20 $f3
 	j	cos.putsignbit
 cos.theta<=pi/4:			;cos(theta)
-	flui	$f10 $f10 16256
-	flli	$f10 $f10 0	;1.0
-	flui	$f11 $f11 48896
-	flli	$f11 $f11 0	;-0.5
+	flui	$f10 $f0 16256	;1.0
+	flui	$f11 $f0 48896	;-0.5
 
 	flui	$f12 $f12 15658 ;; 0011110100101010 
 	flli	$f12 $f12 42889 ;; 1010011110001001
@@ -133,12 +124,10 @@ min_caml_sin:
 	fmul	$f28 $f29 $f25
 	fmul	$f27 $f28 $f25
 	;; 与えられた引数の絶対値と符号を取り出す(sign = $r3, abs(theta) = $f3)
-	addi	$r1 $r0 1
-	sll	$r1 $r1 31
+	lui	$r1 $r0 -32768  ; マイナスの符号
 	f2r	$r2 $f3
 	and	$r3 $r1 $r2
-	xor	$r4 $r3 $r2
-	r2f	$f3 $r4
+	fabs	$f3 $f3
 	;; abs(theta)の値を0~2PI以下にする。
 	fblte	$f3 $f30 sin.calc ;既に2pi未満ならcos.calcに飛ぶ #error
 	f2f	$f5 $f30
@@ -166,10 +155,8 @@ sin.theta<=pi/2:
 	fblte	$f3 $f27 sin.theta<=pi/4
 sin.theta>=pi/4:			;cos(theta)
 	fsub	$f3 $f28 $f3
-	flui	$f10 $f10 16256
-	flli	$f10 $f10 0	;1.0
-	flui	$f11 $f11 48896
-	flli	$f11 $f11 0	;-0.5
+	flui	$f10 $f0 16256	;1.0
+	flui	$f11 $f0 48896	;-0.5
 
 	flui	$f12 $f12 15658 ;; 0011110100101010 
 	flli	$f12 $f12 42889 ;; 1010011110001001
@@ -186,8 +173,7 @@ sin.theta>=pi/4:			;cos(theta)
 	fadd	$f3 $f19 $f10
 	j	sin.putsignbit
 sin.theta<=pi/4:			;sin(theta)
-	flui	$f10 $f10 16256
-	flli	$f10 $f10 0	;1.0
+	flui	$f10 $f10 16256	;1.0
 	flui	$f11 $f11 -16854 ;; 1011 1110 0010 1010
 	flli	$f11 $f11 -21844 ;; 1010 1010 1010 1100
 	flui	$f12 $f12 15368  ;; 0011 1100 0000 1000
@@ -209,8 +195,3 @@ sin.putsignbit:
 	or	$r1 $r3 $r1
 	r2f	$f3 $r1
 	jr	$r31
-
-
-
-
-
