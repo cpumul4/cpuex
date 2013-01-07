@@ -7,12 +7,12 @@ min_caml_cos:
 	flui	$f29 $f29 16457;0 10000000 10010010000111111011011 = +/- 3.14159274
 	flli	$f29 $f29 4059	;f29 = pi
 	;; 2.0を$f26にセット
-	lui	$r10 $r0 16384
-	r2f	$f26 $r10	; $f26 = 2
+	flui	$f26 $f0 16384	; $f26 = 2
+	finv	$f25 $f26	; $f25 = 0.5
 	;; 2PI, PI/2, PI/4をそれぞれ_$f30, $f28, $f27にセット
 	fmul	$f30 $f29 $f26	; $f30 = 2pi
-	divf	$f28 $f29 $f26	; $f29 = pi, $f28 = pi/2
-	divf	$f27 $f28 $f26	; $f27 = pi/4
+	fmul	$f28 $f29 $f25	; $f29 = pi, $f28 = pi/2
+	fmul	$f27 $f28 $f25	; $f27 = pi/4
 	;; 与えられた引数の絶対値を取り出す
 	addi	$r1 $r0 1
 	sll	$r1 $r1 31
@@ -34,7 +34,7 @@ cos.division:		;f0 = theta, f4 = 2, f5 = 引く数, f30 = 2pi
 	fsub	$f3 $f3 $f5
 	fblte	$f3 $f30 cos.calc ;既に2pi未満ならcos.calcに飛ぶ #error
 cos.suber/2:
-	divf	$f5 $f5 $f26
+	fmul	$f5 $f5 $f25
 	j cos.division
 cos.calc:	;; f0 = theta', f30 = 2pi, f29 = pi, f28 = pi/2, f27 = pi/4
 	;; r1 = sign bit(minus) $r3 = sign bit(plus)
