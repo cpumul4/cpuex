@@ -126,12 +126,12 @@ min_caml_sin:
 	flui	$f29 $f29 16457;0 10000000 10010010000111111011011=3.14159274
 	flli	$f29 $f29 4059
 	;; 2.0を$f26にセット
-	lui	$r10 $r0 16384
-	r2f	$f26 $r10
+	flui	$f26 $f0 16384
+	finv	$f25 $f26
 	;; 2PI, PI/2, PI/4をそれぞれ_$f30, $f28, $f27にセット
 	fmul	$f30 $f29 $f26
-	divf	$f28 $f29 $f26
-	divf	$f27 $f28 $f26
+	fmul	$f28 $f29 $f25
+	fmul	$f27 $f28 $f25
 	;; 与えられた引数の絶対値と符号を取り出す(sign = $r3, abs(theta) = $f3)
 	addi	$r1 $r0 1
 	sll	$r1 $r1 31
@@ -152,7 +152,7 @@ sin.division:		;f0 = theta, f4 = 2, f5 = 引く数, f30 = 2pi
 	fsub	$f3 $f3 $f5
 	fblte	$f3 $f30 sin.calc ;既に2pi未満ならcos.calcに飛ぶ
 sin.suber/2:
-	divf	$f5 $f5 $f26
+	fmul	$f5 $f5 $f25
 	j sin.division
 sin.calc:	;; f0 = theta', f30 = 2pi, f29 = pi, f28 = pi/2, f27 = pi/4
 	;; r3 = sign bit(minus) $r0 = sign bit(plus)
