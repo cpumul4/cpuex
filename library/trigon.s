@@ -22,44 +22,33 @@ min_caml_cos:
 	r2r	$r3 $r0		;sign = '+'
 	r2f	$f0 $r4
 	;; abs(theta)の値を0~2PI以下にする。	
-	cmpf	$r28 $f0 $f30 
-	bne	$r28 $r0  cos.calc ;既に2pi未満ならcos.calcに飛ぶ
+	fblte	$f0 $f30 cos.calc ;既に2pi未満ならcos.calcに飛ぶ #error?
 	f2f	$f5 $f30
 cos.suber<=theta<=2suber:		;f0 = theta, f4 = 2, f5 = 2pi, f6 = 2*f5
 	fmul	$f6 $f5	$f4
-	cmpf	$r28 $f0 $f6
-	bne	$r28 $r0 cos.division ;if(f0 <= f6)goto division
+	fblte	$f0 $f6 cos.division ;if(f0 <= f6)goto division
 	f2f	$f5 $f6
 	j	cos.suber<=theta<=2suber
 cos.division:		;f0 = theta, f4 = 2, f5 = 引く数, f30 = 2pi
-	cmpf	$r28 $f0 $f5
-	bne	$r28 $r0 cos.suber/2
+	fblte	$f0 $f5 cos.suber/2
 	fsub	$f0 $f0 $f5
-	cmpf	$r28 $f0 $f30 
-	bne	$r28 $r0  cos.calc ;既に2pi未満ならcos.calcに飛ぶ
+	fblte	$f0 $f30 cos.calc ;既に2pi未満ならcos.calcに飛ぶ #error
 cos.suber/2:
 	divf	$f5 $f5 $f4
 	j cos.division
 cos.calc:	;; f0 = theta', f30 = 2pi, f29 = pi, f28 = pi/2, f27 = pi/4
 	;; r1 = sign bit(minus) $r3 = sign bit(plus)
-	cmpf	$r28 $f0 $f29	       
-	bne	$r28 $r0 cos.theta<=pi ;if(f0 <= f29)goto theta<=pi
+	fblte	$f0 $f29 cos.theta<=pi ;if(f0 <= f29)goto theta<=pi
 	;; theta >= piの場合
 	fsub	$f0 $f0 $f29
 	r2r	$r3 $r1		;sign bitの反転
 cos.theta<=pi:	
-	cmpf	$r28 $f0 $f28
-	bne	$r28 $r0 cos.theta<=pi/2
+	fblte	$f0 $f28 cos.theta<=pi/2
 	;; theta >= pi/2の場合
 	fsub	$f0 $f29 $f0
 	xor	$r3 $r3 $r1
-;; 	beq	$r3 $r0 cos.plus_to_minus	; 符号の反転
-;; 	r2r	$r3 $r0
-;; cos.plus_to_minus:
-;; 	r2r	$r3 $r1
 cos.theta<=pi/2:
-	cmpf	$r28 $f0 $f27
-	bne	$r28 $r0 cos.theta<=pi/4
+	fblte	$f0 $f27 cos.theta<=pi/4
 cos.theta>=pi/4:			;sin(theta)
 	fsub	$f0 $f28 $f0
 	flui	$f10 $f10 16256
@@ -151,37 +140,30 @@ min_caml_sin:
 	xor	$r4 $r3 $r2
 	r2f	$f0 $r4
 	;; abs(theta)の値を0~2PI以下にする。
-	cmpf	$r28 $f0 $f30 
-	bne	$r28 $r0  sin.calc ;既に2pi未満ならcos.calcに飛ぶ
+	fblte	$f0 $f30 sin.calc ;既に2pi未満ならcos.calcに飛ぶ #error
 	f2f	$f5 $f30
 sin.suber<=theta<=2suber:;f0 = theta, f4 = 2,0, f5 = 2pi, f6 = 2*f5
 	fmul	$f6 $f5	$f4
-	cmpf	$r28 $f0 $f6
-	bne	$r28 $r0 sin.division ;if(f0 <= f6)goto division
+	fblte	$f0 $f6 sin.division ;if(f0 <= f6)goto division
 	f2f	$f5 $f6
 	j	sin.suber<=theta<=2suber
 sin.division:		;f0 = theta, f4 = 2, f5 = 引く数, f30 = 2pi
-	cmpf	$r28 $f0 $f5
-	bne	$r28 $r0 sin.suber/2
+	fblte	$f0 $f5 sin.suber/2
 	fsub	$f0 $f0 $f5
-	cmpf	$r28 $f0 $f30 
-	bne	$r28 $r0  sin.calc ;既に2pi未満ならcos.calcに飛ぶ
+	fblte	$f0 $f30 sin.calc ;既に2pi未満ならcos.calcに飛ぶ
 sin.suber/2:
 	divf	$f5 $f5 $f4
 	j sin.division
 sin.calc:	;; f0 = theta', f30 = 2pi, f29 = pi, f28 = pi/2, f27 = pi/4
 	;; r3 = sign bit(minus) $r0 = sign bit(plus)
-	cmpf	$r28 $f0 $f29
-	bne	$r28 $r0 sin.theta<=pi ;if(f0 <= f29)goto theta<=pi
+	fblte	$f0 $f29 sin.theta<=pi ;if(f0 <= f29)goto theta<=pi
 	fsub	$f0 $f0 $f29
 	xor	$r3 $r1 $r3
 sin.theta<=pi:	
-	cmpf	$r28 $f0 $f28
-	bne	$r28 $r0 sin.theta<=pi/2
+	fblte	$f0 $f28 sin.theta<=pi/2
 	fsub	$f0 $f29 $f0
 sin.theta<=pi/2:
-	cmpf	$r28 $f0 $f27
-	bne	$r28 $r0 sin.theta<=pi/4
+	fblte	$f0 $f27 sin.theta<=pi/4
 sin.theta>=pi/4:			;cos(theta)
 	fsub	$f0 $f28 $f0
 	flui	$f10 $f10 16256
