@@ -45,7 +45,6 @@ cos.theta<=pi/2:
 	fblte	$f3 $f27 cos.theta<=pi/4
 cos.theta>=pi/4:			;sin(theta)
 	fsub	$f3 $f28 $f3
-	flui	$f10 $f0 16256	;1.0
 	flui	$f11 $f11 -16854 ;; 1011 1110 0010 1010
 	flli	$f11 $f11 -21844 ;; 1010 1010 1010 1100
 	flui	$f12 $f12 15368  ;; 0011 1100 0000 1000
@@ -60,13 +59,10 @@ cos.theta>=pi/4:			;sin(theta)
 	fmul	$f17 $f14 $f16
 	fadd	$f18 $f17 $f11
 	fmul	$f19 $f18 $f14
-	fadd	$f20 $f19 $f10
+	fadd	$f20 $f19 $f1
 	fmul	$f3  $f20 $f3
 	j	cos.putsignbit
 cos.theta<=pi/4:			;cos(theta)
-	flui	$f10 $f0 16256	;1.0
-	flui	$f11 $f0 48896	;-0.5
-
 	flui	$f12 $f12 15658 ;; 0011110100101010 
 	flli	$f12 $f12 42889 ;; 1010011110001001
 
@@ -77,9 +73,9 @@ cos.theta<=pi/4:			;cos(theta)
 	fmul	$f15 $f14 $f13
 	fadd	$f16 $f12 $f15
 	fmul	$f17 $f14 $f16
-	fadd	$f18 $f17 $f11
+	fsub	$f18 $f17 $f25
 	fmul	$f19 $f18 $f14
-	fadd	$f3 $f19 $f10
+	fadd	$f3 $f19 $f1
 cos.putsignbit:
 	f2r	$r1 $f3
 	or	$r1 $r3 $r1
@@ -134,9 +130,6 @@ sin.theta<=pi/2:
 	fblte	$f3 $f27 sin.theta<=pi/4
 sin.theta>=pi/4:			;cos(theta)
 	fsub	$f3 $f28 $f3
-	flui	$f10 $f0 16256	;1.0
-	flui	$f11 $f0 48896	;-0.5
-
 	flui	$f12 $f12 15658 ;; 0011110100101010 
 	flli	$f12 $f12 42889 ;; 1010011110001001
 
@@ -147,12 +140,11 @@ sin.theta>=pi/4:			;cos(theta)
 	fmul	$f15 $f14 $f13
 	fadd	$f16 $f12 $f15
 	fmul	$f17 $f14 $f16
-	fadd	$f18 $f17 $f11
+	fsub	$f18 $f17 $f25
 	fmul	$f19 $f18 $f14
-	fadd	$f3 $f19 $f10
+	fadd	$f3 $f19 $f1
 	j	sin.putsignbit
 sin.theta<=pi/4:			;sin(theta)
-	flui	$f10 $f10 16256	;1.0
 	flui	$f11 $f11 -16854 ;; 1011 1110 0010 1010
 	flli	$f11 $f11 -21844 ;; 1010 1010 1010 1100
 	flui	$f12 $f12 15368  ;; 0011 1100 0000 1000
@@ -167,7 +159,7 @@ sin.theta<=pi/4:			;sin(theta)
 	fmul	$f17 $f14 $f16
 	fadd	$f18 $f17 $f11
 	fmul	$f19 $f18 $f14
-	fadd	$f20 $f19 $f10
+	fadd	$f20 $f19 $f1
 	fmul	$f3  $f20 $f3
 sin.putsignbit:
 	f2r	$r1 $f3
