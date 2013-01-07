@@ -88,27 +88,6 @@ cos.putsignbit:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	;; ;; $f3に引数が与えられるとする
 	;; jl	sin.start
 	;; halt
