@@ -6,13 +6,13 @@ min_caml_cos:
 	;; PIを$f29にセット
 	flui	$f29 $f29 16457;0 10000000 10010010000111111011011 = +/- 3.14159274
 	flli	$f29 $f29 4059	;f29 = pi
-	;; 2.0を$f4にセット
+	;; 2.0を$f26にセット
 	lui	$r10 $r0 16384
-	r2f	$f4 $r10	; $f4 = 2
+	r2f	$f26 $r10	; $f26 = 2
 	;; 2PI, PI/2, PI/4をそれぞれ_$f30, $f28, $f27にセット
-	fmul	$f30 $f29 $f4	; $f30 = 2pi
-	divf	$f28 $f29 $f4	; $f29 = pi, $f28 = pi/2
-	divf	$f27 $f28 $f4	; $f27 = pi/4
+	fmul	$f30 $f29 $f26	; $f30 = 2pi
+	divf	$f28 $f29 $f26	; $f29 = pi, $f28 = pi/2
+	divf	$f27 $f28 $f26	; $f27 = pi/4
 	;; 与えられた引数の絶対値を取り出す
 	addi	$r1 $r0 1
 	sll	$r1 $r1 31
@@ -25,7 +25,7 @@ min_caml_cos:
 	fblte	$f3 $f30 cos.calc ;既に2pi未満ならcos.calcに飛ぶ #error?
 	f2f	$f5 $f30
 cos.suber<=theta<=2suber:		;f0 = theta, f4 = 2, f5 = 2pi, f6 = 2*f5
-	fmul	$f6 $f5	$f4
+	fmul	$f6 $f5	$f26
 	fblte	$f3 $f6 cos.division ;if(f0 <= f6)goto division
 	f2f	$f5 $f6
 	j	cos.suber<=theta<=2suber
@@ -34,7 +34,7 @@ cos.division:		;f0 = theta, f4 = 2, f5 = 引く数, f30 = 2pi
 	fsub	$f3 $f3 $f5
 	fblte	$f3 $f30 cos.calc ;既に2pi未満ならcos.calcに飛ぶ #error
 cos.suber/2:
-	divf	$f5 $f5 $f4
+	divf	$f5 $f5 $f26
 	j cos.division
 cos.calc:	;; f0 = theta', f30 = 2pi, f29 = pi, f28 = pi/2, f27 = pi/4
 	;; r1 = sign bit(minus) $r3 = sign bit(plus)
@@ -125,13 +125,13 @@ min_caml_sin:
 	;; PIを$f29にセット
 	flui	$f29 $f29 16457;0 10000000 10010010000111111011011=3.14159274
 	flli	$f29 $f29 4059
-	;; 2.0を$f4にセット
+	;; 2.0を$f26にセット
 	lui	$r10 $r0 16384
-	r2f	$f4 $r10
+	r2f	$f26 $r10
 	;; 2PI, PI/2, PI/4をそれぞれ_$f30, $f28, $f27にセット
-	fmul	$f30 $f29 $f4
-	divf	$f28 $f29 $f4
-	divf	$f27 $f28 $f4
+	fmul	$f30 $f29 $f26
+	divf	$f28 $f29 $f26
+	divf	$f27 $f28 $f26
 	;; 与えられた引数の絶対値と符号を取り出す(sign = $r3, abs(theta) = $f3)
 	addi	$r1 $r0 1
 	sll	$r1 $r1 31
@@ -143,7 +143,7 @@ min_caml_sin:
 	fblte	$f3 $f30 sin.calc ;既に2pi未満ならcos.calcに飛ぶ #error
 	f2f	$f5 $f30
 sin.suber<=theta<=2suber:;f0 = theta, f4 = 2,0, f5 = 2pi, f6 = 2*f5
-	fmul	$f6 $f5	$f4
+	fmul	$f6 $f5	$f26
 	fblte	$f3 $f6 sin.division ;if(f0 <= f6)goto division
 	f2f	$f5 $f6
 	j	sin.suber<=theta<=2suber
@@ -152,7 +152,7 @@ sin.division:		;f0 = theta, f4 = 2, f5 = 引く数, f30 = 2pi
 	fsub	$f3 $f3 $f5
 	fblte	$f3 $f30 sin.calc ;既に2pi未満ならcos.calcに飛ぶ
 sin.suber/2:
-	divf	$f5 $f5 $f4
+	divf	$f5 $f5 $f26
 	j sin.division
 sin.calc:	;; f0 = theta', f30 = 2pi, f29 = pi, f28 = pi/2, f27 = pi/4
 	;; r3 = sign bit(minus) $r0 = sign bit(plus)
