@@ -149,7 +149,7 @@ architecture fmul of float_mul is
   end component;
   
   signal s1,s2 : std_logic; --sign bit
-  signal e1,e2 : std_logic_vector(8 downto 0); --exponent
+  signal e1,e2,e3 : std_logic_vector(8 downto 0); --exponent
   signal fr1,fr2,fr3 : std_logic_vector(22 downto 0); --fraction
   signal fr4 : std_logic_vector(24 downto 0); --fraction
   signal m_3 : std_logic_vector(24 downto 0); --fr1x3
@@ -164,6 +164,7 @@ architecture fmul of float_mul is
   signal t_4,t_5,t_6 : std_logic_vector(26 downto 0); --step2
   signal sign : std_logic_vector(5 downto 0); --step2
   signal fr_1 : std_logic_vector(22 downto 0); --step3
+  signal fr_2 : std_logic_vector(23 downto 0); --step3
   signal round : std_logic; --step3
   signal exp : std_logic_vector(7 downto 0); --step3
   signal fr : std_logic_vector(22 downto 0); --step3
@@ -251,7 +252,7 @@ begin
     end if;
   end process;
 
-  step3 : process(e2,fr4,g,r,fr_1,round)
+  step3 : process(fr_2,e2,e3,fr4,g,r,fr_1,round)
   begin
     if (fr4(24) = '1') then
       fr_1 <= fr4(23 downto 1);
@@ -260,14 +261,15 @@ begin
       fr_1 <= fr4(22 downto 0);
       round <= g and (r or fr4(0));
     end if;
-    if (e2(8) = '1') then
-      exp <= e2(7 downto 0);
-      if (round = '1') then
-        -- already under 2.0
-        fr <= fr_1 + 1;
-      else
-        fr <= fr_1;
-      end if;
+    e3 <= e2 + fr_2(23);
+    if (round = '1') then
+      fr_2 <= ('0'&fr_1) + 1;
+    else
+      fr_2 <= '0'&fr_1;
+    end if;
+    if (e3(8) = '1') then
+      exp <= e3(7 downto 0);
+      fr <= fr_2(22 downto 0);
     else
       --underflow etc.
       exp <= x"00";
