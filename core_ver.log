@@ -66,9 +66,9 @@ CPI : 基本 2, 分岐 3, ロード/ストア 4, fadd/fsub/fmul/finv/sqrt 4
  - float演算組み込みで不安定動作
 
 **ver2.4(core2_4)
-作業中(デバッグ中)
+01/10Thu完動
 6段パイプライン : IF,ID/RF,EX1,EX2/MEM1,EX3/MEM2,WB
-現在44MHz
+44MHz
 
  - 命令メモリをread-first modeからwrite-first modeに
  - j,jl : 遅延なし
@@ -76,29 +76,13 @@ CPI : 基本 2, 分岐 3, ロード/ストア 4, fadd/fsub/fmul/finv/sqrt 4
  - jr,jlr,branch成立時 : 遅延2
  - fadd,fsub,fmul,finv,sqrt,itof,ftoi,ロード/ストア : 1or2ストール(データハザード)
  - I/O禁止時 : nストール
- - 連続するoutput命令の間に1ストール
+ - I/O命令がそれぞれ連続するとき : 間に1ストール
 
  - mandelbrot : 55.6sec(送信バッファを大きくすれば短縮可能:52.9secまで確認済)
- - min-rt(base/contest) : 結果が正しくない
+ - min-rt(contest) : 51.1sec(11.58億命令)
 
 **ver2.5(core2_5)
-構想段階
-7段パイプライン : PC,IF,ID/RF,EX1,EX2/MEM1,EX3/MEM2,WB
- - j,jl : 遅延1
- - branch不成立時 : 実質遅延1(投機的実行)
- - jr,jlr,branch成立時 : 遅延3
- - fadd,fsub,fmul,finv,sqrt,itof,ftoi,ロード/ストア : 1or2ストール(データハザード)
- - 必ず偶数ストール？
+作業中
 
-**ver2.6(core2_6)
-構想段階
-7段パイプライン : IF,ID/RF,FW,EX1,EX2/MEM1,EX3/MEM2,WB
- - j,jl : 遅延なし
- - branch不成立時 : 実質遅延なし(投機的実行)
- - jr,jlr : 遅延2
- - branch成立時 : 遅延3
- - fadd,fsub,fmul,finv,sqrt,itof,ftoi,ロード/ストア : 1or2or3ストール(データハザード)
-
-**ver2.7(core2_7)
-構想段階
-8段パイプライン : PC,IF,ID/RF,FW,EX1,EX2/MEM1,EX3/MEM2,WB
+ - ver2.4の動作周波数を上げたい
+ - floor,itofを3clkに
