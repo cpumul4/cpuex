@@ -85,4 +85,4 @@ CPI : 基本 2, 分岐 3, ロード/ストア 4, fadd/fsub/fmul/finv/sqrt 4
 作業中
 
  - ver2.4の動作周波数を上げたい
- - floor,itofを3clkに
+ - floor,itof,ftoiを3clkに
