@@ -69,6 +69,7 @@ CPI : 基本 2, 分岐 3, ロード/ストア 4, fadd/fsub/fmul/finv/sqrt 4
 01/10Thu完動
 6段パイプライン : IF,ID/RF,EX1,EX2/MEM1,EX3/MEM2,WB
 44MHz
+送信バッファ : 4096byte
 
  - 命令メモリをread-first modeからwrite-first modeに
  - j,jl : 遅延なし
@@ -83,6 +84,18 @@ CPI : 基本 2, 分岐 3, ロード/ストア 4, fadd/fsub/fmul/finv/sqrt 4
 
 **ver2.5(core2_5)
 作業中
+8段パイプライン : PC,IF,ID/RF,FW,EX1,EX2/MEM1,EX3/MEM2,WB
+66MHz
 
- - ver2.4の動作周波数を上げたい
+ - 現在の最大動作周波数 : 74MHz
  - floor,itof,ftoiを3clkに
+ - j,jl : 遅延1
+ - branch不成立時 : 実質遅延なし(投機的実行)
+ - jr,jlr : 遅延3
+ - branch成立時 : 遅延4
+ - データハザード : 最大3ストール
+ - I/O禁止時 : nストール
+ - I/O命令がそれぞれ連続するとき : 間に2ストール
+
+ - mandelbrot : 52.47sec
+ - min-rt(contest) : 44.77sec(11.58億命令)
