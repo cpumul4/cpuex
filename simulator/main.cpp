@@ -124,7 +124,10 @@ int main(int argc, char *argv[]){
   cerr << "<simulation has started!>\n";
 
   gettimeofday(&t1,NULL);
-  cout << "実行命令数: " << (count = simulate(argv[1], argv[2], argv[3])) << '\n';
+  
+  cout << "実行命令数:\t" << (count = simulate(argv[1], argv[2], argv[3])) << "回" << endl;
+  cout << "nopの回数:\t" << instr_count[NOP] << "回" << endl;
+  cout << "nop除いた回数:\t" << count - instr_count[NOP] << "回" << endl;
   gettimeofday(&t2,NULL);
 
   char *speed = new char[100];
