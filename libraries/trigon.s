@@ -45,20 +45,23 @@ cos.theta<=pi/2:
 	fblte	$f3 $f27 cos.theta<=pi/4
 cos.theta>=pi/4:			;sin(theta)
 	fsub	$f3 $f28 $f3
+	fmul	$f14 $f3 $f3
+
+	flui	$f11 $f11 -18099 ;; 1011 1001 0100 1101
+	flli	$f11 $f11 25782  ;; 0110 0100 1011 0110
+	
+	fmul	$f15 $f14 $f11
+
+	flui	$f11 $f11 15368  ;; 0011 1100 0000 1000
+	flli	$f11 $f11 -31130 ;; 1000 0110 0110 0110
+	fadd	$f16 $f11 $f15
+	fmul	$f17 $f14 $f16
+
 	flui	$f11 $f11 -16854 ;; 1011 1110 0010 1010
 	flli	$f11 $f11 -21844 ;; 1010 1010 1010 1100
-	flui	$f12 $f12 15368  ;; 0011 1100 0000 1000
-	flli	$f12 $f12 -31130 ;; 1000 0110 0110 0110
-
-	flui	$f13 $f13 -18099 ;; 1011 1001 0100 1101
-	flli	$f13 $f13 25782  ;; 0110 0100 1011 0110
-	
-	fmul	$f14 $f3 $f3
-	fmul	$f15 $f14 $f13
-	fadd	$f16 $f12 $f15
-	fmul	$f17 $f14 $f16
 	fadd	$f18 $f17 $f11
 	fmul	$f19 $f18 $f14
+
 	fadd	$f20 $f19 $f1
 	fmul	$f3  $f20 $f3
 	j	cos.putsignbit
