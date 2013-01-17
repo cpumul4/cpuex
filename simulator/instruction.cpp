@@ -4,8 +4,8 @@
 #include <math.h>
 
 long int instr_count[OPCNUM];
+long int branch_count[2] = {0,0};
 extern int step;
-
 
 template<class T> inline T abs32(const T &x){
   if(sizeof(x) != 4)throw "4byteではないデータに遭遇\n";
@@ -154,6 +154,16 @@ void instr::exec_asm(){
 #define IMMT rs
 #define IMM rt
 #define c(_op,_expr) case _op: _expr ++instr_count[_op] ; break
+#define cb(_op,b,_expr) case _op:		\
+  ++instr_count[_op] ;				\
+  if(b){					\
+    branch_count[0]++;				\
+    _expr					\
+      }						\
+  else						\
+    branch_count[1]++;				\
+  break
+
   switch(opc) {
     //  ----------- R 形式の命令 ---------------
     c(ADD , D = S + T;);
@@ -232,35 +242,41 @@ void instr::exec_asm(){
     c(JR  , pc = D.i;);		// D reg が distになってない
     c(JLR  ,LR = pc;pc = D.i;);		// D reg が distになってない
 
-    c(BEQ , if(D == S)  pc = pc + IMM;);
-    c(BNE , if(D != S)  pc = pc + IMM;);
-    c(FBEQ ,if(FD == FS)pc +=     IMM;);
-    c(FBNE ,if(FD != FS)pc +=     IMM;);
+    // c(BEQ , if(D == S)  pc = pc + IMM;);
+    // c(BNE , if(D != S)  pc = pc + IMM;);
+    // c(FBEQ ,if(FD == FS)pc +=     IMM;);
+    // c(FBNE ,if(FD != FS)pc +=     IMM;);
 
-    c(BLTE  ,if(D <= S)  pc = pc + IMM;);
-    c(BGTE  ,if(D >= S)  pc = pc + IMM;);
-    c(FBLTE ,if(FD <= FS)pc +=     IMM;);
-    c(FBGTE ,if(FD >= FS)pc +=     IMM;);
 
-    c(BEQI  , if(D == IMMT)  pc = pc + IMM;);
-    c(BNEI  , if(D != IMMT)  pc = pc + IMM;);
-    c(BLTEI , if(D <= IMMT)  pc = pc + IMM;);
-    c(BGTEI , if(D >= IMMT)  pc = pc + IMM;);
+    cb(BEQ , D == S,  pc = pc + IMM;);
+    cb(BNE , D != S,  pc = pc + IMM;);
+    cb(FBEQ ,FD == FS,pc +=     IMM;);
+    cb(FBNE ,FD != FS,pc +=     IMM;);
 
-    c(BEQR , if(D == S)  pc = T.i;);
-    c(BNER , if(D != S)  pc = T.i;);
-    c(FBEQR ,if(FD == FS)pc = T.i;);
-    c(FBNER ,if(FD != FS)pc = T.i;);
+    cb(BLTE  ,D <= S,  pc = pc + IMM;);
+    cb(BGTE  ,D >= S,  pc = pc + IMM;);
+    cb(FBLTE ,FD <= FS,pc +=     IMM;);
+    cb(FBGTE ,FD >= FS,pc +=     IMM;);
 
-    c(BLTER  ,if(D <= S)  pc = T.i;);
-    c(BGTER  ,if(D >= S)  pc = T.i;);
-    c(FBLTER ,if(FD <= FS)pc = T.i;);
-    c(FBGTER ,if(FD >= FS)pc = T.i;);
+    cb(BEQI  , D == IMMT,  pc = pc + IMM;);
+    cb(BNEI  , D != IMMT,  pc = pc + IMM;);
+    cb(BLTEI , D <= IMMT,  pc = pc + IMM;);
+    cb(BGTEI , D >= IMMT,  pc = pc + IMM;);
 
-    c(BEQIR  , if(D == IMMT)  pc = T.i;);
-    c(BNEIR  , if(D != IMMT)  pc = T.i;);
-    c(BLTEIR , if(D <= IMMT)  pc = T.i;);
-    c(BGTEIR , if(D >= IMMT)  pc = T.i;);
+    cb(BEQR , D == S,  pc = T.i;);
+    cb(BNER , D != S,  pc = T.i;);
+    cb(FBEQR ,FD == FS,pc = T.i;);
+    cb(FBNER ,FD != FS,pc = T.i;);
+
+    cb(BLTER  ,D <= S,  pc = T.i;);
+    cb(BGTER  ,D >= S,  pc = T.i;);
+    cb(FBLTER ,FD <= FS,pc = T.i;);
+    cb(FBGTER ,FD >= FS,pc = T.i;);
+
+    cb(BEQIR  , D == IMMT,  pc = T.i;);
+    cb(BNEIR  , D != IMMT,  pc = T.i;);
+    cb(BLTEIR , D <= IMMT,  pc = T.i;);
+    cb(BGTEIR , D >= IMMT,  pc = T.i;);
 
     // -------------- FR形式 -------------
 

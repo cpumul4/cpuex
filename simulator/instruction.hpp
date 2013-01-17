@@ -11,6 +11,7 @@ typedef int16_t immidiate;
 
 extern uint32_t int16_to_uint32(int16_t); // memory.cpp
 extern long int instr_count[OPCNUM];
+extern long int branch_count[2];
 extern ofstream fout;
 extern ifstream fin;
 

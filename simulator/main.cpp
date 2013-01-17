@@ -100,7 +100,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
   cerr << "結果レジスタ($r1, $f3) = " << ireg[1].i << ", " << freg[3].f  << endl;
   instr_stat(instr_count, exec_count);
   rom_stat(rom_count, exec_count);
-
+  branch_stat(branch_count);
   return exec_count;
 }
 
