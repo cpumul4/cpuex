@@ -1,4 +1,9 @@
 24ばん 作業記録
+**01/18Fri
+3rdISA決定
+デコーダ実装(途中まで)
+**01/17Thu
+3rdArchの構想
 **01/16Wed
 パイプラインを7段(PC,IF,ID/RF,EX1,EX2/MEM1,EX3/MEM2,WB)に
 →44MHz/54.18sec(ストールの増加)
