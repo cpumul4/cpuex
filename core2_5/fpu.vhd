@@ -58,17 +58,19 @@ architecture box of fpu is
 
   component float_to_int
     port (
---      clk  : in  std_logic;
+      clk  : in  std_logic;
       din  : in  std_logic_vector(31 downto 0);
       dout : out std_logic_vector(31 downto 0));
   end component;
 
   component floor
     port (
+      clk  : in  std_logic;
       din  : in  std_logic_vector(31 downto 0);
       dout : out std_logic_vector(31 downto 0));
   end component;
 
+--  signal fadd_out_i, fmul_out_i, finv_out_i, sqrt_out_i, floor_out_i, ftoi_out_i : std_logic_vector(31 downto 0);
   signal fadd_out, fmul_out, finv_out, sqrt_out, floor_out, ftoi_out, fadd_in2, dout1_i, dout3_i : std_logic_vector(31 downto 0);
   signal OP1, OP2 : std_logic_vector(3 downto 0);
   signal FLAG1, FLAG2 : std_logic_vector(1 downto 0);
@@ -110,12 +112,13 @@ begin
 
   ftoi : float_to_int
     port map (
---      clk => clk,
+      clk => clk,
       din => din1,
       dout => ftoi_out);
 
   floor_do : floor
     port map (
+      clk => clk,
       din => din1,
       dout => floor_out);
 
@@ -129,23 +132,19 @@ begin
     end case;
   end process;
 
-  main_1clk : process(OP, din1, din2, floor_out, ftoi_out)
+  main_1clk : process(OP, din1, din2)
   begin
     case OP is
-      when "0110" =>                    -- floor
-        dout1_i <= floor_out;
       when "1100" =>                    -- lli
         dout1_i <= din1(31 downto 16) & din2(15 downto 0);
       when "1110" =>                    -- lui
         dout1_i <= din2(15 downto 0) & din1(15 downto 0);
-      when "1101" =>                    -- ftoi
-        dout1_i <= ftoi_out;
       when others =>                    -- nop
         dout1_i <= din1;
     end case;
   end process;
 
-  main_3clk : process(OP2, fadd_out, fmul_out, finv_out, sqrt_out)--, ftoi_out)
+  main_3clk : process(OP2, fadd_out, fmul_out, finv_out, floor_out, ftoi_out, sqrt_out)
   begin
     case OP2 is
       when "0000" | "0010" =>           -- add, sub
@@ -154,8 +153,10 @@ begin
         dout3_i <= fmul_out;
       when "0011" =>                    -- inv
         dout3_i <= finv_out;
---      when "1101" =>                    -- ftoi
---        dout3_i <= ftoi_out;
+      when "0110" =>                    -- floor
+        dout3_i <= floor_out;
+      when "1101" =>                    -- ftoi
+        dout3_i <= ftoi_out;
       when others =>                    -- sqrt
         dout3_i <= sqrt_out;
     end case;

@@ -1,0 +1,180 @@
+3rdアーキテクチャ
+ - 計85+2(setl,dbg)命令
+ - 01/18Fri作成
+
+****************************************************************
+
+○変更点
+コンパイラが吐かない命令を削除
+ - and, or, nor, xor, andi, ori, srl, r2f, f2r
+Return Address Stackの導入
+ - 戻り番地レジスタの廃止
+jump命令の再編
+ - j -> j
+ - jr -> jr, return
+ - jl -> call
+ - jlr -> callr
+移動命令の再編
+ - r2r -> mv
+ - f2f -> fmv
+ - r2f, f2r -> 削除
+ - fabs, fneg -> fmva, fmvn
+各オペランドの使い方
+ - 書き込みオペランドはadに統一
+ - as,at,ad,immtのバイナリにおける配置の変更
+
+○命名規則みたいなもの(変更なし)
+float演算
+ - 先頭にfをつける
+ - 結果の絶対値をとる命令は末尾にaをつける
+ - 結果の符号を反転させる命令は末尾にnをつける
+即値命令
+ - 末尾にiをつける
+
+●データ表現
+1word = 32bit
+32bit符号つき整数
+32bit単精度浮動小数点数
+リトルエンディアン
+
+●整数レジスタ -> $ra廃止に伴い変更予定
+0     $zero     // 値を0固定(コアが0x00000000で初期化)
+1     $v 	// 返値
+2-25  $r2-$r25	// 汎用
+26    $sw	// swap用
+27    $cl	// closure用
+28    $cp	// cmp用レジスタ
+29    $gp	// グローバルポインタ(静的データへのアクセス用)
+30    $sp	// スタックポインタ(コアが0x000FFFFFで初期化)
+31    $ra	// 戻り番地(link register)
+
+●浮動小数点数レジスタ
+$f0      // 0.0固定
+$f1      // 1.0固定
+$f2      // -1.0固定
+$f3-$f31 // 汎用
+
+●命令形式
+命令長 : 36bit
+
+R : opcode(35-30),ad(29-25),as(20-16),at(15-11)/amt(15-11)
+      - amt : 5bit/unsigned
+I : opcode(35-30),ad(29-25),as(20-16),imm(15-0)
+      - imm : 16bit/signed
+B : opcode(35-30),immt(29-22),as(20-16),imm(15-0)
+      - immt : 8bit/unsigned(x"00"を-1の表現とする)
+      - imm : 16bit/signed
+
+●算術演算命令/移動命令
+R add    rd = rs + rt
+R sub    rd = rs - rt
+
+I addi   rd = rs + imm
+I subi   rd = rs - imm
+
+R fadd   fd = fs +. ft
+R fadda    // faddの絶対値
+R faddn    // faddの符号反転
+R fsub   fd = fs -. ft
+R fsuba
+R fsubn
+R fmul   fd = fs *. ft
+R fmula
+R fmuln
+R finv   fd = 1. /. fs
+R finva
+R finvn
+R sqrt   fd = sqrt(fs)    // 平方根
+R sqrta
+R sqrtn
+
+R itof   fd = itof(rs)     // int to float
+R ftoi   rd = ftoi(fs)     // float to int
+R floor  fd = floor(fs)    // floor
+
+R mv     rd = rs
+R fmv    fd = fs
+R fmva   fd = |fs|     // 絶対値
+R fmvn   fd = -(fs)    // 符号反転
+
+●論理演算命令
+なし
+
+●シフト命令
+R sll    rd = rs <<  amt    // shift left logical
+R sra    rd = rs >>> amt    // shift right arith.
+
+●16bit即値代入命令    // @は連接
+I lui    rd = imm @ rs(15-0)     // load upper immidiate
+I lli    rd = rs(31-16) @ imm    // load lower immidiate
+I flui   fd = imm @ fs(15-0)
+I flli   fd = fs(31-16) @ imm
+
+●ロード/ストア命令    // ワードアクセス
+R lw     rd = M[rs + rt]    // load word
+I lwi    rd = M[rs + imm]
+R flw    fd = M[rs + rt]
+R flwa    // ロードした値の絶対値
+R flwn    // ロードした値の符号反転
+I flwi   fd = M[rs + imm]
+I flwia
+I flwin
+
+R sw     M[rs + rt] = rd    // store word
+I swi    M[rs + imm] = rd
+R fsw    M[rs + rt] = fd
+I fswi   M[rs + imm] = fd
+
+●I/O命令    // Inputはワード単位、Outputはバイト単位
+R in     rd = Input
+R fin    fd = Input
+
+R outa   Output = rd(31-24)    // 上位1バイト
+R outb   Output = rd(23-16)
+R outc   Output = rd(15-8)
+R outd   Output = rd(7-0)    // 下位1バイト(実際にレイトレが使うのはこれ)
+R fouta  Output = fd(31-24)
+R foutb  Output = fd(23-16)
+R foutc  Output = fd(15-8)
+R foutd  Output = fd(7-0)
+
+●無条件分岐命令    // 参照されるPCは次の命令のアドレス
+I j      PC = imm          // 関数の末尾呼び出し
+R jr     PC = rt           // クロージャの末尾呼び出し
+I call   PC = imm; PUSH    // 関数呼び出し
+R callr  PC = rt; PUSH     // クロージャ呼び出し
+- return PC = POP          // 関数からのreturn
+
+ - PUSH : Return Address StackにPCをpush
+ - POP  : Return Address Stackからpop
+
+●条件分岐(比較分岐)命令    // 参照されるPCは次の命令のアドレス
+I beq    if(rs == rd)   PC = PC + imm    // branch on equal
+B beqi   if(rs == immt) PC = PC + imm
+I fbeq   if(fs == fd)   PC = PC + imm
+
+I bne    if(rs != rd)   PC = PC + imm    // branch on not equal
+B bnei   if(rs != immt) PC = PC + imm
+I fbne   if(fs != fd)   PC = PC + imm
+
+I blte   if(rs <= rd)   PC = PC + imm    // branch on less than equal
+B bltei  if(rs <= immt) PC = PC + imm
+I fblte  if(fs <= fd)   PC = PC + imm
+
+I bgte   if(rs >= rd)   PC = PC + imm    // branch on greater than equal
+B bgtei  if(rs >= immt) PC = PC + imm
+I fbgte  if(fs >= fd)   PC = PC + imm
+
+これら12命令の-r(return)命令 : PC = (RASからpopしたもの)    // branch and return
+  beqr/beqir/fbeqr
+  bner/bneir/fbner
+  blter/blteir/fblter
+  bgter/bgteir/fbgter
+
+●疑似命令
+- setl   レジスタにラベルアドレスを代入    // setl $r** label  ->  addi $r** $r0 addr
+
+●その他
+- nop
+- halt   停止命令(実行終了)
+- dbg    シミュレータ用デバッグ命令

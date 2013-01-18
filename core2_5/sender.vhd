@@ -9,7 +9,7 @@ use ieee.std_logic_unsigned.all;
 
 entity sender is
   generic (
-    wtime : std_logic_vector(11 downto 0) := x"17D");
+    wtime : std_logic_vector(11 downto 0) := x"23C");
   port (
     clk   : in  std_logic;
     data  : in  std_logic_vector(7 downto 0);

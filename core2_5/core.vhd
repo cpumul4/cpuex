@@ -1,6 +1,6 @@
--- ver2.4
+-- ver2.5
 -- 2nd Architecture
--- 6-stages pipeline : IF,ID/RF,EX1,EX2/MEM1,EX3/MEM2,WB
+-- 7-stages pipeline : PC,IF,ID/RF,EX1,EX2/MEM1,EX3/MEM2,WB
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -8,55 +8,64 @@ use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
 -- ise only
---library unisim;
---use unisim.vcomponents.all;
+library unisim;
+use unisim.vcomponents.all;
 -- ise only
 
 entity core is
 -- ise only
---  port (
---    ZCLKMA : out   std_logic_vector(1 downto 0);
---    ZA     : out   std_logic_vector(19 downto 0);
---    XZBE   : out   std_logic_vector(3 downto 0);
---    XWA    : out   std_logic;
---    XE1    : out   std_logic;
---    E2A    : out   std_logic;
---    XE3    : out   std_logic;
---    XGA    : out   std_logic;
---    ADVA   : out   std_logic;
---    XZCKE  : out   std_logic;
---    ZD     : inout std_logic_vector(31 downto 0);
---    ZDP    : inout std_logic_vector(3 downto 0);
---    ZZA    : out   std_logic;
---    XFT    : out   std_logic;
---    XLBO   : out   std_logic;
---    MCLK1  : in    std_logic;
---    RS_RX  : in    std_logic;
---    RS_TX  : out   std_logic);
+  port (
+    ZCLKMA : out   std_logic_vector(1 downto 0);
+    ZA     : out   std_logic_vector(19 downto 0);
+    XZBE   : out   std_logic_vector(3 downto 0);
+    XWA    : out   std_logic;
+    XE1    : out   std_logic;
+    E2A    : out   std_logic;
+    XE3    : out   std_logic;
+    XGA    : out   std_logic;
+    ADVA   : out   std_logic;
+    XZCKE  : out   std_logic;
+    ZD     : inout std_logic_vector(31 downto 0);
+    ZDP    : inout std_logic_vector(3 downto 0);
+    ZZA    : out   std_logic;
+    XFT    : out   std_logic;
+    XLBO   : out   std_logic;
+    MCLK1  : in    std_logic;
+    RS_RX  : in    std_logic;
+    RS_TX  : out   std_logic);
 -- ise only
 end core;
 
-architecture ver2_4 of core is
+architecture ver2_5 of core is
   component pc_decide
     port (
       clk     : in  std_logic;
       pcin    : in  std_logic_vector(14 downto 0);
+      lpc_in  : in  std_logic_vector(14 downto 0);
       opcode  : in  std_logic_vector(5 downto 0);
       jimm    : in  std_logic_vector(14 downto 0);
-      raddr   : in  std_logic_vector(14 downto 0);
+      jraddr  : in  std_logic_vector(14 downto 0);
+      braddr  : in  std_logic_vector(14 downto 0);
       bpc     : in  std_logic_vector(14 downto 0);
       bimm    : in  std_logic_vector(14 downto 0);
-      INFO    : in  std_logic_vector(2 downto 0);
+      ipc_in  : in  std_logic_vector(14 downto 0);
+      INFO1   : in  std_logic_vector(2 downto 0);
+      INFO2   : in  std_logic_vector(2 downto 0);
       ALUBR   : in  std_logic;
       FPUBR   : in  std_logic;
       EN1     : in  std_logic;
+      EN4_in  : in  std_logic;
       pcout   : out std_logic_vector(14 downto 0);
       linkpc  : out std_logic_vector(14 downto 0);
+      ipc     : out std_logic_vector(14 downto 0);
       EN2     : out std_logic;
-      EN3     : out std_logic);
+      EN3     : out std_logic;
+      EN4     : out std_logic;
+      EN5     : out std_logic;
+      EN6     : out std_logic);
   end component;
 
-  component inst_mem_fixed
+  component inst_mem
     port (
       clk  : in  std_logic;
       addr : in  std_logic_vector(14 downto 0);
@@ -72,14 +81,19 @@ architecture ver2_4 of core is
       inst      : in  std_logic_vector(35 downto 0);
       LOADEN    : in  std_logic;
       STOREEN   : in  std_logic;
-      IOWE      : in  std_logic;
-      IORE      : in  std_logic;
+      IOWE0     : in  std_logic;
+      IORE0     : in  std_logic;
+      IOWE1     : in  std_logic;
+      IORE1     : in  std_logic;
+      regwaddr0 : in  std_logic_vector(4 downto 0);
       regwaddr1 : in  std_logic_vector(4 downto 0);
       regwaddr2 : in  std_logic_vector(4 downto 0);
       regwaddr3 : in  std_logic_vector(4 downto 0);
+      RREGWE0   : in  std_logic;
       RREGWE1   : in  std_logic;
       RREGWE2   : in  std_logic;
       RREGWE3   : in  std_logic;
+      FREGWE0   : in  std_logic;
       FREGWE1   : in  std_logic;
       FREGWE2   : in  std_logic;
       FREGWE3   : in  std_logic;
@@ -100,6 +114,7 @@ architecture ver2_4 of core is
       inst    : in  std_logic_vector(35 downto 0);
       EN1     : in  std_logic;
       EN2     : in  std_logic;
+      EN4     : in  std_logic;
       ALUIN2  : out std_logic_vector(1 downto 0);
       FPUIN2  : out std_logic;
       SRAMIN  : out std_logic_vector(1 downto 0);
@@ -250,43 +265,43 @@ architecture ver2_4 of core is
   end component;
 
   signal clk, iclk, clk_in, clk0, clk0o, clk_dv : std_logic;
-  signal inst, iodin : std_logic_vector(35 downto 0);
+  signal inst, minst, pinst, iodin_i, iodin : std_logic_vector(35 downto 0);
   signal iaddr : std_logic_vector(15 downto 0);
-  signal pc, pc_i, pc_ii, linkpc_1, linkpc_2, bimm, raddr : std_logic_vector(14 downto 0);
-  signal amt, at, ad, regwaddr_1, regwaddr_2, regwaddr_3, regwaddr_4 : std_logic_vector(4 downto 0);
+  signal pc, pc_i, linkpc, linkpc_0, linkpc_1, linkpc_2, bimm_i, bimm, jraddr, braddr, ipc : std_logic_vector(14 downto 0);
+  signal amt_i, amt, at, ad, regwaddr_0, regwaddr_1, regwaddr_2, regwaddr_3, regwaddr_4 : std_logic_vector(4 downto 0);
   signal iodout : std_logic_vector(39 downto 0);
-  signal imm, immt, ras_i, rat_i, rad_i, fas_i, fat_i, fad_i, ras, rat, rad, fas, fat, fad, aludin2, fpudin2, sramdin_1, sramdin_2, aludout1, aludout3, fpudout1, fpudout3, sramdout, regdin_1, regdin_2, regdin_3i, regdin_3 : std_logic_vector(31 downto 0);
+  signal imm, immt, ras_i, rat_i, rad_i, fas_i, fat_i, fad_i, ras, rat, rad, fas, fat, fad, aludin1, aludin2, fpudin1, fpudin2, sramdin_1, sramdin_2, aludout1, aludout3, fpudout1, fpudout3, sramdout, regdin_1, regdin_2, regdin_3i, regdin_3 : std_logic_vector(31 downto 0);
 
-  signal EN1_i, EN1, EN2, EN3, LOADEN, STOREEN, INSTWE_l, ALUBR, FPUBR, LEN, RESET, RUN : std_logic;
+  signal EN1_i, EN1, EN2, EN3, EN4, EN5, EN6, LOADEN, STOREEN, INSTWE_l, ALUBR, FPUBR, LEN, RESET, RUN : std_logic;
   signal first : std_logic := '1';
-  signal RREGWE_d, FREGWE_d, RREGWE_1, RREGWE_2, RREGWE_3, RREGWE_4, FREGWE_1, FREGWE_2, FREGWE_3, FREGWE_4 : std_logic;
-  signal IOWE_d, IORE_d, IOWE_l, IORE_l, IOWE_1, IORE_1 : std_logic;
-  signal SRAMWE_d, SRAMWE_1, SRAMWE_2 : std_logic;
-  signal TRI_1, TRI_2, FPUIN2_1, IOIN_1 : std_logic;
+  signal RREGWE_d, RREGWE_0, RREGWE_1i, RREGWE_1, RREGWE_2, RREGWE_3, RREGWE_4, FREGWE_d, FREGWE_0, FREGWE_1i, FREGWE_1, FREGWE_2, FREGWE_3, FREGWE_4 : std_logic;
+  signal IOWE_d, IORE_d, IOWE_0, IORE_0, IOWE_1i, IORE_1i, IOWE_l, IORE_l, IOWE_1, IORE_1 : std_logic;
+  signal SRAMWE_d, SRAMWE_0, SRAMWE_1i, SRAMWE_1, SRAMWE_2 : std_logic;
+  signal TRI_0, TRI_1, TRI_2, FPUIN2_0, IOIN_0 : std_logic;
   signal RSB, RTB, RDB, FSB, FTB, FDB : std_logic_vector(1 downto 0);
-  signal REGADDR_1, ALUIN2_1, SRAMIN_1, FLAG_1, FLAG_2, FLAG_3, FLAG_4, CMP_1, BYTE_d : std_logic_vector(1 downto 0);
-  signal BYTE_l, BYTE_1, INFO_d, INFO_1, INFO_2, REGIN_1, REGIN_2, REGIN_3, REGIN_4 : std_logic_vector(2 downto 0);
-  signal OP_1 : std_logic_vector(3 downto 0);
+  signal REGADDR_0, ALUIN2_0, SRAMIN_0, FLAG_0, FLAG_1, FLAG_2, FLAG_3, FLAG_4, CMP_0, CMP_1, BYTE_d, BYTE_0, BYTE_1i : std_logic_vector(1 downto 0);
+  signal BYTE_l, BYTE_1, INFO_d, INFO_0, INFO_1i, INFO_1, INFO_2, REGIN_0, REGIN_1, REGIN_2, REGIN_3, REGIN_4 : std_logic_vector(2 downto 0);
+  signal OP_0, OP_1 : std_logic_vector(3 downto 0);
 
 -- sim only
-  signal RS_TX, RS_RX : std_logic;
+--  signal RS_TX, RS_RX : std_logic;
 -- sim only
   
 begin
 -- ise only
---  ib : ibufg
---    port map (
---      i => MCLK1,
---      o => iclk);
+  ib : ibufg
+    port map (
+      i => MCLK1,
+      o => iclk);
 
---  bg : bufg
---    port map (
---      i => iclk,
---      o => clk_in);
+  bg : bufg
+    port map (
+      i => iclk,
+      o => clk);--_in);
 
 --  dll : clkdll
 --    generic map (
---      clkdv_divide => 2.0)              -- 33Hz
+--      clkdv_divide => 1.5)
 --    port map (
 --      clkin => clk_in,
 --      clkfb => clk0o,
@@ -306,41 +321,50 @@ begin
 -- ise only
 
 -- sim only
-  gen_clk : process
-  begin
-    while true loop
-      clk <= '0';
-      wait for 10 ns;
-      clk <= '1';
-      wait for 10 ns;
-    end loop;
-  end process;
+--  gen_clk : process
+--  begin
+--    while true loop
+--      clk <= '0';
+--      wait for 22.5 ns;
+--      clk <= '1';
+--      wait for 22.5 ns;
+--    end loop;
+--  end process;
 -- sim only
 
   next_pc : pc_decide
     port map (
       clk => clk,
-      pcin => pc_ii,
+      pcin => pc,
+      lpc_in => linkpc,
       opcode => inst(35 downto 30),
       jimm => inst(14 downto 0),
-      raddr => raddr,
+      jraddr => jraddr,
+      braddr => braddr,
       bpc => linkpc_2,
       bimm => bimm,
-      INFO => INFO_2,
+      ipc_in => ipc,
+      INFO1 => INFO_1,
+      INFO2 => INFO_2,
       ALUBR => ALUBR,
       FPUBR => FPUBR,
       EN1 => EN1,
+      EN4_in => EN4,
       pcout => pc_i,
-      linkpc => linkpc_1,
+      linkpc => linkpc,
+      ipc => ipc,
       EN2 => EN2,
-      EN3 => EN3);
+      EN3 => EN3,
+      EN4 => EN4,
+      EN5 => EN5,
+      EN6 => EN6);
 
-  imem : inst_mem_fixed
+  imem : inst_mem
     port map (
       clk => clk,
       addr => pc,
       din => iodout(35 downto 0),
-      inst => inst,
+      inst => minst,
       EN => '1',
       WE => INSTWE_l);
 
@@ -350,14 +374,19 @@ begin
       inst => inst,
       LOADEN => LOADEN,
       STOREEN => STOREEN,
-      IOWE => IOWE_1,
-      IORE => IORE_1,
+      IOWE0 => IOWE_0,
+      IORE0 => IORE_0,
+      IOWE1 => IOWE_1,
+      IORE1 => IORE_1,
+      regwaddr0 => regwaddr_0,
       regwaddr1 => regwaddr_1,
       regwaddr2 => regwaddr_2,
       regwaddr3 => regwaddr_3,
+      RREGWE0 => RREGWE_0,
       RREGWE1 => RREGWE_1,
       RREGWE2 => RREGWE_2,
       RREGWE3 => RREGWE_3,
+      FREGWE0 => FREGWE_0,
       FREGWE1 => FREGWE_1,
       FREGWE2 => FREGWE_2,
       FREGWE3 => FREGWE_3,
@@ -377,21 +406,22 @@ begin
       inst => inst,
       EN1 => EN1,
       EN2 => EN2,
-      ALUIN2 => ALUIN2_1,
-      FPUIN2 => FPUIN2_1,
-      SRAMIN => SRAMIN_1,
-      IOIN => IOIN_1,
-      REGIN => REGIN_1,
-      REGADDR => REGADDR_1,
-      TRI => TRI_1,
+      EN4 => EN4,
+      ALUIN2 => ALUIN2_0,
+      FPUIN2 => FPUIN2_0,
+      SRAMIN => SRAMIN_0,
+      IOIN => IOIN_0,
+      REGIN => REGIN_0,
+      REGADDR => REGADDR_0,
+      TRI => TRI_0,
       IOWE => IOWE_d,
       IORE => IORE_d,
       SRAMWE => SRAMWE_d,
       RREGWE => RREGWE_d,
       FREGWE => FREGWE_d,
-      OP => OP_1,
-      FLAG => FLAG_1,
-      CMP => CMP_1,
+      OP => OP_0,
+      FLAG => FLAG_0,
+      CMP => CMP_0,
       BYTE => BYTE_d,
       INFO => INFO_d);
 
@@ -426,7 +456,7 @@ begin
   syn_alu : alu
     port map (
       clk => clk,
-      din1 => ras,
+      din1 => aludin1,
       din2 => aludin2,
       dout1 => aludout1,
       dout3 => aludout3,
@@ -438,7 +468,7 @@ begin
   syn_fpu : fpu
     port map (
       clk => clk,
-      din1 => fas,
+      din1 => fpudin1,
       din2 => fpudin2,
       dout1 => fpudout1,
       dout3 => fpudout3,
@@ -463,46 +493,46 @@ begin
       LOADEN => LOADEN);
 
 -- sim only
-  io_o : io_model
-    port map (
-      clk => clk,
-      tx => RS_TX,
-      rx => RS_RX);
-  
-  sram : sram_model
-    port map (
-      clk => clk,
-      addr => aludout1(19 downto 0),
-      din => sramdin_2,
-      dout => sramdout,
-      GO => '1',
-      WE => SRAMWE_2);
--- sim only
-
--- ise only
---  sram : sram_controller
+--  io_o : io_model
 --    port map (
---      CK => ZCLKMA,
---      A => ZA,
---      B => XZBE,
---      W => XWA,
---      E1 => XE1,
---      E2 => E2A,
---      E3 => XE3,
---      G => XGA,
---      ADV => ADVA,
---      CKE => XZCKE,
---      DQ => ZD,
---      DQP => ZDP,
---      ZZ => ZZA,
---      FT => XFT,
---      LBO => XLBO,
+--      clk => clk,
+--      tx => RS_TX,
+--      rx => RS_RX);
+  
+--  sram : sram_model
+--    port map (
 --      clk => clk,
 --      addr => aludout1(19 downto 0),
 --      din => sramdin_2,
 --      dout => sramdout,
 --      GO => '1',
 --      WE => SRAMWE_2);
+-- sim only
+
+-- ise only
+  sram : sram_controller
+    port map (
+      CK => ZCLKMA,
+      A => ZA,
+      B => XZBE,
+      W => XWA,
+      E1 => XE1,
+      E2 => E2A,
+      E3 => XE3,
+      G => XGA,
+      ADV => ADVA,
+      CKE => XZCKE,
+      DQ => ZD,
+      DQP => ZDP,
+      ZZ => ZZA,
+      FT => XFT,
+      LBO => XLBO,
+      clk => clk,
+      addr => aludout1(19 downto 0),
+      din => sramdin_2,
+      dout => sramdout,
+      GO => '1',
+      WE => SRAMWE_2);
 -- ise only
 
   loader : inst_loader
@@ -560,44 +590,12 @@ begin
     end case;
   end process;
 
-  asyn_aludin2 : process(rat, imm, immt, ALUIN2_1)
-  begin
-    case ALUIN2_1 is
-      when "11" => aludin2 <= immt;
-      when "10" => aludin2 <= imm;
-      when others => aludin2 <= rat;
-    end case;
-  end process;
-
-  asyn_sramdin_1 : process(rat, rad, fat, fad, SRAMIN_1)
-  begin
-    case SRAMIN_1 is
-      when "00" => sramdin_1 <= rad;
-      when "01" => sramdin_1 <= rat;
-      when "10" => sramdin_1 <= fad;
-      when others => sramdin_1 <= fat;
-    end case;
-  end process;
-
-  asyn_fpudin2 : process(fat, imm, FPUIN2_1)
-  begin
-    if FPUIN2_1 = '0' then
-      fpudin2 <= fat;
-    else
-      fpudin2 <= imm;
-    end if;
-  end process;
-
-  asyn_iodin : process(ras, fas, IOIN_1, RUN)
+  asyn_iodin : process(iodin_i, RUN)
   begin
     if RUN = '0' then
       iodin <= x"0000000aa";
     else
-      if IOIN_1 = '0' then
-        iodin <= "0000" & ras;
-      else
-        iodin <= "0000" & fas;
-      end if;
+      iodin <= iodin_i;
     end if;
   end process;
 
@@ -626,12 +624,12 @@ begin
     end case;
   end process;
 
-  asyn_regwaddr : process(at, ad, REGADDR_1)
+  asyn_regwaddr : process(at, ad, REGADDR_0)
   begin
-    case REGADDR_1 is
-      when "00" => regwaddr_1 <= ad;
-      when "01" => regwaddr_1 <= at;
-      when others => regwaddr_1 <= "11111";
+    case REGADDR_0 is
+      when "00" => regwaddr_0 <= ad;
+      when "01" => regwaddr_0 <= at;
+      when others => regwaddr_0 <= "11111";
     end case;
   end process;
 
@@ -657,31 +655,52 @@ begin
     end if;
   end process;
 
-  asyn_EN3_io : process(IOWE_d, IORE_d, BYTE_d, IOWE_l, IORE_l, BYTE_l, RUN, EN3)
+  asyn_EN3 : process(IOWE_d, IORE_d, SRAMWE_d, RREGWE_d, FREGWE_d, BYTE_d, INFO_d, EN3)
+  begin
+    if EN3 = '1' then
+      IOWE_0 <= IOWE_d;
+      IORE_0 <= IORE_d;
+      SRAMWE_0 <= SRAMWE_d;
+      RREGWE_0 <= RREGWE_d;
+      FREGWE_0 <= FREGWE_d;
+      BYTE_0 <= BYTE_d;
+      INFO_0 <= INFO_d;
+    else
+      IOWE_0 <= '0';
+      IORE_0 <= '0';
+      SRAMWE_0 <= '0';
+      RREGWE_0 <= '0';
+      FREGWE_0 <= '0';
+      BYTE_0 <= "00";
+      INFO_0 <= "00-";
+    end if;
+  end process;
+  
+  asyn_EN5_io : process(IOWE_1i, IORE_1i, BYTE_1i, IOWE_l, IORE_l, BYTE_l, RUN, EN5)
   begin
     if RUN = '0' then
       IOWE_1 <= IOWE_l;
       IORE_1 <= IORE_l;
       BYTE_1 <= BYTE_l;
     else
-      if EN3 = '1' then
-        IOWE_1 <= IOWE_d;
-        IORE_1 <= IORE_d;
+      if EN5 = '1' then
+        IOWE_1 <= IOWE_1i;
+        IORE_1 <= IORE_1i;
       else
         IOWE_1 <= '0';
         IORE_1 <= '0';
       end if;
-      BYTE_1 <= "0" & BYTE_d;
+      BYTE_1 <= "0" & BYTE_1i;
     end if;
   end process;
 
-  asyn_EN3_else : process(SRAMWE_d, RREGWE_d, FREGWE_d, INFO_d, EN3)
+  asyn_EN5_else : process(SRAMWE_1i, RREGWE_1i, FREGWE_1i, INFO_1i, EN5)
   begin
-    if EN3 = '1' then
-      SRAMWE_1 <= SRAMWE_d;
-      RREGWE_1 <= RREGWE_d;
-      FREGWE_1 <= FREGWE_d;
-      INFO_1 <= INFO_d;
+    if EN5 = '1' then
+      SRAMWE_1 <= SRAMWE_1i;
+      RREGWE_1 <= RREGWE_1i;
+      FREGWE_1 <= FREGWE_1i;
+      INFO_1 <= INFO_1i;
     else
       SRAMWE_1 <= '0';
       RREGWE_1 <= '0';
@@ -689,10 +708,20 @@ begin
       INFO_1 <= "00-";
     end if;
   end process;
-  
+
+  asyn_EN6 : process(minst, pinst, EN6)
+  begin
+    if EN6 = '1' then
+      inst <= minst;
+    else
+      inst <= pinst;
+    end if;
+  end process;
+
   syn_pipeline : process(clk)
   begin
     if rising_edge(clk) then
+      pinst <= inst;
       if inst(15) = '1' then
         imm <= x"FFFF" & inst(15 downto 0);
       else
@@ -703,35 +732,79 @@ begin
       else
         immt <= x"000000" & inst(23 downto 16);
       end if;
-      amt <= inst(10 downto 6);
+      amt_i <= inst(10 downto 6);
+      amt <= amt_i;
       at <= inst(20 downto 16);
       ad <= inst(15 downto 11);
-      bimm <= imm(14 downto 0);
-      raddr <= rad(14 downto 0);
+      bimm_i <= imm(14 downto 0);
+      bimm <= bimm_i;
+      jraddr <= rad(14 downto 0);
+      braddr <= jraddr;
 
-      pc_ii <= pc;
+      aludin1 <= ras;
+      case ALUIN2_0 is
+        when "11" => aludin2 <= immt;
+        when "10" => aludin2 <= imm;
+        when others => aludin2 <= rat;
+      end case;
+
+      case SRAMIN_0 is
+        when "00" => sramdin_1 <= rad;
+        when "01" => sramdin_1 <= rat;
+        when "10" => sramdin_1 <= fad;
+        when others => sramdin_1 <= fat;
+      end case;
+      sramdin_2 <= sramdin_1;
+
+      fpudin1 <= fas;
+      if FPUIN2_0 = '0' then
+        fpudin2 <= fat;
+      else
+        fpudin2 <= imm;
+      end if;
+
+      if IOIN_0 = '0' then
+        iodin_i <= "0000" & ras;
+      else
+        iodin_i <= "0000" & fas;
+      end if;
+
+      linkpc_0 <= linkpc;
+      linkpc_1 <= linkpc_0;
       linkpc_2 <= linkpc_1;
+      regwaddr_1 <= regwaddr_0;
       regwaddr_2 <= regwaddr_1;
       regwaddr_3 <= regwaddr_2;
       regwaddr_4 <= regwaddr_3;
       regdin_2 <= regdin_1;
       regdin_3i <= regdin_2;
-      sramdin_2 <= sramdin_1;
 
+      OP_1 <= OP_0;
+      CMP_1 <= CMP_0;
+      FLAG_1 <= FLAG_0;
       FLAG_2 <= FLAG_1;
       FLAG_3 <= FLAG_2;
       FLAG_4 <= FLAG_3;
+      TRI_1 <= TRI_0;
       TRI_2 <= TRI_1;
+      IOWE_1i <= IOWE_0;
+      IORE_1i <= IORE_0;
+      SRAMWE_1i <= SRAMWE_0;
       SRAMWE_2 <= SRAMWE_1;
+      RREGWE_1i <= RREGWE_0;
       RREGWE_2 <= RREGWE_1;
       RREGWE_3 <= RREGWE_2;
       RREGWE_4 <= RREGWE_3;
+      FREGWE_1i <= FREGWE_0;
       FREGWE_2 <= FREGWE_1;
       FREGWE_3 <= FREGWE_2;
       FREGWE_4 <= FREGWE_3;
+      REGIN_1 <= REGIN_0;
       REGIN_2 <= REGIN_1;
       REGIN_3 <= REGIN_2;
       REGIN_4 <= REGIN_3;
+      BYTE_1i <= BYTE_0;
+      INFO_1i <= INFO_0;
       INFO_2 <= INFO_1;
 
       if RUN = '1' then
@@ -739,4 +812,4 @@ begin
       end if;
     end if;
   end process;
-end ver2_4;
+end ver2_5;

@@ -36,7 +36,7 @@ architecture box of alu is
 
   component int_to_float
     port (
---      clk  : in  std_logic;
+      clk  : in  std_logic;
       din  : in  std_logic_vector(31 downto 0);
       dout : out std_logic_vector(31 downto 0));
   end component;
@@ -61,7 +61,7 @@ begin
 
   itof : int_to_float
     port map (
---      clk => clk,
+      clk => clk,
       din => din1,
       dout => itof_out);
 
@@ -87,12 +87,11 @@ begin
           dout1 <= din1(31 downto 16) & din2(15 downto 0);
         when "1110" =>                  -- lui
           dout1 <= din2(15 downto 0) & din1(15 downto 0);
-        when "1101" =>                  -- itof
-          dout1 <= itof_out;
         when others =>                  -- nop
           dout1 <= din1;
       end case;
-      dout3 <= itof_out;
+      
+      dout3 <= itof_out;                -- itof
 
       if (CMP = "00" and EQ = '1') or (CMP = "11" and EQ = '0') or (CMP = "01" and LTE = '1') or (CMP = "10" and (EQ = '1' or LTE = '0')) then
         BR <= '1';

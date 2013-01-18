@@ -25,7 +25,7 @@ end input_controller;
 architecture box of input_controller is
   component receiver
     generic (
-      wtime : std_logic_vector(11 downto 0) := x"17D");
+      wtime : std_logic_vector(11 downto 0) := x"23C");
     port (
       clk   : in  std_logic;
       data  : out std_logic_vector(7 downto 0);
@@ -46,7 +46,7 @@ architecture box of input_controller is
 begin
   recv : receiver
     generic map (
-      wtime => x"17D")
+      wtime => x"23C")
     port map (
       clk => clk,
       data => data,

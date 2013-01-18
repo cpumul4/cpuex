@@ -83,7 +83,7 @@ CPI : 基本 2, 分岐 3, ロード/ストア 4, fadd/fsub/fmul/finv/sqrt 4
  - min-rt(contest) : 51.1sec(11.58億命令)
 
 **ver2.5(core2_5)
-作業中
+01/18Fri開発終了
 8段パイプライン : PC,IF,ID/RF,FW,EX1,EX2/MEM1,EX3/MEM2,WB
 66MHz
 

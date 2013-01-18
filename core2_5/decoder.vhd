@@ -10,6 +10,7 @@ entity decoder is
     inst    : in  std_logic_vector(35 downto 0);
     EN1     : in  std_logic;
     EN2     : in  std_logic;
+    EN4     : in  std_logic;
     ALUIN2  : out std_logic_vector(1 downto 0);
     FPUIN2  : out std_logic;
     SRAMIN  : out std_logic_vector(1 downto 0);
@@ -44,7 +45,7 @@ begin
   main : process(clk)
   begin
     if rising_edge(clk) then
-      if EN1 = '0' or EN2 = '0' then
+      if EN1 = '0' or EN2 = '0' or EN4 = '0' then
         IOWE_i <= '0';
         IORE_i <= '0';
         SRAMWE_i <= '0';
@@ -52,49 +53,6 @@ begin
         FREGWE_i <= '0';
         INFO <= "00-";
       else
-        if inst(35 downto 34) = "01" then
-          ALUIN2 <= inst(31 downto 30);
-        else
-          ALUIN2 <= inst(30) & "0";
-        end if;
-        FPUIN2 <= inst(30);
-        SRAMIN <= inst(31 downto 30);
-        IOIN <= inst(30);
-        if inst(35 downto 34) = "00" then
-          REGIN <= inst(34 downto 32);
-        elsif inst(35) = '1' and inst(24 downto 21) = "1101" then  -- itof/ftoi
-          REGIN <= "1" & inst(32) & "0";
-        else
-          REGIN <= "1" & inst(32) & inst(34);
-        end if;
-        if inst(35 downto 33) = "000" then
-          REGADDR <= inst(32) & "0";
-        else
-          REGADDR <= "0" & inst(30);
-        end if;
-        if inst(35 downto 34) = "11" or inst(35 downto 33) = "001" then--or (inst(35) = '1' and inst(24 downto 21) = "1101") then  -- itof/ftoi
-          TRI <= '1';
-        else
-          TRI <= '0';
-        end if;
-        if inst(35) = '1' then
-          OP <= inst(24 downto 21);
-          FLAG <= (inst(30) & inst(30)) or inst(1 downto 0);
-        else
-          OP <= "0000";
-          FLAG <= inst(22 downto 21);
-        end if;
-        BYTE_i <= inst(1 downto 0);
-
-        CMP <= inst(33 downto 32);
-        if inst(35 downto 34) = "01" then
-          INFO <= "1" & (inst(31) and (not inst(30))) & inst(24);
-        elsif inst(35 downto 32) = "0001" and inst(30) = '0' then
-          INFO <= "01-";
-        else
-          INFO <= "00-";
-        end if;
-
         if inst(35 downto 31) = "00000" then
           IOWE_i <= '1';
         else
@@ -126,7 +84,52 @@ begin
         else
           FREGWE_i <= '0';
         end if;
+        if inst(35 downto 34) = "01" then
+          INFO <= "1" & (inst(31) and (not inst(30))) & inst(24);
+        elsif inst(35 downto 32) = "0001" and inst(30) = '0' then
+          INFO <= "01-";
+        else
+          INFO <= "00-";
+        end if;
       end if;
+
+      if inst(35 downto 34) = "01" then
+        ALUIN2 <= inst(31 downto 30);
+      else
+        ALUIN2 <= inst(30) & "0";
+      end if;
+      FPUIN2 <= inst(30);
+      SRAMIN <= inst(31 downto 30);
+      IOIN <= inst(30);
+      if inst(35 downto 34) = "00" then
+        REGIN <= inst(34 downto 32);
+      elsif (inst(35 downto 30) = "101110" and inst(24 downto 21) = "0110") or (inst(35 downto 30) = "101100" and inst(24 downto 21) = "1101") then  -- floor/ftoi
+        REGIN <= "111";
+      elsif inst(35 downto 30) = "101010" and inst(24 downto 21) = "1101" then  -- itof
+        REGIN <= "101";
+      else
+        REGIN <= "1" & inst(32) & inst(34);
+      end if;
+      if inst(35 downto 33) = "000" then
+        REGADDR <= inst(32) & "0";
+      else
+        REGADDR <= "0" & inst(30);
+      end if;
+      if inst(35 downto 34) = "11" or inst(35 downto 33) = "001" or (inst(35 downto 30) = "101110" and inst(24 downto 21) = "0110") or (inst(35) = '1' and inst(24 downto 21) = "1101") then  -- floor, itof/ftoi
+        TRI <= '1';
+      else
+        TRI <= '0';
+      end if;
+      if inst(35) = '1' then
+        OP <= inst(24 downto 21);
+        FLAG <= (inst(30) & inst(30)) or inst(1 downto 0);
+      else
+        OP <= "0000";
+        FLAG <= inst(22 downto 21);
+      end if;
+      BYTE_i <= inst(1 downto 0);
+
+      CMP <= inst(33 downto 32);
     end if;
   end process;
 end box;
