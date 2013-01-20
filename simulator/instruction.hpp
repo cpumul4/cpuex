@@ -94,9 +94,11 @@ inline void instr::show(){
   case HALT:
   case NOP:
   case DBG:
+  case RETURN:
     cerr << endl;
     return;
   case J:
+  case CALL:
   case JL:
     cerr << (int)rt << endl;
     return;
@@ -111,6 +113,7 @@ inline void instr::show(){
   case FOUTC:
   case FOUTD:
   case JR:
+  case CALLR:
   case JLR:
     cerr << (int)rd << endl;
     return;

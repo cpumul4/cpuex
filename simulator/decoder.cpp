@@ -5,7 +5,7 @@
 #include <fstream>
 #include <cstring>
 #include <stdlib.h>
-#define DEBUG_DECODER 0
+#define DEBUG_DECODER 1
 #define MAX_CHAR  100
 //extern instr rom[];
 const char combegin[3] = "#;";
@@ -168,7 +168,7 @@ format str_to_opcode(char *str, opcode &opc){
     op(fbgter , FBGTER, r)
 
     // ------------------------------ 3RD ARCHITECTURE ------------------
-    op(call, CALL, i)
+    op(call, CALL, j)
     op(callr, CALLR, r)
     op(return, RETURN, none)
     // ------------------------------------------------------------------
@@ -210,9 +210,10 @@ format str_to_opcode(char *str, opcode &opc){
 inline void pseudo_instr(char *tokens[]){
   if(strcmp(tokens[0], "setl") == 0){
     strcpy(tokens[0], "addi");
-    tokens[3] = (char *)malloc(strlen(tokens[2]) + 1);
-
+    int size = strlen(tokens[2]) + 1;
+    tokens[3] = (char *)malloc(size);
     strcpy(tokens[3], tokens[2]);
+    cout << "tokens[3] is " << strlen(tokens[3]) << endl;
     tokens[2] = (char *)malloc(strlen("$r0") + 1);
     strcpy(tokens[2], "$r0");
   }
@@ -228,7 +229,7 @@ void print_asmtok(char *asmtok[]){
 
 /////////////////////////////////////////////////////////////////////
 void put_rom(char assm[], ltable table, instr &inst, uint romindex){
-  char *asmtok[5];
+  char *asmtok[5] = { 0,0,0,0,0 };
   format format;
   opcode opc;
   int args[3] = {0,0,0};
@@ -344,6 +345,7 @@ int decode(char *srcpath, instr rom[ROM_SIZE]){
   while( fasm.getline(input[romindex],MAX_CHAR) ){
     make_table(input[romindex], table, romindex);
   }
+  table.print();
   for(int i=0;i < romindex;i++){
     put_rom(input[i], table, rom[i], i);    
   }

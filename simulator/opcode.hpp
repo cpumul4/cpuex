@@ -152,6 +152,13 @@ inline std::string encode(opcode opc){
     op(dbg , DBG , none)
     op(halt, HALT, none)
 
+    // ------------------------------ 3RD ARCHITECTURE ------------------
+    op(call, CALL, i)
+    op(callr, CALLR, r)
+    op(return, RETURN, none)
+    // ------------------------------------------------------------------
+
+
     op(in , IN  , r)
     op(fin, FIN , r)
     op(outa,OUTA, r)

@@ -1,5 +1,6 @@
 #include "./instruction.hpp"
 #include "./memory.hpp"
+#include "./stack.hpp"
 #include <stdlib.h>
 #include <math.h>
 
@@ -241,9 +242,9 @@ void instr::exec_asm(){
     c(JR  , pc = D.i;);		// D reg が distになってない
     c(JLR  ,LR = pc;pc = D.i;);		// D reg が distになってない
 
-    c(CALL, ;);
-    c(CALLR, ;);
-    c(RETURN, ;);
+    c(CALL, push(); pc = IMM;);
+    c(CALLR, push(); pc = D.i ;);
+    c(RETURN, pop(););
 
 
     // c(BEQ , if(D == S)  pc = pc + IMM;);
