@@ -5,7 +5,7 @@
 #include <fstream>
 #include <cstring>
 #include <stdlib.h>
-#define DEBUG_DECODER 1
+#define DEBUG_DECODER 0
 #define MAX_CHAR  100
 //extern instr rom[];
 const char combegin[3] = "#;";
@@ -213,7 +213,6 @@ inline void pseudo_instr(char *tokens[]){
     int size = strlen(tokens[2]) + 1;
     tokens[3] = (char *)malloc(size);
     strcpy(tokens[3], tokens[2]);
-    cout << "tokens[3] is " << strlen(tokens[3]) << endl;
     tokens[2] = (char *)malloc(strlen("$r0") + 1);
     strcpy(tokens[2], "$r0");
   }
