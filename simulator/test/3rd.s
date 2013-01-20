@@ -1,10 +1,14 @@
 	call	aaa
-	setl	$r3 aaa
+	setl	$r3 bbb
 	callr	$r3
 	return
 aaa:
-	addi $r1 $r0 100
+	addi	$r2 $r0 100
 	return
 bbb:
-	addi $r1 $r1 1000
+	beq	$r0 $r2 return
+	subi	$r2 $r2 1
+	add 	$r1 $r2 $r1
+	call	bbb
+return:	
 	return
