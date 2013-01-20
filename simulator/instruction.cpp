@@ -184,8 +184,8 @@ void instr::exec_asm(){
     c(FINVA , FD =  abs32(FS.inv()););
     c(FINVN , FD = neg(FS.inv()););
     
-    c(FABS , FD =  abs32(FS.f););
-    c(FNEG , FD = neg(FS.f););
+    c(FMVA , FD =  abs32(FS.f););
+    c(FMVN , FD = neg(FS.f););
 
     c(SQRT  , FD = FS.sqrt(););
     c(SQRTA , FD = abs32(FS.sqrt()););
@@ -205,8 +205,8 @@ void instr::exec_asm(){
     c(SRA , D = sra(S,IMM););
 
 
-    c(R2R , D = S;);
-    c(F2F , FD = FS;);
+    c(MV , D = S;);
+    c(FMV , FD = FS;);
     c(R2F, FD.b = S.b;);		// myint,myfloat
     c(F2R, D.b  = FS.b;);		// myint,myfloat
 
@@ -238,9 +238,13 @@ void instr::exec_asm(){
     // -------------- J形式 --------------
     c(J , pc = IMM;); 
     c(JL, LR = pc;pc = IMM;);
-
     c(JR  , pc = D.i;);		// D reg が distになってない
     c(JLR  ,LR = pc;pc = D.i;);		// D reg が distになってない
+
+    c(CALL, ;);
+    c(CALLR, ;);
+    c(RETURN, ;);
+
 
     // c(BEQ , if(D == S)  pc = pc + IMM;);
     // c(BNE , if(D != S)  pc = pc + IMM;);

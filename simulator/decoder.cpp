@@ -87,8 +87,8 @@ format str_to_opcode(char *str, opcode &opc){
     op(finv, FINV, r)
     op(finva, FINVA, r)
     op(finvn, FINVN, r)    
-    op(fabs, FABS, r)
-    op(fneg, FNEG, r)
+    op(fmva, FMVA, r)
+    op(fmvn, FMVN, r)
     op(sqrt, SQRT, r)
     op(sqrta, SQRTA, r)
     op(sqrtn, SQRTN, r)
@@ -109,8 +109,8 @@ format str_to_opcode(char *str, opcode &opc){
     op(srl , SRL , i)
     op(sra , SRA , i)
 
-    op(r2r  , R2R  , r)
-    op(f2f  , F2F  , r)
+    op(mv  , MV  , r)
+    op(fmv  , FMV  , r)
     op(r2f  , R2F  , r)
     op(f2r  , F2R  , r)
     op(itof , ITOF , r)
@@ -167,6 +167,11 @@ format str_to_opcode(char *str, opcode &opc){
     op(bgteir, BGTEIR, branchitr)
     op(fbgter , FBGTER, r)
 
+    // ------------------------------ 3RD ARCHITECTURE ------------------
+    op(call, CALL, i)
+    op(callr, CALLR, r)
+    op(return, RETURN, none)
+    // ------------------------------------------------------------------
 
     op(nop , NOP , none)
     op(dbg , DBG , none)

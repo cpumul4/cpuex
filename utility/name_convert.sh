@@ -1,41 +1,11 @@
 #!/bin/sh
-sed -e 's/\(.*\)ADDF\(.*\)/\1FADD\2/' -i $* && 
-sed -e 's/\(.*\)SUBF\(.*\)/\1FSUB\2/' -i $* &&
-sed -e 's/\(.*\)MULF\(.*\)/\1FMUL\2/' -i $* &&
-sed -e 's/\(.*\)MVRF\(.*\)/\1R2F\2/' -i $* &&
-sed -e 's/\(.*\)MVFR\(.*\)/\1F2R\2/' -i $* &&
-sed -e 's/\(.*\)MVF\(.*\)/\1F2F\2/' -i $* &&
-sed -e 's/\(.*\)MVR\(.*\)/\1R2R\2/' -i $* &&
-sed -e 's/\(.*\)LUIF\(.*\)/\1FLUI\2/' -i $* &&
-sed -e 's/\(.*\)LLIF\(.*\)/\1FLLI\2/' -i $* &&
-sed -e 's/\(.*\)LWF\(.*\)/\1FLW\2/' -i $* &&
-sed -e 's/\(.*\)LWIF\(.*\)/\1FLWI\2/' -i $* &&
-sed -e 's/\(.*\)SWF\(.*\)/\1FSW\2/' -i $* &&
-sed -e 's/\(.*\)SWIF\(.*\)/\1FSWI\2/' -i $* &&
-sed -e 's/\(.*\)INF\(.*\)/\1FIN\2/' -i $* &&
-sed -e 's/\(.*\)OUTAF\(.*\)/\1FOUTA\2/' -i $* &&
-sed -e 's/\(.*\)OUTBF\(.*\)/\1FOUTB\2/' -i $* &&
-sed -e 's/\(.*\)OUTCF\(.*\)/\1FOUTC\2/' -i $* &&
-sed -e 's/\(.*\)OUTDF\(.*\)/\1FOUTD\2/' -i $* &&
-sed -e 's/\(.*\)BEQF\(.*\)/\1FBEQ\2/' -i $* &&
-sed -e 's/\(.*\)BNEF\(.*\)/\1FBNE\2/' -i $* &&
-sed -e 's/\(.*\)addf\(.*\)/\1fadd\2/' -i $* &&
-sed -e 's/\(.*\)subf\(.*\)/\1fsub\2/' -i $* &&
-sed -e 's/\(.*\)mulf\(.*\)/\1fmul\2/' -i $* &&
-sed -e 's/\(.*\)mvrf\(.*\)/\1r2f\2/' -i $* &&
-sed -e 's/\(.*\)mvfr\(.*\)/\1f2r\2/' -i $* &&
-sed -e 's/\(.*\)mvf\(.*\)/\1f2f\2/' -i $* &&
-sed -e 's/\(.*\)mvr\(.*\)/\1r2r\2/' -i $* &&
-sed -e 's/\(.*\)luif\(.*\)/\1flui\2/' -i $* &&
-sed -e 's/\(.*\)llif\(.*\)/\1flli\2/' -i $* &&
-sed -e 's/\(.*\)lwf\(.*\)/\1flw\2/' -i $* &&
-sed -e 's/\(.*\)lwif\(.*\)/\1flwi\2/' -i $* &&
-sed -e 's/\(.*\)swf\(.*\)/\1fsw\2/' -i $* &&
-sed -e 's/\(.*\)swif\(.*\)/\1fswi\2/' -i $* &&
-sed -e 's/\(.*\)inf\(.*\)/\1fin\2/' -i $* &&
-sed -e 's/\(.*\)outaf\(.*\)/\1fouta\2/' -i $* &&
-sed -e 's/\(.*\)outbf\(.*\)/\1foutb\2/' -i $* &&
-sed -e 's/\(.*\)outcf\(.*\)/\1foutc\2/' -i $* &&
-sed -e 's/\(.*\)outdf\(.*\)/\1foutd\2/' -i $* &&
-sed -e 's/\(.*\)beqf\(.*\)/\1fbeq\2/' -i $* &&
-sed -e 's/\(.*\)bnef\(.*\)/\1fbne\2/' -i $*
+sed -e 's/\(.*\)F2F\(.*\)/\1FMV\2/' -i $* &&
+sed -e 's/\(.*\)R2R\(.*\)/\1MV\2/' -i $* &&
+sed -e 's/\(.*\)FNEG\(.*\)/\1FMVN\2/' -i $* &&
+sed -e 's/\(.*\)FABS\(.*\)/\1FMVA\2/' -i $* &&
+sed -e 's/\(.*\)f2f\(.*\)/\1fmv\2/' -i $* &&
+sed -e 's/\(.*\)r2r\(.*\)/\1mv\2/' -i $* &&
+sed -e 's/\(.*\)fneg\(.*\)/\1fmvn\2/' -i $* &&
+sed -e 's/\(.*\)fabs\(.*\)/\1fmva\2/' -i $*
+
+

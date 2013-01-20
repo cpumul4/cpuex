@@ -117,13 +117,13 @@ inline void instr::show(){
   case FINV:
   case FINVA:
   case FINVN:
-  case FABS:
-  case FNEG:
+  case FMVA:
+  case FMVN:
   case SQRT:
   case SQRTA:
   case SQRTN:
-  case R2R:
-  case F2F:
+  case MV:
+  case FMV:
   case R2F:
   case F2R:
   case ITOF:

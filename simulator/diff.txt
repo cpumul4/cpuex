@@ -1,0 +1,34 @@
+コンパイラが吐かない命令を削除
+ - and, or, nor, xor, andi, ori, srl, r2f, f2r
+
+
+Return Address Stackの導入#include <stack>
+ - 戻り番地レジスタの廃止
+
+
+jump命令の再編
+ - j -> j
+ - jr -> jr, return
+ - jl -> call
+ - jlr -> callr
+移動命令の再編
+ - mv -> mv
+ - fmv -> fmv
+ - r2f, f2r -> 削除
+ - fmva, fmvn -> fmva, fmvn
+各オペランドの使い方
+ - 書き込みオペランドはadに統一
+ - as,at,ad,immtのバイナリにおける配置の変更
+
+decoder.cpp
+
+命令削除
+命令名変更(mv, fmv, fmva, fmvn)
+call label
+callr register
+return
+
+
+
+return addr. stack 実装
+stackにははじめからLR_INITがはいっている。

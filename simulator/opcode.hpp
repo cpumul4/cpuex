@@ -11,10 +11,10 @@ enum opcode : uint8_t {
   ADD, SUB, SUBI, ADDI, 
   FADD, FADDA, FADDN, FSUB, FSUBA, FSUBN, 
   FMUL, FMULA, FMULN, FINV, FINVA, FINVN, 
-  FABS, FNEG, SQRT, SQRTA, SQRTN, 
+  FMVA, FMVN, SQRT, SQRTA, SQRTN, 
   AND, OR, NOR, XOR, ANDI, ORI, 
   SLL, SRL, SRA,
-  R2R, F2F, R2F, F2R, ITOF, FTOI, FLOOR,
+  MV, FMV, R2F, F2R, ITOF, FTOI, FLOOR,
   LUI, LLI, FLUI, FLLI, 
   LW, LWI, FLW, FLWA, FLWN, FLWI, FLWIA, FLWIN, 
   SW, SWI, FSW, FSWI, 
@@ -25,7 +25,7 @@ enum opcode : uint8_t {
   BLTE, BLTEI, FBLTE, BGTE, BGTEI, FBGTE, 
   BEQR, BEQIR, FBEQR, BNER, BNEIR, FBNER, 
   BLTER, BLTEIR, FBLTER, BGTER, BGTEIR, FBGTER, 
-  NOP, DBG
+    NOP, DBG, CALL, CALLR, RETURN
 #if OLD
   ,FINDF1, SLLR, SRLR
 #endif
@@ -61,8 +61,8 @@ inline std::string encode(opcode opc){
     op(finva, FINVA, r)
     op(finvn, FINVN, r)
     
-    op(fabs, FABS, r)
-    op(fneg, FNEG, r)
+    op(fmva, FMVA, r)
+    op(fmvn, FMVN, r)
     op(sqrt, SQRT, r)
     op(sqrta, SQRTA, r)
     op(sqrtn, SQRTN, r)
@@ -83,8 +83,8 @@ inline std::string encode(opcode opc){
     op(srl , SRL , i)
     op(sra , SRA , i)
 
-    op(r2r , R2R , r)
-    op(f2f , F2F , r)
+    op(mv , MV , r)
+    op(fmv , FMV , r)
     op(r2f, R2F, r)
     op(f2r, F2R, r)
 
