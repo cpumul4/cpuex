@@ -1,5 +1,6 @@
 #include "./memory.hpp"
 #include "./opcode.hpp"
+#include "./stack.hpp"
 #include "./instruction.hpp"
 #include "./statistic.hpp"
 #include <stdlib.h>
@@ -30,9 +31,10 @@ inline void const_reg(void){
 
 inline void init(void){
   pc = 0;
-  LR  = LR_INIT;
+  // LR  = LR_INIT;
   SPR = SPR_INIT;
   const_reg();
+  init_return_stack();
   return;
 }
 
