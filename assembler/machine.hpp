@@ -20,29 +20,23 @@ class binary {
   void set_opcode(int i){ opcodehigh |= i >> 2; opcodelow |= i & 0b000011; }
   
 
-  void set_r(int _rs, int _rt, int _rd, int _amt = 0){
+  void set_r(int _rd, int _rs, int _rt, int _amt = 0){
     set_rs(_rs);
     set_rt(_rt);
     set_rd(_rd);
     set_amt(_amt);
     return;
   }
-  void set_i(int _rs, int _rt, int _imm){
-    set_rs(_rs);
-    set_rt(_rt);
-    set_imm(_imm);
-    return;
-  }
-  void set_it(int _rs, int _immt, int _imm){
-    set_rs(_rs);
-    set_immt(_immt);
-    set_imm(_imm);
-    return;
-  }
-  void set_itr(int _rs, int _immt, int _rd){
-    set_rs(_rs);
-    set_immt(_immt);
+  void set_i(int _rd, int _rs, int _imm = 0){
     set_rd(_rd);
+    set_rs(_rs);
+    set_imm(_imm);
+    return;
+  }
+  void set_it(int _immt, int _rs, int _imm = 0){
+    set_rs(_rs);
+    set_immt(_immt);
+    set_imm(_imm);
     return;
   }
   void set_id(int opc, int fnc = 0, int fncr = 0){
