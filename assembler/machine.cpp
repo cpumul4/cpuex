@@ -27,8 +27,8 @@ format binary::decode_sim_opcode(instr inst){
     op(finv, FINV)
     op(finva, FINVA)
     op(finvn, FINVN)    
-    op(fabs, FABS)
-    op(fneg, FNEG)
+    op(fmva, FMVA)
+    op(fmvn, FMVN)
     op(sqrt, SQRT)
     op(sqrta, SQRTA)
     op(sqrtn, SQRTN)
@@ -49,8 +49,8 @@ format binary::decode_sim_opcode(instr inst){
     op(srl , SRL )
     op(sra , SRA )
 
-    op(r2r  , R2R  )
-    op(f2f  , F2F  )
+    op(mv  , MV  )
+    op(fmv  , FMV  )
     op(r2f  , R2F  )
     op(f2r  , F2R  )
     op(itof , ITOF )
@@ -131,13 +131,13 @@ format binary::decode_sim_opcode(instr inst){
 void binary::set_operand(instr inst, format frm){
   switch(frm){
   case R:
-    set_r(inst.get_rs(), inst.get_rt(), inst.get_rd());
+    set_r(inst.get_rd(), inst.get_rs(), inst.get_rt());
     break;
   case SHIFT:
-    set_r(inst.get_rs(),             0, inst.get_rd(), inst.get_amt());
+    set_r(inst.get_rd(), inst.get_rs(),             0, inst.get_amt());
     break;
   case I:
-    set_i(inst.get_rs(), inst.get_rd(), inst.get_imm());
+    set_i(inst.get_rd(), inst.get_rs(), inst.get_imm());
     break;
   case OUT:
     set_r(inst.get_rd(), 0, 0);
@@ -146,13 +146,13 @@ void binary::set_operand(instr inst, format frm){
     set_i(inst.get_rd(), inst.get_rs(), inst.get_imm());
     break;
   case IT:
-    set_it(inst.get_rd(), inst.get_immt(), inst.get_imm());
+    set_it(inst.get_immt(), inst.get_rd(), inst.get_imm());
     break;
   case BRREG:
-    set_r(inst.get_rd(), inst.get_rs(), inst.get_rt());
+    set_i(inst.get_rd(), inst.get_rs());
     break;
   case ITR:
-    set_itr(inst.get_rd(), inst.get_immt(), inst.get_rt());
+    set_it(inst.get_immt(), inst.get_rd());
     break;
   case none:
     break;
