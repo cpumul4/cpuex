@@ -154,6 +154,7 @@ format str_to_opcode(char *str, opcode &opc){
     op(fblte, FBLTE, branch)
     op(fbgte, FBGTE, branch)
 
+    // ------------------------------ 3RD ARCHITECTURE ------------------
     op(beqr  , BEQR  , r)
     op(beqir , BEQIR , branchitr)
     op(fbeqr , FBEQR , r)
@@ -167,7 +168,6 @@ format str_to_opcode(char *str, opcode &opc){
     op(bgteir, BGTEIR, branchitr)
     op(fbgter , FBGTER, r)
 
-    // ------------------------------ 3RD ARCHITECTURE ------------------
     op(call, CALL, j)
     op(callr, CALLR, r)
     op(return, RETURN, none)
@@ -286,7 +286,7 @@ void put_rom(char assm[], ltable table, instr &inst, uint romindex){
       if(args[1] == -1)args[1] = 0;
 #endif
       valid_immt(args[1]);
-      args[2] = get_regnum(asmtok[3]);
+      args[2] = 0;
       break;
     case none:
       break;

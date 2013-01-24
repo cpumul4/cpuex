@@ -268,29 +268,25 @@ void instr::exec_asm(){
     cb(BLTEI , D <= IMMT,  pc = pc + IMM;);
     cb(BGTEI , D >= IMMT,  pc = pc + IMM;);
 
-    cb(BEQR , D == S,  pc = T.i;);
-    cb(BNER , D != S,  pc = T.i;);
-    cb(FBEQR ,FD == FS,pc = T.i;);
-    cb(FBNER ,FD != FS,pc = T.i;);
+    cb(BEQR , D == S,  pop(););
+    cb(BNER , D != S,  pop(););
+    cb(FBEQR ,FD == FS,pop(););
+    cb(FBNER ,FD != FS,pop(););
 
-    cb(BLTER  ,D <= S,  pc = T.i;);
-    cb(BGTER  ,D >= S,  pc = T.i;);
-    cb(FBLTER ,FD <= FS,pc = T.i;);
-    cb(FBGTER ,FD >= FS,pc = T.i;);
+    cb(BLTER  ,D <= S,  pop(););
+    cb(BGTER  ,D >= S,  pop(););
+    cb(FBLTER ,FD <= FS,pop(););
+    cb(FBGTER ,FD >= FS,pop(););
 
-    cb(BEQIR  , D == IMMT,  pc = T.i;);
-    cb(BNEIR  , D != IMMT,  pc = T.i;);
-    cb(BLTEIR , D <= IMMT,  pc = T.i;);
-    cb(BGTEIR , D >= IMMT,  pc = T.i;);
-
-    // -------------- FR形式 -------------
-
+    cb(BEQIR  , D == IMMT,  pop(););
+    cb(BNEIR  , D != IMMT,  pop(););
+    cb(BLTEIR , D <= IMMT,  pop(););
+    cb(BGTEIR , D >= IMMT,  pop(););
 
     c(NOP, ;);
     c(DBG,  cerr << "DEBUG命令に到達しました\n";step = 1;);
     c(HALT, halt(););
 
-    // ここまでちゃんと動く10\17 15:00
     c(IN  , exec_input( D.b, IN ););
     c(FIN , exec_input(FD.b, FIN););
 
