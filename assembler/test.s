@@ -14,8 +14,8 @@
 	finv	 $f4 $f1
 	finva	 $f4 $f1
 	finvn	 $f4 $f1
-	fabs	 $f4 $f1
-	fneg	 $f4 $f1
+	fmva	 $f4 $f1
+	fmvn	 $f4 $f1
 	sqrt	 $f4 $f1
 	sqrta	 $f4 $f1
 	sqrtn	 $f4 $f1
@@ -31,8 +31,8 @@
 	sll	 $r4 $r1 7
 	srl	 $r4 $r1 7
 	sra	 $r4 $r1 7
-	r2r	 $r4 $r1
-	f2f	 $f4 $f1
+	mv	 $r4 $r1
+	fmv	 $f4 $f1
 	r2f	 $f4 $r1
 	f2r	 $r4 $f1
 	lui	 $r2 $r1 127

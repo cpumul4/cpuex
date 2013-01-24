@@ -80,15 +80,15 @@
 #define	finvn_funct	0b0011
 #define	finvn_functR	0b10
 
-#define	fabs_format	R
-#define	fabs_opcode	0b101110
-#define	fabs_funct	0b1111
-#define	fabs_functR	0b01
+#define	fmva_format	R
+#define	fmva_opcode	0b101110
+#define	fmva_funct	0b1111
+#define	fmva_functR	0b01
 
-#define	fneg_format	R
-#define	fneg_opcode	0b101110
-#define	fneg_funct	0b1111
-#define	fneg_functR	0b10
+#define	fmvn_format	R
+#define	fmvn_opcode	0b101110
+#define	fmvn_funct	0b1111
+#define	fmvn_functR	0b10
 
 #define	sqrt_format	R
 #define	sqrt_opcode	0b111110
@@ -165,15 +165,15 @@
 #define	sra_funct	0b1011
 #define	sra_functR	dummy
 
-#define	r2r_format	R
-#define	r2r_opcode	0b101000
-#define	r2r_funct	0b1111
-#define	r2r_functR	dummy
+#define	mv_format	R
+#define	mv_opcode	0b101000
+#define	mv_funct	0b1111
+#define	mv_functR	dummy
 
-#define	f2f_format	R
-#define	f2f_opcode	0b101110
-#define	f2f_funct	0b1111
-#define	f2f_functR	dummy
+#define	fmv_format	R
+#define	fmv_opcode	0b101110
+#define	fmv_funct	0b1111
+#define	fmv_functR	dummy
 
 #define	r2f_format	R
 #define	r2f_opcode	0b101010
@@ -275,42 +275,42 @@
 #define	fin_funct	dummy
 #define	fin_functR	dummy
 
-#define	outa_format	OUT
+#define	outa_format	R
 #define	outa_opcode	0b000000
 #define	outa_functR	0b11
 #define	outa_funct	dummy
 
-#define	outb_format	OUT
+#define	outb_format	R
 #define	outb_opcode	0b000000
 #define	outb_functR	0b10
 #define	outb_funct	dummy
 
-#define	outc_format	OUT
+#define	outc_format	R
 #define	outc_opcode	0b000000
 #define	outc_functR	0b01
 #define	outc_funct	dummy
 
-#define	outd_format	OUT
+#define	outd_format	R
 #define	outd_opcode	0b000000
 #define	outd_functR	0b00
 #define	outd_funct	dummy
 
-#define	fouta_format	OUT
+#define	fouta_format	R
 #define	fouta_opcode	0b000001
 #define	fouta_functR	0b11
 #define	fouta_funct	dummy
 
-#define	foutb_format	OUT
+#define	foutb_format	R
 #define	foutb_opcode	0b000001
 #define	foutb_functR	0b10
 #define	foutb_funct	dummy
 
-#define	foutc_format	OUT
+#define	foutc_format	R
 #define	foutc_opcode	0b000001
 #define	foutc_functR	0b01
 #define	foutc_funct	dummy
 
-#define	foutd_format	OUT
+#define	foutd_format	R
 #define	foutd_opcode	0b000001
 #define	foutd_functR	0b00
 #define	foutd_funct	dummy
@@ -325,12 +325,12 @@
 #define	jl_funct	dummy
 #define	jl_functR	dummy
 
-#define	jr_format	R
+#define	jr_format	JREG
 #define	jr_opcode	0b000100
 #define	jr_funct	dummy
 #define	jr_functR	dummy
 
-#define	jlr_format	R
+#define	jlr_format	JREG
 #define	jlr_opcode	0b000110
 #define	jlr_funct	dummy
 #define	jlr_functR	dummy

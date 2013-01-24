@@ -139,8 +139,8 @@ void binary::set_operand(instr inst, format frm){
   case I:
     set_i(inst.get_rd(), inst.get_rs(), inst.get_imm());
     break;
-  case OUT:
-    set_r(inst.get_rd(), 0, 0);
+  case JREG:
+    set_r(0, 0, inst.get_rd());
     break;
   case BRANCH:
     set_i(inst.get_rd(), inst.get_rs(), inst.get_imm());
