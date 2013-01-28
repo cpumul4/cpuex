@@ -24,14 +24,10 @@ float time_diff(struct timeval t1, struct timeval t2){ /* 単位はマイクロ�
 
 inline void const_reg(void){
   ZR = 0;
-  F1.f = 1.0;
-  FM1.f = -1.0;
-  FZR.f = 0;
 }
 
 inline void init(void){
   pc = 0;
-  // LR  = LR_INIT;
   SPR = SPR_INIT;
   const_reg();
   init_return_stack();
