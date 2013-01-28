@@ -37,11 +37,11 @@ void show_ram(int first, int last){
     first = last;
     last = tmp;
   }
-  first += SPR_INIT;
-  last += SPR_INIT;
+  first = SPR_INIT - first;
+  last = SPR_INIT - last;
   for(int i=last;i >= first;i--)
     if(ram[i] != 0)
-      cerr << "ram[" << (i - SPR_INIT) << "]=" << (int)ram[i] << ", ";
+      cerr << "ram[" << (SPR_INIT - i) << "]=" << (int)ram[i] << ", ";
 }
 
 void show_regs(void){
