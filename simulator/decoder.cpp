@@ -344,7 +344,7 @@ int decode(char *srcpath, instr rom[ROM_SIZE]){
   while( fasm.getline(input[romindex],MAX_CHAR) ){
     make_table(input[romindex], table, romindex);
   }
-  table.print();
+
   for(int i=0;i < romindex;i++){
     put_rom(input[i], table, rom[i], i);    
   }
