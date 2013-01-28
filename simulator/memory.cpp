@@ -25,8 +25,6 @@ uint32_t int16_to_uint32(int16_t sign){
   return ret.bits;
 }
 
-
-
 void ram_string(int i, char *str){
   sprintf(str, "ram[%x]",i);
   return;
@@ -61,17 +59,14 @@ void show_regs(void){
   }
   cerr << endl << "\t";
 #define print(reg,regname) cerr << #regname << "=" << reg.i << ", ";
-  print(SWR, $swp(r26))
+  print(SWR, $swp(r28))
     print(CLR, $clos)
-    print(CPR, $cmp)
-    print(GPR, $glbp)
-    cerr << "$stkp(relative)" << "=" << (SPR.i - SPR_INIT) << ", ";
-    print(LR , $lnkr)
+    print(HPR, $hp)
+    cerr << "$stkp(relative)" << "=" << (SPR_INIT - SPR.i);
 #undef print
 
   cerr << endl;
   for(int i=0; i < FLOATREG_NUM; i++)
-
     if(freg[i].b != 0){		// 非正規化数などに対応してない
 #if DEBUG
       print_bit(freg[i].f);
@@ -79,5 +74,3 @@ void show_regs(void){
       cerr << "$f" << i << "=" << freg[i].f << ", ";
     }
 }
-
-

@@ -238,9 +238,7 @@ void instr::exec_asm(){
 
     // -------------- J形式 --------------
     c(J , pc = IMM;); 
-    c(JL, LR = pc;pc = IMM;);
     c(JR  , pc = D.i;);		// D reg が distになってない
-    c(JLR  ,LR = pc;pc = D.i;);		// D reg が distになってない
 
     c(CALL, push(); pc = IMM;);
     c(CALLR, push(); pc = D.i ;);

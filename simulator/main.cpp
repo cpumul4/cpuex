@@ -35,11 +35,8 @@ inline void init(void){
 }
 
 inline void valid_reg(void){
-  // if(!(ZR == 0 && F1.f == 1.0 && FM1.f == -1.0 && FZR.f == 0))throw (string)"定数レジスタ";
   if(SPR.i < 0 || SPR.i > RAM_SIZE)throw (string)"スタックポインタレジスタ";
-  if(GPR.i < 0 || GPR.i > RAM_SIZE)throw (string)"グローバルポインタレジスタ";
-  if(LR.i  < 0 || LR.i  > ROM_SIZE)
-    if(LR.i != LR_INIT)throw (string)"リンクレジスタ";
+  if(HPR.i < 0 || HPR.i > RAM_SIZE)throw (string)"グローバルポインタレジスタ";
   return;
 }
 

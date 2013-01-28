@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <limits.h>
 #include <math.h>
-#include <iostream>
 #include <stdio.h>		// Cygwinでコンパイルするときに要る
 #include <string>
 #define INTREG_NUM   32
@@ -13,16 +12,14 @@
 
 /* register */
 #define ZR ireg[0]
-#define FZR freg[0]
-#define F1 freg[1]
-#define FM1 freg[2]
-const int GENR_MAX = 25;
-#define SWR ireg[26]
-#define CLR ireg[27]
-#define CPR ireg[28]
-#define GPR ireg[29]
-#define SPR ireg[30] 
-#define LR  ireg[31]
+// #define FZR freg[0]
+// #define F1 freg[1]
+// #define FM1 freg[2]
+const int GENR_MAX = 27;
+#define SWR ireg[28]
+#define CLR ireg[29]
+#define HPR ireg[30]
+#define SPR ireg[31] 
 
 const int SPR_INIT = 0x000fffff;
 const int LR_INIT = INT_MAX;
