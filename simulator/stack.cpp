@@ -9,7 +9,9 @@ void init_return_stack(void){
 }
 
 void push(void){
-  retaddr.push(pc);
+  if(retaddr.size() <= 1024)
+    retaddr.push(pc);
+  else throw (std::string)"返り値スタックのサイズを超えています（1025個目）";
   return;
 }
 
