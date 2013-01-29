@@ -259,7 +259,7 @@ void instr::exec_asm(){
     cb(BLTE  ,D <= S,  pc = pc + IMM;);
     cb(BGTE  ,D >= S,  pc = pc + IMM;);
     cb(FBLTE ,FD <= FS,pc +=     IMM;);
-    cb(FBGTE ,FD >= FS,pc +=     IMM;);
+    cb(FBGT ,FD >  FS,pc +=     IMM;);
 
     cb(BEQI  , D == IMMT,  pc = pc + IMM;);
     cb(BNEI  , D != IMMT,  pc = pc + IMM;);
@@ -274,7 +274,7 @@ void instr::exec_asm(){
     cb(BLTER  ,D <= S,  pop(););
     cb(BGTER  ,D >= S,  pop(););
     cb(FBLTER ,FD <= FS,pop(););
-    cb(FBGTER ,FD >= FS,pop(););
+    cb(FBGTR ,FD >  FS,pop(););
 
     cb(BEQIR  , D == IMMT,  pop(););
     cb(BNEIR  , D != IMMT,  pop(););

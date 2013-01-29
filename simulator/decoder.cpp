@@ -152,7 +152,7 @@ format str_to_opcode(char *str, opcode &opc){
     op(fbeq , FBEQ , branch)
     op(fbne , FBNE , branch)
     op(fblte, FBLTE, branch)
-    op(fbgte, FBGTE, branch)
+    op(fbgt, FBGT, branch)
 
     // ------------------------------ 3RD ARCHITECTURE ------------------
     op(beqr  , BEQR  , r)
@@ -166,7 +166,7 @@ format str_to_opcode(char *str, opcode &opc){
     op(fblter, FBLTER, r)
     op(bgter , BGTER , r)
     op(bgteir, BGTEIR, branchitr)
-    op(fbgter , FBGTER, r)
+    op(fbgtr , FBGTR, r)
 
     op(call, CALL, j)
     op(callr, CALLR, r)

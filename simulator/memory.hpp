@@ -98,6 +98,7 @@ public:
     if(isnormal(f) && isnormal(t.f))return f <= t.f;
     else return lte_f(this->f, t.f);}
   uint32_t operator>=(myfloat t){ return t <= *this; }
+  uint32_t operator>(myfloat t) { return !(*this <= t); }
   uint32_t operator==(myfloat t){ return eq_f(this->f, t.f); } 
   uint32_t operator==(float t)  { return eq_f(this->f, t  ); }
   uint32_t operator!=(myfloat t){return !(t == *this);}

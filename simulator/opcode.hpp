@@ -22,9 +22,9 @@ enum opcode : uint8_t {
   OUTA, OUTB, OUTC, OUTD, FOUTA, FOUTB, FOUTC, FOUTD, 
   J, JL, JR, JLR, 
   BEQ, BEQI, FBEQ, BNE, BNEI, FBNE, 
-  BLTE, BLTEI, FBLTE, BGTE, BGTEI, FBGTE, 
+  BLTE, BLTEI, FBLTE, BGTE, BGTEI, FBGT, 
   BEQR, BEQIR, FBEQR, BNER, BNEIR, FBNER, 
-  BLTER, BLTEIR, FBLTER, BGTER, BGTEIR, FBGTER, 
+  BLTER, BLTEIR, FBLTER, BGTER, BGTEIR, FBGTR, 
     NOP, DBG, CALL, CALLR, RETURN
 #if OLD
   ,FINDF1, SLLR, SRLR
@@ -130,7 +130,7 @@ inline std::string encode(opcode opc){
 
     op(bgte , BGTE , branch)
     op(bgtei , BGTEI, it)
-    op(fbgte, FBGTE, branch)
+    op(fbgt, FBGT, branch)
 
     op(beqr , BEQR , branch)
     op(beqir , BEQIR , it)
@@ -146,7 +146,7 @@ inline std::string encode(opcode opc){
 
     op(bgter , BGTER , branch)
     op(bgteir , BGTEIR, it)
-    op(fbgter, FBGTER, branch)
+    op(fbgtr, FBGTR, branch)
 
     op(nop , NOP , none)
     op(dbg , DBG , none)
