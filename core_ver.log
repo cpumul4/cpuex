@@ -99,3 +99,10 @@ CPI : 基本 2, 分岐 3, ロード/ストア 4, fadd/fsub/fmul/finv/sqrt 4
 
  - mandelbrot : 52.47sec
  - min-rt(contest) : 44.77sec(11.58億命令)
+
+**ver3.1(core3_1)
+作業中(実装完了)
+8段パイプライン : PC,IF,ID/RF,FW,EX1,EX2/MEM1,EX3/MEM2,WB
+66MHz
+
+ - Return Address Stackの導入
