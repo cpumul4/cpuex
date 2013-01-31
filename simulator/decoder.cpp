@@ -1,13 +1,14 @@
 #include "./instruction.hpp"
 #include "./opcode.hpp"
-#include "./memory.hpp"
+#include "./const.hpp"
 #include "./ltable.hpp"
 #include <fstream>
-#include <cstring>
-#include <stdlib.h>
+#include <string>
+#include <cstdlib>
 #define DEBUG_DECODER 0
 #define MAX_CHAR  100
 //extern instr rom[];
+using namespace std;
 const char combegin[3] = "#;";
 const char delims[] = " \t\r\n";
 enum format {r,i,j, branch, none, it, branchitr};

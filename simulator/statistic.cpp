@@ -2,6 +2,7 @@
 #include "./memory.hpp"
 #include "./opcode.hpp"
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 inline void print_percent(const long int count, const long long all_count){
@@ -12,27 +13,14 @@ inline void print_percent(const long int count, const long long all_count){
 }
 
 inline void print_count(const long int count){
-  char str[20];
-  if(count != 0)
-    sprintf(str, " %10.ld回", count);
-  else
-    sprintf(str, "          0回");
-  cout << str;
+  cout << setw(10) << count << "回";
   return;
 }  
 
 void instr_stat(const long int count[OPCNUM], const long long all_count){
-  double ratio[OPCNUM];
-  double sum = all_count/100.0;
-  for(int j = 0;j < OPCNUM; j++){
-    ratio[j] = count[j]/sum;
-  }
-
   cout << "--- 各命令が何回実行されたか ----\n";
   for(int i = 0;i < OPCNUM; i++){ 
     if(count[i] != 0){
-      char str[20];
-      sprintf(str,"%.1f", ratio[i]);
       cout << encode((opcode)i) << "\t:";
       print_percent(count[i], all_count);
       print_count(count[i]);
@@ -51,8 +39,8 @@ void rom_stat(const int count[ROM_SIZE], const long long all_count){
     else {
       if(count[start] != 0){
 	start == last ? 
-	  cout << '[' << start << ']' << '\t' << '\t' : 
-	  cout << '[' << start << '~' << last << ']' << '\t';
+	  cout << '[' << setw(11) << start << ']' : 
+	  cout << '[' << setw(5) << start << '~' << setw(5) << last << ']';
 	print_percent(count[start], all_count);
 	print_count(count[start]);
 	cout << endl;
@@ -77,8 +65,8 @@ void branch_stat(const long int count[2]){
   ratio[1] = ((double)count[1])/all * 100.0;
 
   cout << "---------- 分岐の統計 ----------\n";
-  cout << "分岐成立:\t" << count[0] << "回\t(" << ratio[0] << "%)" << endl;
-  cout << "分岐不成立:\t" << count[1] << "回\t(" << ratio[1] << "%)" << endl;;
+  cout << "分岐成立:\t" << count[0] << "回\t(" << fixed << setprecision(2) << ratio[0] << "%)" << endl;
+  cout << "分岐不成立:\t" << count[1] << "回\t(" << setprecision(2) << fixed << ratio[1] << "%)" << endl;;
   cout << "分岐命令合計:\t" << count[0] + count[1] << "回" << endl;
   cout << "------------------------------\n";
   return;
@@ -86,7 +74,5 @@ void branch_stat(const long int count[2]){
 
 void jump_stat(const long int count[ROM_SIZE]){
   cout << "---- 各番地の命令に何回分岐したか ----\n";
-  long long all = sum(count);
-  
-  
+  long long all = sum(count);  
 }

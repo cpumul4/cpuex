@@ -1,11 +1,11 @@
 #include "./memory.hpp"
 #include "./opcode.hpp"
-#include "./stack.hpp"
 #include "./instruction.hpp"
 #include "./statistic.hpp"
 #include <stdlib.h>
 #include <sys/time.h>
 #include <fstream>
+using namespace std;
 
 #define OPTIMIZATION 0
 
@@ -35,8 +35,8 @@ inline void init(void){
 }
 
 inline void valid_reg(void){
-  if(SPR.i < 0 || SPR.i > RAM_SIZE)throw (string)"スタックポインタレジスタ";
-  if(HPR.i < 0 || HPR.i > RAM_SIZE)throw (string)"グローバルポインタレジスタ";
+  valid_addr(SPR,"スタックポインタレジスタ = ");
+  valid_addr(HPR,"ヒープポインタレジスタ = ");
   return;
 }
 
@@ -64,13 +64,17 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
   
   init();
 
+  integer prev_pc, now_pc = 0;
   // 実行ループ
   while(pc != LR_INIT){
 #if OPTIMIZATION
 #else
     ui();
 #endif
+    prev_pc = now_pc;
+    now_pc = pc;
     pc++;
+    prev_pc = pc;
     const_reg();
 
     try {
@@ -82,20 +86,21 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     catch(string str){
       cerr << "[ERROR]" << str << endl;
       if(pc > 1){
-	cerr << "直前に実行した命令:\t[" << pc -2 << ']';
+	cerr << "直前に実行した命令:\t[" << prev_pc << ']';
 	rom[pc-2].show();
       }
-      cerr << "実行しようとした命令:\t[" << pc -1 << ']';
+      cerr << "実行しようとした命令:\t[" << now_pc << ']';
       rom[pc-1].show();
       ui_error();
       halt();
     }      
   }
 
-  cerr << "結果レジスタ($r1, $f0) = " << ireg[1].i << ", " << freg[0].f  << endl;
+  cerr << "結果レジスタ($r1, $f0) = " << ireg[1] << ", " << freg[0]  << endl;
   instr_stat(instr_count, exec_count);
   rom_stat(rom_count, exec_count);
   branch_stat(branch_count);
+  print_memory_stat();
   return exec_count;
 }
 

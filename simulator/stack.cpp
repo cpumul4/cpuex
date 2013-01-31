@@ -1,7 +1,9 @@
 #include <stack>
-#include "./stack.hpp"
 #include "./memory.hpp"
+#include <string>
+
 std::stack<int32_t> retaddr;
+extern int32_t pc;
 
 void init_return_stack(void){
   retaddr.push(LR_INIT);

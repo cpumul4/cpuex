@@ -1,13 +1,12 @@
 #include <cstring>
 #include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 #include <map>
 #include "./opcode.hpp"
 #include "./memory.hpp"
 #include "./instruction.hpp"
 #include "./ui.hpp"
-#include "./watchmem.hpp"
 #include "./print_bit.hpp"
 using namespace std;
 
@@ -17,7 +16,6 @@ extern instr rom[];
 extern long long int exec_count;
 extern int str_to_opcode(char*, opcode&);
 
-const int bpsize = 100;
 int step = 0;
 
 void checkarray::add(uint32_t *key, uint32_t *val, regtype _t){
@@ -101,20 +99,21 @@ regtype see_type(const char *regstr){
 
 
 uint32_t *ptr_to_memreg(const char *str){
-  int i = (str[0] == '$') ? 1 : 0;
+  // int i = (str[0] == '$') ? 1 : 0;
 
-  switch(str[i]) {
-  case '$':
-    str++;
-  case 'r':
-    return &ireg[atoi(str + 1 + i)].b;
-  case 'f':
-    return &freg[atoi(str + 1 + i)].b;
-  case 'm':
-    return &ram[atoi(str + 1 + i)];
-  default:
-    return NULL;
-  }
+  // switch(str[i]) {
+  // case '$':
+  //   str++;
+  // case 'r':
+  //   return &ireg[atoi(str + 1 + i)];
+  // case 'f':
+  //   return &freg[atoi(str + 1 + i)];
+  // case 'm':
+  //   return &ram[atoi(str + 1 + i)];
+  // default:
+  //   return NULL;
+  // }
+  return 0;
 }
 
 uint32_t *atofi(const char *str){
@@ -145,10 +144,8 @@ void checkarray::add(const char *keystr, const char *valstr){
     cerr << "type error\n";
     return;
   }
-  else if(keyt == valt)
-    typ = keyt;
-  else 
-    typ = keyt == mem ? valt : keyt;
+  else if(keyt == valt)typ = keyt;
+  else typ = keyt == mem ? valt : keyt;
 
   // レジスタ
   key = ptr_to_memreg(keystr);
@@ -171,10 +168,10 @@ void checkarray::add(const char *keystr, const char *valstr){
 char *checkarray::find_regnum(uint32_t *ptr, regtype t){
   char *str;
   str = (char *)malloc(sizeof(char) * 10);
-  int regnum;
+  int regnum = 0;
   switch(t){
   case ir:
-    regnum = ptr - &ireg[0].b;
+    // regnum = ptr - &ireg[0].b;
     if(0 <= regnum && regnum <= 31){
       sprintf(str, "ireg[%d]", regnum);
       return str;
@@ -182,19 +179,19 @@ char *checkarray::find_regnum(uint32_t *ptr, regtype t){
     else 
       return NULL;
   case fr:
-    regnum = ptr - &freg[0].b;
+    // regnum = ptr - &freg[0].b;
     if(0 <= regnum && regnum <= 31){
       sprintf(str, "freg[%d]", regnum);
       return str;
     }
     else {
-      myfloat fl;
-      fl.b = *ptr;
-      sprintf(str, "%f", fl.f);
-      return str;
+      // myfloat fl;
+      // fl.b = *ptr;
+      // sprintf(str, "%f", fl.f);
+      // return str;
     }
   case mem:
-    regnum = ((int)(ptr - ram))/sizeof(uint32_t);
+    // regnum = ((int)(ptr - ram))/sizeof(uint32_t);
     sprintf(str, "mem[%d]", regnum);
     return str;
   }

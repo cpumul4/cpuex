@@ -1,7 +1,8 @@
 #pragma once
-#include <stdint.h>
+#include <cstdint>
 
 enum regtype { ir, fr, mem };
+const int size = 100;
 
 class checkarray {
 protected:
@@ -9,13 +10,13 @@ protected:
     uint32_t *key;
     uint32_t *val;
     regtype t;
-  } array[100];
+  } array[size];
   int last;
   char *find_regnum(uint32_t *, regtype);
   void add(uint32_t *,uint32_t *, regtype);
 public:
-  void show(const char *op);
   checkarray(void){ last = 0; };
+  void show(const char *op);
   void add(const char *,const char *);
   void remove(uint32_t *);
   bool check(void);

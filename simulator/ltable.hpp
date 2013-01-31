@@ -1,12 +1,9 @@
-#ifndef _LTABLE
-#define _LTABLE
+#pragma once
 
 #include <cstring>
-#include <stdlib.h>
 #include <iostream>
-using namespace std;
-#define LABEL_TABLE_NUM 10000
 
+const int LABEL_TABLE_NUM = 10000;
 
 class ltable {
   uint index[LABEL_TABLE_NUM];
@@ -23,7 +20,7 @@ public:
 
 void ltable::print(){
   for(int i = 0; label[i] != NULL; i++)
-    cerr << label[i] << " -> " << index[i] << endl;
+    std::cerr << label[i] << " -> " << index[i] << std::endl;
 }
 
 void ltable::set_label(uint i, const char *l){
@@ -36,7 +33,7 @@ void ltable::set_label(uint i, const char *l){
 }
 
 int ltable::get_index(const char *_label){
-  string err = "Not Found Label";
+  std::string err = "Not Found Label";
   uint i = 0;
   while(label[i] != NULL && strcmp(_label,label[i]) != 0)i++;
   if(label[i] != NULL)
@@ -44,4 +41,3 @@ int ltable::get_index(const char *_label){
   throw err;			// ERROR
 }
 
-#endif
