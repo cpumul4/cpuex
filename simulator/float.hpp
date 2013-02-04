@@ -1,4 +1,4 @@
-#pragma onppce
+#pragma once
 
 #include "fpu.h"
 #include "type.hpp"

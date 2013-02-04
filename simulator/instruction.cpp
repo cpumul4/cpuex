@@ -47,21 +47,21 @@ void instr::exec_asm(){
     c(FMUL  , FD = flt::mul (FS, FT););
     c(FMULA , FD = flt::mula(FS, FT););
     c(FMULN , FD = flt::muln(FS, FT););
-    c(FINV  , FD = flt::inv(FS););
+    c(FINV  , FD = flt::inv (FS););
     c(FINVA , FD = flt::inva(FS););
     c(FINVN , FD = flt::invn(FS););
     
     c(FMVA  , FD = flt::abs(FS););
     c(FMVN  , FD = flt::neg(FS););
 
-    c(SQRT  , FD = flt::sqrt(FS););
+    c(SQRT  , FD = flt::sqrt (FS););
     c(SQRTA , FD = flt::sqrta(FS););
     c(SQRTN , FD = flt::sqrtn(FS););
 
-    c(AND , D = S & T;);       
-    c(OR  , D = S | T;);
+    c(AND , D =   S & T;);       
+    c(OR  , D =   S | T;);
     c(NOR , D = ~(S | T););
-    c(XOR , D = S ^ T;);
+    c(XOR , D =   S ^ T;);
 
     c(ANDI, D = S & IMM;);
     c(ORI , D = S | IMM;);
@@ -123,7 +123,7 @@ void instr::exec_asm(){
     cb(BLTE  ,D <= S,  pc = pc + IMM;);
     cb(BGTE  ,D >= S,  pc = pc + IMM;);
     cb(FBLTE ,flt::lte(FD, FS),pc +=     IMM;);
-    cb(FBGT ,flt::gt(FD, FS),pc +=     IMM;);
+    cb(FBGT  ,flt::gt (FD, FS),pc +=     IMM;);
 
     cb(BEQI  , D == IMMT,  pc = pc + IMM;);
     cb(BNEI  , D != IMMT,  pc = pc + IMM;);
@@ -138,7 +138,7 @@ void instr::exec_asm(){
     cb(BLTER  ,D <= S,  pop(););
     cb(BGTER  ,D >= S,  pop(););
     cb(FBLTER ,flt::lte(FD, FS),pop(););
-    cb(FBGTR ,flt::gt(FD, FS),pop(););
+    cb(FBGTR , flt::gt (FD, FS),pop(););
 
     cb(BEQIR  , D == IMMT,  pop(););
     cb(BNEIR  , D != IMMT,  pop(););
