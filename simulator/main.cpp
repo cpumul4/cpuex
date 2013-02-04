@@ -76,7 +76,8 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     pc++;
     prev_pc = pc;
     const_reg();
-
+    if(exec_count % 10000000 == 0)
+      cerr << ".";
     try {
       valid_reg();
       rom_count[pc-1]++;

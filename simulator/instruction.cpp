@@ -38,21 +38,21 @@ void instr::exec_asm(){
     c(ADDI, D = S + IMM;);
     c(SUBI, D = S - IMM;);
 
-    c(FADD  , FD = flt::fadd (FS, FT););
-    c(FADDA , FD = flt::fadda(FS, FT););
-    c(FADDN , FD = flt::faddn(FS, FT););
-    c(FSUB  , FD = flt::fsub (FS, FT););
-    c(FSUBA , FD = flt::fsuba(FS, FT););
-    c(FSUBN , FD = flt::fsubn(FS, FT););
-    c(FMUL  , FD = flt::fmul (FS, FT););
-    c(FMULA , FD = flt::fmula(FS, FT););
-    c(FMULN , FD = flt::fmuln(FS, FT););
-    c(FINV  , FD = flt::finv(FS););
-    c(FINVA , FD = flt::finva(FS););
-    c(FINVN , FD = flt::finvn(FS););
+    c(FADD  , FD = flt::add (FS, FT););
+    c(FADDA , FD = flt::adda(FS, FT););
+    c(FADDN , FD = flt::addn(FS, FT););
+    c(FSUB  , FD = flt::sub (FS, FT););
+    c(FSUBA , FD = flt::suba(FS, FT););
+    c(FSUBN , FD = flt::subn(FS, FT););
+    c(FMUL  , FD = flt::mul (FS, FT););
+    c(FMULA , FD = flt::mula(FS, FT););
+    c(FMULN , FD = flt::muln(FS, FT););
+    c(FINV  , FD = flt::inv(FS););
+    c(FINVA , FD = flt::inva(FS););
+    c(FINVN , FD = flt::invn(FS););
     
-    c(FMVA  , FD = flt::fabs(FS););
-    c(FMVN  , FD = flt::fneg(FS););
+    c(FMVA  , FD = flt::abs(FS););
+    c(FMVN  , FD = flt::neg(FS););
 
     c(SQRT  , FD = flt::sqrt(FS););
     c(SQRTA , FD = flt::sqrta(FS););
@@ -93,12 +93,12 @@ void instr::exec_asm(){
     c(FSWI, sw(S + IMM, FD);); 
 
     c(FLW , lw(S + T, FD););
-    c(FLWA, lw(S + T, FD);FD = flt::fabs(FD););
-    c(FLWN, lw(S + T, FD);FD = flt::fneg(FD););
+    c(FLWA, lw(S + T, FD);FD = flt::abs(FD););
+    c(FLWN, lw(S + T, FD);FD = flt::neg(FD););
 
     c(FLWI , lw(S + IMM,FD););
-    c(FLWIA, lw(S + IMM,FD);FD = flt::fabs(FD););
-    c(FLWIN, lw(S + IMM,FD);FD = flt::fneg(FD););
+    c(FLWIA, lw(S + IMM,FD);FD = flt::abs(FD););
+    c(FLWIN, lw(S + IMM,FD);FD = flt::neg(FD););
 
     // -------------- J形式 --------------
     c(J , pc = IMM;); 
@@ -117,13 +117,13 @@ void instr::exec_asm(){
 
     cb(BEQ , D == S,  pc = pc + IMM;);
     cb(BNE , D != S,  pc = pc + IMM;);
-    cb(FBEQ ,flt::feq(FD, FS),pc +=     IMM;);
-    cb(FBNE ,flt::fne(FD, FS),pc +=     IMM;);
+    cb(FBEQ ,flt::eq(FD, FS),pc +=     IMM;);
+    cb(FBNE ,flt::ne(FD, FS),pc +=     IMM;);
 
     cb(BLTE  ,D <= S,  pc = pc + IMM;);
     cb(BGTE  ,D >= S,  pc = pc + IMM;);
-    cb(FBLTE ,flt::flte(FD, FS),pc +=     IMM;);
-    cb(FBGT ,flt::fgt(FD, FS),pc +=     IMM;);
+    cb(FBLTE ,flt::lte(FD, FS),pc +=     IMM;);
+    cb(FBGT ,flt::gt(FD, FS),pc +=     IMM;);
 
     cb(BEQI  , D == IMMT,  pc = pc + IMM;);
     cb(BNEI  , D != IMMT,  pc = pc + IMM;);
@@ -132,13 +132,13 @@ void instr::exec_asm(){
 
     cb(BEQR , D == S,  pop(););
     cb(BNER , D != S,  pop(););
-    cb(FBEQR ,flt::feq(FD, FS),pop(););
-    cb(FBNER ,flt::fne(FD, FS),pop(););
+    cb(FBEQR ,flt::eq(FD, FS),pop(););
+    cb(FBNER ,flt::ne(FD, FS),pop(););
 
     cb(BLTER  ,D <= S,  pop(););
     cb(BGTER  ,D >= S,  pop(););
-    cb(FBLTER ,flt::flte(FD, FS),pop(););
-    cb(FBGTR ,flt::fgt(FD, FS),pop(););
+    cb(FBLTER ,flt::lte(FD, FS),pop(););
+    cb(FBGTR ,flt::gt(FD, FS),pop(););
 
     cb(BEQIR  , D == IMMT,  pop(););
     cb(BNEIR  , D != IMMT,  pop(););

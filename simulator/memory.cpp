@@ -75,7 +75,7 @@ void sw(int i, integer v){write<integer>(i, v);}
 string section::string_of_count(void){
   if(!(load_count == 0 && store_count == 0)){
     stringstream ss;
-    ss << "l:" << setw(4) << load_count << "回 / s:" << setw(4) <<  store_count << "回";
+    ss << "l:" << setw(6) << load_count << "回 / s:" << setw(6) <<  store_count << "回";
     return ss.str();
   }
   return "";

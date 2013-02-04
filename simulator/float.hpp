@@ -1,7 +1,7 @@
-#pragma once
+#pragma onppce
 
 #include "fpu.h"
-#include "./type.hpp"
+#include "type.hpp"
 #include <cmath>
 typedef union {
   float val;
@@ -26,56 +26,56 @@ namespace flt {
   __dec1(funcname,a)				\
   __dec1(funcname,n)
 
-  float fabs(float);
-  float fneg(float);
+  float abs(float);
+  float neg(float);
   float floor(float);
-  declare2(fadd)
-  declare2(fsub)
-  declare2(fmul)
-  declare1(finv)
+  declare2(add)
+  declare2(sub)
+  declare2(mul)
+  declare1(inv)
   declare1(sqrt)
-  int feq(float, float);
-  int fne(float, float);
-  int flte(float, float);
-  int fgte(float, float);
-  int fgt (float, float);
+  int eq(float, float);
+  int ne(float, float);
+  int lte(float, float);
+  int gte(float, float);
+  int gt (float, float);
 };
 
-inline float flt::fadd(float a, float b){
+inline float flt::add(float a, float b){
   if(std::isnormal(a) && 
      std::isnormal(b))return a + b;
   else return fadd(a,b);
 }
 
-inline float flt::fsub(float a, float b){
+inline float flt::sub(float a, float b){
   if(std::isnormal(a) && 
      std::isnormal(b))return a - b;
   else return fadd(a,-b);
 }
 
-inline float flt::fmul(float a, float b){
+inline float flt::mul(float a, float b){
   if(std::isnormal(a) && 
      std::isnormal(b))return a * b;
   else return fmul(a,b);
 }
 
-inline float flt::finv(float a){ return finv(a);}
+inline float flt::inv (float a){ return finv(a); }
 inline float flt::sqrt(float a){ return sqrt_m(a); }
-inline int flt::feq   (float a, float b){ return eq_f(a,b); }
-inline int flt::fne   (float a, float b){ return !eq_f(a,b);}
-inline int flt::flte  (float a, float b){ return lte_f(a,b); }
-inline int flt::fgte  (float a, float b){ return lte_f(b,a); }
-inline int flt::fgt   (float a, float b){ return !lte_f(a,b); }
+inline int flt::eq   (float a, float b){ return   eq_f(a,b); }
+inline int flt::ne   (float a, float b){ return  !eq_f(a,b); }
+inline int flt::lte  (float a, float b){ return  lte_f(a,b); }
+inline int flt::gte  (float a, float b){ return  lte_f(b,a); }
+inline int flt::gt   (float a, float b){ return !lte_f(a,b); }
 
 
 
-inline float flt::fabs(const float x){
+inline float flt::abs(const float x){
   conv tmp;
   tmp.val = x;
   tmp.bits.sign = 0;
   return tmp.val;
 }
-inline float flt::fneg(const float x){
+inline float flt::neg(const float x){
   conv tmp;
   tmp.val = x;
   tmp.bits.sign ^= 1;
@@ -86,7 +86,7 @@ inline float flt::floor(float a) {
   conv ret;
   ret.val = a;
   if(ret.bits.other >= 0x4b000000)return a;
-  else if(a < 0 && flt::feq(a,0))return 0;
+  else if(a < 0 && flt::eq(a,0))return 0;
   else return std::floor(a);
 }
 
@@ -96,22 +96,22 @@ inline float flt::floor(float a) {
     return abs(funcname(a,b));				\
   }
 #define all(funcname)					\
-  aandn2(funcname,a,fabs)				\
-  aandn2(funcname,n,fneg)
+  aandn2(funcname,a,flt::abs)				\
+  aandn2(funcname,n,flt::neg)
 
-all(flt::fadd)
-all(flt::fsub)
-all(flt::fmul)
+all(flt::add)
+all(flt::sub)
+all(flt::mul)
 
 #define aandn1(funcname,an,abs)				\
   inline float funcname ## an(float a){	\
     return abs(funcname(a));				\
   }
 #define all1(funcname)					\
-  aandn1(funcname,a,fabs)				\
-  aandn1(funcname,n,fneg)
+  aandn1(funcname,a,flt::abs)				\
+  aandn1(funcname,n,flt::neg)
 
-all1(flt::finv)
+all1(flt::inv)
 all1(flt::sqrt)
 
 
