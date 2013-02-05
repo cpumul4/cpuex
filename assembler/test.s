@@ -76,7 +76,7 @@
 	fblte	 $f1 $f2 label
 	bgte	 $r1 $r2 label
 	bgtei	 $r1 15 label
-	fbgte	 $f1 $f2 label
+	fbgt	 $f1 $f2 label
 	beqr	 $r2 $r1 $r4
 	beqir	 $r1 15 $r4
 	fbeqr	 $f2 $f1 $r4
@@ -88,7 +88,7 @@
 	fblter	 $f2 $f1 $r4
 	bgter	 $r2 $r1 $r4
 	bgteir	 $r1 15 $r4
-	fbgter	 $f2 $f1 $r4
+	fbgtr	 $f2 $f1 $r4
 	nop	
 	halt	
 label:

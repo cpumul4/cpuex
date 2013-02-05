@@ -390,10 +390,10 @@
 #define	bgtei_funct	0b1000
 #define	bgtei_functR	dummy
 
-#define	fbgte_format	BRANCH
-#define	fbgte_opcode	0b011010
-#define	fbgte_funct	0b1000
-#define	fbgte_functR	dummy
+#define	fbgt_format	BRANCH
+#define	fbgt_opcode	0b011010
+#define	fbgt_funct	0b1000
+#define	fbgt_functR	dummy
 
 #define	beqr_format	BRREG
 #define	beqr_opcode	0b010000
@@ -450,10 +450,10 @@
 #define	bgteir_funct	0b0000
 #define	bgteir_functR	dummy
 
-#define	fbgter_format	BRREG
-#define	fbgter_opcode	0b011010
-#define	fbgter_funct	0b0000
-#define	fbgter_functR	dummy
+#define	fbgtr_format	BRREG
+#define	fbgtr_opcode	0b011010
+#define	fbgtr_funct	0b0000
+#define	fbgtr_functR	dummy
 
 #define	nop_format	none
 #define	nop_opcode	0b100000

@@ -1,8 +1,9 @@
-#include "./instruction.hpp"
-#include "./machine.hpp"
-#include "./opcfnc.hpp"
-#include "./opcode.hpp"
-
+#include "instruction.hpp"
+#include "machine.hpp"
+#include "opcfnc.hpp"
+#include "opcode.hpp"
+#include <string>
+using namespace std;
 
 format binary::decode_sim_opcode(instr inst){
 #define _op(OPC,opc,suf1,suf2,suf3,suf4)		\
@@ -92,7 +93,7 @@ format binary::decode_sim_opcode(instr inst){
     op(fbeq , FBEQ )
     op(fbne , FBNE )
     op(fblte, FBLTE)
-    op(fbgte, FBGTE)
+    op(fbgt, FBGT)
 
     op(beqr  , BEQR  )
     op(beqir , BEQIR )
@@ -105,7 +106,7 @@ format binary::decode_sim_opcode(instr inst){
     op(fblter, FBLTER)
     op(bgter , BGTER )
     op(bgteir, BGTEIR)
-    op(fbgter , FBGTER)
+    op(fbgtr , FBGTR)
 
     op(nop , NOP )
     op(dbg , DBG )
