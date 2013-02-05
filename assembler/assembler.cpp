@@ -48,17 +48,24 @@ int main(int argc, char *argv[]){
     cerr << "USAGE: ./assembler outfile infile\n";
     return 1;
   }
-  // シミュレータが実行できる形式に変更
-  instrnum = decode(argv[2], rom); 
-  
-  // 機械語にする
-  for(int i = 0;i < instrnum; i++){
-    format f_i;
-    f_i = minstr[i].bin.decode_sim_opcode(rom[i]);
-    minstr[i].bin.set_operand(rom[i], f_i);
+  try {
+    // シミュレータが実行できる形式に変更
+    instrnum = decode(argv[2], rom); 
+    
+    // 機械語にする
+    for(int i = 0;i < instrnum; i++){
+      format f_i;
+      f_i = minstr[i].bin.decode_sim_opcode(rom[i]);
+      minstr[i].bin.set_operand(rom[i], f_i);
+    }
+    
+    // 機械語をファイルに吐く
+    output_machinecode(argv[1], minstr, instrnum);
+
   }
-  
-  // 機械語をファイルに吐く
-  output_machinecode(argv[1], minstr, instrnum);
+  catch(std::string msg){
+    cerr << msg << endl;
+    return 1;
+  }
   return 0;
 }

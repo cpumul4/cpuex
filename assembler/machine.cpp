@@ -37,23 +37,11 @@ format binary::decode_sim_opcode(instr inst){
     op(addi, ADDI)
     op(subi, SUBI)
 
-    op(and ,  AND)
-    op(or  ,  OR )
-    op(nor , NOR )
-    op(xor , XOR )
-
-    op(andi, ANDI)
-    op(ori , ORI )
-
-
     op(sll , SLL )		// シミュレータ的にはi形式
-    op(srl , SRL )
     op(sra , SRA )
 
     op(mv  , MV  )
     op(fmv  , FMV  )
-    op(r2f  , R2F  )
-    op(f2r  , F2R  )
     op(itof , ITOF )
     op(ftoi , FTOI )
     op(floor, FLOOR)
@@ -76,9 +64,11 @@ format binary::decode_sim_opcode(instr inst){
     op(fswi , FSWI )
 
     op(j   , J   )
-    op(jl  , JL  )
     op(jr  , JR  )
-    op(jlr , JLR )
+
+      op(call, CALL)
+      op(callr, CALLR)
+      op(return, RETURN)
 
     op(beqi , BEQI )
     op(bnei , BNEI )
@@ -144,16 +134,10 @@ void binary::set_operand(instr inst, format frm){
     set_r(0, 0, inst.get_rd());
     break;
   case BRANCH:
-    set_i(inst.get_rd(), inst.get_rs(), inst.get_imm());
+    set_i(inst.get_rs(), inst.get_rd(), inst.get_imm());
     break;
   case IT:
     set_it(inst.get_immt(), inst.get_rd(), inst.get_imm());
-    break;
-  case BRREG:
-    set_i(inst.get_rd(), inst.get_rs());
-    break;
-  case ITR:
-    set_it(inst.get_immt(), inst.get_rd());
     break;
   case none:
     break;

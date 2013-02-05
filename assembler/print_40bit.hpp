@@ -21,7 +21,7 @@ template<class T> void print_bit(T x){
 
   tmp.val = x;
 #if DELIM
-  sprintf(printstr, "%d%d%d%d %d%d%d%d%d%d %d%d%d%d%d %d%d%d%d%d%d%d%d%d %d%d%d%d%d %d%d%d%d%d %d%d%d%d%d%d\n", 
+  sprintf(printstr, "%d%d%d%d %d%d%d%d%d%d %d%d%d%d%d %d%d%d%d %d%d%d%d%d %d%d%d%d%d %d%d%d%d%d%d%d%d%d %d%d\n", 
 #else
   sprintf(printstr, "%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d\n", 
 #endif

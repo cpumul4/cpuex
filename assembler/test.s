@@ -22,19 +22,10 @@
 	itof	 $f4 $r1
 	ftoi	 $r4 $f1
 	floor	 $f4 $f1
-	and	 $r4 $r1 $r2
-	or	 $r4 $r1 $r2
-	nor	 $r4 $r1 $r2
-	xor	 $r4 $r1 $r2
-	andi	 $r2 $r1 127
-	ori	 $r2 $r1 127
 	sll	 $r4 $r1 7
-	srl	 $r4 $r1 7
 	sra	 $r4 $r1 7
 	mv	 $r4 $r1
 	fmv	 $f4 $f1
-	r2f	 $f4 $r1
-	f2r	 $r4 $f1
 	lui	 $r2 $r1 127
 	lli	 $r2 $r1 127
 	flui	 $f2 $f1 127
@@ -62,9 +53,10 @@
 	foutc	 $f1
 	foutd	 $f1
 	j	 label
-	jl	 label
 	jr	 $r4
-	jlr	 $r4
+	call	 label
+	callr	 $r15
+	return
 	beq	 $r1 $r2 label
 	beqi	 $r1 15 label
 	fbeq	 $f1 $f2 label

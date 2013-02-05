@@ -1,6 +1,6 @@
-#include "./instruction.hpp"
+#include "instruction.hpp"
 
-enum format { R, I, SHIFT, BRANCH, JREG, IT, BRREG, ITR, none };
+enum format { R, I, SHIFT, BRANCH, JREG, IT, none };
 
 class binary {
   int imm:16;
