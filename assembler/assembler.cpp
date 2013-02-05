@@ -1,9 +1,10 @@
-#include "./instruction.hpp"
-#include "./memory.hpp"
-#include "./opcfnc.hpp"
-#include "./machine.hpp"
-#include "./print_40bit.hpp"
+#include "instruction.hpp"
+#include "opcfnc.hpp"
+#include "machine.hpp"
+#include "const.hpp"
+#include "print_40bit.hpp"
 #include <fstream>
+#include <iostream>
 #define ASSEMBLER_DEBUG 1
 
 
