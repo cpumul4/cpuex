@@ -4,7 +4,9 @@
 typedef int32_t integer;
 typedef uint32_t notype;
 
-template <class T,class Origin> inline T convert(Origin x){
+const notype lower16 = 65535;
+
+template <class T,class Origin> inline T convert(const Origin x){
   union  {
     Origin o;
     T t;
@@ -13,14 +15,16 @@ template <class T,class Origin> inline T convert(Origin x){
   return conv.t;
 }
 
-template<class T> inline T lui(T lower, int upper){
+template<class T> inline T lui(const T lower, const integer upper){
   notype a = convert<notype,T>(lower);
-  notype b = ((a << 16) >> 16) | (upper << 16);
+  notype u = convert<notype,integer>(upper) & lower16;
+  notype b = ((a << 16) >> 16) | (u << 16);
   return convert<T,notype>(b);
 }
 
-template<class T> inline T lli(T upper, int lower){
+template<class T> inline T lli(const T upper, const integer lower){
   notype a = convert<notype,T>(upper);
-  notype b = ((a >> 16) << 16) | lower;
+  notype l = convert<notype,integer>(lower) & lower16;
+  notype b = ((a >> 16) << 16) | l;
   return convert<T,notype>(b);
 }

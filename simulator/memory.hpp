@@ -34,11 +34,6 @@ public:
   template<class T> std::string string_of_data(void);
 };
 
-extern void lw(int i, float   &reg);
-extern void lw(int i, integer &reg);
-extern void sw(int i, float   v);
-extern void sw(int i, integer v);
-
 inline void valid_addr(int index,
 		       std::string prefix = "", std::string surfix = ""){
   if(0 <= index && index < RAM_SIZE)return;
