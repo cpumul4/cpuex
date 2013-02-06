@@ -53,10 +53,11 @@ void show_regs(void){
     }
 }
 
-static section memory[RAM_SIZE];
+section memory[RAM_SIZE];
 
 template<class T> inline T read(int index){
-  valid_addr(index, "fail to read from memory[", "]");
+  static std::string prefix = "fail to read from mem[";
+  valid_addr(index, prefix, "]");
   return convert<T, notype>(memory[index].load());
 }
 
@@ -64,7 +65,8 @@ void lw(int i, float   &reg){reg = read<float>  (i);}
 void lw(int i, integer &reg){reg = read<integer>(i);}
 
 template<class T> inline void write(int index, T value){
-  valid_addr(index, "fail to write to memory[", "]");
+  static std::string prefix = "fail to write to mem[";
+  valid_addr(index, prefix, "]");
   memory[index].store(convert<notype, T>(value));
   return;
 }
@@ -75,7 +77,7 @@ void sw(int i, integer v){write<integer>(i, v);}
 string section::string_of_count(void){
   if(!(load_count == 0 && store_count == 0)){
     stringstream ss;
-    ss << "l:" << setw(6) << load_count << "回 / s:" << setw(6) <<  store_count << "回";
+    ss << "l:" << setw(7) << load_count << "回 / s:" << setw(7) <<  store_count << "回";
     return ss.str();
   }
   return "";

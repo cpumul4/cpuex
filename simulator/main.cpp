@@ -35,8 +35,10 @@ inline void init(void){
 }
 
 inline void valid_reg(void){
-  valid_addr(SPR,"スタックポインタレジスタ = ");
-  valid_addr(HPR,"ヒープポインタレジスタ = ");
+  static string stk = "スタックポインタレジスタ = ";
+  static string hpr = "ヒープポインタレジスタ = ";
+  valid_addr(SPR,stk);
+  valid_addr(HPR,hpr);
   return;
 }
 
@@ -74,15 +76,13 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     prev_pc = now_pc;
     now_pc = pc;
     pc++;
-    prev_pc = pc;
     const_reg();
-    if(exec_count % 10000000 == 0)
-      cerr << ".";
     try {
-      valid_reg();
+      // valid_reg();
       rom_count[pc-1]++;
       rom[pc-1].exec_asm();
       exec_count++;
+      // if(exec_count % 10000000 == 0)cerr << ".";
     }
     catch(string str){
       cerr << "[ERROR]" << str << endl;
