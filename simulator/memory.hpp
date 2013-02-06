@@ -43,6 +43,10 @@ inline void valid_addr(int index,
     throw ss.str();
   }
 }
+extern void lw(int i, float   &reg);
+extern void lw(int i, integer &reg);
+extern void sw(int i, float   v);
+extern void sw(int i, integer v);
 
 
 // return address stack
