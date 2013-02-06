@@ -53,7 +53,7 @@ void show_regs(void){
     }
 }
 
-section memory[RAM_SIZE];
+static section memory[RAM_SIZE];
 
 template<class T> inline T read(int index){
   static std::string prefix = "fail to read from mem[";
