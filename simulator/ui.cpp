@@ -249,6 +249,33 @@ void stop_at_instr(char *opname, opcode& opc){
   return;
 }
 
+void bit(string regname){
+  stringstream ss;
+  int regnumber;
+  if(regname[0] ==  '$')
+    regname.erase(0,1);
+  switch(regname[0]){
+  case 'r':
+    regname.erase(0,1);
+    ss << regname;
+    ss >> regnumber;
+    print_bit<integer>(ireg[regnumber]);
+    break;
+  case 'f':
+    regname.erase(0,1);
+    ss << regname;
+    ss >> regnumber;
+    print_bit<float>(freg[regnumber]);
+    break;
+  // case 'm':
+  //   regname.erase(0);
+  //   ss << regname;
+  //   ss >> regnumber;
+  //   print_bit<notype>([regnumber]);
+  }
+  return;
+}
+
 void howtouse(void){
   cerr << 
     "\n-----------------------------------------------------------------\n	\
@@ -269,8 +296,6 @@ void howtouse(void){
  ------------------------------------------------------------------\n";
   return;
 }
-
-
 
 
 int ui(){
@@ -374,8 +399,7 @@ int ui(){
       step = atoi(tokens[1]);
     else if('0' <= tokens[0][0] && tokens[0][0] <= '9')
       step = atoi(tokens[0]);
-    else if(strcmp(tokens[0], "bit") == 0)
-      print_bit(*ptr_to_memreg(tokens[1]));
+    else if(strcmp(tokens[0], "bit") == 0)bit(tokens[1]);
     else if(strcmp(tokens[0], "instr") == 0){
       stop_at_instr(tokens[1], watchinstr);
       cerr << tokens[1] << "を実行する直前に停止します" << endl;
