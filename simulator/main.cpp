@@ -86,12 +86,12 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     }
     catch(string str){
       cerr << "[ERROR]" << str << endl;
-      if(pc > 1){
+      if(prev_pc != 0){
 	cerr << "直前に実行した命令:\t[" << prev_pc << ']';
-	rom[pc-2].show();
+	rom[prev_pc].show();
       }
       cerr << "実行しようとした命令:\t[" << now_pc << ']';
-      rom[pc-1].show();
+      rom[now_pc].show();
       ui_error();
       halt();
     }      
