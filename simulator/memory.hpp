@@ -18,6 +18,10 @@ extern float   freg[FLOATREG_NUM];
 extern void show_regs(void);
 
 // RAM
+void lw(int i, float   &reg);
+void lw(int i, integer &reg);
+void sw(int i, float v);
+void sw(int i, integer v);
 extern void show_ram(int, int);
 extern void print_memory_stat(void);
 
