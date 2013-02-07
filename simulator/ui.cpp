@@ -267,11 +267,11 @@ void bit(string regname){
     ss >> regnumber;
     print_bit<float>(freg[regnumber]);
     break;
-  // case 'm':
-  //   regname.erase(0);
-  //   ss << regname;
-  //   ss >> regnumber;
-  //   print_bit<notype>([regnumber]);
+  case 'm':
+    regname.erase(0,1);
+    ss << regname;
+    ss >> regnumber;
+    print_bit<notype>(show(regnumber));
   }
   return;
 }

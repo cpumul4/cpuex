@@ -53,6 +53,20 @@ void show_regs(void){
     }
 }
 
+// ---------------------- メモリ ------------------------
+class section {
+  notype data;
+  int load_count;
+  int store_count;
+public:
+  section(){data = load_count = store_count = 0;}
+  notype load(void){ load_count++; return data; }
+  void  store(notype value){ store_count++; data = value; }
+  notype show(void){ return data;}
+  std::string string_of_count(void);
+  template<class T> std::string string_of_data(void);
+};
+
 section memory[RAM_SIZE];
 
 template<class T> inline T read(int index){
@@ -73,6 +87,8 @@ template<class T> inline void write(int index, T value){
 
 void sw(int i, float v){write<float>(i, v);}
 void sw(int i, integer v){write<integer>(i, v);}
+
+notype show(int i){ return memory[i].show(); }
 
 string section::string_of_count(void){
   if(!(load_count == 0 && store_count == 0)){

@@ -22,21 +22,11 @@ void lw(int i, float   &reg);
 void lw(int i, integer &reg);
 void sw(int i, float v);
 void sw(int i, integer v);
+extern notype show(int);
 extern void show_ram(int, int);
 extern void print_memory_stat(void);
 
 
-class section {
-  notype data;
-  int load_count;
-  int store_count;
-public:
-  section(){data = load_count = store_count = 0;}
-  notype load(void){ load_count++; return data; }
-  void  store(notype value){ store_count++; data = value; }
-  std::string string_of_count(void);
-  template<class T> std::string string_of_data(void);
-};
 
 inline void valid_addr(int index,
 		       std::string prefix = "", std::string surfix = ""){
