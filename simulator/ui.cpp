@@ -1,8 +1,5 @@
 #include <cstring>
 #include <iostream>
-#include <cstdlib>
-#include <cstdio>
-#include <map>
 #include "opcode.hpp"
 #include "memory.hpp"
 #include "instruction.hpp"
@@ -12,7 +9,6 @@
 using namespace std;
 
 class instr;
-typedef map<int, uint32_t> cells;
 extern instr rom[];
 extern long long int exec_count;
 extern int str_to_opcode(char*, opcode&);
@@ -75,7 +71,7 @@ void howtouse(void){
  ; \t\"$\"は省略可能\n\
  ; if (条件式)\t... 条件式を満たすときに停止\n\
  ;\t（条件式）... <reg> = 4, <reg> < 4.0, <reg> != 0.2など. \n\
- ; if <reg> change ... <reg>の値が変わったら停止する\n\
+ ; if <reg> change ... <reg>の値が変わったら停止する(メモリは無理)\n\
  ;rmif [enl] <reg> ... <reg>に関する条件式を削除\n\
  ;\t [enl] ... eかnかlのどれか１文字。eなら =の条件を, nなら !=を, lなら <を削除\n\
  ;\t [enl]を省略した場合、e,n,lの全てから消す。\n\
@@ -96,14 +92,25 @@ bool eqf(int i, int j){ return freg[i] == freg[j];}
 bool nef(int i, int j){ return freg[i] != freg[j];}
 bool ltf(int i, int j){ return freg[i] <  freg[j];}
 
+static checkarray eqarray(eqi);
+static checkarray nearray(nei);
+static checkarray ltarray(lti);
+static checkarray feqarray(eqf);
+static checkarray fnearray(nef);
+static checkarray fltarray(ltf);
+
+void show_all(void){
+  eqarray.show("ireg", "=");
+  ltarray.show("ireg", "<");
+  nearray.show("ireg", "!=");
+  feqarray.show("freg", "=");
+  fltarray.show("freg", "<");
+  fnearray.show("freg", "!=");
+}
+
+
 int ui(){
   static opcode watchinstr = UNKNOWN;
-  static checkarray eqarray(eqi);
-  static checkarray nearray(nei);
-  static checkarray ltarray(lti);
-  static checkarray feqarray(eqf);
-  static checkarray fnearray(nef);
-  static checkarray fltarray(ltf);
   // static int breakpoints[bpsize];
   static bool init_stop = true;
   static bool need_check = false;
@@ -161,17 +168,27 @@ int ui(){
 	eqarray.remove(tokens[1]);
 	nearray.remove(tokens[1]);
 	ltarray.remove(tokens[1]);
+	feqarray.remove(tokens[1]);
+	fnearray.remove(tokens[1]);
+	fltarray.remove(tokens[1]);
+	show_all();
       }
       else {
 	switch(tokens[1][0]){
 	case 'e':
 	  eqarray.remove(tokens[2]);
+	  feqarray.remove(tokens[2]);
+	  show_all();
 	  break;
 	case 'n':
 	  nearray.remove(tokens[2]);
+	  fnearray.remove(tokens[2]);
+	  show_all();
 	  break;
 	case 'l':
 	  ltarray.remove(tokens[2]);
+	  fltarray.remove(tokens[2]);
+	  show_all();
 	  break;
 	}
       }
@@ -196,12 +213,7 @@ int ui(){
       // else if(strcmp(tokens[2], "change") == 0){
       // 	nearray.add_change(tokens[1]);
       // }
-      eqarray.show("ireg", "=");
-      ltarray.show("ireg", "<");
-      nearray.show("ireg", "!=");
-      feqarray.show("freg", "=");
-      fltarray.show("freg", "<");
-      fnearray.show("freg", "!=");
+      show_all();
       need_check = true;
     }
     // step実行の区切り

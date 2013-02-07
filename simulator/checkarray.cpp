@@ -18,7 +18,7 @@ int get_index(string a){
   switch(a[0]){
   case 'r':
   case 'f':
-    a.erase(0.1);
+    a.erase(0,1);
     ss << a;
     ss >> i;
     return i;

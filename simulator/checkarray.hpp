@@ -1,7 +1,6 @@
 #pragma once
 #include "type.hpp"
 #include <string>
-#include <typeinfo>
 const int SizeOfCheckArray = 10;
 
 class checkarray {
