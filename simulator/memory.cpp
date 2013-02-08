@@ -9,6 +9,7 @@ using namespace std;
 integer ireg[INTREG_NUM];
 float freg[FLOATREG_NUM];
 integer pc;
+integer prev_pc, now_pc = 0;
 
 template<class T> void print(string prefix, T value){
   cerr << prefix << "=" << value << ", ";
@@ -52,14 +53,18 @@ void show_regs(void){
 }
 
 // ---------------------- メモリ ------------------------
+int incre = 1;
+int mstatpc[2] = { 0, 40000 };
+long long int  mstatcnt[2] = { 0, 2000000000 };
+
 class section {
   notype data;
   int load_count;
   int store_count;
 public:
   section(){data = load_count = store_count = 0;}
-  notype load(void){ load_count++; return data; }
-  void  store(notype value){ store_count++; data = value; }
+  notype load(void){ load_count += incre; return data; }
+  void  store(notype value){ store_count += incre; data = value; }
   notype show(void){ return data;}
   std::string string_of_count(void);
   template<class T> std::string string_of_data(void);

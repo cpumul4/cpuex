@@ -1,7 +1,7 @@
-#include "./memory.hpp"
-#include "./opcode.hpp"
-#include "./instruction.hpp"
-#include "./statistic.hpp"
+#include "memory.hpp"
+#include "opcode.hpp"
+#include "instruction.hpp"
+#include "statistic.hpp"
 #include <stdlib.h>
 #include <sys/time.h>
 #include <fstream>
@@ -42,6 +42,7 @@ inline void valid_reg(void){
   return;
 }
 
+
 int simulate(char *asmpath, char *srcpath, char *tgtpath){
   decode(asmpath, rom);
   int rom_count[ROM_SIZE] = {0};
@@ -66,7 +67,6 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
   
   init();
 
-  integer prev_pc, now_pc = 0;
   // 実行ループ
   while(pc != LR_INIT){
 #if OPTIMIZATION
@@ -79,10 +79,13 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     const_reg();
     try {
       // valid_reg();
-      rom_count[pc-1]++;
-      rom[pc-1].exec_asm();
+      rom_count[now_pc]++;
+      rom[now_pc].exec_asm();
       exec_count++;
-      // if(exec_count % 10000000 == 0)cerr << ".";
+#if OPTIMIZATION
+#else
+      memstat_now();
+#endif
     }
     catch(string str){
       cerr << "[ERROR]" << str << endl;

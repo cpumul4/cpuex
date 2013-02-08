@@ -37,6 +37,19 @@ void stop_at_instr(char *opname, opcode& opc){
   return;
 }
 
+void memstatpc(char *begin, char *end){
+  mstatpc[0] = atoi(begin);
+  mstatpc[1] = atoi(end);
+  if(mstatpc[0] >= ROM_SIZE || mstatpc[1] >= ROM_SIZE)
+    cerr << "大きすぎ\n" << endl;
+  return;
+}
+void memstatcnt(char *begin, char *end){
+  mstatcnt[0] = atoi(begin);
+  mstatcnt[1] = atoi(end);
+  return;
+}
+
 void bit(string regname){
   stringstream ss;
   int regnumber;
@@ -79,7 +92,8 @@ void howtouse(void){
  ; step int\t... int命令毎に実行停止(0で非停止). stepは省略可.\n\
  ; Enterキー\t... 実行再開\n\
  ; quit\t...終了\n\
- ; instr opname \t... <opname>の命令が来たら停止する\n\
+ ; memstatpc  i j\t... i <= pc <= jのときのメモリの統計を取る\n\
+ ; memstatcnt i j\t... i <= 実行命令数 <= jのときのメモリの統計を取る\n\
  ; bit <reg>\t... <reg> のビット列を表示\n\
  ------------------------------------------------------------------\n";
   return;
@@ -116,7 +130,7 @@ int ui(){
   static bool need_check = false;
 
   // static cells nonzeroram;
-  const int max_line = 30;
+  const int max_line = 50;
   char line[max_line] = {0};
   char *tokens[5];
 
@@ -224,6 +238,12 @@ int ui(){
     else if(strcmp(tokens[0], "instr") == 0){
       stop_at_instr(tokens[1], watchinstr);
       cerr << tokens[1] << "を実行する直前に停止します" << endl;
+    }
+    else if(strcmp(tokens[0], "memstatpc") == 0){
+      memstatpc(tokens[1], tokens[2]);
+    }
+    else if(strcmp(tokens[0], "memstatcnt") == 0){
+      memstatcnt(tokens[1], tokens[2]);
     }
     else cerr << "不明なコマンドです" << endl;
   }
