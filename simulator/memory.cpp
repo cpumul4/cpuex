@@ -18,8 +18,13 @@ void print(string prefix, integer value){print<integer>(prefix, value);}
 void print(string prefix, float   value){print<float>  (prefix, value);}
 
 void show_regs(void){
+  // 特別な意味のレジスタ
+  print("$swp(r28)"      , SWR);
+  print("$clos"          , CLR);
+  print("$hp"            , HPR);
+  print("$stkp(relative)", SPR_INIT - SPR);
+  cerr << endl;
   // 整数レジスタ
-  cerr << "非0のレジスタ:";
   if(ireg[1] != 0){
     print("$v(r1)",ireg[1]);
   }
@@ -33,14 +38,17 @@ void show_regs(void){
 #endif
     }
   }
-  // 特別な意味のレジスタ
-  cerr << endl << "\t";
-  print("$swp(r28)"      , SWR);
-  print("$clos"          , CLR);
-  print("$hp"            , HPR);
-  print("$stkp(relative)", SPR_INIT - SPR);
+  for(int i = 32; i <= INTREG_NUM; i++){
+    if(ireg[i] != 0){
+      stringstream ss;
+      ss << "$r" << i;
+      print(ss.str(), ireg[i]);
+#if DEBUG
+      print_bit(ireg[i]);
+#endif
+    }
+  }
   cerr << endl;
-
   // FLOATレジスタ
   for(int i=0; i < FLOATREG_NUM; i++)
     if(freg[i] != 0){		// 非正規化数などに対応してない
