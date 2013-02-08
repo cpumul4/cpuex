@@ -27,6 +27,7 @@ endif
 a:
 	make
 	make opt
+	make clean
 	make 64
 
 opt:
