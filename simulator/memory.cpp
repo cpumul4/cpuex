@@ -28,18 +28,8 @@ void show_regs(void){
   if(ireg[1] != 0){
     print("$v(r1)",ireg[1]);
   }
-  for(int i = 2; i <= GENR_MAX; i++){
-    if(ireg[i] != 0){
-      stringstream ss;
-      ss << "$r" << i;
-      print(ss.str(), ireg[i]);
-#if DEBUG
-      print_bit(ireg[i]);
-#endif
-    }
-  }
-  for(int i = 32; i <= INTREG_NUM; i++){
-    if(ireg[i] != 0){
+  for(int i = 2; i <= INTREG_NUM; i++){
+    if(ireg[i] != 0 && (28 < i && 31 < i )){
       stringstream ss;
       ss << "$r" << i;
       print(ss.str(), ireg[i]);
