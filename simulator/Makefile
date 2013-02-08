@@ -24,6 +24,11 @@ ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEPENDS)
 endif
 
+a:
+	make
+	make opt
+	make 64
+
 opt:
 	sed -e 's/#define OPTIMIZATION 0/#define OPTIMIZATION 1/' -i main.cpp
 	make PROGRAM=sim_fastnostop
@@ -40,6 +45,16 @@ winold:
 	make
 	sed -e 's/#define ROM_SIZE 15000/#define ROM_SIZE 32768/' -i memory.hpp
 	sed -e 's/#define OLD 1/#define OLD 0/' -i opcode.hpp
+
+64:
+	sed -e 's/INTREG_NUM   32/INTREG_NUM   64/' -i const.hpp
+	sed -e 's/FLOATREG_NUM 32/FLOATREG_NUM 64/' -i const.hpp
+	make PROGRAM=simulator64
+	sed -e 's/#define OPTIMIZATION 0/#define OPTIMIZATION 1/' -i main.cpp
+	make PROGRAM=sim_fastnostop64
+	sed -e 's/#define OPTIMIZATION 1/#define OPTIMIZATION 0/' -i main.cpp
+	sed -e 's/INTREG_NUM   64/INTREG_NUM   32/' -i const.hpp
+	sed -e 's/FLOATREG_NUM 64/FLOATREG_NUM 32/' -i const.hpp
 
 win:
 	sed -e 's/#define ROM_SIZE 32768/#define ROM_SIZE 15000/' -i memory.hpp
@@ -66,7 +81,6 @@ winopt:
 
 .PHONY : clean check-syntax
 clean:
-	rm -f $(PROGRAM)
 	rm -f $(OBJS)
 	rm -f *.depend~
 
