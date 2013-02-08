@@ -1,78 +1,19 @@
 #include <cstring>
 #include <iostream>
-#include <cstdlib>
-#include <cstdio>
-#include <map>
-#include "./opcode.hpp"
-#include "./memory.hpp"
-#include "./instruction.hpp"
-#include "./ui.hpp"
-#include "./print_bit.hpp"
+#include "opcode.hpp"
+#include "memory.hpp"
+#include "instruction.hpp"
+#include "ui.hpp"
+#include "print_bit.hpp"
+#include "checkarray.hpp"
 using namespace std;
 
 class instr;
-typedef map<int, uint32_t> cells;
 extern instr rom[];
 extern long long int exec_count;
 extern int str_to_opcode(char*, opcode&);
 
 int step = 0;
-
-void checkarray::add(uint32_t *key, uint32_t *val, regtype _t){
-  array[last].key = key;
-  array[last].val = val;
-  array[last].t = _t;
-  last++;
-  return;
-}	
-
-void checkarray::remove(uint32_t *rmkey){
-  for(int i= 0; i< last; i++)
-    if(rmkey == array[i].key){
-      cerr << find_regnum(rmkey, array[i].t) << " removed from condition\n";
-      last--;
-      array[i].key = array[last].key;
-      array[i].val = array[last].val;
-      array[i].t = array[last].t;
-      return;
-    }
-  return;
-}
-
-bool equalarray::check(void){
-
-  for(int i=0; i < last; i++)
-    if(*array[i].key == *array[i].val)
-      return true;
-  return false;
-}
-
-bool noteqarray::check(void){
-  for(int i=0; i < last; i++)
-    if(*array[i].key != *array[i].val)
-      return true;
-  return false;
-}
-
-
-bool lessthanarray::check(void){
-  union {
-    int32_t i;
-    float f;
-    uint32_t u;
-  } conv1, conv2;
-
-
-  for(int i=0; i < last; i++){
-    conv1.u = *array[i].key;
-    conv2.u = *array[i].val; 
-    if(array[i].t == fr && conv1.f < conv2.f)
-      return true;
-    else if(array[i].t == ir && conv1.i < conv2.i)
-      return true;
-  }
-  return false;
-}
 
 void lex(char *line, char *tokens[]){
   const char delims[] = " \t\r";
@@ -83,159 +24,6 @@ void lex(char *line, char *tokens[]){
   return;
 }
 
-
-regtype see_type(const char *regstr){
-  if(regstr[0] == '$')
-    regstr++;
-  if(regstr[0] == 'r')
-    return ir;
-  else if(regstr[0] == 'f' || strchr(regstr, '.') != NULL)
-    return fr;
-  else if(regstr[0] == 'm')
-    return mem;
-  else
-    return ir;
-}
-
-
-uint32_t *ptr_to_memreg(const char *str){
-  // int i = (str[0] == '$') ? 1 : 0;
-
-  // switch(str[i]) {
-  // case '$':
-  //   str++;
-  // case 'r':
-  //   return &ireg[atoi(str + 1 + i)];
-  // case 'f':
-  //   return &freg[atoi(str + 1 + i)];
-  // case 'm':
-  //   return &ram[atoi(str + 1 + i)];
-  // default:
-  //   return NULL;
-  // }
-  return 0;
-}
-
-uint32_t *atofi(const char *str){
-  union _conv{
-    float f;
-    int   i;
-    uint32_t bits;
-  } *conv = new _conv;
-
-  if(strchr(str, '.') != NULL)
-    conv->f = atof(str);
-  else
-    conv->i = atoi(str);
-
-  return (uint32_t *)conv;
-}
-
-
-void checkarray::add(const char *keystr, const char *valstr){
-  uint32_t *key, *val;
-  regtype keyt, valt, typ;
-
-  keyt = see_type(keystr);
-  valt = see_type(valstr);
-
-  // 型を調べる
-  if((keyt == ir && valt == fr) || (keyt == fr && valt == ir)){
-    cerr << "type error\n";
-    return;
-  }
-  else if(keyt == valt)typ = keyt;
-  else typ = keyt == mem ? valt : keyt;
-
-  // レジスタ
-  key = ptr_to_memreg(keystr);
-  val = ptr_to_memreg(valstr);
-
-  if(key == NULL){
-    if(val == NULL)
-      cerr << "意味がありません\n";
-    else 
-      add(atofi(keystr),val, typ);
-  }
-  else {
-    if(val == NULL)
-      add(key,atofi(valstr), typ);
-    else 
-      add(key, val, typ);
-  }
-}
-
-char *checkarray::find_regnum(uint32_t *ptr, regtype t){
-  char *str;
-  str = (char *)malloc(sizeof(char) * 10);
-  int regnum = 0;
-  switch(t){
-  case ir:
-    // regnum = ptr - &ireg[0].b;
-    if(0 <= regnum && regnum <= 31){
-      sprintf(str, "ireg[%d]", regnum);
-      return str;
-    }
-    else 
-      return NULL;
-  case fr:
-    // regnum = ptr - &freg[0].b;
-    if(0 <= regnum && regnum <= 31){
-      sprintf(str, "freg[%d]", regnum);
-      return str;
-    }
-    else {
-      // myfloat fl;
-      // fl.b = *ptr;
-      // sprintf(str, "%f", fl.f);
-      // return str;
-    }
-  case mem:
-    // regnum = ((int)(ptr - ram))/sizeof(uint32_t);
-    sprintf(str, "mem[%d]", regnum);
-    return str;
-  }
-  return NULL;
-}
-
-    
-void noteqarray::add_change(const char *str){
-  regtype t;
-  uint32_t *reg, *regval = new uint32_t;
-
-  t = see_type(str);
-  reg = ptr_to_memreg(str);
-  *regval = *reg;
-  cerr << reg;
-  add(reg, regval, t);
-  return ;
-}
-
-
-void checkarray::show(const char *op){
-  char *strkey, *strval;
-  cerr << " - : ";
-  for(int i=0; i< last; i++){
-    cerr << "(";
-    strkey = find_regnum(array[i].key, array[i].t);
-    if(strkey != NULL)
-      cerr << strkey;
-    else 
-      cerr << *array[i].key;
-    cerr << ' ' << op << ' ';
-
-    strval = find_regnum(array[i].val, array[i].t);
-    if(strval != NULL)
-      cerr << strval;
-    else 
-      cerr << *array[i].val;
-    
-    cerr << "), ";
-  }
-  cerr << endl;
-
-};
-  
 bool does_break(int bps[]){
   for(int i=0; bps[i] >= 0;i++)
     if(pc == bps[i])
@@ -249,6 +37,46 @@ void stop_at_instr(char *opname, opcode& opc){
   return;
 }
 
+void memstatpc(char *begin, char *end){
+  mstatpc[0] = atoi(begin);
+  mstatpc[1] = atoi(end);
+  if(mstatpc[0] >= ROM_SIZE || mstatpc[1] >= ROM_SIZE)
+    cerr << "大きすぎ\n" << endl;
+  return;
+}
+void memstatcnt(char *begin, char *end){
+  mstatcnt[0] = atoi(begin);
+  mstatcnt[1] = atoi(end);
+  return;
+}
+
+void bit(string regname){
+  stringstream ss;
+  int regnumber;
+  if(regname[0] ==  '$')
+    regname.erase(0,1);
+  switch(regname[0]){
+  case 'r':
+    regname.erase(0,1);
+    ss << regname;
+    ss >> regnumber;
+    print_bit<integer>(ireg[regnumber]);
+    break;
+  case 'f':
+    regname.erase(0,1);
+    ss << regname;
+    ss >> regnumber;
+    print_bit<float>(freg[regnumber]);
+    break;
+  case 'm':
+    regname.erase(0,1);
+    ss << regname;
+    ss >> regnumber;
+    print_bit<notype>(show(regnumber));
+  }
+  return;
+}
+
 void howtouse(void){
   cerr << 
     "\n-----------------------------------------------------------------\n	\
@@ -256,7 +84,7 @@ void howtouse(void){
  ; \t\"$\"は省略可能\n\
  ; if (条件式)\t... 条件式を満たすときに停止\n\
  ;\t（条件式）... <reg> = 4, <reg> < 4.0, <reg> != 0.2など. \n\
- ; if <reg> change ... <reg>の値が変わったら停止する\n\
+ ; if <reg> change ... <reg>の値が変わったら停止する(メモリは無理)\n\
  ;rmif [enl] <reg> ... <reg>に関する条件式を削除\n\
  ;\t [enl] ... eかnかlのどれか１文字。eなら =の条件を, nなら !=を, lなら <を削除\n\
  ;\t [enl]を省略した場合、e,n,lの全てから消す。\n\
@@ -264,26 +92,45 @@ void howtouse(void){
  ; step int\t... int命令毎に実行停止(0で非停止). stepは省略可.\n\
  ; Enterキー\t... 実行再開\n\
  ; quit\t...終了\n\
- ; instr opname \t... <opname>の命令が来たら停止する\n\
+ ; memstatpc  i j\t... i <= pc <= jのときのメモリの統計を取る\n\
+ ; memstatcnt i j\t... i <= 実行命令数 <= jのときのメモリの統計を取る\n\
  ; bit <reg>\t... <reg> のビット列を表示\n\
  ------------------------------------------------------------------\n";
   return;
 }
 
+bool eqi(int i, int j){ return ireg[i] == ireg[j];}
+bool nei(int i, int j){ return ireg[i] != ireg[j];}
+bool lti(int i, int j){ return ireg[i] <  ireg[j];}
+bool eqf(int i, int j){ return freg[i] == freg[j];}
+bool nef(int i, int j){ return freg[i] != freg[j];}
+bool ltf(int i, int j){ return freg[i] <  freg[j];}
 
+static checkarray eqarray(eqi);
+static checkarray nearray(nei);
+static checkarray ltarray(lti);
+static checkarray feqarray(eqf);
+static checkarray fnearray(nef);
+static checkarray fltarray(ltf);
+
+void show_all(void){
+  eqarray.show("ireg", "=");
+  ltarray.show("ireg", "<");
+  nearray.show("ireg", "!=");
+  feqarray.show("freg", "=");
+  fltarray.show("freg", "<");
+  fnearray.show("freg", "!=");
+}
 
 
 int ui(){
   static opcode watchinstr = UNKNOWN;
-  static equalarray eqarray;
-  static lessthanarray ltarray;
-  static noteqarray nearray;
   // static int breakpoints[bpsize];
   static bool init_stop = true;
   static bool need_check = false;
 
   // static cells nonzeroram;
-  const int max_line = 30;
+  const int max_line = 50;
   char line[max_line] = {0};
   char *tokens[5];
 
@@ -292,11 +139,16 @@ int ui(){
   init_stop = false;
 #endif
 
-
-
   stop = init_stop;
   stop = stop || (step != 0 && exec_count % step == 0);
-  stop = stop || (need_check && (eqarray.check() || ltarray.check() || nearray.check()));
+  stop = stop || (need_check && 
+		  (eqarray.check_all() || 
+		   ltarray.check_all() || 
+		   nearray.check_all() ||
+		   feqarray.check_all() || 
+		   fltarray.check_all() || 
+		   fnearray.check_all() 
+		   ));
   stop = stop || rom[pc].equal_opcode(watchinstr);
   if(!stop)return 0;
 
@@ -327,20 +179,30 @@ int ui(){
     }
     else if(strcmp(tokens[0], "rmif") == 0){
       if(tokens[2] == NULL){
-	eqarray.remove(ptr_to_memreg(tokens[1]));
-	nearray.remove(ptr_to_memreg(tokens[1]));
-	ltarray.remove(ptr_to_memreg(tokens[1]));
+	eqarray.remove(tokens[1]);
+	nearray.remove(tokens[1]);
+	ltarray.remove(tokens[1]);
+	feqarray.remove(tokens[1]);
+	fnearray.remove(tokens[1]);
+	fltarray.remove(tokens[1]);
+	show_all();
       }
       else {
 	switch(tokens[1][0]){
 	case 'e':
-	  eqarray.remove(ptr_to_memreg(tokens[2]));
+	  eqarray.remove(tokens[2]);
+	  feqarray.remove(tokens[2]);
+	  show_all();
 	  break;
 	case 'n':
-	  nearray.remove(ptr_to_memreg(tokens[2]));
+	  nearray.remove(tokens[2]);
+	  fnearray.remove(tokens[2]);
+	  show_all();
 	  break;
 	case 'l':
-	  ltarray.remove(ptr_to_memreg(tokens[2]));
+	  ltarray.remove(tokens[2]);
+	  fltarray.remove(tokens[2]);
+	  show_all();
 	  break;
 	}
       }
@@ -362,23 +224,26 @@ int ui(){
 	ltarray.add(tokens[3], tokens[1]);
       else if(strcmp(tokens[2], "!=") == 0)
 	nearray.add(tokens[1], tokens[3]);
-      else if(strcmp(tokens[2], "change") == 0){
-	nearray.add_change(tokens[1]);
-      }
-      eqarray.show("=");
-      ltarray.show("<");
-      nearray.show("!=");
+      // else if(strcmp(tokens[2], "change") == 0){
+      // 	nearray.add_change(tokens[1]);
+      // }
+      show_all();
       need_check = true;
     }
-    else if(strcmp(tokens[0], "step") == 0)
-      step = atoi(tokens[1]);
-    else if('0' <= tokens[0][0] && tokens[0][0] <= '9')
-      step = atoi(tokens[0]);
-    else if(strcmp(tokens[0], "bit") == 0)
-      print_bit(*ptr_to_memreg(tokens[1]));
+    // step実行の区切り
+    else if(strcmp(tokens[0], "step") == 0)step = atoi(tokens[1]);
+    else if('0' <= tokens[0][0] && tokens[0][0] <= '9')step = atoi(tokens[0]);
+    // bit表示
+    else if(strcmp(tokens[0], "bit") == 0)bit(tokens[1]);
     else if(strcmp(tokens[0], "instr") == 0){
       stop_at_instr(tokens[1], watchinstr);
       cerr << tokens[1] << "を実行する直前に停止します" << endl;
+    }
+    else if(strcmp(tokens[0], "memstatpc") == 0){
+      memstatpc(tokens[1], tokens[2]);
+    }
+    else if(strcmp(tokens[0], "memstatcnt") == 0){
+      memstatcnt(tokens[1], tokens[2]);
     }
     else cerr << "不明なコマンドです" << endl;
   }
@@ -394,4 +259,3 @@ int ui_error(){
 
   return ui();
 }
-  

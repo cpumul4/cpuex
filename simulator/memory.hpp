@@ -17,22 +17,33 @@ extern integer ireg[INTREG_NUM];
 extern float   freg[FLOATREG_NUM];
 extern void show_regs(void);
 
+// return address stack
+extern integer pc, now_pc, prev_pc;
+extern void init_return_stack(void);
+extern void push(void);
+extern void pop(void);
+inline void halt(void){ pc = LR_INIT; }
+
 // RAM
+extern void lw(int i, float   &reg);
+extern void lw(int i, integer &reg);
+extern void sw(int i, float v);
+extern void sw(int i, integer v);
+extern notype show(int);
 extern void show_ram(int, int);
 extern void print_memory_stat(void);
 
+extern int incre;
+extern int mstatpc[2];
+extern long long int  mstatcnt[2];
+extern long long int exec_count;
 
-class section {
-  notype data;
-  int load_count;
-  int store_count;
-public:
-  section(){data = load_count = store_count = 0;}
-  notype load(void){ load_count++; return data; }
-  void  store(notype value){ store_count++; data = value; }
-  std::string string_of_count(void);
-  template<class T> std::string string_of_data(void);
-};
+inline void memstat_now(void){
+  if((mstatpc[0] <= now_pc && now_pc <= mstatpc[1]) &&
+     (mstatcnt[0] <= exec_count && exec_count <= mstatcnt[1]))incre = 1;
+  else incre = 0;;
+}
+
 
 inline void valid_addr(int index,
 		       std::string prefix = "", std::string surfix = ""){
@@ -43,15 +54,5 @@ inline void valid_addr(int index,
     throw ss.str();
   }
 }
-extern void lw(int i, float   &reg);
-extern void lw(int i, integer &reg);
-extern void sw(int i, float   v);
-extern void sw(int i, integer v);
 
 
-// return address stack
-extern integer pc;
-extern void init_return_stack(void);
-extern void push(void);
-extern void pop(void);
-inline void halt(void){ pc = LR_INIT; }

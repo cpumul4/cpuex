@@ -9,6 +9,7 @@ using namespace std;
 integer ireg[INTREG_NUM];
 float freg[FLOATREG_NUM];
 integer pc;
+integer prev_pc, now_pc = 0;
 
 template<class T> void print(string prefix, T value){
   cerr << prefix << "=" << value << ", ";
@@ -18,13 +19,18 @@ void print(string prefix, integer value){print<integer>(prefix, value);}
 void print(string prefix, float   value){print<float>  (prefix, value);}
 
 void show_regs(void){
+  // 特別な意味のレジスタ
+  print("$swp(r28)"      , SWR);
+  print("$clos"          , CLR);
+  print("$hp"            , HPR);
+  print("$stkp(relative)", SPR_INIT - SPR);
+  cerr << endl;
   // 整数レジスタ
-  cerr << "非0のレジスタ:";
   if(ireg[1] != 0){
     print("$v(r1)",ireg[1]);
   }
-  for(int i = 2; i <= GENR_MAX; i++){
-    if(ireg[i] != 0){
+  for(int i = 2; i <= INTREG_NUM; i++){
+    if(ireg[i] != 0 && (28 < i && 31 < i )){
       stringstream ss;
       ss << "$r" << i;
       print(ss.str(), ireg[i]);
@@ -33,14 +39,7 @@ void show_regs(void){
 #endif
     }
   }
-  // 特別な意味のレジスタ
-  cerr << endl << "\t";
-  print("$swp(r28)"      , SWR);
-  print("$clos"          , CLR);
-  print("$hp"            , HPR);
-  print("$stkp(relative)", SPR_INIT - SPR);
   cerr << endl;
-
   // FLOATレジスタ
   for(int i=0; i < FLOATREG_NUM; i++)
     if(freg[i] != 0){		// 非正規化数などに対応してない
@@ -53,7 +52,25 @@ void show_regs(void){
     }
 }
 
-static section memory[RAM_SIZE];
+// ---------------------- メモリ ------------------------
+int incre = 1;
+int mstatpc[2] = { 0, 40000 };
+long long int  mstatcnt[2] = { 0, 2000000000 };
+
+class section {
+  notype data;
+  int load_count;
+  int store_count;
+public:
+  section(){data = load_count = store_count = 0;}
+  notype load(void){ load_count += incre; return data; }
+  void  store(notype value){ store_count += incre; data = value; }
+  notype show(void){ return data;}
+  std::string string_of_count(void);
+  template<class T> std::string string_of_data(void);
+};
+
+section memory[RAM_SIZE];
 
 template<class T> inline T read(int index){
   static std::string prefix = "fail to read from mem[";
@@ -73,6 +90,8 @@ template<class T> inline void write(int index, T value){
 
 void sw(int i, float v){write<float>(i, v);}
 void sw(int i, integer v){write<integer>(i, v);}
+
+notype show(int i){ return memory[i].show(); }
 
 string section::string_of_count(void){
   if(!(load_count == 0 && store_count == 0)){
