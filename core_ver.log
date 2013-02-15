@@ -101,8 +101,16 @@ CPI : 基本 2, 分岐 3, ロード/ストア 4, fadd/fsub/fmul/finv/sqrt 4
  - min-rt(contest) : 44.77sec(11.58億命令)
 
 **ver3.1(core3_1)
-作業中(実装完了)
+作業中(実装完了)→却下
 8段パイプライン : PC,IF,ID/RF,FW,EX1,EX2/MEM1,EX3/MEM2,WB
 66MHz
 
  - Return Address Stackの導入
+ - Return Address Stackまわりにバグあり
+
+**ver3.2(core3_2)
+作業中(実装中)
+OoO実行
+静的分岐予測(常に分岐不成立と予測して投機的実行)
+ボーレート460800
+66MHz
