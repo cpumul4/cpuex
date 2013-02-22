@@ -1,8 +1,18 @@
  o ...予定通りいったこと
  x ...予定通り進まなかったこと
  - ...予定になかったこと
+--------- 2/22(Fri) ---------
+ o simulatorのバグ修正
+ o sim_fastnostopを速度に特化させた
+ o 3rd_2用assembler書いた
+--------- 2/8(Fri) ----------
+ o simulatorにmemoryの統計を取る機能を追加
+ o register数64個のsimulatorを作った
+--------- 2/7(Thu) ----------
+ o simulatorのdebug機能一部復活
 --------- 2/6(Wed) ----------
  o simulator のバグ修正
+ o tan.s(library)完成
 --------- 2/5(Tue) ----------
  o 3rd Assembler 完成
 --------- 1/20(Sun) ----------
