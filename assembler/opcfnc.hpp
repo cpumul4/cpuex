@@ -12,13 +12,13 @@
 
 #define	addi_format	I
 #define	addi_opcode	0b011010
-#define	addi_funct	0b0000
-#define	addi_functR	dummy
+#define	addi_functR	0b00
+#define	addi_funct	dummy
 
 #define	subi_format	I
 #define	subi_opcode	0b011010
-#define	subi_funct	0b0001
-#define	subi_functR	dummy
+#define	subi_functR	0b01
+#define	subi_funct	dummy
 
 #define	fadd_format	R
 #define	fadd_opcode	0b011101
@@ -142,28 +142,28 @@
 
 #define	lui_format	I
 #define	lui_opcode	0b011010
-#define	lui_funct	0b0110
-#define	lui_functR	dummy
+#define	lui_functR	0b10
+#define	lui_funct	dummy
 
 #define	lli_format	I
 #define	lli_opcode	0b011010
-#define	lli_funct	0b0111
-#define	lli_functR	dummy
+#define	lli_functR	0b11
+#define	lli_funct	dummy
 
 #define	flui_format	I
 #define	flui_opcode	0b011111
-#define	flui_funct	0b0110
-#define	flui_functR	dummy
+#define	flui_functR	0b10
+#define	flui_funct	dummy
 
 #define	flli_format	I
 #define	flli_opcode	0b011111
-#define	flli_funct	0b0111
-#define	flli_functR	dummy
+#define	flli_functR	0b11
+#define	flli_funct	dummy
 
 #define	lw_format	R
 #define	lw_opcode	0b001000
-#define	lw_funct	dummy
 #define	lw_functR	dummy
+#define	lw_funct	dummy
 
 #define	lwi_format	I
 #define	lwi_opcode	0b001010
@@ -172,33 +172,33 @@
 
 #define	flw_format	R
 #define	flw_opcode	0b001001
-#define	flw_funct	0b00
-#define	flw_functR	dummy
+#define	flw_functR	0b00
+#define	flw_funct	dummy
 
 #define	flwa_format	R
 #define	flwa_opcode	0b001001
-#define	flwa_funct	0b01
-#define	flwa_functR	dummy
+#define	flwa_functR	0b01
+#define	flwa_funct	dummy
 
 #define	flwn_format	R
 #define	flwn_opcode	0b001001
-#define	flwn_funct	0b10
-#define	flwn_functR	dummy
+#define	flwn_functR	0b10
+#define	flwn_funct	dummy
 
 #define	flwi_format	I
 #define	flwi_opcode	0b001011
-#define	flwi_funct	0b00
-#define	flwi_functR	dummy
+#define	flwi_functR	0b00
+#define	flwi_funct	dummy
 
 #define	flwia_format	I
 #define	flwia_opcode	0b001011
-#define	flwia_funct	0b01
-#define	flwia_functR	dummy
+#define	flwia_functR	0b01
+#define	flwia_funct	dummy
 
 #define	flwin_format	I
 #define	flwin_opcode	0b001011
-#define	flwin_funct	0b10
-#define	flwin_functR	dummy
+#define	flwin_functR	0b10
+#define	flwin_funct	dummy
 
 #define	sw_format	R
 #define	sw_opcode	0b001100
@@ -232,43 +232,43 @@
 
 #define	outa_format	R
 #define	outa_opcode	0b000100
-#define	outa_funct	0b11
-#define	outa_functR	dummy
+#define	outa_functR	0b11
+#define	outa_funct	dummy
 
 #define	outb_format	R
 #define	outb_opcode	0b000100
-#define	outb_funct	0b10
-#define	outb_functR	dummy
+#define	outb_functR	0b10
+#define	outb_funct	dummy
 
 #define	outc_format	R
 #define	outc_opcode	0b000100
-#define	outc_funct	0b01
-#define	outc_functR	dummy
+#define	outc_functR	0b01
+#define	outc_funct	dummy
 
 #define	outd_format	R
 #define	outd_opcode	0b000100
-#define	outd_funct	0b00
-#define	outd_functR	dummy
+#define	outd_functR	0b00
+#define	outd_funct	dummy
 
 #define	fouta_format	R
 #define	fouta_opcode	0b000101
-#define	fouta_funct	0b11
-#define	fouta_functR	dummy
+#define	fouta_functR	0b11
+#define	fouta_funct	dummy
 
 #define	foutb_format	R
 #define	foutb_opcode	0b000101
-#define	foutb_funct	0b10
-#define	foutb_functR	dummy
+#define	foutb_functR	0b10
+#define	foutb_funct	dummy
 
 #define	foutc_format	R
 #define	foutc_opcode	0b000101
-#define	foutc_funct	0b01
-#define	foutc_functR	dummy
+#define	foutc_functR	0b01
+#define	foutc_funct	dummy
 
 #define	foutd_format	R
 #define	foutd_opcode	0b000101
-#define	foutd_funct	0b00
-#define	foutd_functR	dummy
+#define	foutd_functR	0b00
+#define	foutd_funct	dummy
 
 #define	j_format	I
 #define	j_opcode	0b010010

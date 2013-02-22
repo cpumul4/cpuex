@@ -14,18 +14,18 @@
 	finv	 $f4 $f1
 	finva	 $f4 $f1
 	finvn	 $f4 $f1
-	fmva	 $f4 $f1
-	fmvn	 $f4 $f1
 	sqrt	 $f4 $f1
 	sqrta	 $f4 $f1
 	sqrtn	 $f4 $f1
 	itof	 $f4 $r1
 	ftoi	 $r4 $f1
 	floor	 $f4 $f1
-	sll	 $r4 $r1 7
-	sra	 $r4 $r1 7
 	mv	 $r4 $r1
 	fmv	 $f4 $f1
+	fmva	 $f4 $f1
+	fmvn	 $f4 $f1
+	sll	 $r4 $r1 7
+	sra	 $r4 $r1 7
 	lui	 $r2 $r1 127
 	lli	 $r2 $r1 127
 	flui	 $f2 $f1 127
@@ -52,6 +52,8 @@
 	foutb	 $f1
 	foutc	 $f1
 	foutd	 $f1
+	nop	
+	halt	
 	j	 label
 	jr	 $r4
 	call	 label
@@ -81,6 +83,4 @@
 	bgter	 $r2 $r1 $r4
 	bgteir	 $r1 15 $r4
 	fbgtr	 $f2 $f1 $r4
-	nop	
-	halt	
 label:

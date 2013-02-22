@@ -15,19 +15,15 @@ enum format {r,i,j, branch, none, it, branchitr};
 
 int immtoimmt(int imm){
   if(imm == -1)return 0;
-
   return imm;
 }
 
 ///////////////////////////////////////////////////////////
 void valid_immt(int immt){
-#if OLD_STRICT
-  string err = "0 <= immt <= 511";
-  if(immt >= 0 && immt <=  511)return;
-#else
-  string err = "-256 <= immt <= 255";
-  if(-256 <= immt && immt <=  255)return;
-#endif
+  // string err = "-256 <= immt <= 255";
+  // if(-256 <= immt && immt <=  255)return;
+  string err = "immt == -1 || 1 <= immt <= 255";
+  if(0 <= immt && immt <= 255)return;
   else throw err;
 }
 

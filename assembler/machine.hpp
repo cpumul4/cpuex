@@ -4,17 +4,17 @@ enum format { R, I, SHIFT, BRANCH, JREG, IT, none };
 
 class binary {
   int imm:16;
-  int rs:5;
-  int immtfunct:9;
+  int rs:6;
+  int immtfunct:8;
   int opcodelow:2;
   int opcodehigh:4;
   int :4;
   void set_imm   (int i){ imm |= i;}
   void set_functR(int i){ imm |= i; }
-  void set_rt (int i){ imm |= i << 11; }
-  void set_amt(int i){ imm |= i << 11; }
+  void set_rt (int i){ imm |= i << 10; }
+  void set_amt(int i){ imm |= i << 10; }
   void set_rs (int i){ rs  |= i;}
-  void set_rd (int i){  immtfunct |= i << 4; }
+  void set_rd (int i){  immtfunct |= i << 2; }
   void set_funct(int i){immtfunct |= i ;}
   void set_immt(int i) {immtfunct |= i == -1 ? 0 : i; }
   void set_opcode(int i){ opcodehigh |= i >> 2; opcodelow |= i & 0b000011; }

@@ -10,7 +10,7 @@ format binary::decode_sim_opcode(instr inst){
   case OPC:						\
     set_id(opc ## suf1, opc ## suf2, opc ##suf3);	\
     return opc ## suf4;
-#define op(opc, OPC) _op(OPC,opc, _opcode, _funct, _functR, _format)
+#define op(opc, OPC) _op(OPC,opc, _opcode, _functR, _funct, _format)
 
   switch(inst.get_opc()){
     op(add , ADD)
