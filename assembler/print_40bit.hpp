@@ -1,4 +1,4 @@
-#define DELIM 1
+#define DELIM 0
 
 #include <stdio.h>
 template<class T> void print_bit(T x){
