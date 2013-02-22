@@ -2,8 +2,8 @@
 
 #include <limits>
 
-#define INTREG_NUM   32
-#define FLOATREG_NUM 32		// rst命令でireg = fregを仮定している
+#define INTREG_NUM   64
+#define FLOATREG_NUM 64		// rst命令でireg = fregを仮定している
 
 const int SPR_INIT = 0x000fffff;
 const int LR_INIT = std::numeric_limits<int>::max();

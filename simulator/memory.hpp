@@ -1,6 +1,6 @@
 #pragma once
-#include "./const.hpp"
-#include "./type.hpp"
+#include "const.hpp"
+#include "type.hpp"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -8,11 +8,13 @@
 
 // register
 #define ZR ireg[0]
-const int GENR_MAX = 27;
-#define SWR ireg[28]
-#define CLR ireg[29]
-#define HPR ireg[30]
-#define SPR ireg[31] 
+const int GENR_MAX = 59;
+#define SWR ireg[60]
+#define CLR ireg[61]
+#define HPR ireg[62]
+#define SPR ireg[63] 
+const int FGENR_MAX = 62;
+#define FSWR freg[63]
 extern integer ireg[INTREG_NUM];
 extern float   freg[FLOATREG_NUM];
 extern void show_regs(void);

@@ -2,12 +2,12 @@
 #include "opcode.hpp"
 #include "instruction.hpp"
 #include "statistic.hpp"
+#include "optimize.hpp"
 #include <stdlib.h>
 #include <sys/time.h>
 #include <fstream>
 using namespace std;
 
-#define OPTIMIZATION 0
 
 extern int ui(void);
 extern int ui_error(void);
@@ -45,8 +45,9 @@ inline void valid_reg(void){
 
 int simulate(char *asmpath, char *srcpath, char *tgtpath){
   decode(asmpath, rom);
+#ifndef OPTIMIZATION
   int rom_count[ROM_SIZE] = {0};
-
+#endif
   if(srcpath == NULL)cerr << "no input file.\n";
   else {
     fin.open(srcpath);
@@ -69,8 +70,7 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
 
   // 実行ループ
   while(pc != LR_INIT){
-#if OPTIMIZATION
-#else
+#ifndef OPTIMIZATION
     ui();
 #endif
     prev_pc = now_pc;
@@ -79,11 +79,12 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
     const_reg();
     try {
       // valid_reg();
+#ifndef OPTIMIZATION
       rom_count[now_pc]++;
+#endif
       rom[now_pc].exec_asm();
       exec_count++;
-#if OPTIMIZATION
-#else
+#ifndef OPTIMIZATION
       memstat_now();
 #endif
     }
@@ -101,10 +102,12 @@ int simulate(char *asmpath, char *srcpath, char *tgtpath){
   }
 
   cerr << "結果レジスタ($r1, $f0) = " << ireg[1] << ", " << freg[0]  << endl;
+#ifndef OPTIMIZATION
   instr_stat(instr_count, exec_count);
   rom_stat(rom_count, exec_count);
   branch_stat(branch_count);
   print_memory_stat();
+#endif
   return exec_count;
 }
 
@@ -113,7 +116,7 @@ int main(int argc, char *argv[]){
   long long int count;
   
   if(argc < 2){
-    cerr << "USAGE: ./simulator assemblyfile (finile) (outfile) \n";
+    cerr << "USAGE: ./simulator assemblyfile (infile) (outfile) \n";
     return 1;
   }
   switch(argc) {
@@ -130,8 +133,6 @@ int main(int argc, char *argv[]){
   gettimeofday(&t1,NULL);
   
   cout << "実行命令数:\t" << (count = simulate(argv[1], argv[2], argv[3])) << "回" << endl;
-  cout << "nopの回数:\t" << instr_count[NOP] << "回" << endl;
-  cout << "nop除いた回数:\t" << count - instr_count[NOP] << "回" << endl;
   gettimeofday(&t2,NULL);
 
   char *speed = new char[100];

@@ -6,6 +6,7 @@
 #include "ui.hpp"
 #include "print_bit.hpp"
 #include "checkarray.hpp"
+#include "optimize.hpp"
 using namespace std;
 
 class instr;
@@ -135,7 +136,7 @@ int ui(){
   char *tokens[5];
 
   bool stop;
-#if OPTIMISATION
+#ifdef OPTIMIZATION
   init_stop = false;
 #endif
 
@@ -153,7 +154,9 @@ int ui(){
   if(!stop)return 0;
 
   if(init_stop){
+#ifndef OPTIMIZATION
     howtouse();
+#endif
     init_stop = false;
   }
 
@@ -166,7 +169,7 @@ int ui(){
   rom[pc].show();
 
   while(1){
-    cerr << "$ ";
+    cerr << "% ";
     cin.getline(line, max_line);
     
     if(line == NULL || line[0] == 0)return 0;
@@ -254,7 +257,7 @@ int ui_error(){
   step = 1;
   cerr <<
     "*******************************************************\n\
-エラーで停止しました。レジスタやメモリの中を見れます。\nEnterを押すとシミュレータが終了します。\n\
+     エラーで停止しました。\n\
 *******************************************************\n";
 
   return ui();

@@ -1,5 +1,6 @@
-#include "./instruction.hpp"
-#include "./memory.hpp"
+#include "instruction.hpp"
+#include "memory.hpp"
+#include "optimize.hpp"
 #include "type.hpp"
 #include "float.hpp"
 #include "integer.hpp"
@@ -20,6 +21,7 @@ void instr::exec_asm(){
 #define FT freg[rt]
 #define IMMT rs
 #define IMM rt
+#ifndef OPTIMIZATION
 #define c(_op,_expr) case _op: _expr ++instr_count[_op] ; break
 #define cb(_op,b,_expr) case _op:		\
   ++instr_count[_op] ;				\
@@ -30,6 +32,10 @@ void instr::exec_asm(){
   else						\
     branch_count[1]++;				\
   break
+#else
+#define c(_op,_expr) case _op: _expr; break
+#define cb(_op,b,_expr) case _op:    _expr; break
+#endif  
 
   switch(opc) {
     //  ----------- R 形式の命令 ---------------

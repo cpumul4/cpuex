@@ -1,6 +1,7 @@
 #include "type.hpp"
 #include "opcode.hpp"
 #include "memory.hpp"
+#include "optimize.hpp"
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -20,17 +21,17 @@ void print(string prefix, float   value){print<float>  (prefix, value);}
 
 void show_regs(void){
   // 特別な意味のレジスタ
-  print("$swp(r28)"      , SWR);
-  print("$clos"          , CLR);
+  print("$sw(r60)"      , SWR);
+  print("$cl"          , CLR);
   print("$hp"            , HPR);
-  print("$stkp(relative)", SPR_INIT - SPR);
+  print("$sp(rel)", SPR_INIT - SPR);
   cerr << endl;
   // 整数レジスタ
   if(ireg[1] != 0){
     print("$v(r1)",ireg[1]);
   }
-  for(int i = 2; i <= INTREG_NUM; i++){
-    if(ireg[i] != 0 && (28 < i && 31 < i )){
+  for(int i = 2; i <= GENR_MAX; i++){
+    if(ireg[i] != 0){
       stringstream ss;
       ss << "$r" << i;
       print(ss.str(), ireg[i]);
@@ -41,7 +42,9 @@ void show_regs(void){
   }
   cerr << endl;
   // FLOATレジスタ
-  for(int i=0; i < FLOATREG_NUM; i++)
+  print("$fsw(f63)", FSWR);
+  cerr << endl;
+  for(int i=0; i <= FGENR_MAX; i++)
     if(freg[i] != 0){		// 非正規化数などに対応してない
 #if DEBUG
       print_bit(freg[i].f);
@@ -63,8 +66,18 @@ class section {
   int store_count;
 public:
   section(){data = load_count = store_count = 0;}
-  notype load(void){ load_count += incre; return data; }
-  void  store(notype value){ store_count += incre; data = value; }
+  notype load(void){ 
+#ifndef OPTIMIZATION
+    load_count += incre; 
+#endif
+    return data; 
+  }
+  void  store(notype value){ 
+#ifndef OPTIMIZATION
+    store_count += incre; 
+#endif
+    data = value; 
+  }
   notype show(void){ return data;}
   std::string string_of_count(void);
   template<class T> std::string string_of_data(void);
