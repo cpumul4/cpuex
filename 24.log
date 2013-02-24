@@ -1,6 +1,9 @@
 24ばん 作業記録
+**02/24Sun
+floor修正
+itof,ftoi,floorシミュレーション
 **02/23Sat
-ftoi,floor修正
+ftoi,floor修正(分散RAMを使わないようにする)
 **02/22Fri
 SRAMコントローラのテスト
 RVS実装、簡単に動作確認
