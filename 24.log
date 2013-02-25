@@ -1,4 +1,8 @@
 24ばん 作業記録
+**02/25Mon
+ftoi,floor修正、テスト
+レジスタ、CDB実装
+RVSが空のときPOPしないように修正
 **02/24Sun
 floor修正
 itof,ftoi,floorシミュレーション
