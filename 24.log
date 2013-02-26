@@ -1,4 +1,8 @@
 24ばん 作業記録
+**02/26Tue
+CDBアービタ実装
+RVS(ALU,FPU,CMP,Input,SRAM)でバス権を考慮するようにした
+RAS,ROB実装
 **02/25Mon
 ftoi,floor修正、テスト
 レジスタ、CDB実装
