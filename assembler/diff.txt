@@ -1,0 +1,31 @@
+18,24c18,24
+< finv   R  0 1 1 1 0 1  fd 0 0  fs 1 1 0 0
+<  finva R  0 1 1 1 0 1  fd 0 1  fs 1 1 0 0
+<  finvn R  0 1 1 1 0 1  fd 1 0  fs 1 1 0 0
+< sqrt   R  0 1 1 1 0 1  fd 0 0  fs 1 1 0 1
+<  sqrta R  0 1 1 1 0 1  fd 0 1  fs 1 1 0 1
+<  sqrtn R  0 1 1 1 0 1  fd 1 0  fs 1 1 0 1
+< itof   R  0 1 1 0 0 1  fd      rs 1 1 1 0
+---
+> finv   R 0 1 1 1 0 1   fd 0 0  fs 1 0 1 1
+>  finva R 0 1 1 1 0 1   fd 0 1  fs 1 0 1 1
+>  finvn R 0 1 1 1 0 1   fd 1 0  fs 1 0 1 1
+> sqrt   R 0 1 1 1 0 1   fd 0 0  fs 1 1 0 0
+>  sqrta R 0 1 1 1 0 1   fd 0 1  fs 1 1 0 0
+>  sqrtn R 0 1 1 1 0 1   fd 1 0  fs 1 1 0 0
+> itof   R 0 1 1 0 0 1   fd      rs 1 1 0 1
+27,32c27,32
+<  mv    R  0 1 1 0 0 0  rd      rs 0 1 0 0
+< fmv    R  0 1 1 1 0 1  fd 0 0  fs 0 1 0 0
+<  fmva  R  0 1 1 1 0 1  fd 0 1  fs 0 1 0 0
+<  fmvn  R  0 1 1 1 0 1  fd 1 0  fs 0 1 0 0
+<sll     R  0 1 1 0 0 0  rd   0  rs 0 1 0 1
+<  sra   R  0 1 1 0 0 0  rd   1  rs 0 1 0 1
+---
+>  mv    R 0 1 1 0 0 0   rd      rs 0 1 1 0
+> fmv    R 0 1 1 1 0 1   fd 0 0  fs 0 1 1 0
+>  fmva  R 0 1 1 1 0 1   fd 0 1  fs 0 1 1 0
+>  fmvn  R 0 1 1 1 0 1   fd 1 0  fs 0 1 1 0
+>sll     R 0 1 1 0 0 0   rd      rs 0 1 0 0
+>  sra   R 0 1 1 0 0 0   rd      rs 0 1 0 1
+s

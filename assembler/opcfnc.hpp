@@ -67,37 +67,37 @@
 
 #define	finv_format	R
 #define	finv_opcode	0b011101
-#define	finv_subop	0b1100
+#define	finv_subop	0b1011
 #define	finv_flag	0b00
 
 #define	finva_format	R
 #define	finva_opcode	0b011101
-#define	finva_subop	0b1100
+#define	finva_subop	0b1011
 #define	finva_flag	0b01
 
 #define	finvn_format	R
 #define	finvn_opcode	0b011101
-#define	finvn_subop	0b1100
+#define	finvn_subop	0b1011
 #define	finvn_flag	0b10
 
 #define	sqrt_format	R
 #define	sqrt_opcode	0b011101
-#define	sqrt_subop	0b1101
+#define	sqrt_subop	0b1100
 #define	sqrt_flag	0b00
 
 #define	sqrta_format	R
 #define	sqrta_opcode	0b011101
-#define	sqrta_subop	0b1101
+#define	sqrta_subop	0b1100
 #define	sqrta_flag	0b01
 
 #define	sqrtn_format	R
 #define	sqrtn_opcode	0b011101
-#define	sqrtn_subop	0b1101
+#define	sqrtn_subop	0b1100
 #define	sqrtn_flag	0b10
 
 #define	itof_format	R
 #define	itof_opcode	0b011001
-#define	itof_subop	0b1110
+#define	itof_subop	0b1101
 #define	itof_flag	dummy
 
 #define	ftoi_format	R
@@ -112,33 +112,33 @@
 
 #define	mv_format	R
 #define	mv_opcode	0b011000
-#define	mv_subop	0b0100
+#define	mv_subop	0b0110
 #define	mv_flag	dummy
 
 #define	fmv_format	R
 #define	fmv_opcode	0b011101
-#define	fmv_subop	0b0100
+#define	fmv_subop	0b0110
 #define	fmv_flag	0b00
 
 #define	fmva_format	R
 #define	fmva_opcode	0b011101
-#define	fmva_subop	0b0100
+#define	fmva_subop	0b0110
 #define	fmva_flag	0b01
 
 #define	fmvn_format	R
 #define	fmvn_opcode	0b011101
-#define	fmvn_subop	0b0100
+#define	fmvn_subop	0b0110
 #define	fmvn_flag	0b10
 
 #define	sll_format	R
 #define	sll_opcode	0b011000
-#define	sll_subop	0b0101
+#define	sll_subop	0b0100
 #define	sll_flag	dummy
 
 #define	sra_format	R
 #define	sra_opcode	0b011000
 #define	sra_subop	0b0101
-#define	sra_flag	0b1
+#define	sra_flag	dummy
 
 #define	lui_format	I
 #define	lui_opcode	0b011010
