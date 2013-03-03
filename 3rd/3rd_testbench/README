@@ -2,12 +2,31 @@
 ack
 adder		56		10
 cls-bug		76		912
-cls-bug2	550		9,8,7,6,5,4,3,2,1,0を順にprint_int
+cls-bug2	550		9876543210
 cls-rec		649		230
 even-odd	1725		456
 fib		21026095	40
 float		131		736
 funcomp		119		247
 gcd		130		700
-
+inprod		68		100
+inprod-loop	183		400
+inprod-rec	197		400
+join-reg	50		912
+join-reg2	52		789
+join-stack	35		37
+join-stack2	27		246
+join-stack3	53		912
+mandelbrot	742134781
+matmul		1051		58\n64\n139\n154\n
+matmul-flat	635		58\n64\n139\n154\n
+min-rt		929540841
+non-tail-if	52		90
+non-tail-if	44		238
+shuffle		174		214563
+spill		32		69
+spill2		60		880
+spill3		42		617
+sum		52378		500
+sum-tail	31295		500
 
