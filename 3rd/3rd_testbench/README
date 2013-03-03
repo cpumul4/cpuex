@@ -1,0 +1,13 @@
+		実行命令数	返り値
+ack
+adder		56		10
+cls-bug		76		912
+cls-bug2	550		9,8,7,6,5,4,3,2,1,0を順にprint_int
+cls-rec		649		230
+even-odd	1725		456
+fib		21026095	40
+float		131		736
+funcomp		119		247
+gcd		130		700
+
+
